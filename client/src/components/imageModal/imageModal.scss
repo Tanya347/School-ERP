@@ -1,0 +1,51 @@
+.ImageModal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.418);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 1000;
+
+  .mContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    height: fit-content;
+    position: relative;
+    width: fit-content;
+  }
+  
+  @media screen and (max-width: 600px){
+    .mContainer img {
+      height: 300px;
+    }
+  
+    .mContainer {
+      width: 90%;
+    }
+
+    .mClose {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      padding: 5px;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .mClose:hover {
+      color: rgba(0, 0, 0, 0.699);
+    }
+  }
+  
+  
+}
+

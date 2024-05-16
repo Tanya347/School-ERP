@@ -1,0 +1,52 @@
+.AdminWidgets {
+
+    margin: 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    
+    .widget {
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+        width: 20%;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+        @media screen and (max-width: 700px){
+            width: 40%;
+        }
+
+        @media screen and (max-width: 450px){
+            width: 80%;
+        }
+
+        .leftContainer {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+
+            .icon {
+                background-color: white;
+                border-radius: 30px;
+                padding: 10px;
+            }
+            background-color: inherit;
+        }
+
+        .rightContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            h3 {
+                color: var(--gray);
+            }
+        }
+    }
+
+}

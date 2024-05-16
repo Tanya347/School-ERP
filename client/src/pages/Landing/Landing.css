@@ -1,0 +1,77 @@
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.landing-container img {
+    height: 450px;
+}
+
+.landing-container h1 {
+    font-size: 3em;
+    color: #385A64;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #FE725B;
+}
+
+.landing-container .button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.landing-container .button-container .notAdmin {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-container .button-container .isAdmin button{
+    background-color: #FE725B;
+}
+
+.landing-container .button-container .isAdmin button:hover{
+    background-color: #fe715bdd;
+}
+
+.landing-container .button-container button {
+    border: none;
+    padding: 10px 10px;
+    background-color: #355964;
+    color: white;
+    width: 200px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 115px;
+}
+
+.landing-container .button-container button:hover {
+    background-color: #355964be;
+}
+
+@media screen and (max-width: 600px) {
+
+    .landing-container h1 {
+        font-size: 2.5em;
+        margin-bottom: 100px;
+    }
+
+    .landing-container img {
+        height: 250px;
+    }
+
+    .landing-container .button-container button {
+        margin-top: 15px;
+    }
+}

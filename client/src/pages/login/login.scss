@@ -1,0 +1,87 @@
+.AdminLogin {
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.img-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img-container img {
+    width: 90%;
+}
+
+
+.lContainer {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.lContainer label {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.lContainer h1 {
+    margin-bottom: 20px;
+    color: #355964;
+}
+
+.lContainer p {
+    margin-bottom: 20px;
+    color: #355964d7;
+}
+
+.lInput {
+    height: 30px;
+    padding: 10px;
+    width: 50%;
+    background-color: #ECECEC;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+.lButton {
+    border: none;
+    padding: 10px 20px;
+    background-color: #355964;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 250px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.lButton:hover {
+    background-color: #355964d7;
+}
+
+.lButton:disabled {
+    background-color: #0071c28c;
+    cursor: not-allowed;
+}
+
+
+@media screen and (max-width: 600px) {
+    .img-container, .lContainer {
+        width: 80%;
+    }
+
+    .lInput {
+        width: 80%;
+    }
+}

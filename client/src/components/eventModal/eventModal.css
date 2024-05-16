@@ -1,0 +1,148 @@
+.eventModal {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.418);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1000;
+}
+
+.eventModal .mContainer {
+    background-color: white;
+    height: fit-content;
+    position: relative;
+    width: 70%;
+}
+
+.eventModal .mEvents {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.eventModal .mLeft {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.eventModal .mRight {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.eventModal .mLeft img {
+    height: 300px;
+}
+
+.eventModal .mEvents p {
+    padding-top: 10px;
+}
+
+.eventModal .mEvents p span {
+    font-weight: bold;
+    color: #7451F8;
+}
+
+.eventModal .mClose {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.eventModal .mIcon {
+    margin-top: 10px;
+    color: #a53eef;
+}
+
+.eventModal .mClose:hover {
+    color: rgba(0, 0, 0, 0.699);
+}
+
+.eventModal .mTitle {
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    padding: 10px 0;
+}
+
+.eventModal .mDesc {
+    color: rgba(0, 0, 0, 0.699);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.crudButton {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.crudButton button {
+    padding: 5px 20px;
+    margin: 10px 10px;
+    background-color: #5353AF;
+    color: white;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: bolder;
+}
+
+.crudButton button:hover {
+    transform: translateY(-2px);
+    background-color: #7551f8a1;
+}
+
+.eventModal .mButton {
+    border: none;
+    padding: 10px 20px;
+    background-color: #7451F8;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 80%;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: all 0.2s ease-in-out;
+}
+
+.eventModal .mButton:last-child {
+    margin-bottom: 50px;
+}
+
+.eventModal .mButton:hover {
+    background-color: #7551f8a1;
+}
+
+@media screen and (max-width: 600px) {
+    .eventModal .mLeft img {
+        height: 300px;
+    }
+
+    .eventModal .mContainer {
+        width: 80%;
+    }
+
+    .eventModal .mLeft {
+        width: 80%;
+    }
+
+    .eventModal .mRight {
+        width: 80%;
+    }
+}

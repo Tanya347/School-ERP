@@ -1,0 +1,89 @@
+.home {
+  display: flex;
+
+  .AdminHomeContainer {
+    width: 100%;
+
+    .welcome {
+      width: 90%;
+      padding: 0 0 20px 0;
+      border-radius: 5px;
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      margin: auto;
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+      .text {
+        width: 80%;
+        text-align: center;
+
+        h1 {
+          margin-bottom: 10px;
+        }
+      }
+
+      img {
+        width: 50%;
+        height: 150px;
+        width: 150px;
+      }
+    }
+
+
+    .charts {
+      padding: 5px 20px;
+    }
+
+    .mainContainer {
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+
+      .AdminListContainer {
+        
+        padding: 20px;
+        margin: 20px;
+        width: 45%;
+  
+        .listTitle {
+          font-weight: 500;
+          color: gray;
+          margin-bottom: 15px;
+        }
+
+        @media screen and (max-width: 1100px){
+          width: 65%;
+        }
+
+        @media screen and (max-width: 600px){
+          width: 80%;
+        }
+
+      }
+
+      .AdminButtons, .FacultyButtons {
+        width: 45%;
+        padding: 10px;
+        text-align: center;
+
+        @media screen and (max-width: 1100px){
+          text-align: center;
+          width: 65%;
+        }
+
+        @media screen and (max-width: 600px){
+          text-align: center;
+          width: 80%;
+        }
+      }
+
+      
+    }
+  }
+}

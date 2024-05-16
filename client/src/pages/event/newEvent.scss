@@ -1,0 +1,194 @@
+.new {
+  width: 100%;
+  display: flex;
+
+  .newEventContainer {
+    width: 100%;
+
+    .eventsButton {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+
+      button {
+        padding: 10px 25px;
+        margin: 20px 10px;
+        background-color: #5353AF;
+        color: white;
+        cursor: pointer;
+        border-radius: 20px;
+        font-weight: bolder;
+
+        &:hover {
+          transform: translateY(-2px);
+          background-color: #7551f8a1;
+        }
+      }
+    }
+
+    .cardsContainer {
+
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .card {
+        position: relative;
+        width: 300px;
+        height: 400px;
+        margin: 20px;
+        box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.3);
+        /* border-radius: 15px; */
+        background: white;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(4px);
+
+        .content {
+          padding: 10px;
+          text-align: center;
+          transform: translateY(20px);
+          transition: 0.5s;
+
+          img {
+            height: 180px;
+            overflow: hidden;
+            padding: 5px;
+          }
+
+          h4 {
+            padding: 10px 0;
+            font-size: 1.3em;
+            color: #a53eef;
+            z-index: 1;
+          }
+
+          h6 {
+            font-size: 0.8em;
+            color: black;
+            font-weight: bold;
+            padding: 5px 0;
+
+            span {
+              color: #a53eef;
+              font-weight: bold;
+            }
+          }
+
+          p {
+            margin: 0 10px;
+            padding: 5px 5px;
+            color: black;
+            background-color: rgba(255, 255, 255, 0.174);
+          }
+
+          button {
+            position: relative;
+            display: inline-block;
+            padding: 8px 20px;
+            margin: 20px 0;
+            background: #5353AF;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+              transform: translateY(-2px);
+              background-color: #7551f8a1;
+            }
+          }
+        }
+
+        &:hover content {
+          transform: translateY(0px);
+        }
+      }
+    }
+
+    .top,
+    .bottom {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 10px;
+      margin: 20px;
+      display: flex;
+
+      h1 {
+        color: lightgray;
+        font-size: 20px;
+      }
+
+      .left {
+        flex: 1;
+        text-align: center;
+
+        img {
+          height: 200px;
+          object-fit: cover;
+        }
+      }
+
+      .right {
+        flex: 2;
+        padding: 0px 20px;
+
+        form {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 30px;
+          justify-content: space-between;
+
+          .selectRooms {
+            width: 100%;
+
+            select {
+              width: 100%;
+              padding: 10px;
+            }
+          }
+
+          .formInput {
+            width: 40%;
+
+            label {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+
+              .icon {
+                cursor: pointer;
+              }
+            }
+
+            input {
+              width: 100%;
+              padding: 5px;
+              border: none;
+              border-bottom: 1px solid gray;
+            }
+          }
+        }
+
+        #submit {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          background-color: teal;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+.queries-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.queries-container .query {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    margin-bottom: 20px;
+}
+
+.queries-container .query .query-box {
+    background-color: #F3F5F9;
+    border-radius: 15px;
+    padding: 12px;
+    margin-bottom: 20px;
+}
+
+.queries-container .query h2 {
+    font-size: 1.3rem;
+}
+
+.queries-container .query .query-box .qTo, .qDesc, .rDesc{
+    font-size: 1rem;
+}
+
+.qTo {
+    color: #5757db;
+}
+
+.queries-container .query .response-box {
+    background-color: #8e8ee3;
+    color: white;
+    border-radius: 15px;
+    padding: 12px;
+    margin-bottom: 20px;
+} 

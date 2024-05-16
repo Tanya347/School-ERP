@@ -1,0 +1,99 @@
+
+// all specifications for dark mode 
+
+.app.dark {
+  background-color: #111;
+  color: white;
+
+  .home {
+    background-color: #111;
+  }
+  
+  .landing-container, .list, .single, .new {
+    height: 100vh;
+  }
+
+  .list {
+    overflow-y: hidden;
+  }
+
+  .chartGrid {
+    stroke: rgba(228, 228, 228, 0.219);
+  }
+
+  .table {
+    background-color: #111;
+
+    .tableCell {
+      color: white;
+    }
+  }
+
+  .navbar {
+    color: white;
+    border-color: #333;
+
+    .search {
+      border-color: gray;
+
+      input {
+        color: white;
+      }
+    }
+  }
+
+  .sidebar {
+    border-color: rgb(84, 82, 82);
+    background-color: #5353AF;
+
+    #menu {
+      .icon {
+
+        &:hover {
+          color: #5353AF;
+        }
+      }
+    }
+
+    .top {
+      .logo {
+        color: white;
+      }
+    }
+
+    hr {
+      border-color: #333;
+    }
+
+    ul {
+      li {
+        &:hover {
+          background-color: #333;
+        color: white;
+        }
+
+        .icon {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .datatable {
+    .datagrid {
+      color: white;
+      border: none;
+
+      .viewButton,
+      .deleteButton,
+      .cellWithStatus {
+        color: white;
+        border: none;
+      }
+    }
+  }
+
+  input {
+    background-color: transparent;
+  }
+}

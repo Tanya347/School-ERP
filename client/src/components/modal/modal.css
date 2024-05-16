@@ -1,0 +1,86 @@
+.modal {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.418);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.mTasks .syll {
+    height: 500px;
+}
+
+@media screen and (max-width: 600px) {
+    .mTasks .syll {
+        height: 300px;
+    }
+}
+
+.mContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    height: fit-content;
+    position: relative;
+    width: 400px;
+}
+
+.mTasks p {
+    padding-top: 10px;
+}
+
+.mTasks p span {
+    font-weight: bold;
+    color: #7451F8;
+}
+
+.mClose {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.mClose:hover {
+    color: rgba(0, 0, 0, 0.699);
+}
+
+.mTitle {
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    padding: 10px 0;
+}
+
+.mDesc {
+    color: rgba(0, 0, 0, 0.699);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.mButton {
+    border: none;
+    padding: 10px 20px;
+    background-color: #7451F8;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 20px;
+    transition: all 0.2s ease-in-out;
+}
+
+.mButton:hover {
+    background-color: #7551f8a1;
+}

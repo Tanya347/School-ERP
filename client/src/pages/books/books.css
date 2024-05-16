@@ -1,0 +1,25 @@
+/* css stylesheet for books api PROJECT
+  author: Jorge L. jlvazquez
+  date: 2/24/2019
+*/
+
+  
+  .center {
+    margin: auto;
+    margin-top: 200px;
+  }
+  
+  #header {
+    font-family: 'Righteous', sans-serif;
+    font-size: 3rem;
+  }
+  
+  h2 {
+    font-family: 'Righteous', sans-serif;
+  }
+  
+  .book-list {
+    margin-top: 50px;
+    visibility: hidden;
+  }
+  

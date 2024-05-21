@@ -9,10 +9,6 @@ const UpdateSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status: {
-        type: String,
-        default: "New"
-    },
     updateType: {
         type: String,
         required: true,

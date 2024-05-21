@@ -27,7 +27,6 @@ const List = () => {
           <TableRow>
             <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Update</TableCell>
             <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Description</TableCell>
-            {/* <TableCell className="tableCell">Date</TableCell> */}
           </TableRow>
         </TableHead>
 

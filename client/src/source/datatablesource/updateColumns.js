@@ -10,4 +10,9 @@ export const updateColumns = [
         headerName: "Description",
         width: 500,
     },
+    {
+        field: "updateType",
+        headerName: "Notice Type",
+        width: 150,
+    }
 ];

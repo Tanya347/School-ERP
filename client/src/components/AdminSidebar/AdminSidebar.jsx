@@ -91,12 +91,12 @@ const AdminSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Takes you to list of all events created by teams */}
-                    <Link to="/admin/events" style={{ textDecoration: "none" }}>
+                    {/* <Link to="/admin/events" style={{ textDecoration: "none" }}>
                         <li>
                             <EventIcon className="icon" />
                             <span>Events</span>
                         </li>
-                    </Link>
+                    </Link> */}
 
                     {/* Takes you to list of all courses created by admin */}
                     <Link to="/admin/courses" style={{ textDecoration: "none" }}>
@@ -145,12 +145,12 @@ const AdminSidebar = ({ setOpen }) => {
                         </li>
                     </Link>
 
-                    <Link to="/admin/timetables/new" style={{ textDecoration: "none" }}>
+                    {/* <Link to="/admin/timetables/new" style={{ textDecoration: "none" }}>
                         <li>
                             <CalendarMonthIcon className="icon" />
                             <span>Timetable</span>
                         </li>
-                    </Link>
+                    </Link> */}
 
                     {/* Options under User which is only Logout for now */}
 

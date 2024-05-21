@@ -50,9 +50,10 @@ const Modal = ({ setOpen, id, type }) => {
                 {/* if type is updates */}
                 {
                     type === "updates" &&
-                    <div className="mUpdates">
+                    <div className="mTasks">
                         <div className="mTitle">{data.title}</div>
                         <div className="mDesc">{data.desc}</div>
+                        {data.updateType === "specific" && <p><span>For</span>: Class {data?.class?.name}</p>}
                     </div>
                 }
 
@@ -111,18 +112,6 @@ const Modal = ({ setOpen, id, type }) => {
                         {data.syllabusPicture && <img className="syll" src={data.syllabusPicture} alt="syllabus picture"/>}
                         {data.teacher && <p><span>Taught by</span> : {data?.teacher?.teachername}</p>}
                         <p><span>Class</span> : {data?.class?.name}</p>
-                        
-                    </div>
-                }
-
-                {/* If type is videos */}
-                {
-                    type === "facVideo" &&
-                    <div className="mTasks">
-                        <div className="mTitle">{data?.title}</div>
-                        {data.link && <iframe width="560" height="315" src={data.link} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>}
-                        <p><span>Class</span> : {data?.standard?.name}</p>
-                        <p><span>Subject</span> : {data?.subject?.name}</p>
                         
                     </div>
                 }

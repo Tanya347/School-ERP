@@ -11,7 +11,7 @@ const ViewClass = () => {
     const location = useLocation();
     const id = location.pathname.split("/")[3]
 
-    const classData = useFetch(`/classes/${id}`).data
+    const classData = useFetch(`/classes/details/${id}`).data
 
   return (
     <div className='viewClass'>

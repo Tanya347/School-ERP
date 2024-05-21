@@ -7,7 +7,6 @@ import FacultyButton from "../../components/facultyButtons/FacultyButton"
 import AdminWidgets from "../../components/adminWidgets/AdminWidgets";
 import AdminButton from "../../components/adminButtons/AdminButton"
 import Table from "../../components/table/Table";
-import Featured from "../../components/featured/Featured";
 
 // type specifies the admin side or user side 
 const Home = ({ type }) => {

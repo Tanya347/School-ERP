@@ -7,7 +7,7 @@ export const getDatatableURL = (path, user) => {
     else if (path === 'facTests')
         return `/tests/faculty/${user._id}`
     else    
-        return `/${path}`
+        return `/${path}/`
 }
 
 export const getModalURL = (path, id) => {
@@ -18,7 +18,7 @@ export const getModalURL = (path, id) => {
     else if(path === 'facVideo')
         return `/video/${id}`
     else
-        return `/${path}`
+        return `/${path}/${id}`
 }
 
 export const getTaskCalenderURL = (user) => {

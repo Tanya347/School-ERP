@@ -66,7 +66,7 @@ export const getClassDetails = async (req, res, next) => {
         .populate({
             path: 'students',
             model: 'Student',
-            select: 'name profilePicture cloud_id gender enroll',
+            select: 'name profilePicture cloud_id gender enroll email studentPhone',
         });
 
         res.status(200).json(classDetails);
@@ -83,7 +83,7 @@ export const getClassStudents = async (req, res, next) => {
         .populate({
             path: 'students',
             model: 'Student',
-            select: 'name profilePicture cloud_id gender enroll',
+            select: 'name profilePicture cloud_id gender enroll studentPhone email',
         });
 
         res.status(200).json(classStudents);

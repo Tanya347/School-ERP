@@ -35,7 +35,7 @@ export const deleteUpdate = async (req, res, next) => {
 
 export const getUpdate = async (req, res, next) => {
     try {
-        const update = await Update.findById(req.params.id);
+        const update = await Update.findById(req.params.id).populate("class", "name");
         res.status(200).json(update);
     } catch (err) {
         next(err);

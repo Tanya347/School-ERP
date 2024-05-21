@@ -15,6 +15,9 @@ const EditUpdate = ({ title, type }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[3];
   const { data } = useFetch(`/updates/${id}`)
+  const classes = useFetch('/classes').data
+  console.log(data)
+
 
   const [info, setInfo] = useState({});
 
@@ -64,6 +67,7 @@ const EditUpdate = ({ title, type }) => {
                   value={info.title}
                 />
               </div>
+
               <div className="formInput">
                 <label>Description</label>
                 <input
@@ -74,6 +78,20 @@ const EditUpdate = ({ title, type }) => {
                   value={info.desc}
                 />
               </div>
+
+              {info.updateType === "specific" && <div className="formInput">
+                <label>Class</label>
+                <select
+                  id="class"
+                  onChange={handleChange}
+                >
+                  {
+                    classes.map((d, index) => (
+                      <option value={d._id} key={index} selected={info?.class?._id === d._id}>{d.name}</option>
+                    ))
+                  }
+                </select>
+              </div>}
             </form>
             <div className="submitButton">
               <button onClick={handleClick} id="submit" className="form-btn">Edit Update</button>

@@ -54,7 +54,6 @@ import List from "./pages/list/List";
 import Landing from "./pages/Landing/Landing";
 import EditStudent from "./pages/student/EditStudent";
 import EditFaculty from "./pages/faculty/EditFaculty";
-import NewTimeTable from "./pages/timetable/NewTimeTable";
 import Class from "./pages/class/Class";
 import AddClass from "./pages/class/AddClass";
 import ViewClass from "./pages/class/ViewClass";
@@ -92,11 +91,6 @@ function App() {
   // if user is not admin then they cannot access faculty/login pages
   const RequireCommon = ({ children }) => {
     return user.isAdmin ? <Navigate to="/home" /> : children;
-  };
-
-  // if user is not a creator (i.e.) cr and faculty both have access
-  const RequireCreator = ({ children }) => {
-    return user.isStudent && !user.isCr ? <Navigate to="/home" /> : children;
   };
 
   // if user is logged in and reaches on log in page then redirect to home page
@@ -300,33 +294,7 @@ function App() {
             }
           />
 
-          {/* routes for timetable */}
 
-          {/*  create new timetable */}
-
-          <Route
-            path="/admin/timetables/new"
-            element={
-              <RequireAdmin>
-                <RequireAuth>
-                  <NewTimeTable title="Add New Time Table" />
-                </RequireAuth>
-              </RequireAdmin>
-            }
-          />
-
-          {/* edit timetables */}
-
-          <Route
-            path="/admin/timetables/:timetableId/edit"
-            element={
-              <RequireAdmin>
-                <RequireAuth>
-                  <EditCourse title="Edit Timetable" type="Admin" />
-                </RequireAuth>
-              </RequireAdmin>
-            }
-          />
 
           {/* routes for courses */}
 

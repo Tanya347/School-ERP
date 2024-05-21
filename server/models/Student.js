@@ -43,12 +43,6 @@ const StudentSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    group: {
-      type: String,
-    },
-    pace: {
-      type: String
-    },
     dob: {
       type: String,
       required: true

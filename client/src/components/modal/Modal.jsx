@@ -68,6 +68,20 @@ const Modal = ({ setOpen, id, type }) => {
                     </div>
                 }
 
+                {/* If type is tasks */}
+                {
+                    (type === "facTests" || type==="stuTests" || type === 'tests') &&
+                    <div className="mTasks">
+                        <div className="mTitle">{data?.name}</div>
+                        <p><span>Syllabus</span> : {data?.syllabus}</p>
+                        <p><span>Duration</span> : {data?.duration} min</p>
+                        <p><span>Date</span> : {new Date(data.date).toLocaleDateString()}</p>
+                        <p><span>Assigned To</span> : {data?.sclass?.name}</p>
+                        <p><span>Subject</span>: {data?.subject?.name}</p>
+                        <p><span>Assigned By</span>: {data?.author?.teachername}</p>
+                    </div>
+                }
+
                 {/* If type is query */}
                 {
                     type === "queries" &&

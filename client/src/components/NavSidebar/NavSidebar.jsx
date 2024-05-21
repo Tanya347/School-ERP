@@ -18,9 +18,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import AddchartIcon from '@mui/icons-material/Addchart';
-import QueuePlayNextIcon from '@mui/icons-material/QueuePlayNext';
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -83,12 +82,21 @@ const NavSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Takes you to list of all tasks created by admin */}
-                    <Link to={user.isFaculty? "/facVideo" : "/stuVideo"} style={{ textDecoration: "none" }}>
+                    <Link to={user.isFaculty? "/facTests" : "/stuTests"} style={{ textDecoration: "none" }}>
                         <li>
-                            <OndemandVideoIcon className="icon" />
-                            <span>Videos</span>
+                            <NoteAddIcon className="icon" />
+                            <span>Tests</span>
                         </li>
                     </Link>
+
+                    {/* Takes you to list of all tasks created by admin */}
+                    {user.isFaculty && <Link to={"/class/students"} style={{ textDecoration: "none" }}>
+                        <li>
+                            <GroupsIcon className="icon" />
+                            <span>Students</span>
+                        </li>
+                    </Link>}
+
 
                     {/* Takes you to list of all responses sent by faculties */}
                     {user.isStudent && <Link to="/responses" style={{ textDecoration: "none" }}>
@@ -108,9 +116,9 @@ const NavSidebar = ({ setOpen }) => {
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="/tests/new" style={{ textDecoration: "none" }}>
+                    {(user.isFaculty) && <Link to="/facTests/new" style={{ textDecoration: "none" }}>
                         <li>
-                            <NoteAddIcon className="icon" />
+                            <PostAddIcon className="icon" />
                             <span>Tests</span>
                         </li>
                     </Link>}
@@ -129,19 +137,19 @@ const NavSidebar = ({ setOpen }) => {
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="/material/new" style={{ textDecoration: "none" }}>
+                    {/* {(user.isFaculty) && <Link to="/material/new" style={{ textDecoration: "none" }}>
                         <li>
                             <PostAddIcon className="icon" />
                             <span>Material</span>
                         </li>
-                    </Link>}
-
+                    </Link>} */}
+{/* 
                     {(user.isFaculty) && <Link to="/marks/new" style={{ textDecoration: "none" }}>
                         <li>
                             <QueuePlayNextIcon className="icon" />
                             <span>Videos</span>
                         </li>
-                    </Link>}
+                    </Link>} */}
                     
 
                     {/* Event can be created only when user is a part of technical team so it will only be visible to them */}

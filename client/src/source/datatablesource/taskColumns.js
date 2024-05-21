@@ -9,5 +9,10 @@ export const taskColumns = [
         field: "desc",
         headerName: "Description",
         width: 500,
+    },
+    {
+        field: "deadline",
+        headerName: "Deadline",
+        width: 200
     }
 ];

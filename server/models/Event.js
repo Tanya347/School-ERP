@@ -21,13 +21,6 @@ const EventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    meetLink: {
-        type: String
-    },
-    teamName: {
-        type: String,
-        required: true
-    },
     registerLink: {
         type: String
     },

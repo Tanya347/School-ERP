@@ -22,12 +22,6 @@ const TaskSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Faculty'
     },
-    pace: {
-      type: String
-    },
-    category: {
-      type: String
-    }
   },
   { timestamps: true }
 );

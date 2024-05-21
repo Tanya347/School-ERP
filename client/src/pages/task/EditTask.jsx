@@ -107,7 +107,7 @@ const EditTask = ({ title }) => {
 
               <div className="formInput">
 
-                <label>Set Deadline</label>
+                <label>Set Deadline<span style={{color: "green", fontWeight: "bold"}}>Original Date: {new Date(info.deadline).toLocaleDateString()}</span></label>
                 <DatePicker
                   class="date-picker"
                   placeholderText="Choose Date and Time"

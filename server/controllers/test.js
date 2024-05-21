@@ -4,6 +4,8 @@ import Student from "../models/Student.js";
 export const createTest = async (req, res, next) => {
   const newTest = new Test(req.body);
   try {
+    const courseId = newTest.subject;
+
     const savedTest = await newTest.save();
     res.status(200).json(savedTest);
   } catch (err) {

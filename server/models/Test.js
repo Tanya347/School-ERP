@@ -30,6 +30,10 @@ const TestSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Class'
         },
+        totalMarks: {
+            type: Number,
+            required: true
+        },
         marks: [
             {
                 student_id: {

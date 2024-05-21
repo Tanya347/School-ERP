@@ -75,6 +75,23 @@ export const getClassDetails = async (req, res, next) => {
     }
 };
 
+export const getClassStudents = async (req, res, next) => {
+    const classId = req.params.id;
+
+    try {
+        const classStudents = await Class.findById(classId)
+        .populate({
+            path: 'students',
+            model: 'Student',
+            select: 'name profilePicture cloud_id gender enroll',
+        });
+
+        res.status(200).json(classStudents);
+    } catch (err) {
+        next(err);
+    }
+};
+
 export const getClasses = async (req, res, next) => {
     try {
         const classes = await Class.find();

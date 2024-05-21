@@ -35,7 +35,7 @@ const NewTask = ({ inputs, title }) => {
       await axios.post("http://localhost:5500/api/tasks", newtask, {
         withCredentials: false
       });
-      navigate(-1)
+      navigate('/facTasks')
     } catch (err) {
       console.log(err)
     }
@@ -57,7 +57,7 @@ const NewTask = ({ inputs, title }) => {
           <div className="right">
             <form>
 
-              {inputs.map((input) => (
+              {inputs?.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
                   <input
@@ -77,7 +77,7 @@ const NewTask = ({ inputs, title }) => {
                     <option>-</option>
                     {
                       classes && classes.length > 0 &&
-                      classes.map((cl, index) => (
+                      classes?.map((cl, index) => (
                         <option key={index} value={cl._id}>{cl.name}</option>
                       ))
                     }

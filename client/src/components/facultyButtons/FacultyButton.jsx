@@ -33,7 +33,7 @@ const FacultyButton = () => {
             <p>Tasks</p>
           </div>
         </Link>
-        <Link to="/tests/new" style={{ textDecoration: "none", color: "black" }}>
+        <Link to="/facTests/new" style={{ textDecoration: "none", color: "black" }}>
           <div className="createButton">
             <NoteAddIcon className='icon' style={{color:"var(--green)"}}/>
             <p>Tests</p>

@@ -21,8 +21,8 @@ const StudentClass = ({props}) => {
                     <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Name</TableCell>
                     <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Enrollment Number</TableCell>
                     <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Gender</TableCell>
-                    <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Group</TableCell>
-                    <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Pace</TableCell>
+                    <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Email</TableCell>
+                    <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Phone</TableCell>
                 </TableRow>
                 </TableHead>
 
@@ -44,12 +44,13 @@ const StudentClass = ({props}) => {
                     {/* Other details */}
                     <TableCell className="tableCell">{row.enroll}</TableCell>
                     <TableCell className="tableCell">{row.gender}</TableCell>
+                    <TableCell className="tableCell">{row.email}</TableCell>
+                    <TableCell className="tableCell">{row.stuPhone}</TableCell>
+
                     
                     {/* Can be used to show some kind of status */}
                     
-                    {/* <TableCell className="tableCell">
-                        <span className={`status ${row.status}`}>{row.status}</span>
-                    </TableCell> */}
+
                     </TableRow>
                 ))}
                 </TableBody>

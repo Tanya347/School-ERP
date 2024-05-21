@@ -14,14 +14,13 @@ import { DarkModeContext } from "./context/darkModeContext";
 import { studentColumns } from "./source/datatablesource/studentColumns";
 import { facultyColumns } from "./source/datatablesource/facultyColumns";
 import { taskColumns } from "./source/datatablesource/taskColumns";
+import { testColumns } from "./source/datatablesource/testColumns";
 import { updateColumns } from "./source/datatablesource/updateColumns";
 import { queryColumns } from "./source/datatablesource/queryColumns";
 import { courseColumns } from "./source/datatablesource/courseColumns";
-import { videoColumns } from "./source/datatablesource/videoColumns";
 
 // Form Inputs
 import { studentInputs } from "./source/formsource/studentInputs";
-import { taskInputs } from "./source/formsource/taskInputs";
 import { facultyInputs } from "./source/formsource/facultyInputs";
 import { updateInputs } from "./source/formsource/updateInputs";
 import { eventInputs } from "./source/formsource/eventInputs";
@@ -30,7 +29,6 @@ import { courseInputs } from "./source/formsource/courseInputs";
 // Admin Pages
 import NewStudent from "./pages/student/NewStudent";
 import NewFaculty from "./pages/faculty/NewFaculty";
-import NewTask from "./pages/task/NewTask";
 import NewCourse from "./pages/course/NewCourse";
 import NewUpdate from "./pages/update/NewUpdate";
 import EditTask from "./pages/task/EditTask";
@@ -44,9 +42,8 @@ import EditEvent from "./pages/event/EditEvent";
 import Response from "./pages/response/Response";
 import NewTest from "./pages/test/NewTest";
 import EditTest from "./pages/test/EditTest";
-import NewVideo from "./pages/video/NewVideo";
-import UpdateVideo from "./pages/video/UpdateVideo";
 import Books from "./pages/books/Books"
+import NewTask from "./pages/task/NewTask"
 
 // Common Pages
 import Home from "./pages/home/Home";
@@ -61,9 +58,9 @@ import NewTimeTable from "./pages/timetable/NewTimeTable";
 import Class from "./pages/class/Class";
 import AddClass from "./pages/class/AddClass";
 import ViewClass from "./pages/class/ViewClass";
-import { videoInputs } from "./source/formsource/videoInputs";
-import StuVideo from "./pages/video/ViewVideo";
 import StudentCategory from "./components/studentCategory/StudentCategory";
+import { taskInputs } from "./source/formsource/taskInputs";
+import ViewStudents from "./pages/viewStudents/ViewStudents";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -209,19 +206,6 @@ function App() {
                 <RequireAdmin>
                   <NewStudent inputs={studentInputs} title="Add New Student" />
                 </RequireAdmin>
-              </RequireAuth>
-            }
-          />
-
-          {/* view video student */}
-
-          <Route
-            path="/stuVideo"
-            element={
-              <RequireAuth>
-                <RequireStudent>
-                  <StuVideo />
-                </RequireStudent>
               </RequireAuth>
             }
           />
@@ -426,45 +410,7 @@ function App() {
             }
           />
 
-          {/* routes for uploading videos faculty side */}
-
-          {/* list of videos */}
-          <Route
-            path="/facVideo"
-            element={
-              <RequireAuth>
-                <RequireFaculty>
-                  <List column={videoColumns} name="Video" type="Creator" />
-                </RequireFaculty>
-              </RequireAuth>
-            }
-          />
-
-          {/* edit page for videos */}
-          <Route
-            path="/facVideo/:taskId/edit"
-            element={
-              <RequireAuth>
-                <RequireFaculty>
-                  <UpdateVideo title="Update Video" />
-                </RequireFaculty>
-              </RequireAuth>
-            }
-          />
-
-          {/* create video page */}
-          <Route
-            path="/facVideo/new"
-            element={
-              <RequireAuth>
-                <RequireFaculty>
-                  <NewVideo inputs={videoInputs} title="Add New Video" />
-                </RequireFaculty>
-              </RequireAuth>
-            }
-          />
-
-          {/* view video uploaded  */}
+   
 
           {/* routes for events */}
 
@@ -521,7 +467,7 @@ function App() {
             }
           />
 
-          {/* edit profile page for faculty*/}
+          {/* edit profile page for student*/}
           <Route
             path="/students/:id/edit"
             element={
@@ -583,6 +529,18 @@ function App() {
             }
           />
 
+          <Route
+            path="/facTasks/new"
+            element={
+              <RequireAuth>
+                <RequireFaculty>
+                  <NewTask title="Add New Task" inputs={taskInputs} />
+                </RequireFaculty>
+              </RequireAuth>
+            }
+          >
+          </Route>
+
           {/* edit page for tasks */}
           <Route
             path="/facTasks/:taskId/edit"
@@ -595,43 +553,23 @@ function App() {
             }
           />
 
-          {/* add video */}
-          <Route
-            path="/facTasks/new"
-            element={
-              <RequireAuth>
-                <RequireFaculty>
-                  <NewTask inputs={taskInputs} title="Add New Task" />
-                </RequireFaculty>
-              </RequireAuth>
-            }
-          />
 
-          {/* delete video */}
-
-          {/* updates page student side
-        <Route path="/updates" element={
-            <RequireAuth>
-              <RequireStudent>
-                < List column={updateColumns} type="Main" name="Update" />
-              </RequireStudent>
-            </RequireAuth>
-        } /> */}
+       
 
           {/* routes for tests faculty side */}
 
           {/* list of tests */}
-          {/* <Route path="/tests/cr" element={
+          <Route path="facTests" element={
             <RequireAuth>
               <RequireFaculty>
                 <List column={testColumns} name="Test" type="Creator" />
               </RequireFaculty>
             </RequireAuth>
-        } /> */}
+        } />
 
           {/* edit page for tests */}
           <Route
-            path="/tests/:testId/edit"
+            path="/facTests/:testId/edit"
             element={
               <RequireAuth>
                 <RequireFaculty>
@@ -643,7 +581,7 @@ function App() {
 
           {/* create test page */}
           <Route
-            path="/tests/new"
+            path="/facTests/new"
             element={
               <RequireAuth>
                 <RequireFaculty>
@@ -662,6 +600,19 @@ function App() {
               </RequireAuth>
             }
           />
+
+          {/* Students on Faculty Side */}
+          <Route
+            path="/class/students"
+            element={
+              <RequireAuth>
+                <RequireFaculty>
+                  <ViewStudents />
+                </RequireFaculty>
+              </RequireAuth>
+            }
+          >
+          </Route>
 
           {/* create events page */}
           <Route

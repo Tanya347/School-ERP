@@ -8,17 +8,20 @@ import DatePicker from "react-datepicker";
 
 import { AuthContext } from "../../context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
+import useFetch from "../../hooks/useFetch";
 
 
 const NewTest = ({ title }) => {
   
   const [info, setInfo] = useState({});
-
+  const [course, setCourse] = useState();
+  const [sclass, setSclass] = useState();
   // dates
   const [start, setStart] = useState("")
-
-  const { user } = useContext(AuthContext)
   
+  const { user } = useContext(AuthContext)
+  const courses = useFetch(`/faculties/courses/${user._id}`).data
+  const classes = useFetch(`/faculties/classes/${user._id}`).data
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,16 +33,16 @@ const NewTest = ({ title }) => {
    
       try {
         const newtest = {
-          ...info, date: start, author: user._id
+          ...info, date: start, author: user._id, subject: course, sclass: sclass
         }
+        console.log(newtest)
         axios.post("http://localhost:5500/api/tests", newtest, { withCredentials: false })
-        navigate(-1)
+        navigate("/facTests")
 
       } catch (error) {
         console.log(error)
       }
     } 
-
 
  
   return (
@@ -55,6 +58,40 @@ const NewTest = ({ title }) => {
             <form>
               
               {/* course */}
+
+              <div className="formInput">
+                <label>Name</label>
+                <input 
+                  type="text" 
+                  id="name"
+                  onChange={handleChange}
+                  placeholder="Enter Name for the Test"
+                />
+              </div>
+
+              <div className="formInput">
+                <label>Select Course</label>
+                <select onChange={(e) => {
+                  setCourse(e.target.value);
+                }} id="classId">
+                  <option>-</option>
+                    {courses?.map((cr, index) => (
+                      <option value={cr._id} key={index}>{cr.name}</option>
+                    ))}
+                </select>
+              </div>
+
+              <div className="formInput">
+                <label>Select Class</label>
+                <select onChange={(e) => {
+                  setSclass(e.target.value);
+                }} id="classId">
+                  <option>-</option>
+                    {classes?.map((cl, index) => (
+                      <option value={cl._id} key={index}>{cl.name}</option>
+                    ))}
+                </select>
+              </div>
 
               <div className="formInput">
                 <label>Syllabus</label>
@@ -77,10 +114,20 @@ const NewTest = ({ title }) => {
               <div className="formInput">
                 <label>Duration</label>
                 <input 
-                  type="text" 
+                  type="number" 
                   id="duration"
                   onChange={handleChange}
-                  placeholder="Enter Duration of the Test"
+                  placeholder="Enter Duration of the Test in minutes"
+                />
+              </div>
+
+              <div className="formInput">
+                <label>Total Marks</label>
+                <input 
+                  type="number" 
+                  id="totalMarks"
+                  onChange={handleChange}
+                  placeholder="Enter total marks of the Test"
                 />
               </div>
             

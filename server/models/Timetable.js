@@ -4,23 +4,11 @@ import mongoose from "mongoose";
 
 const TimetableSchema = new mongoose.Schema({
 
-  //  user: {
-  //      type: Schema.Types.ObjectId,
-   //     ref: "users"
-   //   },
    classId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Class", // Assuming your class model is named "Class"
     required: true
   },
-  classAndSec: {
-        type: String,
-        required: true
-    },
-    // semester: {
-    //     type: String, 
-    //     required: true
-    // },
     Monday:[
         {
             start_time: String,

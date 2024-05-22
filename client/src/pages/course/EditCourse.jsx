@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
-import useFetch from "../../hooks/useFetch";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import useFetch from "../../config/hooks/useFetch";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 const EditCourse = ({ title }) => {
   
   // get location and extract id out of it

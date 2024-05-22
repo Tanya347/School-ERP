@@ -5,11 +5,11 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 import axios from "axios"
 
 import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { departments} from "../../source/formsource/arrays";
 
 

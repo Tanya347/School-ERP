@@ -6,9 +6,9 @@ import axios from "axios"
 
 import DatePicker from "react-datepicker";
 
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 
 
 const NewTest = ({ title }) => {

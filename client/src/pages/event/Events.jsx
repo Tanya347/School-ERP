@@ -8,9 +8,9 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "../../components/navbar/Navbar";
-import useFetch from '../../hooks/useFetch';
-import Modal from '../../components/modal/Modal';
-import { AuthContext } from '../../context/AuthContext';
+import useFetch from '../../config/hooks/useFetch';
+import Modal from '../../components/popUps/Modal';
+import { AuthContext } from '../../config/context/AuthContext';
 import { getTaskCalenderURL, getTestCalenderURL } from '../../source/endpoints/get';
 
 const locales = {

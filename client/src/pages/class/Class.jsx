@@ -1,8 +1,8 @@
 import React from 'react'
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 import "./class.scss"
 import { Link } from 'react-router-dom';
-import useFetch from '../../hooks/useFetch';
+import useFetch from '../../config/hooks/useFetch';
 
 const Class = () => {
 

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 import { useContext, useState } from 'react'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../config/context/AuthContext'
 
 
 
@@ -67,9 +67,11 @@ function Login({ type }) {
       }
 
       // if not admin redirect to / i.e localhost:3000/
-      else {
-        navigate("/");
+      else if(res.data.isFaculty) {
+        navigate("/faculty");
       }
+
+      else navigate("/student");
 
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err.response.data })

@@ -2,8 +2,8 @@ import "./single.scss";
 
 import { useLocation, useNavigate} from "react-router-dom";
 import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
-import useFetch from "../../hooks/useFetch";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
+import useFetch from "../../config/hooks/useFetch";
 import Course from "../../components/course/Course";
 import { CircularProgressbar } from "react-circular-progressbar";
 

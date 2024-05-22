@@ -1,10 +1,10 @@
 import React from 'react'
 import './viewClass.scss'
-import AdminNavbar from '../../components/adminNavbar/AdminNavbar'
-import useFetch from '../../hooks/useFetch'
+import AdminNavbar from '../../components/navbar/AdminNavbar'
+import useFetch from '../../config/hooks/useFetch'
 import { useLocation } from 'react-router-dom'
 import Course from '../../components/course/Course'
-import StudentClass from '../../components/studentClass/StudentClass'
+import StudentClass from '../../components/table/StudentClass'
 
 const ViewClass = () => {
 

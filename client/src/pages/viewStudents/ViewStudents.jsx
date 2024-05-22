@@ -1,11 +1,11 @@
 import React from 'react'
 import "./viewStudents.scss"
 import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../config/context/AuthContext';
 import axios from 'axios';
-import useFetch from '../../hooks/useFetch';
+import useFetch from '../../config/hooks/useFetch';
 import Navbar from '../../components/navbar/Navbar';
-import StudentClass from '../../components/studentClass/StudentClass'
+import StudentClass from '../../components/table/StudentClass'
 
 
 const ViewStudents = () => {

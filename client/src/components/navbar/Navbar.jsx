@@ -1,18 +1,18 @@
 import "./navbar.scss";
 
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+// import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
-import { DarkModeContext } from "../../context/darkModeContext";
-import { AuthContext } from "../../context/AuthContext";
+import { DarkModeContext } from "../../config/context/darkModeContext";
+import { AuthContext } from "../../config/context/AuthContext";
 
 import { useContext, useEffect, useState } from "react";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 import { Link, useNavigate } from "react-router-dom"
 
-import NavSidebar from "../NavSidebar/NavSidebar"
+import NavSidebar from "../sidebar/MainSidebar"
 
 const Navbar = () => {
 
@@ -34,7 +34,7 @@ const Navbar = () => {
   // use states for setting notifications, opening notification popup and opening side bar
   // const [notifs, setNotifs] = useState([])
   const [messages, setMessages] = useState([])
-  const [openNotif, setOpenNotif] = useState(false);
+  // const [openNotif, setOpenNotif] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openMessages, setOpenMessages] = useState(false);
 
@@ -46,7 +46,7 @@ const Navbar = () => {
   // feeds all messages into the messages array whenever page rerenders or data changes  
   useEffect(() => {
     setMessages(queries.filter((item) => item.queryTo === user._id))
-  }, [queries])
+  }, [queries, user._id])
 
 
 
@@ -54,9 +54,9 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   // toggles open and close of notifications pop up
-  const handleNotif = () => {
-    setOpenNotif(!openNotif)
-  }
+  // const handleNotif = () => {
+  //   setOpenNotif(!openNotif)
+  // }
 
   // toggles open and close of notifications pop up
   const handleMessages = () => {
@@ -71,7 +71,7 @@ const Navbar = () => {
       <div className="wrapper">
 
         {/* takes to main landing page and if it is darkmode changes the brand so it's visible*/}
-        <Link to="/">
+        <Link to={user.isFaculty? "/faculty" : "/student"}>
           {/* {darkMode ? <p className="brand"><img src={process.env.PUBLIC_URL + "/Assets/brand2.png"} height="60px" alt="" /></p> : <p className="brand"><img src={process.env.PUBLIC_URL + "/Assets/brand.png"} height="60px" alt="" /></p>} */}
           <div className="logo" style={{textDecoration: "none"}}>
             <img src="/Assets/logo.png" alt="" style={{height: "50px"}}/>
@@ -124,7 +124,7 @@ const Navbar = () => {
             ))}
 
             {/* Takes to the page of all updates */}
-            <Link to="/queries" style={{ textDecoration: "none" }}>
+            <Link to="/faculty/queries" style={{ textDecoration: "none" }}>
               <li id="more">
                 View all new queries
               </li>

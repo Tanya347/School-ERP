@@ -2,11 +2,11 @@ import "./home.scss";
 
 // calling all the components on the page
 import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar"
-import FacultyButton from "../../components/facultyButtons/FacultyButton"
+import AdminNavbar from "../../components/navbar/AdminNavbar"
+import FacultyButton from "../../components/buttons/FacultyButton"
 import AdminWidgets from "../../components/adminWidgets/AdminWidgets";
-import AdminButton from "../../components/adminButtons/AdminButton"
-import Table from "../../components/table/Table";
+import AdminButton from "../../components/buttons/AdminButton"
+import Table from "../../components/table/UpdateTable";
 
 // type specifies the admin side or user side 
 const Home = ({ type }) => {

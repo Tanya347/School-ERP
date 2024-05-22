@@ -4,15 +4,15 @@ import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../config/context/AuthContext.js";
 
 
 // useFetch and axios for fetching data
 import axios from "axios";
-import useFetch from "../../hooks/useFetch.js"
+import useFetch from "../../config/hooks/useFetch.js"
 
 // Modal for showing the details about tasks and updates
-import Modal from "../../components/modal/Modal";
+import Modal from "../popUps/Modal.jsx";
 import { getDatatableURL } from "../../source/endpoints/get.js";
 import { getDeleteURL } from "../../source/endpoints/delete.js";
 

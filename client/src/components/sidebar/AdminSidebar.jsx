@@ -25,8 +25,8 @@ import { Link } from 'react-router-dom';
 
 // contexts
 import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { DarkModeContext } from "../../context/darkModeContext";
+import { AuthContext } from "../../config/context/AuthContext";
+import { DarkModeContext } from "../../config/context/darkModeContext";
 
 
 const AdminSidebar = ({ setOpen }) => {

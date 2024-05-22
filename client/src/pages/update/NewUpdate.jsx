@@ -1,12 +1,12 @@
 import "../../style/form.scss";
 
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Navbar from "../../components/navbar/Navbar";
 
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 
 const NewUpdate = ({ inputs, type }) => {
   const [info, setInfo] = useState({});

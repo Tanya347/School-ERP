@@ -7,8 +7,8 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 
 import Navbar from "../../components/navbar/Navbar";
-import { AuthContext } from "../../context/AuthContext";
-import useFetch from "../../hooks/useFetch";
+import { AuthContext } from "../../config/context/AuthContext";
+import useFetch from "../../config/hooks/useFetch";
 
 const NewTask = ({ inputs, title }) => {
 

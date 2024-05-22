@@ -1,7 +1,7 @@
 import "./modal.css"
 
 import CancelIcon from '@mui/icons-material/Cancel';
-import useFetch from "../../hooks/useFetch"
+import useFetch from "../../config/hooks/useFetch"
 import { useState } from "react";
 import axios from "axios";
 import { getModalURL } from "../../source/endpoints/get";

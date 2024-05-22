@@ -2,9 +2,9 @@ import "../../style/form.scss";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 import axios from "axios";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 
 const NewCourse = ({ inputs, title }) => {
 

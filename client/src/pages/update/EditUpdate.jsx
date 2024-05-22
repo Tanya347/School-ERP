@@ -5,9 +5,9 @@ import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Navbar from "../../components/navbar/Navbar";
 
 const EditUpdate = ({ title, type }) => {

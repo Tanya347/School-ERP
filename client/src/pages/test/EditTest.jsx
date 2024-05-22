@@ -4,8 +4,8 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import useFetch from "../../hooks/useFetch";
-import { AuthContext } from "../../context/AuthContext";
+import useFetch from "../../config/hooks/useFetch";
+import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
 
 const EditTest = ({ title }) => {

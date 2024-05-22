@@ -18,7 +18,7 @@ import EditTest from '../../pages/test/EditTest';
 import NewTest from '../../pages/test/NewTest';
 import Events from '../../pages/event/Events';
 import ViewStudents from '../../pages/viewStudents/ViewStudents';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../config/context/AuthContext';
 
 
 
@@ -28,10 +28,10 @@ const FacultyRoutes = () => {
 
   const RequireFaculty = ({ children }) => {
     if(user) {
-      return user.isFaculty ? children : <Navigate to="/home" />;
+      return user.isFaculty ? children : <Navigate to="/" />;
     }
     else
-      return <Navigate to="/home" />;
+      return <Navigate to="/" />;
 };
 
   return (
@@ -40,19 +40,19 @@ const FacultyRoutes = () => {
 
           {/* dashboard of main */}
           <Route
-            path="/faculty"
+            index
             element={ <Home type="Main" />}
           />
 
           {/* profile page for faculty */}
           <Route
-            path="/faculties/:id"
+            path=":id"
             element={<SingleFaculty type="Main" />}
           />
 
           {/* edit profile page for faculty */}
           <Route
-            path="/faculties/:id/edit"
+            path=":id/edit"
             element={<EditFaculty title="Edit Profile" type="Main" />}
           />
 
@@ -61,19 +61,19 @@ const FacultyRoutes = () => {
 
           {/* list of tasks */}
           <Route
-            path="/facTasks"
+            path="tasks"
             element={<List column={taskColumns} name="Task" type="Creator" />}
           />
 
           <Route
-            path="/facTasks/new"
+            path="tasks/new"
             element={<NewTask title="Add New Task" inputs={taskInputs} />}
           >
           </Route>
 
           {/* edit page for tasks */}
           <Route
-            path="/facTasks/:taskId/edit"
+            path="tasks/:taskId/edit"
             element={<EditTask title="Update Task" />}
           />
 
@@ -81,37 +81,37 @@ const FacultyRoutes = () => {
 
           {/* list of tests */}
           <Route 
-            path="facTests" 
+            path="tests" 
             element={ <List column={testColumns} name="Test" type="Creator" />} 
           />
 
           {/* edit page for tests */}
           <Route
-            path="/facTests/:testId/edit"
+            path="tests/:testId/edit"
             element={<EditTest title="Update Test" />}
           />
 
           {/* create test page */}
           <Route
-            path="/facTests/new"
+            path="tests/new"
             element={<NewTest title="Add New Test" />}
           />
 
           {/* events */}
           <Route
-            path="/faculty/events"
+            path="events"
             element={ <Events />}
           />
 
           {/* Students on Faculty Side */}
           <Route
-            path="/class/students"
+            path="class/students"
             element={<ViewStudents />}
           />
 
           {/* query page faculty side*/}
           <Route
-            path="/queries"
+            path="queries"
             element={<List column={queryColumns} type="Faculty" name="Query" />}
           />
         </Routes>

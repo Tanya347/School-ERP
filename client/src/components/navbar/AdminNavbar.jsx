@@ -3,12 +3,12 @@ import "./adminNavbar.scss";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 
-import { DarkModeContext } from "../../context/darkModeContext";
+import { DarkModeContext } from "../../config/context/darkModeContext";
 
 import { useContext, useState } from "react";
 import { Link} from "react-router-dom"
 
-import AdminSidebar from "../AdminSidebar/AdminSidebar"
+import AdminSidebar from "../sidebar/AdminSidebar"
 
 const AdminNavbar = () => {
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import './addClass.scss'
 import { useLocation, useNavigate } from 'react-router-dom'
-import AdminNavbar from '../../components/adminNavbar/AdminNavbar';
-import useFetch from '../../hooks/useFetch';
+import AdminNavbar from '../../components/navbar/AdminNavbar';
+import useFetch from '../../config/hooks/useFetch';
 import axios from 'axios';
 const AddClass = () => {
 

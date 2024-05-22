@@ -3,10 +3,10 @@ import "./single.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Course from "../../components/course/Course";
 
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 
 const Single = ({ type }) => {
   

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import ImageModal from '../imageModal/ImageModal'
+import ImageModal from '../popUps/ImageModal'
 import './course.scss'
 
 const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {

@@ -1,4 +1,4 @@
-import "./table.scss";
+import "./updateTable.scss";
 
 // elements of the table
 import Table from "@mui/material/Table";
@@ -10,9 +10,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 // to fetch data
-import useFetch from "../../hooks/useFetch.js"
+import useFetch from "../../config/hooks/useFetch.js"
 import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext.js";
+import { AuthContext } from "../../config/context/AuthContext.js";
 import { getTableURL } from "../../source/endpoints/get.js";
 
 const List = () => {
@@ -36,10 +36,10 @@ const List = () => {
 
 
         <TableBody>
-          {data?.map((row) => (
+          {data?.map((row, index) => (
 
             // row.id is just a number
-            <TableRow key={row.id}>
+            <TableRow key={index}>
               
               {/* Event poster and name
               <TableCell className="tableCell">

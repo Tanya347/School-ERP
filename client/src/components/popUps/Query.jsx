@@ -3,7 +3,7 @@ import './query.css'
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useState } from 'react';
 import axios from "axios"
-import useFetch from '../../hooks/useFetch';
+import useFetch from '../../config/hooks/useFetch';
 
 const Query = ({ setOpen, user }) => {
 

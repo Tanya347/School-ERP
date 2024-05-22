@@ -1,6 +1,6 @@
 import "./list.scss"
 
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar"
+import AdminNavbar from "../../components/navbar/AdminNavbar"
 import Navbar from "../../components/navbar/Navbar"
 import Datatable from "../../components/datatable/Datatable"
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './response.css'
 import Navbar from '../../components/navbar/Navbar'
-import { AuthContext } from '../../context/AuthContext'
+import { AuthContext } from '../../config/context/AuthContext'
 import { useContext } from 'react'
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../config/hooks/useFetch'
 
 const Response = () => {
 
@@ -13,7 +13,7 @@ const Response = () => {
 
   useEffect(() => {
     setQuery(queries.filter(item => item.author === user.name))
-  }, [queries])
+  }, [queries, user.name])
 
 
   return (

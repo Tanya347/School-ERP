@@ -6,13 +6,13 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 
 
 import axios from "axios"
 
 import { departments} from "../../source/formsource/arrays";
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 
 const NewFaculty = ({ inputs, title }) => {
   

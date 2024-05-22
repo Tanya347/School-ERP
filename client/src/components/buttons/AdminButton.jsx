@@ -50,11 +50,6 @@ const Button = () => {
             <p>Classes</p>
           </div>
         </Link>
-        
-        {/* <div className="createButton">
-          <ControlPointDuplicateIcon className='icon' style={{color:"var(--blue)"}}/>
-          <p>Classes</p>
-        </div> */}
       </div>
     </div>
   )

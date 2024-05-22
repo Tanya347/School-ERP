@@ -9,8 +9,8 @@ import { useState } from "react";
 
 import axios from "axios"
 
-import AdminNavbar from "../../components/adminNavbar/AdminNavbar";
-import useFetch from "../../hooks/useFetch";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
+import useFetch from "../../config/hooks/useFetch";
 
 const NewUser = ({ inputs, title }) => {
   

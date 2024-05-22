@@ -14,7 +14,6 @@ import EditStudent from "../../pages/student/EditStudent";
 import EditFaculty from "../../pages/faculty/EditFaculty";
 import SingleFaculty from "../../pages/singleFaculty/SingleFaculty";
 import SingleStudent from '../../pages/singleStudent/SingleStudent';
-import StudentCategory from '../../components/studentCategory/StudentCategory';
 import Class from "../../pages/class/Class";
 import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
@@ -30,50 +29,41 @@ import { studentInputs } from "../formsource/studentInputs";
 import { facultyInputs } from "../formsource/facultyInputs";
 import { updateInputs } from "../formsource/updateInputs";
 import { courseInputs } from "../formsource/courseInputs";
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../config/context/AuthContext';
 
 const AdminRoutes = () => {
 
   const { user } = useContext(AuthContext);
   
   const RequireAdmin = ({ children }) => {
-    if(user) {
-      return user.isAdmin ? children : <Navigate to="/home" />;
-    }
-    else
-      return <Navigate to="/home" />;
+    return user && user.isAdmin ? children : <Navigate to="/" />;
 };
 
   return (
       <RequireAdmin>
         <Routes>
           <Route 
-            path="/admin" 
-            element={<Home type="Admin" />} 
-          />
-
-          <Route 
-            path="/admin/viewCategories" 
-            element={<StudentCategory />} 
+            index
+            element={<RequireAdmin><Home type="Admin" /></RequireAdmin>} 
           />
           
         {/* ROUTES FOR STUDENTS */}
           
           {/* list of students */}
           <Route 
-            path="/admin/students" 
+            path="students" 
             element={<List column={studentColumns} name="Student" type="Admin" />} 
           />
           
           {/* single page for student */}
           <Route 
-            path="/admin/students/:studentId" 
+            path="students/:studentId" 
             element={<SingleStudent type="Admin" />} 
           />
           
           {/* edit page for student */}
           <Route 
-            path="/admin/students/:studentId" 
+            path="students/:studentId" 
             element={<EditStudent title="Update Student" type="Admin" />} 
           />
 
@@ -88,25 +78,25 @@ const AdminRoutes = () => {
 
           {/* list of faculties */}
           <Route 
-            path="/admin/faculties" 
+            path="faculties" 
             element={<List column={facultyColumns} name="Faculty" type="Admin" />}
           />
 
           {/* single page for faculty */}
           <Route 
-            path="/admin/faculties/:facultyId" 
+            path="faculties/:facultyId" 
             element={<SingleFaculty type="Admin" />} 
           />
 
           {/* edit page for faculty */}
           <Route 
-            path="/admin/faculties/:facultyId/edit" 
+            path="faculties/:facultyId/edit" 
             element={<EditFaculty title="Update Faculty" type="Admin" /> }
           />
 
           {/* create faculty */}
           <Route 
-            path="/admin/faculties/new" 
+            path="faculties/new" 
             element={<NewFaculty inputs={facultyInputs} title="Add New Faculty" />} 
           />
 
@@ -115,19 +105,19 @@ const AdminRoutes = () => {
 
           {/* list of updates */}
           <Route 
-            path="/admin/updates" 
+            path="updates" 
             element={<List column={updateColumns} name="Update" type="Admin" />} 
           />
 
           {/* edit update */}
           <Route 
-            path="/admin/updates/:updateId/edit" 
+            path="updates/:updateId/edit" 
             element={ <EditUpdate title="Edit Updates" type="Admin" />} 
           />
 
           {/* create update page */}
           <Route 
-            path="/admin/updates/new" 
+            path="updates/new" 
             element={<NewUpdate inputs={updateInputs} title="Add New Update" type="Admin" /> }
           />
         
@@ -136,21 +126,21 @@ const AdminRoutes = () => {
           {/* list of courses */}
 
           <Route
-            path="/admin/courses"
+            path="courses"
             element={ <List column={courseColumns} name="Course" type="Admin" />}
           />
 
           {/*  create new courses */}
 
           <Route
-            path="/admin/courses/new"
+            path="courses/new"
             element={ <NewCourse inputs={courseInputs} title="Add New Course" />}
           />
 
           {/* edit courses */}
 
           <Route
-            path="/admin/courses/:courseId/edit"
+            path="courses/:courseId/edit"
             element={ <EditCourse title="Edit Courses" type="Admin" />}
           />
 
@@ -159,20 +149,20 @@ const AdminRoutes = () => {
           {/* list of classes */}
 
           <Route
-            path="/admin/classes"
+            path="classes"
             element={ <Class />}
           />
 
           {/* edit classes */}
 
           <Route
-            path="/admin/faculties/:facId/addCourse"
+            path="faculties/:facId/addCourse"
             element={ <AddClass />} 
           />
 
           {/* view class */}
           <Route
-            path="/admin/classes/:classId"
+            path="classes/:classId"
             element={ <ViewClass />}
           />
         </Routes>

@@ -8,7 +8,7 @@ import useFetch from "../../hooks/useFetch";
 import { AuthContext } from "../../context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
 
-const EditTask = ({ title }) => {
+const EditTest = ({ title }) => {
   
   // get location and extract id out of it
   const location = useLocation();
@@ -175,4 +175,4 @@ const EditTask = ({ title }) => {
   );
 };
 
-export default EditTask;
+export default EditTest;

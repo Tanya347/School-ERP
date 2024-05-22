@@ -11,15 +11,19 @@ import Paper from "@mui/material/Paper";
 
 // to fetch data
 import useFetch from "../../hooks/useFetch.js"
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
+import { getTableURL } from "../../source/endpoints/get.js";
 
 const List = () => {
 
   // fetch latest/upcoming events
-  const { data } = useFetch("/updates");
-  const newData= data.slice(0, 5);
+  const {user} = useContext(AuthContext)
+  const { data } = useFetch(getTableURL(user));
+  // const newData= data.slice(0, 5);
 
   return (
-    <TableContainer component={Paper} className="table">
+    <TableContainer component={Paper} className="table" style={{overflowY: "scroll", height: "400px"}}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead style={{"backgroundColor": "#EEEEEE"}}>
 
@@ -32,7 +36,7 @@ const List = () => {
 
 
         <TableBody>
-          {newData?.map((row) => (
+          {data?.map((row) => (
 
             // row.id is just a number
             <TableRow key={row.id}>
@@ -48,12 +52,6 @@ const List = () => {
               {/* Other details */}
               <TableCell className="tableCell">{row.title}</TableCell>
               <TableCell className="tableCell">{row.desc}</TableCell>
-              
-              {/* Can be used to show some kind of status */}
-              
-              {/* <TableCell className="tableCell">
-                <span className={`status ${row.status}`}>{row.status}</span>
-              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

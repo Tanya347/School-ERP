@@ -20,8 +20,6 @@ const Class = () => {
                     classes.map((cl, index) => (
                         <div className="classContainer" key={index}>
                             <h3>{cl.name} Standard</h3>
-                            <button className='courseButton'>Add Course</button>
-                            <button className='studentButton'>Add Student</button>
                             <Link to={`/admin/classes/${cl._id}`}>
                                 <button className='viewButton'>View</button>
                             </Link>

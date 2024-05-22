@@ -18,9 +18,15 @@ const ViewClass = () => {
         <AdminNavbar />
         <div className="viewClassContainer">
                 <h2>{classData.name} Standard</h2>
+                <div className="add-buttons">
+                    <button className='courseButton'>Add Course</button>
+                    <button className='studentButton'>Add Student</button>
+                    <button className='facultyButton'>Add Faculty</button>
+                </div>
+
                 <div className="top">
                 {
-                    classData.subjects? (
+                    classData?.subjects?.length > 0? (
                         <>
                         {classData?.subjects?.map((item, index) => (
                             <Course 
@@ -37,7 +43,7 @@ const ViewClass = () => {
                 }
                 </div>
                 <div className="bottom">
-                    {classData.students? (<StudentClass props = {classData.students} />) : (<div>No students in class at the moment</div>)}
+                    {classData?.students?.length > 0 ? (<StudentClass props = {classData.students} />) : (<div>No students in class at the moment</div>)}
                 </div>
             
         </div>

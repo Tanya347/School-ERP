@@ -42,7 +42,6 @@ import EditEvent from "./pages/event/EditEvent";
 import Response from "./pages/response/Response";
 import NewTest from "./pages/test/NewTest";
 import EditTest from "./pages/test/EditTest";
-import Books from "./pages/books/Books"
 import NewTask from "./pages/task/NewTask"
 
 // Common Pages
@@ -378,15 +377,6 @@ function App() {
             }
           />
 
-   
-
-          {/* routes for events */}
-
-          {/* list of events */}
-          {/* <Route path="/admin/events" element={
-            <RequireAuth>
-            </RequireAuth>
-        } /> */}
 
           {/****************************************************************************************************/}
 
@@ -482,6 +472,15 @@ function App() {
               </RequireAuth>
             }
           />
+
+          {/* list of tests student side */}
+          <Route path="/stuTests" element={
+            <RequireAuth>
+              <RequireStudent>
+                <List column={testColumns} name="Test" type="Main" />
+              </RequireStudent>
+            </RequireAuth>
+        } />
 
           {/* routes for tasks faculty side */}
 
@@ -626,16 +625,7 @@ function App() {
             }
           />
 
-            <Route
-            path="/books"
-            element={
-              <RequireAuth>
-                <RequireStudent>
-                  <Books />
-                </RequireStudent>
-              </RequireAuth>
-            }
-          />
+
         </Routes>
       </BrowserRouter>
     </div>

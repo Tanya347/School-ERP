@@ -40,22 +40,6 @@
                     width: 150px;
                 }
 
-                .studentButton {
-                    background-color: var(--light-purple);
-                    transition: all ease-in-out 0.2s;
-                    &:hover {
-                        background-color: #caa8ea;
-                    }
-                }
-
-                .courseButton {
-                    background-color: white;
-                    transition: all ease-in-out 0.2s;
-                    &:hover {
-                        background-color: var(--cream);
-                    }
-                }
-
                 .viewButton {
                     background-color: var(--light-green);
                     transition: all ease-in-out 0.2s;

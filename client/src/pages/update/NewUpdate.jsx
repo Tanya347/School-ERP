@@ -10,7 +10,7 @@ import useFetch from "../../hooks/useFetch";
 
 const NewUpdate = ({ inputs, type }) => {
   const [info, setInfo] = useState({});
-  const [noticeType, setNoticeType] = useState("");
+  const [noticeType, setNoticeType] = useState("general");
   const classes = useFetch('/classes').data
   const navigate = useNavigate();
 

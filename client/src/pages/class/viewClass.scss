@@ -9,6 +9,44 @@
         align-items: center;
         justify-content: center;
 
+        button {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 1.2rem;
+            width: 150px;
+        }
+
+        .add-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .studentButton {
+            background-color: var(--light-purple);
+            transition: all ease-in-out 0.2s;
+            &:hover {
+                background-color: #caa8ea;
+            }
+        }
+
+        .courseButton {
+            background-color: rgb(245, 245, 219);
+            transition: all ease-in-out 0.2s;
+            &:hover {
+                background-color: rgb(234, 234, 160);
+            }
+        }
+
+        .facultyButton {
+            background-color: lightblue;
+            transition: all ease-in-out 0.2s;
+            &:hover {
+                background-color: rgb(60, 207, 199);
+            }
+        }
+
         .top {
             display: flex;
             flex-wrap: wrap;

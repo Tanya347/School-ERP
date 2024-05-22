@@ -6,8 +6,19 @@ export const getDatatableURL = (path, user) => {
         return `/tasks/student/${user.class}`
     else if (path === 'facTests')
         return `/tests/faculty/${user._id}`
+    else if (path === 'stuTests')
+        return `/tests/student/${user.class}`
     else    
         return `/${path}/`
+}
+
+export const getTableURL = (user) => {
+    if(user.isFaculty)
+        return `/updates/faculty/${user._id}`
+    else if(user.isStudent)
+        return `/updates/student/${user.class}`
+    else
+        return '/updates'
 }
 
 export const getModalURL = (path, id) => {

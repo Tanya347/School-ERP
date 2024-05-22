@@ -19,8 +19,9 @@ const Navbar = () => {
   const { Dispatch} = useContext(DarkModeContext);
   const { user } = useContext(AuthContext)
   
-  const updates = useFetch('/updates').data
   const queries = useFetch('/queries').data
+  // const updates = useFetch(`/updates/student/${user.class}`).data
+
 
   let path
 
@@ -31,16 +32,16 @@ const Navbar = () => {
   }
   
   // use states for setting notifications, opening notification popup and opening side bar
-  const [notifs, setNotifs] = useState([])
+  // const [notifs, setNotifs] = useState([])
   const [messages, setMessages] = useState([])
   const [openNotif, setOpenNotif] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openMessages, setOpenMessages] = useState(false);
 
-  // feeds all notifications into the notifs array whenever page rerenders or data changes
-  useEffect(() => {
-    setNotifs(updates)
-  }, [updates])
+  // // feeds all notifications into the notifs array whenever page rerenders or data changes
+  // useEffect(() => {
+  //   setNotifs(updates)
+  // }, [updates])
 
   // feeds all messages into the messages array whenever page rerenders or data changes  
   useEffect(() => {
@@ -89,20 +90,20 @@ const Navbar = () => {
           </div>
 
           {/* Notifications */}
-          {user.isStudent && <div className="item" id="notif">
+          {/* {user.isStudent && <div className="item" id="notif">
             <NotificationsNoneOutlinedIcon className="icon" onClick={handleNotif} />
-            <div className="counter">{notifs.length}</div> {/* Shows number of notifications */}
-          </div>}
+            <div className="counter">{notifs.length}</div> 
+          </div>} */}
 
           {/* Notifs drop down will show when user clicks and useState gets set to true */}
-          {openNotif && <ul id="notif-menu">
+          {/* {openNotif && <ul id="notif-menu">
             {notifs.map((item) => (
               <li>
                 <h3>{item.title}</h3>
                 <p>{item.desc.slice(0, 25)} ...</p>
               </li>
             ))}
-          </ul>}
+          </ul>} */}
 
 
 

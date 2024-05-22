@@ -1,16 +1,15 @@
 import './query.css'
 
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useCallback, useContext, useState } from 'react';
+import { useState } from 'react';
 import axios from "axios"
 import useFetch from '../../hooks/useFetch';
-import { AuthContext } from '../../context/AuthContext';
 
 const Query = ({ setOpen, user }) => {
 
     const [info, setInfo] = useState({});
     const [queryTo, setQueryTo] = useState();
-    const {data} = useFetch(`/classes/${user.class}`)
+    const {data} = useFetch(`/classes/details/${user.class}`)
 
     // set the usestate to the data user passed 
     const handleChange = (e) => {

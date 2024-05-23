@@ -5,14 +5,12 @@ import "../../style/form.scss";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import useFetch from "../../config/hooks/useFetch";
+import { useState } from "react";
 
 
 import axios from "axios"
 
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { getClasses } from "../../source/endpoints/get";
 import { postURLs } from "../../source/endpoints/post";
 
 const NewFaculty = ({ inputs, title }) => {

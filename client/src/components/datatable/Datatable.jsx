@@ -54,7 +54,7 @@ const Datatable = ({ column, name, type }) => {
         setList(data.filter(item => item.queryTo === user._id))
       else
         setList(data)
-  }, [data])
+  }, [data, path, user._id])
 
 
   // function that handles delete operation based on id passed to it

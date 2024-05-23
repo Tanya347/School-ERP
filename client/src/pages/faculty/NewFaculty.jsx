@@ -19,19 +19,10 @@ const NewFaculty = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
-  const [classCode, setClasscode] = useState("");
   const navigate = useNavigate();
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
-
-  const courses = useFetch(getClasses).data;
-  const [deptCourse, setDeptCourse] = useState();
-
-  useEffect(() => {
-    setDeptCourse(courses.filter((c) => info.department === c.department))
-  })
-
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -52,7 +43,7 @@ const NewFaculty = ({ inputs, title }) => {
         const { url } = uploadRes.data;
         const { public_id } = uploadRes.data;
         const newuser = {
-          ...info, profilePicture: url, cloud_id: public_id, classCode: classCode
+          ...info, profilePicture: url, cloud_id: public_id
         }
 
         axios.post("http://localhost:5500/api/faculties/registerFaculty", newuser, {

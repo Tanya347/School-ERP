@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import EventIcon from '@mui/icons-material/Event';
+// import EventIcon from '@mui/icons-material/Event';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
@@ -16,7 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import GroupIcon from '@mui/icons-material/Group';
 import BookIcon from '@mui/icons-material/Book';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+// import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import SchoolIcon from '@mui/icons-material/School';
 

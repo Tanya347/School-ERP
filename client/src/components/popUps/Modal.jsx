@@ -110,7 +110,7 @@ const Modal = ({ setOpen, id, type }) => {
                     type === "courses" &&
                     <div className="mTasks">
                         <div className="mTitle">{data?.subjectCode} {data?.name}</div>
-                        {data.syllabusPicture && <img className="syll" src={data.syllabusPicture} alt="syllabus picture"/>}
+                        {data.syllabusPicture && <img className="syll" src={data.syllabusPicture} />}
                         {data.teacher && <p><span>Taught by</span> : {data?.teacher?.teachername}</p>}
                         <p><span>Class</span> : {data?.class?.name}</p>
                         

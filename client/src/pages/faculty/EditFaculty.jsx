@@ -10,7 +10,6 @@ import axios from "axios"
 
 import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { departments} from "../../source/formsource/arrays";
 import { getSingleData } from "../../source/endpoints/get";
 import { putURLs } from "../../source/endpoints/put";
 
@@ -28,7 +27,6 @@ const EditFaculty = ({ title, type }) => {
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false)
-  const [classCode, setClasscode] = useState("");
 
   useEffect(() => {
     setInfo(data)
@@ -60,7 +58,7 @@ const EditFaculty = ({ title, type }) => {
         const { url } = uploadRes.data;
         const { public_id } = uploadRes.data;
         const newuser = {
-          ...info, profilePicture: url, cloud_id: public_id, classCode: classCode
+          ...info, profilePicture: url, cloud_id: public_id
         }
 
         axios.put(putURLs("faculties", id), newuser, {

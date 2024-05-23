@@ -14,7 +14,6 @@ import { postURLs } from "../../source/endpoints/post"
 function Login({ type }) {
 
   var url;
-  var post_url;
 
   if(type==="Faculty") {
     url = "https://drive.google.com/uc?id=1pB5VggYKPL8B-7q7EnAUwKSKttXsC8bV"

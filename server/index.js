@@ -24,11 +24,13 @@ import countAllRoute from "./routes/countDocuments.js";
 
 //config and middlewares
 const app = express();
+
 dotenv.config();
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    credential: true,
+    origin: process.env.CLIENT,
+    credentials: true,
   })
 );
 
@@ -48,7 +50,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5500;
 
 // mongoose connection
 
@@ -65,8 +66,6 @@ mongoose.connection.on("disconnected", () => {
   console.log("mongoDB disconnected!");
 });
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 app.get("/", (req, res) => {
   res.send("Hello from Express!");
@@ -89,7 +88,7 @@ app.use("/api", countAllRoute);
 
 //listen on port
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log("Listening on port 5500");
   connect();
 });

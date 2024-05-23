@@ -19,11 +19,11 @@ const ViewClass = () => {
         <AdminNavbar />
         <div className="viewClassContainer">
                 <h2>{classData.name} Standard</h2>
-                <div className="add-buttons">
+                {/* <div className="add-buttons">
                     <button className='courseButton'>Add Course</button>
                     <button className='studentButton'>Add Student</button>
                     <button className='facultyButton'>Add Faculty</button>
-                </div>
+                </div> */}
 
                 <div className="top">
                 {

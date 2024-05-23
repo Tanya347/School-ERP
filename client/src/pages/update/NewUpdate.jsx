@@ -7,11 +7,15 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../config/hooks/useFetch";
+import { getClasses } from "../../source/endpoints/get";
+import { postURLs } from "../../source/endpoints/post";
 
 const NewUpdate = ({ inputs, type }) => {
   const [info, setInfo] = useState({});
   const [noticeType, setNoticeType] = useState("general");
-  const classes = useFetch('/classes').data
+
+  const classes = useFetch(getClasses).data
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,7 +30,7 @@ const NewUpdate = ({ inputs, type }) => {
       const newupdate = {
         ...info, updateType: noticeType
       }
-      await axios.post("http://localhost:5500/api/updates", newupdate, {
+      await axios.post(postURLs("updates", "normal"), newupdate, {
         withCredentials: false
       })
       navigate(-1)

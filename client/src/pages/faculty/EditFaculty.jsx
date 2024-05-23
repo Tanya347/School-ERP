@@ -11,6 +11,8 @@ import axios from "axios"
 import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { departments} from "../../source/formsource/arrays";
+import { getSingleData } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
 
 
 const EditFaculty = ({ title, type }) => {
@@ -18,11 +20,11 @@ const EditFaculty = ({ title, type }) => {
   const location = useLocation();
   let id;
   if (type === "Admin")
-    id = location.pathname.split("/")[3];
+    id = location.pathname.split("/")[4];
   else
-    id = location.pathname.split("/")[2];
+    id = location.pathname.split("/")[3];
 
-  const { data } = useFetch(`/faculties/${id}`)
+  const { data } = useFetch(getSingleData(id, "faculties"))
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false)
@@ -61,7 +63,7 @@ const EditFaculty = ({ title, type }) => {
           ...info, profilePicture: url, cloud_id: public_id, classCode: classCode
         }
 
-        axios.put(`http://localhost:5500/api/faculties/${id}`, newuser, {
+        axios.put(putURLs("faculties", id), newuser, {
           withCredentials: false
         })
         navigate(-1)

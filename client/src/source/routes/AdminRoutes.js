@@ -57,19 +57,19 @@ const AdminRoutes = () => {
           
           {/* single page for student */}
           <Route 
-            path="students/:studentId" 
+            path="students/single/:studentId" 
             element={<SingleStudent type="Admin" />} 
           />
           
           {/* edit page for student */}
           <Route 
-            path="students/:studentId" 
+            path="students/edit/:studentId" 
             element={<EditStudent title="Update Student" type="Admin" />} 
           />
 
           {/* create user student */ }
           <Route 
-            path="admin/students/new" 
+            path="students/new" 
             element={<NewStudent inputs={studentInputs} title="Add New Student" />} 
           />
 
@@ -84,13 +84,13 @@ const AdminRoutes = () => {
 
           {/* single page for faculty */}
           <Route 
-            path="faculties/:facultyId" 
+            path="faculties/single/:facultyId" 
             element={<SingleFaculty type="Admin" />} 
           />
 
           {/* edit page for faculty */}
           <Route 
-            path="faculties/:facultyId/edit" 
+            path="faculties/edit/:facultyId/" 
             element={<EditFaculty title="Update Faculty" type="Admin" /> }
           />
 
@@ -111,7 +111,7 @@ const AdminRoutes = () => {
 
           {/* edit update */}
           <Route 
-            path="updates/:updateId/edit" 
+            path="updates/edit/:updateId" 
             element={ <EditUpdate title="Edit Updates" type="Admin" />} 
           />
 
@@ -140,7 +140,7 @@ const AdminRoutes = () => {
           {/* edit courses */}
 
           <Route
-            path="courses/:courseId/edit"
+            path="courses/edit/:courseId/"
             element={ <EditCourse title="Edit Courses" type="Admin" />}
           />
 
@@ -156,7 +156,7 @@ const AdminRoutes = () => {
           {/* edit classes */}
 
           <Route
-            path="faculties/:facId/addCourse"
+            path="faculties/addCourse/:facId"
             element={ <AddClass />} 
           />
 

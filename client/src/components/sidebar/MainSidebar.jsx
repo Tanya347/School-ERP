@@ -90,7 +90,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Takes you to list of all tasks created by admin */}
-                    {user.isFaculty && <Link to={"faculty/class/students"} style={{ textDecoration: "none" }}>
+                    {user.isFaculty && <Link to={"/faculty/class/students"} style={{ textDecoration: "none" }}>
                         <li>
                             <GroupsIcon className="icon" />
                             <span>Students</span>
@@ -99,7 +99,7 @@ const MainSidebar = ({ setOpen }) => {
 
 
                     {/* Takes you to list of all responses sent by faculties */}
-                    {user.isStudent && <Link to="student/responses" style={{ textDecoration: "none" }}>
+                    {user.isStudent && <Link to="/student/responses" style={{ textDecoration: "none" }}>
                         <li>
                             <MarkChatReadIcon className="icon" />
                             <span>Responses</span>
@@ -109,28 +109,28 @@ const MainSidebar = ({ setOpen }) => {
                     {/* Create events/queries */}
                     <p className="title">Create</p>
 
-                    {(user.isFaculty) && <Link to="faculty/tasks/new" style={{ textDecoration: "none" }}>
+                    {(user.isFaculty) && <Link to="/faculty/tasks/new" style={{ textDecoration: "none" }}>
                         <li>
                             <AddTaskIcon className="icon" />
                             <span>Tasks</span>
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="faculty/tests/new" style={{ textDecoration: "none" }}>
+                    {(user.isFaculty) && <Link to="/faculty/tests/new" style={{ textDecoration: "none" }}>
                         <li>
                             <PostAddIcon className="icon" />
                             <span>Tests</span>
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="faculty/attendance/new" style={{ textDecoration: "none" }}>
+                    {(user.isFaculty) && <Link to="/faculty/attendance/new" style={{ textDecoration: "none" }}>
                         <li>
                             <PlaylistAddIcon className="icon" />
                             <span>Attendance</span>
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="faculty/marks/new" style={{ textDecoration: "none" }}>
+                    {(user.isFaculty) && <Link to="/faculty/marks/new" style={{ textDecoration: "none" }}>
                         <li>
                             <AddchartIcon className="icon" />
                             <span>Marks</span>

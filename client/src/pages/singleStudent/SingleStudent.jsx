@@ -6,6 +6,7 @@ import AdminNavbar from "../../components/navbar/AdminNavbar";
 import useFetch from "../../config/hooks/useFetch";
 import Course from "../../components/course/Course";
 import { CircularProgressbar } from "react-circular-progressbar";
+import { getSingleData } from "../../source/endpoints/get";
 
 
 const Single = ({ type }) => {
@@ -17,11 +18,11 @@ const Single = ({ type }) => {
   
   let id
   if (type === "Main")
-    id = location.pathname.split("/")[2];
-  else
     id = location.pathname.split("/")[3];
-  const { data } = useFetch(`/students/${id}`)
-  const attendance = useFetch(`/students/getAttendance/${id}`).data 
+  else
+    id = location.pathname.split("/")[4];
+  const { data } = useFetch(getSingleData(id, "students"))
+  const attendance = useFetch(getSingleData(id, "attendance")).data 
   
   
   // used to navigate to a certain link
@@ -92,7 +93,7 @@ const Single = ({ type }) => {
                   <span className="itemValue">{data.dob}</span>
                 </div>
 
-                <button className="editButton" onClick={() => navigate("edit")}>Edit Profile</button>
+                <button className="editButton" onClick={() => navigate(`/student/edit/${id}`)}>Edit Profile</button>
             </div>
           </div>
           <div className="right">

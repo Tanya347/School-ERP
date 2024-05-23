@@ -28,8 +28,8 @@ const StudentRoutes = () => {
     <RequireStudent>
         <Routes>
             <Route index element={<Home type="Main" />} />
-            <Route path=":id" element={<SingleStudent type="Main" />} />
-            <Route path=":id/edit" element={<EditStudent title="Edit Profile" type="Main" />} />
+            <Route path="single/:id" element={<SingleStudent type="Main" />} />
+            <Route path="edit/:id" element={<EditStudent title="Edit Profile" type="Main" />} />
             <Route path="tasks" element={<List column={taskColumns} type="Main" name="Task" />} />
             <Route path="tests" element={<List column={testColumns} name="Test" type="Main" />} />
             <Route path="events" element={<Events />} />

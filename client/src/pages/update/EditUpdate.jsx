@@ -9,13 +9,15 @@ import useFetch from "../../config/hooks/useFetch";
 
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Navbar from "../../components/navbar/Navbar";
+import { getClasses, getSingleData } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
 
 const EditUpdate = ({ title, type }) => {
 
   const location = useLocation();
   const id = location.pathname.split("/")[3];
-  const { data } = useFetch(`/updates/${id}`)
-  const classes = useFetch('/classes').data
+  const { data } = useFetch(getSingleData(id, "updates"))
+  const classes = useFetch(getClasses).data
   console.log(data)
 
 
@@ -35,7 +37,7 @@ const EditUpdate = ({ title, type }) => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://localhost:5500/api/updates/${id}`, info, {
+      await axios.put(putURLs("updates", id), info, {
         withCredentials: false
       })
       navigate(-1)

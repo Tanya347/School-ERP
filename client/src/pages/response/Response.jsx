@@ -4,11 +4,12 @@ import Navbar from '../../components/navbar/Navbar'
 import { AuthContext } from '../../config/context/AuthContext'
 import { useContext } from 'react'
 import useFetch from '../../config/hooks/useFetch'
+import { getQueries } from '../../source/endpoints/get'
 
 const Response = () => {
 
   const {user} = useContext(AuthContext);  
-  const queries = useFetch("/queries").data;
+  const queries = useFetch(getQueries).data;
   const [query, setQuery] = useState([]);
 
   useEffect(() => {

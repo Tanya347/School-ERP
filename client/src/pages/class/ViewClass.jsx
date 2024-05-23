@@ -5,13 +5,14 @@ import useFetch from '../../config/hooks/useFetch'
 import { useLocation } from 'react-router-dom'
 import Course from '../../components/course/Course'
 import StudentClass from '../../components/table/StudentClass'
+import { getClassDetails } from '../../source/endpoints/get'
 
 const ViewClass = () => {
 
     const location = useLocation();
     const id = location.pathname.split("/")[3]
 
-    const classData = useFetch(`/classes/details/${id}`).data
+    const classData = useFetch(getClassDetails(id)).data
 
   return (
     <div className='viewClass'>

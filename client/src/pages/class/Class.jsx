@@ -3,10 +3,11 @@ import AdminNavbar from "../../components/navbar/AdminNavbar";
 import "./class.scss"
 import { Link } from 'react-router-dom';
 import useFetch from '../../config/hooks/useFetch';
+import { getClasses } from '../../source/endpoints/get';
 
 const Class = () => {
 
-    const classes = useFetch('/classes').data;
+    const classes = useFetch(getClasses).data;
     classes.sort((a, b) => a.classNumber - b.classNumber)
 
 

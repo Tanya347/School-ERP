@@ -7,21 +7,25 @@ import axios from "axios";
 import useFetch from "../../config/hooks/useFetch";
 import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
+import { getFacultyData, getSingleData } from "../../source/endpoints/get";
 
 const EditTest = ({ title }) => {
   
-  // get location and extract id out of it
-  const location = useLocation();
-  const id = location.pathname.split("/")[2];
-  const [info, setInfo] = useState({});
-  const { user } = useContext(AuthContext)
-  const classes = useFetch(`/faculties/classes/${user._id}`).data
-  const courses = useFetch(`/faculties/courses/${user._id}`).data
-  
-  const { data } = useFetch(`/tests/${id}`)
   const [date, setDate] = useState(new Date());
   const [sclass, setSclass] = useState("");
   const [course, setCourse] = useState("");
+  const [info, setInfo] = useState({});
+
+  const { user } = useContext(AuthContext)
+
+  // get location and extract id out of it
+  const location = useLocation();
+  const id = location.pathname.split("/")[2];
+  
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
+  const courses = useFetch(getFacultyData(user._id, "courses")).data
+  
+  const { data } = useFetch(getSingleData(id, "tests"))
 
 
   const navigate = useNavigate();
@@ -46,7 +50,7 @@ const EditTest = ({ title }) => {
       if(course)
         info.subject = course
       
-      await axios.put(`http://localhost:5500/api/tests/${id}`, info, {
+      await axios.put("tests", id, info, {
         withCredentials: false
       });
 

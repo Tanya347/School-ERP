@@ -11,8 +11,9 @@ import useFetch from "../../config/hooks/useFetch";
 
 import axios from "axios"
 
-import { departments} from "../../source/formsource/arrays";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
+import { getClasses } from "../../source/endpoints/get";
+import { postURLs } from "../../source/endpoints/post";
 
 const NewFaculty = ({ inputs, title }) => {
   
@@ -24,7 +25,7 @@ const NewFaculty = ({ inputs, title }) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
 
-  const courses = useFetch('/courses').data;
+  const courses = useFetch(getClasses).data;
   const [deptCourse, setDeptCourse] = useState();
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const NewFaculty = ({ inputs, title }) => {
     
     } else {
       try {
-        await axios.post("http://localhost:5500/api/faculties/registerFaculty", info, {
+        await axios.post(postURLs("faculties", "register"), info, {
           withCredentials: false
         })
         navigate(-1)

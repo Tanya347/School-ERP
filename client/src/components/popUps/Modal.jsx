@@ -5,6 +5,7 @@ import useFetch from "../../config/hooks/useFetch"
 import { useState } from "react";
 import axios from "axios";
 import { getModalURL } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
 
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
@@ -27,7 +28,7 @@ const Modal = ({ setOpen, id, type }) => {
         e.preventDefault();
         
         try {
-            await axios.put(`http://localhost:5500/api/queries/${id}`, info, {
+            await axios.put(putURLs("queries", id), info, {
                 withCredentials: false
             })
             setOpen(false)

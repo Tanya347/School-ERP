@@ -7,6 +7,7 @@ import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Course from "../../components/course/Course";
 
 import useFetch from "../../config/hooks/useFetch";
+import { getSingleData } from "../../source/endpoints/get";
 
 const Single = ({ type }) => {
   
@@ -17,10 +18,10 @@ const Single = ({ type }) => {
   
   let id
   if (type === "Main")
-    id = location.pathname.split("/")[2];
-  else
     id = location.pathname.split("/")[3];
-  const { data } = useFetch(`/faculties/${id}`)
+  else
+    id = location.pathname.split("/")[4];
+  const { data } = useFetch(getSingleData(id, "faculties"))
 
   const colors = ['var(--light-blue)', 'var(--light-pink)', 'var(-light-yellow)', 'var(light-green)', 'var(light-red)']
 
@@ -100,7 +101,7 @@ const Single = ({ type }) => {
                   <span className="itemValue">{data.dob}</span>
                 </div>
 
-                <button className="editButton" onClick={() => navigate("edit")}>Edit Profile</button>
+                <button className="editButton" onClick={() => navigate(`/faculty/edit/${id}`)}>Edit Profile</button>
 
               </div>
           </div>

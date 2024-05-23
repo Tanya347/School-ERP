@@ -9,6 +9,8 @@ import DatePicker from "react-datepicker";
 import Navbar from "../../components/navbar/Navbar";
 import { AuthContext } from "../../config/context/AuthContext";
 import useFetch from "../../config/hooks/useFetch";
+import { getFacultyData } from "../../source/endpoints/get";
+import { postURLs } from "../../source/endpoints/post";
 
 const NewTask = ({ inputs, title }) => {
 
@@ -16,7 +18,7 @@ const NewTask = ({ inputs, title }) => {
   const [deadline, setDeadline] = useState(new Date());
   const [sclass, setSclass] = useState("");
   const { user } = useContext(AuthContext)
-  const classes = useFetch(`/faculties/classes/${user._id}`).data
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
 
   const navigate = useNavigate();
   
@@ -32,7 +34,7 @@ const NewTask = ({ inputs, title }) => {
       const newtask = {
         ...info, deadline: deadline, author: user._id, sclass: sclass 
       }
-      await axios.post("http://localhost:5500/api/tasks", newtask, {
+      await axios.post(postURLs("tasks", "normal"), newtask, {
         withCredentials: false
       });
       navigate('/facTasks')

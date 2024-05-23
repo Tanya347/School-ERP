@@ -11,17 +11,20 @@ import axios from "axios"
 
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import useFetch from "../../config/hooks/useFetch";
+import { postURLs } from "../../source/endpoints/post";
+import { getClasses } from "../../source/endpoints/get";
 
 const NewUser = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
-  const classes = useFetch('/classes').data
+  const classes = useFetch(getClasses).data
   const navigate = useNavigate();
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
 
+  
   const handleClick = async (e) => {
     e.preventDefault();
     
@@ -30,21 +33,22 @@ const NewUser = ({ inputs, title }) => {
       const data = new FormData();
       data.append("file", file);
       data.append("upload_preset", "upload");
-
+      
       try {
         const uploadRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
+          process.env.REACT_APP_CLOUDINARY,
           data, {
-          withCredentials: false
-        }
+            withCredentials: false
+          }
         )
         const { url } = uploadRes.data;
         const { public_id } = uploadRes.data;
         const newuser = {
           ...info, profilePicture: url, cloud_id: public_id
         }
+        console.log(newuser)
 
-        axios.post("http://localhost:5500/api/students/registerStudent", newuser, {
+        axios.post(postURLs("students", "register"), newuser, {
           withCredentials: false
         })
         navigate(-1)
@@ -55,7 +59,7 @@ const NewUser = ({ inputs, title }) => {
     
     } else {
       try {
-        await axios.post("http://localhost:5500/api/students/registerStudent", info, {
+        await axios.post(postURLs("students", "register"), info, {
           withCredentials: false
         })
         navigate(-1)

@@ -9,6 +9,8 @@ import DatePicker from "react-datepicker";
 import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
 import useFetch from "../../config/hooks/useFetch";
+import { getFacultyData } from "../../source/endpoints/get";
+import { postURLs } from "../../source/endpoints/post";
 
 
 const NewTest = ({ title }) => {
@@ -20,8 +22,8 @@ const NewTest = ({ title }) => {
   const [start, setStart] = useState("")
   
   const { user } = useContext(AuthContext)
-  const courses = useFetch(`/faculties/courses/${user._id}`).data
-  const classes = useFetch(`/faculties/classes/${user._id}`).data
+  const courses = useFetch(getFacultyData(user._id, "courses")).data
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,7 +38,7 @@ const NewTest = ({ title }) => {
           ...info, date: start, author: user._id, subject: course, sclass: sclass
         }
         console.log(newtest)
-        axios.post("http://localhost:5500/api/tests", newtest, { withCredentials: false })
+        axios.post(postURLs("tests", "normals"), newtest, { withCredentials: false })
         navigate("/facTests")
 
       } catch (error) {

@@ -1,13 +1,13 @@
+export const getAllCount = "/getAllCount";
+export const getQueries = "/queries";
+export const getCourseClasses = '/classes/courses';
+export const getClasses = "/classes"
 
 export const getDatatableURL = (path, user) => {
-    if(path === 'facTasks')
-        return `/tasks/faculty/${user._id}`
-    else if(path === 'stuTasks')
-        return `/tasks/student/${user.class}`
-    else if (path === 'facTests')
-        return `/tests/faculty/${user._id}`
-    else if (path === 'stuTests')
-        return `/tests/student/${user.class}`
+    if(path === 'tests')
+        return user.isFaculty? `/tests/faculty/${user._id}` : `/tests/student/${user.class}`
+    else if(path === 'tasks')
+        return user.isFaculty? `/tasks/faculty/${user._id}` : `/tasks/student/${user.class}`
     else    
         return `/${path}/`
 }
@@ -45,3 +45,27 @@ export const getTestCalenderURL = (user) => {
     else if(user.isStudent)
         return `/tests/student/${user.class}`
 }
+
+export const getClassDetails = (cl) => {
+    return `/classes/details/${cl}`
+}
+
+export const getSingleData = (id, type) => {
+    switch(type) {
+        case "courses" : return `/courses/single/${id}`;
+        case "faculties" : return `/faculties/${id}`;
+        case "students" : return `/students/${id}`;
+        case "attendance" : return `/students/getAttendance/${id}`;
+        case "single-student" : return `/students/single/${id}`;
+        case "tasks" : return `/tasks/${id}`;
+        case "tests" : return `/tests/${id}`;
+        case "updates" : return `/updates/${id}`;
+        default: return "/"
+    }
+}
+
+export const getFacultyData = (id, type) => {
+    return `/faculties/${type}/${id}`
+}
+
+

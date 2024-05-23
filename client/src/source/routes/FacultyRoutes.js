@@ -46,13 +46,13 @@ const FacultyRoutes = () => {
 
           {/* profile page for faculty */}
           <Route
-            path=":id"
+            path="single/:id"
             element={<SingleFaculty type="Main" />}
           />
 
           {/* edit profile page for faculty */}
           <Route
-            path=":id/edit"
+            path="edit/:id"
             element={<EditFaculty title="Edit Profile" type="Main" />}
           />
 
@@ -73,7 +73,7 @@ const FacultyRoutes = () => {
 
           {/* edit page for tasks */}
           <Route
-            path="tasks/:taskId/edit"
+            path="tasks/edit/:taskId"
             element={<EditTask title="Update Task" />}
           />
 
@@ -87,7 +87,7 @@ const FacultyRoutes = () => {
 
           {/* edit page for tests */}
           <Route
-            path="tests/:testId/edit"
+            path="tests/edit/:testId"
             element={<EditTest title="Update Test" />}
           />
 

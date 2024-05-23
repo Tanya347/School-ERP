@@ -4,12 +4,14 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useState } from 'react';
 import axios from "axios"
 import useFetch from '../../config/hooks/useFetch';
+import { getClassDetails } from '../../source/endpoints/get';
+import { postURLs } from '../../source/endpoints/post';
 
 const Query = ({ setOpen, user }) => {
 
     const [info, setInfo] = useState({});
     const [queryTo, setQueryTo] = useState();
-    const {data} = useFetch(`/classes/details/${user.class}`)
+    const {data} = useFetch(getClassDetails(user.class))
 
     // set the usestate to the data user passed 
     const handleChange = (e) => {
@@ -24,7 +26,7 @@ const Query = ({ setOpen, user }) => {
             ...info, author: user.name, queryTo: queryTo
         }
         try {
-            await axios.post("http://localhost:5500/api/queries", newQuery, {
+            await axios.post(postURLs("queries", "normal"), newQuery, {
                 withCredentials: false
             })
             setOpen(false)

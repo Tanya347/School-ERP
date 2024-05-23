@@ -7,17 +7,21 @@ import axios from "axios";
 import useFetch from "../../config/hooks/useFetch";
 import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
+import { getFacultyData, getSingleData } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
 
 const EditTask = ({ title }) => {
   
   // get location and extract id out of it
+  const { user } = useContext(AuthContext)
+
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-  const [info, setInfo] = useState({});
-  const { user } = useContext(AuthContext)
-  const classes = useFetch(`/faculties/classes/${user._id}`).data
+
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
+  const { data } = useFetch(getSingleData(id, "tasks"))
   
-  const { data } = useFetch(`/tasks/${id}`)
+  const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(new Date());
   const [sclass, setSclass] = useState("");
 
@@ -41,7 +45,7 @@ const EditTask = ({ title }) => {
       if(sclass)
         info.sclass = sclass
       
-      await axios.put(`http://localhost:5500/api/tasks/${id}`, info, {
+      await axios.put(putURLs("tasks", id), info, {
         withCredentials: false
       });
 

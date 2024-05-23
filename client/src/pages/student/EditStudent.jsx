@@ -10,18 +10,20 @@ import axios from "axios"
 
 import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
+import { getClasses, getSingleData } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
 
 const EditUser = ({ title, type }) => {
 
   const location = useLocation();
   let id;
   if (type === "Admin")
-    id = location.pathname.split("/")[3];
+    id = location.pathname.split("/")[4];
   else
-    id = location.pathname.split("/")[2];
+    id = location.pathname.split("/")[3];
 
-  const { data } = useFetch(`/students/single/${id}`)
-  const classes = useFetch('/classes').data
+  const { data } = useFetch(getSingleData(id, "single-student"))
+  const classes = useFetch(getClasses).data
 
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
@@ -69,7 +71,7 @@ const EditUser = ({ title, type }) => {
       }
     } else {
       try {
-        await axios.put(`http://localhost:5500/api/students/${id}`, info, { withCredentials: false })
+        await axios.put(putURLs("students", id), info, { withCredentials: false })
         navigate(-1)
       }
       catch (err) {

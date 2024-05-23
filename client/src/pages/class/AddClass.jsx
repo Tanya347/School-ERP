@@ -4,10 +4,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import AdminNavbar from '../../components/navbar/AdminNavbar';
 import useFetch from '../../config/hooks/useFetch';
 import axios from 'axios';
+import { getCourseClasses } from '../../source/endpoints/get';
 const AddClass = () => {
 
     const location = useLocation();
-    const classes = useFetch('/classes/courses').data;
+    const classes = useFetch(getCourseClasses).data;
     const facId = location.pathname.split("/")[3]
     const [sclass, setSclass] = useState("");
     const [classIndex, setClassIndex] = useState();

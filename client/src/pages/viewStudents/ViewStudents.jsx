@@ -6,11 +6,12 @@ import axios from 'axios';
 import useFetch from '../../config/hooks/useFetch';
 import Navbar from '../../components/navbar/Navbar';
 import StudentClass from '../../components/table/StudentClass'
+import { getFacultyData } from '../../source/endpoints/get';
 
 
 const ViewStudents = () => {
   const { user } = useContext(AuthContext)
-  const classes = useFetch(`/faculties/classes/${user._id}`).data
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
   const [sclass, setSclass] = useState("");
   const [className, setClassName] = useState("");
   const [stuData, setStuData] = useState({});

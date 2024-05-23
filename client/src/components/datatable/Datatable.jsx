@@ -30,10 +30,8 @@ const Datatable = ({ column, name, type }) => {
   // if we are at admin side then the end point will be at 2 because we have 
   // additional /admin in the url
 
-  if (type === "Admin")
-    path = location.pathname.split("/")[2];
-  else 
-    path = location.pathname.split("/")[1];
+
+  path = location.pathname.split("/")[2];
 
 
   // fetching data using the path
@@ -99,7 +97,7 @@ const Datatable = ({ column, name, type }) => {
               (
                 <>
                 {/* params.row._id will give us the id of the data entry at particular row we clicked */}
-                <Link to={`/admin/${path}/${params.row._id}`} style={{ textDecoration: "none" }}>
+                <Link to={`/admin/${path}/single/${params.row._id}`} style={{ textDecoration: "none" }}>
                   <div className="viewButton">View</div>
                 </Link>
                 </>
@@ -113,7 +111,7 @@ const Datatable = ({ column, name, type }) => {
               )
             }
 
-            {(type === "Admin" || type==="Creator") && <Link to={`${params.row._id}/edit`} style={{ textDecoration: "none" }}>
+            {(type === "Admin" || type==="Creator") && <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">Edit</div>
             </Link>}
             
@@ -129,7 +127,7 @@ const Datatable = ({ column, name, type }) => {
 
             {/* Only admin can add a course to a teacher so it will only be visible to him */}
             {
-              (type === "Admin" && path === "faculties") && <Link to={`/admin/${path}/${params.row._id}/addCourse`} style={{ textDecoration: "none" }}>
+              (type === "Admin" && path === "faculties") && <Link to={`/admin/${path}/addCourse/${params.row._id}`} style={{ textDecoration: "none" }}>
                 <div className="viewButton"
               >
                 Add Course

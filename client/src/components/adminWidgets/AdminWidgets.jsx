@@ -5,10 +5,11 @@ import SchoolIcon from '@mui/icons-material/School';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleIcon from '@mui/icons-material/People';
 import useFetch from '../../config/hooks/useFetch';
+import { getAllCount } from '../../source/endpoints/get';
 
 const AdminWidgets = () => {
 
-    const {data} = useFetch('/getAllCount')
+    const {data} = useFetch(getAllCount)
 
   return (
     <div className="AdminWidgets">

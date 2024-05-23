@@ -13,22 +13,23 @@ import useFetch from "../../config/hooks/useFetch";
 import { Link, useNavigate } from "react-router-dom"
 
 import NavSidebar from "../sidebar/MainSidebar"
+import { getQueries } from "../../source/endpoints/get";
 
 const Navbar = () => {
 
   const { Dispatch} = useContext(DarkModeContext);
   const { user } = useContext(AuthContext)
   
-  const queries = useFetch('/queries').data
+  const queries = useFetch(getQueries).data
   // const updates = useFetch(`/updates/student/${user.class}`).data
 
 
   let path
 
   if(user.isFaculty) {
-    path = "faculties"
+    path = "faculty"
   } else if(user.isStudent) {
-    path = "students"
+    path = "student"
   }
   
   // use states for setting notifications, opening notification popup and opening side bar
@@ -147,7 +148,7 @@ const Navbar = () => {
               src={user.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
               alt=""
               className="avatar"
-              onClick={() => navigate(`/${path}/${user._id}`)}
+              onClick={() => navigate(`/${path}/single/${user._id}`)}
             />
           </div>
         </div>

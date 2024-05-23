@@ -6,6 +6,7 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import useFetch from "../../hooks/useFetch";
+import { putURLs } from "../../source/endpoints/put";
 
 const EditEvent = ({ inputs, title }) => {
     const location = useLocation();
@@ -53,7 +54,7 @@ const EditEvent = ({ inputs, title }) => {
                     ...info, poster: url, cloud_id: public_id
                 }
 
-                axios.put(`http://localhost:5500/api/events/${id}`, newevent, {
+                axios.put(putURLs("events", id), newevent, {
                     withCredentials: false
                 })
                 navigate(-1)

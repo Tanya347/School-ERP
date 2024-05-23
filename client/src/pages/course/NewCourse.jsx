@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../../config/hooks/useFetch";
 import axios from "axios";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
+import { getClasses } from "../../source/endpoints/get";
+import { postURLs } from "../../source/endpoints/post";
 
 const NewCourse = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
-  const classes = useFetch('/classes').data
+  const classes = useFetch(getClasses).data
   classes.sort((a, b) => a.classNumber - b.classNumber)
 
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const NewCourse = ({ inputs, title }) => {
           ...info, syllabusPicture: url, cloud_id: public_id
         }
   
-        await axios.post("http://localhost:5500/api/courses", newcourse, {
+        await axios.post(postURLs("courses", "normal"), newcourse, {
           withCredentials: false
         });
         navigate(-1)
@@ -54,7 +56,7 @@ const NewCourse = ({ inputs, title }) => {
           ...info,
         }
   
-        await axios.post("http://localhost:5500/api/courses", newcourse, {
+        await axios.post(postURLs("courses", "normal"), newcourse, {
           withCredentials: false
         });
         navigate(-1)

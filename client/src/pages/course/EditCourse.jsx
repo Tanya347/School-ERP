@@ -8,6 +8,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import useFetch from "../../config/hooks/useFetch";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
+import { getSingleData } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
+
 const EditCourse = ({ title }) => {
   
   // get location and extract id out of it
@@ -17,7 +20,7 @@ const EditCourse = ({ title }) => {
   const [file, setFile] = useState("");
 
   // fetch data using id
-  const { data } = useFetch(`/courses/single/${id}`)
+  const { data } = useFetch(getSingleData(id, "courses"))
 
   const navigate = useNavigate();
 
@@ -40,7 +43,7 @@ const EditCourse = ({ title }) => {
       data.append("upload_preset", "upload");
 
       try {
-        const uploadRes = await axios.post( "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
+        const uploadRes = await axios.post( process.env.REACT_APP_CLOUDINARY,
         data, {
         withCredentials: false
       })
@@ -50,7 +53,7 @@ const EditCourse = ({ title }) => {
         ...info, syllabusPicture: url, cloud_id: public_id
       }
 
-      await axios.put(`http://localhost:5500/api/courses/${id}`, newcourse, {
+      await axios.put(putURLs("courses", id), newcourse, {
           withCredentials: false
         });
       }
@@ -62,7 +65,7 @@ const EditCourse = ({ title }) => {
 
       try {
   
-        await axios.put(`http://localhost:5500/api/courses/${id}`, info, {
+        await axios.put(putURLs("courses", id), info, {
           withCredentials: false
         });
   

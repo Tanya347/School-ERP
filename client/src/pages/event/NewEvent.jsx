@@ -14,6 +14,7 @@ import useFetch from "../../hooks/useFetch";
 
 import EventModal from "../../components/eventModal/EventModal";
 import Navbar from "../../components/navbar/Navbar";
+import { postURLs } from "../../source/endpoints/post";
 
 const NewEvent = ({ inputs, title }) => {
   
@@ -53,7 +54,7 @@ const NewEvent = ({ inputs, title }) => {
         const newevent = {
           ...info, poster: url, cloud_id: public_id, startDate: start, endDate: end
         }
-        axios.post("http://localhost:5500/api/events", newevent, { withCredentials: false })
+        axios.post(postURLs("events", "normal"), newevent, { withCredentials: false })
         navigate(-1)
 
       } catch (error) {
@@ -64,7 +65,7 @@ const NewEvent = ({ inputs, title }) => {
         const newevent = {
           ...info, startDate: start, endDate: end
         }
-        await axios.post("http://localhost:5500/api/events", newevent, { withCredentials: false })
+        await axios.post(postURLs("events", "normal"), newevent, { withCredentials: false })
         navigate(-1)
       }
       catch (err) {

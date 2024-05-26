@@ -181,106 +181,24 @@ export const getSingleStudent = async (req, res, next) => {
     }
   }
 
-  export const studentAttendance = async (req, res, next) => {
-    
-    const { atten_date, status, sub_id } = req.body;
 
-    try {
-      const student = await Student.findById(req.params.id);
-  
-      if (!student) {
-        return res.send({ message: 'Student not found' });
-      }
 
-      const existingAttendance = student.attendance.find(
-        (a) =>
-          a.atten_date.toDateString() === new Date(atten_date).toDateString() &&
-          a.sub_id.toString() === sub_id
-      );
-  
-      if (existingAttendance) {
-        existingAttendance.status = status;
-      } else {
-        student.attendance.push({ atten_date, status, sub_id });
-      }
-  
-      const result = await student.save();
-      return res.send(result);
-    } catch (error) {
-      next(error);
-    }
-  };
-  
-  export const clearAllStudentsAttendanceBySubject = async (req, res, next) => {
-    const sub_id = req.params.id;
-  
-    try {
-        const result = await Student.updateMany(
-            { 'attendance.sub_id': sub_id },
-            { $pull: { attendance: { sub_id } } } 
-        );
-        return res.send(result);
-    } catch (error) {
-      next(error);
-    }
-  };
-  
-  export const clearAllStudentsAttendance = async (req, res, next) => {
-  
-    try {
-      const result = await Student.updateMany(
-        {},
-        { $set: { attendance: [] } }
-      );
-  
-      return res.send(result);
-    } catch (error) {
-      next(error);
-    }
-  };
+// enter marks
 
-  export const getSubjectAttendance = async (req, res, next) => {
-  
-    try {
-      const result = await Student.updateMany(
-        {},
-        { $set: { attendance: [] } }
-      );
-  
-      return res.send(result);
-    } catch (error) {
-      next(error);
-    }
-  };
 
-  export const getOverallAttendancePercentage = async (req, res, next) => {
-    const { studentId } = req.params;
+// edit marks
 
-    try {
-        const student = await Student.findById(studentId);
 
-        if (!student) {
-            return res.status(404).send({ message: 'Student not found' });
-        }
+// delete marks
 
-        // Get all attendance records for the student
-        const allAttendance = student.attendance;
 
-        const totalClasses = allAttendance.length;
-        const attendedClasses = allAttendance.filter(
-            (record) => record.status === true
-        ).length;
+// get marks of one student
 
-        // Calculate overall attendance percentage
-        const overallAttendancePercentage = totalClasses > 0
-            ? ((attendedClasses / totalClasses) * 100).toFixed(2)
-            : 0;
 
-        return res.send({ perc: overallAttendancePercentage, total: totalClasses, attended: attendedClasses });
-    } catch (error) {
-      next(error)
-    }
-  }
+// get marks of all students in a subject
+
+
+// get marks of students in all subject in a class
 
 
 

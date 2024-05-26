@@ -14,7 +14,7 @@ const FacultyButton = () => {
     <div className='adminButton'>
       <h2>Create</h2>
       <div className="flexContainer">
-        <Link to="/attendance/new" style={{ textDecoration: "none", color: "black"  }}>
+        <Link to="attendance/new" style={{ textDecoration: "none", color: "black"  }}>
           <div className="createButton">
             <PlaylistAddIcon className='icon' style={{color:"var(--turquoise)"}}/>
             <p>Attendance</p>

@@ -19,6 +19,7 @@ import courseRoute from "./routes/course.js";
 import testRoute from "./routes/test.js";
 import classRoute from "./routes/class.js";
 import countAllRoute from "./routes/countDocuments.js";
+import attendanceRoute from "./routes/attendance.js"
 
 // import resultRoute from "./routes/result.js";
 
@@ -83,6 +84,7 @@ app.use("/api/queries", queryRoute);
 app.use("/api/courses", courseRoute);
 app.use("/api/tests", testRoute);
 app.use("/api/classes", classRoute);
+app.use("/api/attendances", attendanceRoute)
 app.use("/api", countAllRoute);
 
 

@@ -8,22 +8,20 @@ const AttendanceSchema = new mongoose.Schema({
       required: true
     },
     present: [{
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Student',
-      required: true
     }],
     absent: [{
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Student',
-      required: true
     }],
     classid: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Class',
       required: true
     },
     author: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Teacher',
       required: true
     }

@@ -69,10 +69,26 @@ const StudentSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Course'
         },
-        value: {
+        internal: {
           type: Number,
           default: 0
-        }
+        },
+        practical: {
+          type: Number,
+          default: 0
+        },
+        sem1: {
+          type: Number,
+          default: 0
+        },
+        sem2: {
+          type: Number,
+          default: 0
+        },
+        total: {
+          type: Number,
+          default: 0
+        },
       }
     ]
   },

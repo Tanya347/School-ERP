@@ -2,6 +2,8 @@ export const getAllCount = "/getAllCount";
 export const getQueries = "/queries";
 export const getCourseClasses = '/classes/courses';
 export const getClasses = "/classes"
+export const getLectureCount = "/attendances/lecturecount"
+export const getAttendanceDates = "/attendances/dates"
 
 export const getDatatableURL = (path, user) => {
     if(path === 'tests')

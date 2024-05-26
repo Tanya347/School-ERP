@@ -19,6 +19,8 @@ import NewTest from '../../pages/test/NewTest';
 import Events from '../../pages/event/Events';
 import ViewStudents from '../../pages/viewStudents/ViewStudents';
 import { AuthContext } from '../../config/context/AuthContext';
+import MarkAttendance from '../../pages/attendance/MarkAttendance';
+import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 
 
 
@@ -113,6 +115,18 @@ const FacultyRoutes = () => {
           <Route
             path="queries"
             element={<List column={queryColumns} type="Faculty" name="Query" />}
+          />
+
+          {/* mark attendance page */}
+          <Route 
+            path="attendance/new"
+            element={<MarkAttendance />}
+          />
+
+          {/* view and edit attendance on faculty side */}
+          <Route
+            path='attendance'
+            element={<AttendanceInfo />}
           />
         </Routes>
       </RequireFaculty>

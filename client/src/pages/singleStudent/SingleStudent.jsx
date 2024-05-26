@@ -112,7 +112,7 @@ const Single = ({ type }) => {
         <div className="bottom">
           <h2 className="courseTitle">Courses</h2>
           <div className="coursesContainer">
-            {data.classInfo?.subjects?.map((item, index) => (
+            {data?.classInfo?.subjects?.map((item, index) => (
               <Course 
                 name={item.name}
                 index={index}

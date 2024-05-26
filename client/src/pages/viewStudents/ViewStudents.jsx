@@ -41,7 +41,7 @@ const ViewStudents = () => {
       <Navbar />
       <div className="view-students-container">
         {
-          classes.map((cl, index) => (
+          classes?.map((cl, index) => (
             <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
           ))
         }

@@ -22,7 +22,7 @@ const Response = () => {
         <Navbar />
         <div className="queries-container">
                 {
-                  query.map((item) => (
+                  query?.map((item) => (
                     <div className="query">
                       <div className="query-box">
                         <h2 className="qTitle">{item.title}</h2>

@@ -127,7 +127,7 @@ const EditEvent = ({ inputs, title }) => {
                             <label><span>Original Date : </span>{e.getDate()} / {e.getMonth()} / {e.getFullYear()}
                                 <span>    Original Date : </span>{e.getHours() >= 12 ? e.getHours() % 12 : e.getHours()} {e.getHours() >= 12 ? "PM" : "AM"}</label>
 
-                            {inputs.map((input) => (
+                            {inputs?.map((input) => (
                                 <div className="formInput" key={input.id}>
                                     <label>{input.label}</label>
                                     <input onChange={handleChange}

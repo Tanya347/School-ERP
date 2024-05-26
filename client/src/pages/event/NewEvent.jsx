@@ -147,7 +147,7 @@ const NewEvent = ({ inputs, title }) => {
                     onChange={(end) => setEnd(end)}
                   />
 
-                  {inputs.map((input) => (
+                  {inputs?.map((input) => (
                     <div className="formInput" key={input.id}>
                       <label>{input.label}</label>
                       <input onChange={handleChange} type={input.type} placeholder={input.placeholder} id={input.id} />
@@ -160,7 +160,7 @@ const NewEvent = ({ inputs, title }) => {
             </div></>}
 
         {!openForm && <div className="cardsContainer">
-          {list.map((item, i) => (
+          {list?.map((item, i) => (
             <div className="card" key={item._id}>
               <div class="content">
                 {item.poster ? <img id="post-image" src={item.poster} alt="" /> : "no image"}

@@ -116,7 +116,7 @@ const NewFaculty = ({ inputs, title }) => {
                 </select>
               </div>
 
-              {inputs.map((input) => (
+              {inputs?.((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
                   <input

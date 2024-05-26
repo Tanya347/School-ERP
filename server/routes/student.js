@@ -10,7 +10,6 @@ import {
   clearAllStudentsAttendanceBySubject,
   clearAllStudentsAttendance,
   studentAttendance,
-  studentMarksforModel,
   getOverallAttendancePercentage
 } from "../controllers/student.js";
 
@@ -18,7 +17,6 @@ const router = express.Router();
 
 router.post("/registerStudent", registerStudent);
 router.post("/loginStudent", loginStudent);
-router.get('/studentMarks', studentMarksforModel);
 router.put('/ClearAllStudentsAtten/', clearAllStudentsAttendance);
 router.put('/ClearAllStudentsSubAtten/:id', clearAllStudentsAttendanceBySubject);
 router.put("/:id", updateStudent);

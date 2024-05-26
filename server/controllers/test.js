@@ -146,3 +146,11 @@ export const updateMarks = async (req, res, next) => {
     next(err);
   }
 };
+
+// edit marks
+
+// add marks
+
+// get marks of all students
+
+// get marks of one student

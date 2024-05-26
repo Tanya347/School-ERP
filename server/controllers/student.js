@@ -283,34 +283,5 @@ export const getSingleStudent = async (req, res, next) => {
   }
 
 
-  export const studentMarksforModel = async (req, res, next) => {
-    try {
-      const students = await Student.find();
-  
-      const result = students.map((student) => {
-        const { _id, marks, pace } = student;
-  
-        // Assuming you want marks for at least three subjects
-        const sub1 = marks.length >= 1 ? marks[0].value : null;
-        const sub2 = marks.length >= 2 ? marks[1].value : null;
-        const sub3 = marks.length >= 3 ? marks[2].value : null;
-  
-        return {
-          student_id: _id,
-          sub1,
-          sub2,
-          sub3,
-          learner_type: pace,
-        };
-      });
-  
-      res.status(200).json(result);
-    }
-    catch(err) {
-      next(err)
-    }
-
-  }
-
 
 

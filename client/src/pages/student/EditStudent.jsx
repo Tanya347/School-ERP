@@ -214,7 +214,7 @@ const EditUser = ({ title, type }) => {
                   value={info.class?.name}
                 >
                   {
-                    classes.map((d, index) => (
+                    classes?.map((d, index) => (
                       <option value={d._id} key={index}>{d.name}</option>
                     ))
                   }

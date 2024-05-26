@@ -18,7 +18,7 @@ const Class = () => {
             <h1>Classes</h1>
             <div className="classesContainer">
                 {
-                    classes.map((cl, index) => (
+                    classes?.map((cl, index) => (
                         <div className="classContainer" key={index}>
                             <h3>{cl.name} Standard</h3>
                             <Link to={`/admin/classes/${cl._id}`}>

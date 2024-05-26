@@ -31,11 +31,11 @@ const ViewClass = () => {
                         <>
                         {classData?.subjects?.map((item, index) => (
                             <Course 
-                            name={item.name}
+                            name={item?.name}
                             index={index}
-                            subjectCode={item.subjectCode}
-                            syllabusPicture={item.syllabusPicture} 
-                            teacher={item.teacher.teachername}/>
+                            subjectCode={item?.subjectCode}
+                            syllabusPicture={item?.syllabusPicture} 
+                            teacher={item?.teacher?.teachername}/>
                             ))}
                         </>
                     ) : (

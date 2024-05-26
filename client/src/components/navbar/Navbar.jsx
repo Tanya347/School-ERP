@@ -98,7 +98,7 @@ const Navbar = () => {
 
           {/* Notifs drop down will show when user clicks and useState gets set to true */}
           {/* {openNotif && <ul id="notif-menu">
-            {notifs.map((item) => (
+            {notifs?.map((item) => (
               <li>
                 <h3>{item.title}</h3>
                 <p>{item.desc.slice(0, 25)} ...</p>
@@ -117,7 +117,7 @@ const Navbar = () => {
 
           {/* Messages drop down will show when user clicks and useState gets set to true */}
           {openMessages && <ul id="notif-menu">
-            {messages.map((item) => (
+            {messages?.map((item) => (
               <li>
                 <h3>{item.title}</h3>
                 <p>{item.description.slice(0, 25)} ...</p>

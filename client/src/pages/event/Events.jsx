@@ -35,12 +35,12 @@ const Events = () => {
 
     useEffect(() => {
 
-        const e1 = tasks.map((t) => {
+        const e1 = tasks?.map((t) => {
             const deadline = new Date(t.deadline)
             return {title: t.title, start:deadline, type: 'tasks'}
         })
 
-        const e2 = tests.map((t) => {
+        const e2 = tests?.map((t) => {
             const date = new Date(t.date)
             return {title: t.name, start: date, type: 'tests'}
         })

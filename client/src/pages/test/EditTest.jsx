@@ -129,7 +129,7 @@ const EditTest = ({ title }) => {
                   id="classId">
                     {
                       classes && classes.length > 0 &&
-                      classes.map((cl, index) => (
+                      classes?.map((cl, index) => (
                         <option key={index} value={cl._id} selected={info?.sclass?._id === cl._id}>{cl.name}</option>
                         ))
                       }

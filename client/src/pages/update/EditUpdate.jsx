@@ -88,7 +88,7 @@ const EditUpdate = ({ title, type }) => {
                   onChange={handleChange}
                 >
                   {
-                    classes.map((d, index) => (
+                    classes?.map((d, index) => (
                       <option value={d._id} key={index} selected={info?.class?._id === d._id}>{d.name}</option>
                     ))
                   }

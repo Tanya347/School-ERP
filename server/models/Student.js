@@ -63,22 +63,6 @@ const StudentSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    attendance: [
-      {
-        atten_date: {
-          type: Date,
-          // set: (dateString) => new Date(dateString), 
-        },
-        status: {
-          type: Boolean,
-          required: true,
-        },
-        sub_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Course',
-        },
-      },
-    ],
     marks: [
       {
         sub_id: {

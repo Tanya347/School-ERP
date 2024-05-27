@@ -81,76 +81,120 @@ export const getStudentTests = async (req, res, next) => {
   }
 };
 
-export const addMarks = async (req, res, next) => {
-  const { student_id, value } = req.body;
-
+// Add/Edit marks for a test
+export const addEditMarks = async (req, res, next) => {
   try {
-    const test = await Test.findById(req.params.id);
-    const student = await Student.findById(student_id);
-    const sub_id = test.subject;
-    try {
-      student.marks.push({ sub_id, value });
-      await student.save();
-    } catch (err) {}
+    const { testid } = req.params;
+    const { marksData } = req.body; // array of student IDs and marks from the request body
 
-    if (!test) return res.status(404).json({ message: "Test not found" });
-    else {
-      test.marks.push({ student_id, value });
-      const result = await test.save();
-      return res.send(result);
+    const test = await Test.findById(testid);
+    if (!test) {
+      return res.status(404).json({ message: 'Test not found' });
     }
-  } catch (err) {
-    next(err);
+
+    for (let data of marksData) {
+      const { student_id, value } = data;
+
+      // Check if the student already has marks for this test
+      const studentMarks = test.marks.find(mark => mark.student_id.toString() === student_id);
+
+      if (studentMarks) {
+        // Update existing marks
+        studentMarks.value = value;
+      } else {
+        // Add new marks entry
+        test.marks.push({ student_id, value });
+      }
+    }
+
+    // Save the updated test document
+    await test.save();
+
+    res.status(200).json({ message: 'Marks added/edited successfully' });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const updateMarks = async (req, res, next) => {
-  const { student_id, value } = req.body;
-
+// Get marks of all students for a test
+export const getMarksOfAllStudents = async (req, res, next) => {
   try {
-    const test = await Test.findById(req.params.id);
-    const sub_id = test.subject;
+    const { testid } = req.params;
+
+    const test = await Test.findById(testid).populate('marks.student_id', 'name enroll');
+    if (!test) {
+      return res.status(404).json({ message: 'Test not found' });
+    }
+
+    const studentsInClass = await Student.find({ class: test.sclass }).select('name enroll');
+
+    const result = studentsInClass.map(student => {
+      const studentMarks = test.marks.find(mark => 
+        mark.student_id && mark.student_id._id.toString() === student._id.toString()
+      );
+      return {
+        studentName: student.name,
+        enrollment: student.enroll,
+        marks: studentMarks ? studentMarks.value : 0
+      };
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get marks of one student for a test
+export const getMarksOfOneStudent = async (req, res, next) => {
+  try {
+    const { testid, studentid } = req.params;
+
+    const test = await Test.findById(testid);
 
     if (!test) {
-      return res.status(404).json({ message: "Test not found" });
+      return res.status(404).json({ message: 'Test not found' });
     }
 
-    // Check if the student with the given ID exists
-    const student = await Student.findById(student_id);
+    const student = await Student.findById(studentid).select('name enroll');
     if (!student) {
-      return res.status(404).json({ message: "Student not found" });
+      return res.status(404).json({ message: 'Student not found' });
     }
 
-    // Find the existing mark for the student in the test
-    const existingMarkIndex = test.marks.findIndex(
-      (mark) => mark.student_id.toString() === student_id
+    const studentMarks = test.marks.find(mark => 
+      mark.student_id && mark.student_id.toString() === studentid
     );
 
-    // If the mark exists, update it; otherwise, add a new mark
-    if (existingMarkIndex !== -1) {
-      test.marks[existingMarkIndex].value = value;
-    } else {
-      test.marks.push({ student_id, value });
-    }
+    const result = {
+      studentName: student.name,
+      enrollment: student.enroll,
+      marks: studentMarks ? studentMarks.value : 0
+    };
 
-    // Save the updated test
-    const result = await test.save();
-
-    try {
-      student.marks.push({ sub_id, value });
-      await student.save();
-    } catch (err) {}
-
-    return res.send(result);
-  } catch (err) {
-    next(err);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
 };
 
-// edit marks
+// Clear marks of a test
+export const clearMarksOfTest = async (req, res, next) => {
+  try {
+    const { testid } = req.params;
 
-// add marks
+    const test = await Test.findById(testid);
+    if (!test) {
+      return res.status(404).json({ message: 'Test not found' });
+    }
 
-// get marks of all students
+    // Clear the marks array
+    test.marks = [];
 
-// get marks of one student
+    // Save the updated test document
+    await test.save();
+
+    res.status(200).json({ message: 'Marks cleared successfully' });
+  } catch (error) {
+    next(error);
+  }
+};

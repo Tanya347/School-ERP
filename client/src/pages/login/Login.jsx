@@ -16,13 +16,13 @@ function Login({ type }) {
   var url;
 
   if(type==="Faculty") {
-    url = "https://drive.google.com/uc?id=1pB5VggYKPL8B-7q7EnAUwKSKttXsC8bV"
+    url = "/Assets/faculty.jfif"
 
   } else if(type==="Student") {
-    url = "https://drive.google.com/uc?id=1AO6eJhTrn8bF4U-JA9OcRP6pLq2P2E5p";
+    url = "/Assets/student.jfif";
 
   } else {
-    url = "https://drive.google.com/uc?id=1vbn0I0RkKFCyxbZfHtLcQ3j3GN0UCm-1"
+    url = "/Assets/admin.jfif"
   }
 
 

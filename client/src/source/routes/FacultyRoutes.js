@@ -21,6 +21,7 @@ import ViewStudents from '../../pages/viewStudents/ViewStudents';
 import { AuthContext } from '../../config/context/AuthContext';
 import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
+import AddMarks from '../../pages/marks/AddMarks';
 
 
 
@@ -127,6 +128,12 @@ const FacultyRoutes = () => {
           <Route
             path='attendance'
             element={<AttendanceInfo />}
+          />
+
+          {/* add marks page */}
+          <Route 
+            path="marks/new"
+            element={<AddMarks />}
           />
         </Routes>
       </RequireFaculty>

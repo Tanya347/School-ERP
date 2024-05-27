@@ -7,6 +7,12 @@ import {
   getStudent,
   getStudents,
   getSingleStudent,
+  getMarksOfClass,
+  getMarksOfStudent,
+  getMarksOfSubject,
+  enterMarksForSubject,
+  clearMarksForSubject,
+  clearMarksForClass
 } from "../controllers/student.js";
 
 const router = express.Router();
@@ -18,5 +24,12 @@ router.delete("/:id", deleteStudent);
 router.get("/:id", getStudent);
 router.get("/single/:id", getSingleStudent);
 router.get("/", getStudents);
+router.put('/marks/:subjectId', enterMarksForSubject);
+router.get('/marks/single/:studentid', getMarksOfStudent);
+router.get('/marks/subject/:subjectid', getMarksOfSubject);
+router.get('/marks/class/:classid', getMarksOfClass);
+router.delete('/marks/subject/:subjectid', clearMarksForSubject);
+router.delete('/marks/class/:classid', clearMarksForClass)
+
 export default router;
 

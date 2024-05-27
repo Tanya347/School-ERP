@@ -184,21 +184,157 @@ export const getSingleStudent = async (req, res, next) => {
 
 
 // enter marks
+// Enter marks for a particular subject for all students
+export const enterMarksForSubject = async (req, res, next) => {
+  try {
+    const { subjectId } = req.params; // subject ID from the request parameters
+    const { marksData } = req.body; // array of student IDs and marks from the request body
 
+    for (let data of marksData) {
+      const { studentId, marks } = data;
 
-// edit marks
+      // Find the student by ID
+      const student = await Student.findById(studentId);
 
+      if (student) {
+        // Check if marks entry for the subject already exists
+        const subjectMarks = student.marks.find(m => m.sub_id.toString() === subjectId);
 
-// delete marks
+        if (subjectMarks) {
+          // If marks entry exists for the subject, update it
+          subjectMarks.total = marks;
+        } else {
+          // If marks entry does not exist, create a new entry
+          student.marks.push({ sub_id: subjectId, total: marks });
+        }
+
+        // Save the updated student document
+        await student.save();
+      }
+    }
+
+    res.status(200).json({ message: 'Marks entered successfully for all students' });
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 // get marks of one student
+export const getMarksOfStudent = async (req, res, next) => {
+  try {
+    const { studentid } = req.params;
+    const student = await Student.findById(studentid).populate('marks.sub_id', 'name');
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.status(200).json(student.marks);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 // get marks of all students in a subject
+export const getMarksOfSubject = async (req, res, next) => {
+  try {
+    const { subjectid } = req.params;
 
+    const students = await Student.find({ 'marks.sub_id': subjectid })
+      .select('name enroll marks')
+      .populate({
+        path: 'marks.sub_id',
+        select: 'name'
+      });
 
-// get marks of students in all subject in a class
+    const result = students.map(student => {
+      const subjectMarks = student.marks.find(mark => mark.sub_id._id.toString() === subjectid);
+      return {
+        studentName: student.name,
+        enrollment: student.enroll,
+        marks: subjectMarks ? subjectMarks.total : null
+      };
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get marks of students in all subjects in a class
+export const getMarksOfClass = async (req, res, next) => {
+  try {
+    const { classid } = req.params;
+    
+    const students = await Student.find({ class: classid })
+      .select('name enroll marks')
+      .populate({
+        path: 'marks.sub_id',
+        select: 'name'
+      });
+
+    const result = students.map(student => ({
+      name: student.name,
+      enroll: student.enroll,
+      marks: student.marks.map(mark => ({
+        subject: mark.sub_id.name,
+        total: mark.total
+      }))
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// clear marks for a subject
+
+export const clearMarksForSubject = async (req, res, next) => {
+  try {
+    const { subjectid } = req.params;
+
+    // Find all students who have marks for the given subject
+    const students = await Student.find({ 'marks.sub_id': subjectid });
+
+    for (let student of students) {
+      // Filter out the marks for the given subject
+      student.marks = student.marks.filter(mark => mark.sub_id.toString() !== subjectid);
+
+      // Save the updated student document
+      await student.save();
+    }
+
+    res.status(200).json({ message: 'Marks cleared for the specified subject' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Clear all marks for students in a class
+export const clearMarksForClass = async (req, res, next) => {
+  try {
+    const { classid } = req.params;
+
+    // Find all students in the specified class
+    const students = await Student.find({ class: classid });
+
+    for (let student of students) {
+      // Clear the marks array
+      student.marks = [];
+
+      // Save the updated student document
+      await student.save();
+    }
+
+    res.status(200).json({ message: 'All marks cleared for the specified class' });
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 

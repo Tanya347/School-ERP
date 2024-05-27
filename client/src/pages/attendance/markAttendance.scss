@@ -1,3 +1,107 @@
 .mark-attendance {
     
+    .mark-attendance-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .classes-button {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            width: 100%;
+
+            button {
+                border: none;
+                outline: none;
+                padding: 10px 20px;
+                background-color: var(--light-yellow);
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--yellow);
+                }
+            }
+        }
+
+        h1 {
+            font-size: 1.3rem;
+        }
+
+        .attendance-date-picker {
+            margin: 20px 0;
+            padding: 20px 20px;
+            background-color: var(--light-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            label {
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+            input {
+                text-align: center;
+                font-size: 1rem;
+            }
+        }
+
+        .attendance-marking-table {
+            display: table;
+            margin-top: 20px;
+            width: 70%;
+            border-collapse: collapse;
+            flex-direction: column;
+
+            @media screen and (max-width: 600px) {
+                width: 80%;
+                overflow-x: scroll;
+            }
+
+            #title-row {
+                background-color: var(--light-yellow);
+                font-weight: 600;
+            }
+
+            .attendance-row {
+                display: table-row;
+
+                .attendance-col {
+                    display: table-cell;
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                    text-align: left;
+                  }
+
+              }
+        }
+
+        .mark-attendance-button {
+            button {
+                border: none;
+                outline: none;
+                padding: 10px 20px;
+                font-size: 1.1rem;
+                margin-top: 30px;
+                color: white;
+                font-weight: 600;
+                background-color: var(--turquoise);
+                transition: all 0.2s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    transform: translateY(-2px);
+                }
+            }
+        }
+    }
 }

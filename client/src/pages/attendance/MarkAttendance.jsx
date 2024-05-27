@@ -65,7 +65,7 @@ const MarkAttendance = () => {
                 withCredentials: false
             })
 
-            navigate(-1)
+            navigate("/faculty/attendance")
         }
         catch(err) {
             console.log(err)
@@ -76,15 +76,16 @@ const MarkAttendance = () => {
         <div className='mark-attendance'>
             <Navbar />
             <div className="mark-attendance-container">
-            {
-                classes?.map((cl, index) => (
-                    <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
-                ))
-            }
+            <div className="classes-button">
+              {
+                  classes?.map((cl, index) => (
+                      <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
+                  ))
+              }
+            </div>
             {sclass ? 
                 (
                     <>
-                    <h1>Students</h1>
                     <h1>Class: {className}</h1>
 
                     <div className="attendance-date-picker">
@@ -99,24 +100,26 @@ const MarkAttendance = () => {
                     </div>
         
         
-                    <div className="attendance-row">
-                        <div className="attendance-col">Enrollment Number</div>
-                        <div className="attendance-col">Student</div>
-                        <div className="attendance-col">Present</div>
+                    <div className="attendance-marking-table">
+                      <div className="attendance-row" id='title-row'>
+                          <div className="attendance-col">Enrollment Number</div>
+                          <div className="attendance-col">Student</div>
+                          <div className="attendance-col">Present</div>
+                      </div>
+          
+                      {stuData?.students?.map((st, index) => (
+                          <div className="attendance-row" key={index}>
+                              <div className="attendance-col">{st.enroll}</div>
+                              <div className="attendance-col">{st.name}</div>
+                              <div className="attendance-col">
+                                  <input type="checkbox" name="attendance" id="attendance" 
+                                      checked={presentStudents.includes(st._id)}
+                                      onChange={() => handleCheckboxChange(st._id)}
+                                  />
+                              </div>
+                          </div>
+                      ))}
                     </div>
-        
-                    {stuData?.students?.map((st, index) => (
-                        <div className="attendance-row" key={index}>
-                            <div className="attendance-col">{st.enroll}</div>
-                            <div className="attendance-col">{st.name}</div>
-                            <div className="attendance-col">
-                                <input type="checkbox" name="attendance" id="attendance" 
-                                    checked={presentStudents.includes(st._id)}
-                                    onChange={() => handleCheckboxChange(st._id)}
-                                />
-                            </div>
-                        </div>
-                    ))}
         
         
                     <div className="mark-attendance-button">

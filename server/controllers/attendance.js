@@ -1,7 +1,8 @@
-
+import moment from 'moment';
 import Attendance from '../models/Attendance.js';
 import Class from "../models/Class.js";
 
+// --
 export const createAttendance = async (req, res, next) => {
   try {
     const { date, present, classid, author } = req.body;
@@ -32,7 +33,7 @@ export const createAttendance = async (req, res, next) => {
 
 
 // get lecture count 
-
+// --
 export const getLectureCount = async (req, res, next) => {
     try {
       const { classid } = req.params;
@@ -44,7 +45,7 @@ export const getLectureCount = async (req, res, next) => {
   };
 
 // get attendance dates of a class
-
+// --
 export const getAttendanceDates = async(req, res, next) => {
     try {
         const { classid } = req.params;
@@ -52,9 +53,10 @@ export const getAttendanceDates = async(req, res, next) => {
 
         // Map through each attendance record to include the counts
         const attendanceSummary = attendances.map(attendance => ({
-        date: attendance.date,
-        presentCount: attendance.present.length,
-        absentCount: attendance.absent.length,
+          id: attendance._id,
+          date: attendance.date,
+          presentCount: attendance.present.length,
+          absentCount: attendance.absent.length,
         }));
 
         res.status(200).json(attendanceSummary);
@@ -99,14 +101,20 @@ export const editAttendance = async (req, res, next) => {
   
 
 // get attendance of class on a particular day 
-
+// -
 export const getAttendanceStatusByDate = async (req, res, next) => {
     try {
       const { classid, date } = req.params;
   
-      // Find attendance record for the specified class and date
-      const attendance = await Attendance.findOne({ classid, date: new Date(date) }).populate('present absent', 'name enroll');
-  
+      // Standardize and format the incoming date to YYYY-MM-DD
+      const standardizedDate = moment(date).format('YYYY-MM-DD');
+
+      // Find all attendance records for the specified class
+      const attendances = await Attendance.find({ classid }).populate('present absent', 'name enroll');
+
+      // Filter the attendance records by comparing the formatted dates
+      const attendance = attendances.find(att => moment(att.date).format('YYYY-MM-DD') === standardizedDate);
+
       if (!attendance) {
         return res.status(404).json({ message: 'No attendance record found for the specified date and class' });
       }

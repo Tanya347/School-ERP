@@ -9,6 +9,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 // import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
 import CloseIcon from '@mui/icons-material/Close';
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import EditIcon from '@mui/icons-material/Edit';
@@ -72,6 +73,13 @@ const MainSidebar = ({ setOpen }) => {
                             <span>Calender</span>
                         </li>
                     </Link>
+
+                    {(user.isFaculty) && <Link to="/faculty/attendance" style={{ textDecoration: "none" }}>
+                        <li>
+                            <CoPresentIcon className="icon" />
+                            <span>Attendance</span>
+                        </li>
+                    </Link>}
 
                     {/* Takes you to list of all tasks created by admin */}
                     <Link to={user.isFaculty? "/faculty/tasks" : "/student/tasks"} style={{ textDecoration: "none" }}>

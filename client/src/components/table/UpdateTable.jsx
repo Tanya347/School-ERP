@@ -40,16 +40,7 @@ const List = () => {
 
             // row.id is just a number
             <TableRow key={index}>
-              
-              {/* Event poster and name
-              <TableCell className="tableCell">
-                <div className="cellWrapper">
-                  <img src={row.poster} alt="" className="image" />
-                  {row.name}
-                </div>
-              </TableCell> */}
 
-              {/* Other details */}
               <TableCell className="tableCell">{row.title}</TableCell>
               <TableCell className="tableCell">{row.desc}</TableCell>
             </TableRow>

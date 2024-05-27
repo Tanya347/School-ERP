@@ -1,6 +1,46 @@
 .attendance-info {
 
     .attendance-info-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .classes-button {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            width: 100%;
+
+            button {
+                border: none;
+                outline: none;
+                padding: 10px 20px;
+                background-color: var(--light-yellow);
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--yellow);
+                }
+            }
+        }
+
+        h1 {
+            font-size: 1.1rem;
+        }
+
+        .attendance-dates-calender {
+            width: 90%;
+
+            @media screen and (max-width: 600px) {
+                width: 100%;
+            }
+        }
 
         .attendance-dates-table {
 
@@ -8,6 +48,22 @@
             .attendance-date {
                 display: flex;
                 gap: 10px;
+            }
+        }
+
+        .clear-attendance {
+            button {
+                border: none;
+                outline: none;
+                padding: 10px 20px;
+                background-color: var(--light-red);
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: red;
+                    color: white;
+                }
             }
         }
     }

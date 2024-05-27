@@ -5,6 +5,10 @@ export const getClasses = "/classes"
 export const getLectureCount = "/attendances/lecturecount"
 export const getAttendanceDates = "/attendances/dates"
 
+export const getAttendanceStatusByDate = (classid, date) => {
+    return `/attendances/date/${classid}/${date}`
+}
+
 export const getDatatableURL = (path, user) => {
     if(path === 'tests')
         return user.isFaculty? `/tests/faculty/${user._id}` : `/tests/student/${user.class}`

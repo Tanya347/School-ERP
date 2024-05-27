@@ -1,0 +1,79 @@
+.attendanceModal {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.418);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .attContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        padding: 20px;
+        height: fit-content;
+        position: relative;
+        width: fit-content;
+
+        @media screen and (max-width: 600px) {
+            width: 80%;
+        }
+
+        .attClose {
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .table {
+
+            @media screen and (max-width: 600px) {
+                width: 300px;
+                overflow-x: scroll;
+            }
+
+            .status {
+                padding: 5px;
+                border-radius: 5px;
+            
+                &.present {
+                  color: green;
+                  background-color: rgba(0, 128, 0, 0.151);
+                }
+            
+                &.absent {
+                  color: goldenrod;
+                  background-color: rgba(189, 189, 3, 0.103);
+                }
+            }
+        }
+
+        .clear-button {
+            button {
+              border: none;
+              margin-top: 20px;
+              outline: none;
+              padding: 10px 20px;
+              background-color: var(--light-red);
+              transition: all 0.3s ease-in-out;
+              cursor: pointer;
+        
+              &:hover {
+                  background-color: red;
+                  color: white;
+              }
+          }
+          }
+    }
+    
+}

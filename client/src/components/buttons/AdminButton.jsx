@@ -3,8 +3,9 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BookIcon from '@mui/icons-material/Book';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SchoolIcon from '@mui/icons-material/School';
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
-import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
 import { Link } from 'react-router-dom';
 
 import "./adminButton.scss"
@@ -34,7 +35,7 @@ const Button = () => {
         </Link>
         <Link to="/admin/timetables/new" style={{ textDecoration: "none", color: "black" }}>
           <div className="createButton">
-            <CalendarMonthIcon className='icon' style={{color:"var(--green)"}}/>
+            <MoreTimeIcon className='icon' style={{color:"var(--green)"}}/>
             <p>Timetable</p>
           </div>
         </Link>
@@ -52,7 +53,7 @@ const Button = () => {
         </Link>
         <Link to="/admin/classes" style={{ textDecoration: "none", color: "black"  }}>
           <div className="createButton">
-            <ControlPointDuplicateIcon className='icon' style={{color:"var(--pink)"}}/>
+            <SchoolIcon className='icon' style={{color:"var(--pink)"}}/>
             <p>Classes</p>
           </div>
         </Link>

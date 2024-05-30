@@ -36,6 +36,9 @@ import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
 import { eventInputs } from '../formsource/eventInputs';
 import TableWithoutAction from '../../pages/table/TableWithoutAction';
+import NewTimeTable from '../../pages/timetable/NewTimeTable';
+import EditTimeTable from '../../pages/timetable/EditTimeTable';
+import Timetable from '../../pages/timetable/Timetable';
 
 const AdminRoutes = () => {
 
@@ -203,12 +206,22 @@ const AdminRoutes = () => {
         {/* ROUTES FOR TIMETABLES */}
 
           {/* create new timetables */}
+          <Route
+            path="timetables/new"
+            element={ <NewTimeTable />}
+          />
 
           {/* edit timetables */}
+          <Route
+            path='timetables/edit/:id'
+            element={ <EditTimeTable />}
+          />
 
           {/* view timetables */}
-
-
+          <Route
+            path='timetables'
+            element={<Timetable />}
+          />
         </Routes>
       </RequireAdmin>
   );

@@ -25,9 +25,6 @@ const CourseSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Faculty',
             default: null
-        },
-        sessions: {
-            type: Number, 
         }
     }
 );

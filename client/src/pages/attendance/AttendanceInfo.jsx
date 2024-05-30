@@ -18,6 +18,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Navbar from "../../components/navbar/Navbar"
 import AttendanceTable from "../../components/popUps/AttendanceTable";
 import { getClearClassURL } from "../../source/endpoints/delete";
+import { Link } from "react-router-dom";
 
 const locales = {
     "en-US": require("date-fns/locale/en-US"),
@@ -130,8 +131,16 @@ const AttendanceInfo = () => {
                         />
                     </div>
 
-                    <div className="clear-attendance">
-                        <button onClick={handleClear}>Clear Class Attendance</button>
+                    <div className="button-container">
+                        <div className="clear-attendance">
+                            <button onClick={handleClear}>Clear Class Attendance</button>
+                        </div>
+
+                        <Link to={`/faculty/classes/attendance/${sclass}`} >
+                            <div className="view-percentage">
+                                <button>View Percentage Status</button>
+                            </div>
+                        </Link>
                     </div>
                 </>
             ) : (

@@ -5,7 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { taskColumns } from '../datatablesource/taskColumns';
 import { queryColumns } from '../datatablesource/queryColumns';
 import { testColumns } from '../datatablesource/testColumns';
-
+import {attendanceColumns} from "../datatablesource/attendanceColumns"
 import { taskInputs } from '../formsource/taskInputs';
 
 import NewTask from '../../pages/task/NewTask';
@@ -23,6 +23,7 @@ import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 import AddMarks from '../../pages/marks/AddMarks';
 import ViewMarks from '../../pages/marks/ViewMarks';
+import TableWithoutAction from "../../pages/table/TableWithoutAction"
 import ViewTestMarks from '../../pages/test/ViewTestMarks';
 
 
@@ -132,6 +133,12 @@ const FacultyRoutes = () => {
           <Route
             path='attendance'
             element={<AttendanceInfo />}
+          />
+
+          {/* student attendance percentage */}
+          <Route
+            path="classes/attendance/:classId"
+            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
           />
 
           {/* add marks page */}

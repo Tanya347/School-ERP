@@ -51,18 +51,41 @@
             }
         }
 
-        .clear-attendance {
-            button {
-                border: none;
-                outline: none;
-                padding: 10px 20px;
-                background-color: var(--light-red);
-                transition: all 0.3s ease-in-out;
-                cursor: pointer;
+        .button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
 
-                &:hover {
-                    background-color: red;
-                    color: white;
+            .clear-attendance {
+                button {
+                    border: none;
+                    outline: none;
+                    padding: 10px 20px;
+                    background-color: var(--light-red);
+                    transition: all 0.3s ease-in-out;
+                    cursor: pointer;
+    
+                    &:hover {
+                        background-color: red;
+                        color: white;
+                    }
+                }
+            }
+    
+            .view-percentage {
+                button {
+                    border: none;
+                    outline: none;
+                    padding: 10px 20px;
+                    background-color: var(--light-green);
+                    transition: all 0.3s ease-in-out;
+                    cursor: pointer;
+    
+                    &:hover {
+                        background-color: green;
+                        color: white;
+                    }
                 }
             }
         }

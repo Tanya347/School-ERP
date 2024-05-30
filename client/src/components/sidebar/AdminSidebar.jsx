@@ -19,6 +19,9 @@ import BookIcon from '@mui/icons-material/Book';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import SchoolIcon from '@mui/icons-material/School';
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
+
 
 
 import { Link } from 'react-router-dom';
@@ -114,6 +117,14 @@ const AdminSidebar = ({ setOpen }) => {
                         </li>
                     </Link>
 
+                    {/* Takes you to list of all timetables created by admin */}
+                    <Link to="/admin/timetables" style={{ textDecoration: "none" }}>
+                        <li>
+                            <ViewTimelineIcon className="icon" />
+                            <span>Timetables</span>
+                        </li>
+                    </Link>
+
                     {/* Options under Create */}
 
                     <p className="title">Create</p>
@@ -149,6 +160,13 @@ const AdminSidebar = ({ setOpen }) => {
                         <li>
                             <CalendarMonthIcon className="icon" />
                             <span>Events</span>
+                        </li>
+                    </Link>
+
+                    <Link to="/admin/timetables/new" style={{ textDecoration: "none" }}>
+                        <li>
+                            <MoreTimeIcon className="icon" />
+                            <span>Timetables</span>
                         </li>
                     </Link>
 

@@ -78,13 +78,14 @@
           box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
           padding: 20px;
           display: flex;
+          flex-wrap: wrap;
           gap: 30px;
           align-items: center;
           justify-content: center;
           border-radius: 10px;
 
           @media screen and (max-width: 800px){
-            width: 80%;
+            width: 90%;
           }
 
           .title {
@@ -98,11 +99,24 @@
             background-color: var(--light-gray);
             border-radius: 10px;
             text-align: center;
+            width: 30%;
             padding: 20px;
+
+            @media screen and (max-width: 800px){
+              width: 90%;
+            }
 
             .progressbar {
               height: 100px;
               margin-bottom: 10px;
+            }
+          }
+
+          .marks {
+            width: 60%;
+
+            @media screen and (max-width: 800px){
+              width: 90%;
             }
           }
 

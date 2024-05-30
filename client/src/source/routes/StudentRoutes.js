@@ -12,6 +12,7 @@ import List from '../../pages/list/List';
 import Events from '../../pages/event/Events';
 import { AuthContext } from '../../config/context/AuthContext';
 import NewEvent from '../../pages/event/NewEvent';
+import StudentHome from '../../pages/home/StudentHome';
 
 const StudentRoutes = () => {
     const { user } = useContext(AuthContext);
@@ -28,7 +29,7 @@ const StudentRoutes = () => {
 
     <RequireStudent>
         <Routes>
-            <Route index element={<Home type="Main" />} />
+            <Route index element={<StudentHome type="Main" />} />
             <Route path="single/:id" element={<SingleStudent type="Main" />} />
             <Route path="edit/:id" element={<EditStudent title="Edit Profile" type="Main" />} />
             <Route path="tasks" element={<List column={taskColumns} type="Main" name="Task" />} />

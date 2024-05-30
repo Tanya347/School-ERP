@@ -7,9 +7,9 @@ import useFetch from "../../config/hooks/useFetch";
 import Course from "../../components/course/Course";
 import { CircularProgressbar } from "react-circular-progressbar";
 import { getSingleData, getStudentAttendance } from "../../source/endpoints/get";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext} from "react";
 import { AuthContext } from "../../config/context/AuthContext";
+import 'react-circular-progressbar/dist/styles.css';
 
 
 const Single = ({ type }) => {
@@ -19,7 +19,6 @@ const Single = ({ type }) => {
 
   const { user } = useContext(AuthContext)
 
-  const [attendance, setAttendance] = useState({});
 
   const location = useLocation();
   
@@ -29,21 +28,8 @@ const Single = ({ type }) => {
   else
     id = location.pathname.split("/")[4];
   const { data } = useFetch(getSingleData(id, "students"))
+  const attendance = useFetch(getStudentAttendance(user._id, user.class)).data
   
-  useEffect(() => {
-    const fetchStudents = async () => {
-        try {
-          const response = await axios.get(getStudentAttendance(user._id, user.class));
-          setAttendance(response.data);
-        } catch (error) {
-          console.error("Error fetching student data:", error);
-        }
-      
-    };
-    fetchStudents();
-  }, [user])
-
-  console.log(attendance)
   
   // used to navigate to a certain link
   const navigate = useNavigate();
@@ -119,9 +105,9 @@ const Single = ({ type }) => {
           <div className="right">
             <div className="attendance">
               <h2 className="title">Attendance</h2>
-              <CircularProgressbar value={attendance.perc} text={`${attendance.perc}%`} strokeWidth={10} className="progressbar" />
-              <div><span>Classes Attended:</span> {attendance?.attended}</div>
-              <div><span>Total Classes:</span> {attendance?.total}</div>
+              <CircularProgressbar value={parseFloat(attendance?.attendancePercentage?.toFixed(2))} text={`${attendance?.attendancePercentage?.toFixed(2)}%`} strokeWidth={10} className="progressbar" />
+              <div><span>Classes Attended:</span> {attendance?.attendedLectures}</div>
+              <div><span>Total Classes:</span> {attendance?.totalLectures}</div>
             </div>
             <div className="marks">
             <div className="title">Marks</div>

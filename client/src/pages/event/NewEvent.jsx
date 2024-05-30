@@ -28,7 +28,6 @@ const NewEvent = ({ inputs, title, type }) => {
 
   const { data } = useFetch(getDatatableURL("events"))
   
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));

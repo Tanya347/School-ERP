@@ -20,7 +20,6 @@ const AttendanceTable = ({classid, date, setOpen, id}) => {
 
     const {data} = useFetch(getAttendanceStatusByDate(classid, date));
     
-    console.log(id)
     const handleClear = async() => {
         // this deletes data from the database
         try {

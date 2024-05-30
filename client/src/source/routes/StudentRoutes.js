@@ -6,13 +6,11 @@ import { testColumns } from '../datatablesource/testColumns';
 
 import EditStudent from '../../pages/student/EditStudent';
 import SingleStudent from '../../pages/singleStudent/SingleStudent';
-import Home from '../../pages/home/Home';
 import Response from "../../pages/response/Response"
 import List from '../../pages/list/List';
 import Events from '../../pages/event/Events';
 import { AuthContext } from '../../config/context/AuthContext';
 import NewEvent from '../../pages/event/NewEvent';
-import StudentHome from '../../pages/home/StudentHome';
 
 const StudentRoutes = () => {
     const { user } = useContext(AuthContext);

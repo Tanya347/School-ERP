@@ -3,6 +3,7 @@ import "../../style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/navbar/Navbar";
 
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import DatePicker from "react-datepicker";
@@ -13,8 +14,9 @@ import useFetch from "../../config/hooks/useFetch";
 import EventModal from "../../components/popUps/EventModal";
 import { postURLs } from "../../source/endpoints/post";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
+import { getDatatableURL } from "../../source/endpoints/get";
 
-const NewEvent = ({ inputs, title }) => {
+const NewEvent = ({ inputs, title, type }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
@@ -24,7 +26,7 @@ const NewEvent = ({ inputs, title }) => {
   const [end, setEnd] = useState("")
   const [list, setList] = useState([])
 
-  const { data } = useFetch('/events')
+  const { data } = useFetch(getDatatableURL("events"))
   
   const navigate = useNavigate();
 
@@ -93,12 +95,12 @@ const NewEvent = ({ inputs, title }) => {
     <div className="event-container">
       {/* <Sidebar /> */}
       <div className="newEventContainer">
-        <AdminNavbar />
-        <div className="eventsButton">
+       {type === "Admin" ? <AdminNavbar /> : <Navbar />}
+        {type === "Admin" && <div className="eventsButton">
           <button onClick={() => setOpenForm(false)} >View Events</button>
           <button onClick={() => setOpenForm(true)} >Create Events</button>
-        </div>
-        {openForm &&
+        </div>}
+        {openForm && type === "Admin" &&
           <>
           <div className="new">
           <div className="newContainer">
@@ -178,7 +180,7 @@ const NewEvent = ({ inputs, title }) => {
         </div>}
       </div>
 
-      {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} isUser="true" />}
+      {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} type={type} />}
     </div>
   );
 };

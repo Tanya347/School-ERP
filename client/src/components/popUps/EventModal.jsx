@@ -9,7 +9,7 @@ import axios from 'axios';
 
 // setOpen prop, event is the event we need to display and isUser will only allow the user to delete/edit the event
 
-const EventModal = ({ setOpen, event, isUser }) => {
+const EventModal = ({ setOpen, event, type }) => {
 
     // start and end date of the event
     const start = new Date(event.startDate)
@@ -89,7 +89,7 @@ const EventModal = ({ setOpen, event, isUser }) => {
                         
                         {/* Allow only owner to edit/delete the event*/}
                         {
-                            isUser && <div className="crudButton">
+                            type === "Admin" && <div className="crudButton">
                                 <Link to={`/admin/events/edit/${event._id}`}>
                                     <button>Edit</button>
                                 </Link>

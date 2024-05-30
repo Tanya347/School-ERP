@@ -8,7 +8,6 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import TaskIcon from '@mui/icons-material/Task';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-// import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,6 +21,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import AddchartIcon from '@mui/icons-material/Addchart';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import GroupsIcon from '@mui/icons-material/Groups';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 import { useContext } from "react";
 import { AuthContext } from "../../config/context/AuthContext";
@@ -68,7 +68,7 @@ const MainSidebar = ({ setOpen }) => {
                     <p className="title">Information</p>
 
                     {/* Calender Page */}
-                    <Link to={user.isFaculty? "/faculty/events" : "/student/events"} style={{"textDecoration": "none"}}>
+                    <Link to={user.isFaculty? "/faculty/calender" : "/student/calender"} style={{"textDecoration": "none"}}>
                         <li>
                             <CalendarMonthIcon className="icon"/>
                             <span>Calender</span>
@@ -110,7 +110,7 @@ const MainSidebar = ({ setOpen }) => {
                     {user.isFaculty && <Link to={"/faculty/marks"} style={{ textDecoration: "none" }}>
                         <li>
                             <AssessmentIcon className="icon" />
-                            <span>Marks</span>
+                            <span>Students</span>
                         </li>
                     </Link>}
 
@@ -169,15 +169,12 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>} */}
                     
 
-                    {/* Event can be created only when user is a part of technical team so it will only be visible to them */}
-                    {/* <Link to="/newEvent" style={{ textDecoration: "none" }}>
-                        {user.subteam === "Technical Team" &&
+                    <Link to={user.isFaculty ? "/faculty/events" : "/student/events"} style={{ textDecoration: "none" }}>
                             <li>
-                                <PersonAddIcon className="icon" />
+                                <EmojiEventsIcon className="icon" />
                                 <span>Event</span>
                             </li>
-                        }
-                    </Link> */}
+                    </Link>
                     
                     {/* On click set usestate to true */}
                     {user.isStudent && <li onClick={() => setOpenQuery(true)}>

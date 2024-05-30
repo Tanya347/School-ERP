@@ -200,7 +200,7 @@ const AdminRoutes = () => {
           {/* create events */}
           <Route
             path="events/new"
-            element={ <NewEvent inputs={eventInputs}  title="Add New Event" />}
+            element={ <NewEvent inputs={eventInputs}  title="Add New Event" type="Admin" />}
           />
 
         {/* ROUTES FOR TIMETABLES */}

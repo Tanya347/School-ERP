@@ -11,7 +11,8 @@ import Navbar from "../../components/navbar/Navbar";
 import useFetch from '../../config/hooks/useFetch';
 import Modal from '../../components/popUps/Modal';
 import { AuthContext } from '../../config/context/AuthContext';
-import { getTaskCalenderURL, getTestCalenderURL } from '../../source/endpoints/get';
+import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../source/endpoints/get';
+import EventModal from '../../components/popUps/EventModal';
 
 const locales = {
     "en-US": require("date-fns/locale/en-US"),
@@ -29,6 +30,7 @@ const Events = () => {
     const { user } = useContext(AuthContext)
     const tasks = useFetch(getTaskCalenderURL(user)).data
     const tests = useFetch(getTestCalenderURL(user)).data
+    const eventsData = useFetch(getDatatableURL("events")).data
     const [events, setEvents] = useState([]);
     const [clickedEvent, setClickedEvent] = useState({});
     const [openModal, setOpenModal] = useState(false);
@@ -37,15 +39,21 @@ const Events = () => {
 
         const e1 = tasks?.map((t) => {
             const deadline = new Date(t.deadline)
-            return {title: t.title, start:deadline, type: 'tasks'}
+            return {title: t.title, start:deadline, end: deadline, type: 'tasks'}
         })
 
         const e2 = tests?.map((t) => {
             const date = new Date(t.date)
-            return {title: t.name, start: date, type: 'tests'}
+            return {title: t.name, start: date, end: date, type: 'tests'}
         })
-        setEvents([...e1, ...e2]);
-    }, [tasks, tests])
+
+        const e3 = eventsData?.map((t) => {
+            const s = new Date(t.startDate)
+            const e = new Date(t.endDate)
+            return {title: t.name, start: s, end: e, type: 'events'}
+        })
+        setEvents([...e1, ...e2, ...e3]);
+    }, [tasks, tests, eventsData])
 
     const handleEventPopup = (e) => {
         const {title, type} = e;
@@ -54,6 +62,8 @@ const Events = () => {
             clickedItem = tasks.find((item) => item.title === title);
         } else if (type === 'tests') {
             clickedItem = tests.find((item) => item.name === title);
+        } else if (type === 'events') {
+            clickedItem = eventsData.find((item) => item.name === title);
         }
         
 
@@ -64,7 +74,13 @@ const Events = () => {
     }
 
     const eventPropGetter = (event) => {
-        const backgroundColor = event.type === 'tasks' ? '#7451F8' : '#F87451';
+        let backgroundColor
+        if(event.type === 'tasks')
+            backgroundColor = '#C21292'
+        else if(event.type === 'tests')
+            backgroundColor = '#7451F8'
+        else
+            backgroundColor = '#F87451'
         return { style: { backgroundColor, textAlign: 'center' } };
     };
 
@@ -76,14 +92,19 @@ const Events = () => {
                     localizer={localizer} 
                     events={events} 
                     startAccessor="start" 
-                    endAccessor="start" 
+                    endAccessor="end" 
                     style={{ height: 500, margin: "50px" }} 
                     onSelectEvent={handleEventPopup}
                     eventPropGetter={eventPropGetter}
                 />
                     
             </div>
-            {openModal && <Modal setOpen={setOpenModal} id={clickedEvent._id} type={clickedEvent.type}/>}
+            {openModal && clickedEvent.type !== 'events' && (
+                <Modal setOpen={setOpenModal} id={clickedEvent._id} type={clickedEvent.type} />
+            )}
+            {openModal && clickedEvent.type === 'events' && (
+                <EventModal setOpen={setOpenModal} event={clickedEvent} type="Main" />
+            )}
         </div>
 
     )

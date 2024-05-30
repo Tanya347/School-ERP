@@ -25,6 +25,7 @@ import AddMarks from '../../pages/marks/AddMarks';
 import ViewMarks from '../../pages/marks/ViewMarks';
 import TableWithoutAction from "../../pages/table/TableWithoutAction"
 import ViewTestMarks from '../../pages/test/ViewTestMarks';
+import NewEvent from '../../pages/event/NewEvent';
 
 
 
@@ -107,7 +108,7 @@ const FacultyRoutes = () => {
 
           {/* events */}
           <Route
-            path="events"
+            path="calender"
             element={ <Events />}
           />
 
@@ -157,6 +158,12 @@ const FacultyRoutes = () => {
           <Route 
             path="tests/marks/:testId"
             element={<ViewTestMarks />}
+          />
+
+          {/* view events page */}
+          <Route 
+            path="events"
+            element={<NewEvent type="Main" />}
           />
         </Routes>
       </RequireFaculty>

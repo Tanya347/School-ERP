@@ -18,12 +18,6 @@ export const eventInputs = [
         placeholder: "Enter Event Venue"
     },
     {
-        id: "teamName",
-        label: "Team Name",
-        type: "text",
-        placeholder: "Enter Team Name (Adira, Pejas, etc..)",
-    },
-    {
         id: "contact",
         label: "Contact Details",
         type: "text",
@@ -35,10 +29,4 @@ export const eventInputs = [
         type: "text",
         placeholder: "Enter registration link",
     },
-    {
-        id: "meetLink",
-        label: "Platform Link",
-        type: "text",
-        placeholder: "Enter link to google meet/webex/zoom",
-    }
 ];

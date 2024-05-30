@@ -85,13 +85,12 @@ const EventModal = ({ setOpen, event, isUser }) => {
                         }
 
                         {/* Other Details */}
-                        <p style={{ marginTop: "20px" }}><span>Organized by</span> : {event.teamName}</p>
                         <p><span>Contact Details</span> : {event.contact}</p>
                         
                         {/* Allow only owner to edit/delete the event*/}
                         {
                             isUser && <div className="crudButton">
-                                <Link to={`/events/${event._id}`}>
+                                <Link to={`/admin/events/edit/${event._id}`}>
                                     <button>Edit</button>
                                 </Link>
                                 <button onClick={handleDelete}>Delete</button>

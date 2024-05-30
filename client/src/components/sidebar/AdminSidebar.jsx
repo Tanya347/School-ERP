@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import NotificationsIcon from '@mui/icons-material/Notifications';
-// import EventIcon from '@mui/icons-material/Event';
+import EventIcon from '@mui/icons-material/Event';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
@@ -16,7 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import GroupIcon from '@mui/icons-material/Group';
 import BookIcon from '@mui/icons-material/Book';
-// import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -91,12 +91,12 @@ const AdminSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Takes you to list of all events created by teams */}
-                    {/* <Link to="/admin/events" style={{ textDecoration: "none" }}>
+                    <Link to="/admin/events" style={{ textDecoration: "none" }}>
                         <li>
                             <EventIcon className="icon" />
                             <span>Events</span>
                         </li>
-                    </Link> */}
+                    </Link>
 
                     {/* Takes you to list of all courses created by admin */}
                     <Link to="/admin/courses" style={{ textDecoration: "none" }}>
@@ -145,12 +145,12 @@ const AdminSidebar = ({ setOpen }) => {
                         </li>
                     </Link>
 
-                    {/* <Link to="/admin/timetables/new" style={{ textDecoration: "none" }}>
+                    <Link to="/admin/events/new" style={{ textDecoration: "none" }}>
                         <li>
                             <CalendarMonthIcon className="icon" />
-                            <span>Timetable</span>
+                            <span>Events</span>
                         </li>
-                    </Link> */}
+                    </Link>
 
                     {/* Options under User which is only Logout for now */}
 

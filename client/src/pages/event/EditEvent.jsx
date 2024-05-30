@@ -1,19 +1,20 @@
-import "./editEvent.scss";
-import Navbar from "../../components/adminNavbar/AdminNavbar";
+import "../../style/form.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 import { putURLs } from "../../source/endpoints/put";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
+import { getSingleData } from "../../source/endpoints/get";
 
 const EditEvent = ({ inputs, title }) => {
     const location = useLocation();
-    const id = location.pathname.split("/")[2];
+    const id = location.pathname.split("/")[4];
     const [info, setInfo] = useState({});
     const [file, setFile] = useState("");
-    const { data } = useFetch(`/events/${id}`)
+    const { data } = useFetch(getSingleData(id, "events"))
 
     const navigate = useNavigate();
 
@@ -65,7 +66,7 @@ const EditEvent = ({ inputs, title }) => {
         } else {
             try {
                 await axios.put(`http://localhost:5500/api/events/${id}`, info, { withCredentials: false })
-                navigate(-1)
+                navigate("/admin/events/new")
             }
             catch (err) {
                 console.log(err)
@@ -74,13 +75,14 @@ const EditEvent = ({ inputs, title }) => {
     }
 
     return (
-        <div className="editEvent">
-            <div className="editEventContainer">
-                <Navbar />
+        <div className="new">
+            <div className="newContainer">
+                <AdminNavbar />
                 <div className="top">
                     <h1>{title}</h1>
                 </div>
                 <div className="bottom">
+                    <div className="right">
                     <div className="left">
                         <img
                             src={
@@ -90,9 +92,6 @@ const EditEvent = ({ inputs, title }) => {
                             }
                             alt=""
                         />
-                    </div>
-                    <div className="right">
-                        <form>
                             <div className="formInput">
                                 <label htmlFor="file">
                                     Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -104,6 +103,8 @@ const EditEvent = ({ inputs, title }) => {
                                     style={{ display: "none" }}
                                 />
                             </div>
+                    </div>
+                        <form>
 
                             <DatePicker
                                 class="date-picker"
@@ -113,8 +114,8 @@ const EditEvent = ({ inputs, title }) => {
                                 selected={start}
                                 onChange={(start) => setStart(start)}
                             />
-                            <label><span>Original Date : </span>{s.getDate()} / {s.getMonth()} / {s.getFullYear()}
-                                <span>   Original Time : </span>{s.getHours() >= 12 ? s.getHours() % 12 : s.getHours()} {s.getHours() >= 12 ? "PM" : "AM"}</label>
+                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span >{s.getDate()} / {s.getMonth()} / {s.getFullYear()}
+                                <span style={{color: "green", fontWeight: "bold"}}>   Original Time : </span>{s.getHours() >= 12 ? s.getHours() % 12 : s.getHours()} {s.getHours() >= 12 ? "PM" : "AM"}</label>
 
                             <DatePicker
                                 class="date-picker"
@@ -124,8 +125,8 @@ const EditEvent = ({ inputs, title }) => {
                                 onChange={(end) => setEnd(end)}
                             />
 
-                            <label><span>Original Date : </span>{e.getDate()} / {e.getMonth()} / {e.getFullYear()}
-                                <span>    Original Date : </span>{e.getHours() >= 12 ? e.getHours() % 12 : e.getHours()} {e.getHours() >= 12 ? "PM" : "AM"}</label>
+                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span>{e.getDate()} / {e.getMonth()} / {e.getFullYear()}
+                                <span style={{color: "green", fontWeight: "bold"}}>    Original Date : </span>{e.getHours() >= 12 ? e.getHours() % 12 : e.getHours()} {e.getHours() >= 12 ? "PM" : "AM"}</label>
 
                             {inputs?.map((input) => (
                                 <div className="formInput" key={input.id}>
@@ -138,10 +139,10 @@ const EditEvent = ({ inputs, title }) => {
                                     />
                                 </div>
                             ))}
-                            <div className="submitButton">
-                                <button onClick={handleClick} id="submit">Edit Event</button>
-                            </div>
                         </form>
+                            <div className="submitButton">
+                                <button onClick={handleClick} className="form-btn">Edit Event</button>
+                            </div>
                     </div>
                 </div>
 

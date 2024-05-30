@@ -38,6 +38,12 @@ const Button = () => {
             <p>Timetable</p>
           </div>
         </Link>
+        <Link to="/admin/events/new" style={{ textDecoration: "none", color: "black" }}>
+          <div className="createButton">
+            <CalendarMonthIcon className='icon' style={{color:"var(--green)"}}/>
+            <p>Events</p>
+          </div>
+        </Link>
         <Link to="/admin/updates/new" style={{ textDecoration: "none", color: "black"  }}>
           <div className="createButton">
             <NotificationAddIcon className='icon' style={{color:"var(--pink)"}}/>

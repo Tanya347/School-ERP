@@ -1,4 +1,5 @@
-import "./newEvent.scss";
+import "./newEvent.scss"
+import "../../style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,15 +7,12 @@ import { useNavigate } from "react-router-dom";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import DatePicker from "react-datepicker";
 
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-
 import axios from "axios"
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../config/hooks/useFetch";
 
-import EventModal from "../../components/eventModal/EventModal";
-import Navbar from "../../components/navbar/Navbar";
+import EventModal from "../../components/popUps/EventModal";
 import { postURLs } from "../../source/endpoints/post";
+import AdminNavbar from "../../components/navbar/AdminNavbar";
 
 const NewEvent = ({ inputs, title }) => {
   
@@ -26,7 +24,6 @@ const NewEvent = ({ inputs, title }) => {
   const [end, setEnd] = useState("")
   const [list, setList] = useState([])
 
-  const { user } = useContext(AuthContext)
   const { data } = useFetch('/events')
   
   const navigate = useNavigate();
@@ -44,7 +41,7 @@ const NewEvent = ({ inputs, title }) => {
 
       try {
         const uploadRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
+          process.env.REACT_APP_CLOUDINARY,
           data, {
           withCredentials: false
         }
@@ -55,7 +52,7 @@ const NewEvent = ({ inputs, title }) => {
           ...info, poster: url, cloud_id: public_id, startDate: start, endDate: end
         }
         axios.post(postURLs("events", "normal"), newevent, { withCredentials: false })
-        navigate(-1)
+        window.location.reload();
 
       } catch (error) {
         console.log(error)
@@ -66,7 +63,7 @@ const NewEvent = ({ inputs, title }) => {
           ...info, startDate: start, endDate: end
         }
         await axios.post(postURLs("events", "normal"), newevent, { withCredentials: false })
-        navigate(-1)
+        window.location.reload()
       }
       catch (err) {
         console.log(err)
@@ -80,7 +77,7 @@ const NewEvent = ({ inputs, title }) => {
   const [clickedEvent, setClickedEvent] = useState({});
 
   useEffect(() => {
-    setList(data.filter((item) => (item["teamName"] === user.team)))
+    setList(data)
   }, [data])
 
   const handleEventPopup = (id) => {
@@ -93,31 +90,33 @@ const NewEvent = ({ inputs, title }) => {
 
   return (
 
-    <div className="new">
+    <div className="event-container">
       {/* <Sidebar /> */}
       <div className="newEventContainer">
-        <Navbar />
+        <AdminNavbar />
         <div className="eventsButton">
           <button onClick={() => setOpenForm(false)} >View Events</button>
           <button onClick={() => setOpenForm(true)} >Create Events</button>
         </div>
         {openForm &&
-          <><div className="top">
+          <>
+          <div className="new">
+          <div className="newContainer">
+
+          <div className="top">
             <h1>{title}</h1>
           </div>
             <div className="bottom">
+                <div className="right">
               <div className="left">
                 <img
                   src={
                     file
-                      ? URL.createObjectURL(file)
-                      : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                    ? URL.createObjectURL(file)
+                    : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                   }
                   alt=""
-                />
-              </div>
-              <div className="right">
-                <form>
+                  />
                   <div className="formInput">
                     <label htmlFor="file">
                       Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -127,8 +126,10 @@ const NewEvent = ({ inputs, title }) => {
                       id="file"
                       onChange={(e) => setFile(e.target.files[0])}
                       style={{ display: "none" }}
-                    />
+                      />
                   </div>
+              </div>
+                <form>
 
                   <DatePicker
                     class="date-picker"
@@ -137,7 +138,7 @@ const NewEvent = ({ inputs, title }) => {
                     style={{ marginRight: "10px" }}
                     selected={start}
                     onChange={(start) => setStart(start)}
-                  />
+                    />
                   
                   <DatePicker
                     class="date-picker"
@@ -145,7 +146,7 @@ const NewEvent = ({ inputs, title }) => {
                     placeholderText="End Date"
                     selected={end}
                     onChange={(end) => setEnd(end)}
-                  />
+                    />
 
                   {inputs?.map((input) => (
                     <div className="formInput" key={input.id}>
@@ -154,8 +155,12 @@ const NewEvent = ({ inputs, title }) => {
                     </div>
                   ))}
 
-                  <button onClick={handleClick} id="submit">Create Event</button>
                 </form>
+                <div className="submitButton">
+                  <button onClick={handleClick} className="form-btn">Create Event</button>
+                </div>
+              </div>
+              </div>
               </div>
             </div></>}
 

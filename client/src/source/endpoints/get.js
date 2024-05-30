@@ -78,6 +78,7 @@ export const getSingleData = (id, type) => {
         case "single-student" : return `/students/single/${id}`;
         case "tasks" : return `/tasks/${id}`;
         case "tests" : return `/tests/${id}`;
+        case "events" : return `/events/${id}`;
         case "updates" : return `/updates/${id}`;
         default: return "/"
     }

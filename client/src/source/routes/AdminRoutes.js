@@ -7,6 +7,8 @@ import List from '../../pages/list/List';
 import NewStudent from "../../pages/student/NewStudent";
 import NewFaculty from "../../pages/faculty/NewFaculty";
 import NewCourse from "../../pages/course/NewCourse";
+import NewEvent from "../../pages/event/NewEvent"
+import EditEvent from "../../pages/event/EditEvent"
 import NewUpdate from "../../pages/update/NewUpdate";
 import EditUpdate from "../../pages/update/EditUpdate";
 import EditCourse from "../../pages/course/EditCourse";
@@ -32,6 +34,7 @@ import { courseInputs } from "../formsource/courseInputs";
 import { AuthContext } from '../../config/context/AuthContext';
 import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
+import { eventInputs } from '../formsource/eventInputs';
 import TableWithoutAction from '../../pages/table/TableWithoutAction';
 
 const AdminRoutes = () => {
@@ -182,6 +185,30 @@ const AdminRoutes = () => {
             path="classes/:classId"
             element={ <ViewClass />}
           />
+
+        {/* ROUTES FOR EVENTS */}
+
+          {/* edit events */}
+          <Route
+            path="events/edit/:eventId"
+            element={ <EditEvent inputs={eventInputs} title="Edit Event" />}
+          />
+
+          {/* create events */}
+          <Route
+            path="events/new"
+            element={ <NewEvent inputs={eventInputs}  title="Add New Event" />}
+          />
+
+        {/* ROUTES FOR TIMETABLES */}
+
+          {/* create new timetables */}
+
+          {/* edit timetables */}
+
+          {/* view timetables */}
+
+
         </Routes>
       </RequireAdmin>
   );

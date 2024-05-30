@@ -6,13 +6,20 @@ import AdminNavbar from "../../components/navbar/AdminNavbar";
 import useFetch from "../../config/hooks/useFetch";
 import Course from "../../components/course/Course";
 import { CircularProgressbar } from "react-circular-progressbar";
-import { getSingleData } from "../../source/endpoints/get";
+import { getSingleData, getStudentAttendance } from "../../source/endpoints/get";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { AuthContext } from "../../config/context/AuthContext";
 
 
 const Single = ({ type }) => {
   
   // get id of the user using location
   // auth context can also be used 
+
+  const { user } = useContext(AuthContext)
+
+  const [attendance, setAttendance] = useState({});
 
   const location = useLocation();
   
@@ -22,8 +29,21 @@ const Single = ({ type }) => {
   else
     id = location.pathname.split("/")[4];
   const { data } = useFetch(getSingleData(id, "students"))
-  const attendance = useFetch(getSingleData(id, "attendance")).data 
   
+  useEffect(() => {
+    const fetchStudents = async () => {
+        try {
+          const response = await axios.get(getStudentAttendance(user._id, user.class));
+          setAttendance(response.data);
+        } catch (error) {
+          console.error("Error fetching student data:", error);
+        }
+      
+    };
+    fetchStudents();
+  }, [user])
+
+  console.log(attendance)
   
   // used to navigate to a certain link
   const navigate = useNavigate();

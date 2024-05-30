@@ -9,6 +9,9 @@ export const getAttendanceStatusByDate = (classid, date) => {
     return `/attendances/date/${classid}/${date}`
 }
 
+export const getStudentAttendance = (studentid, classid) => {
+    return `/attendances/studentperc/${studentid}/${classid}`
+}
 export const getDatatableURL = (path, user) => {
     if(path === 'tests')
         return user.isFaculty? `/tests/faculty/${user._id}` : `/tests/student/${user.class}`
@@ -61,7 +64,6 @@ export const getSingleData = (id, type) => {
         case "courses" : return `/courses/single/${id}`;
         case "faculties" : return `/faculties/${id}`;
         case "students" : return `/students/${id}`;
-        case "attendance" : return `/students/getAttendance/${id}`;
         case "single-student" : return `/students/single/${id}`;
         case "tasks" : return `/tasks/${id}`;
         case "tests" : return `/tests/${id}`;

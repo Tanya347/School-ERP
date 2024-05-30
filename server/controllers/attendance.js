@@ -202,7 +202,7 @@ export const getClassAttendance = async (req, res, next) => {
         const attendedLectures = attendanceRecords.filter(record => record.present.includes(student._id)).length;
         const attendancePercentage = (attendedLectures / totalLectures) * 100;
         return {
-          studentId: student._id,
+          studentId: student.enroll,
           studentName: student.name,
           attendedLectures,
           totalLectures,

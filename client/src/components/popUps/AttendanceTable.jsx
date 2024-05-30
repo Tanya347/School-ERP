@@ -9,7 +9,6 @@ import Paper from "@mui/material/Paper";
 
 import CancelIcon from '@mui/icons-material/Cancel';
 import useFetch from "../../config/hooks/useFetch"
-import { useState } from "react";
 import axios from "axios";
 import "./attendanceTable.scss"
 import { getAttendanceStatusByDate } from '../../source/endpoints/get';

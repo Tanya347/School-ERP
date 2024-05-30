@@ -22,6 +22,7 @@ import { AuthContext } from '../../config/context/AuthContext';
 import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 import AddMarks from '../../pages/marks/AddMarks';
+import ViewMarks from '../../pages/marks/ViewMarks';
 
 
 
@@ -134,6 +135,12 @@ const FacultyRoutes = () => {
           <Route 
             path="marks/new"
             element={<AddMarks />}
+          />
+
+          {/* add marks page */}
+          <Route 
+            path="marks"
+            element={<ViewMarks />}
           />
         </Routes>
       </RequireFaculty>

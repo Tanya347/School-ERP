@@ -16,11 +16,12 @@ const ViewStudents = () => {
   const [className, setClassName] = useState("");
   const [stuData, setStuData] = useState({});
 
+
   useEffect(() => {
     const fetchStudents = async () => {
       if (sclass) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${sclass}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/details/${sclass}`);
           setStuData(response.data);
         } catch (error) {
           console.error("Error fetching student data:", error);
@@ -40,11 +41,13 @@ const ViewStudents = () => {
 
       <Navbar />
       <div className="view-students-container">
-        {
-          classes?.map((cl, index) => (
-            <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
-          ))
-        }
+        <div className="classes-button">
+          {
+            classes?.map((cl, index) => (
+              <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
+            ))
+          }
+        </div>
         {sclass ? 
           (
             <>

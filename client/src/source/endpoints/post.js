@@ -1,16 +1,20 @@
 
 
+const api_url = process.env.REACT_APP_API_URL
+
 export const postURLs = (path, type) => {
     if(type === "login") {
         if(path === "Student")
-            return `${process.env.REACT_APP_API_URL}/students/loginStudent`
+            return `${api_url}/students/loginStudent`
         else if(path === "Faculty")
-            return `${process.env.REACT_APP_API_URL}/faculties/loginFaculty`
+            return `${api_url}/faculties/loginFaculty`
         else
-            return `${process.env.REACT_APP_API_URL}/admins/loginAdmin`
+            return `${api_url}/admins/loginAdmin`
     }
     else if(type === "register")
-        return path === "students" ? `${process.env.REACT_APP_API_URL}/students/registerStudent` : `${process.env.REACT_APP_API_URL}/faculties/registerFaculty`
+        return path === "students" ? `${api_url}/students/registerStudent` : `${api_url}/faculties/registerFaculty`
+    
     else
-        return `${process.env.REACT_APP_API_URL}/${path}`
+        return `${api_url}/${path}`
 }
+

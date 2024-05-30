@@ -181,7 +181,7 @@ const MainSidebar = ({ setOpen }) => {
                     <p className="title">User</p>
 
                     {/* View Profile */}
-                    <Link to={user.isFaculty? `/faculty/${user._id}` : `/students/${user._id}`} style={{ textDecoration: "none" }}>
+                    <Link to={user.isFaculty? `/faculty/single/${user._id}` : `/student/single/${user._id}`} style={{ textDecoration: "none" }}>
                         <li>
                             <AccountCircleOutlinedIcon className="icon" />
                             <span>Profile</span>

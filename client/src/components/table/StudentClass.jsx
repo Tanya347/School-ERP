@@ -23,6 +23,8 @@ const StudentClass = ({props}) => {
                     <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Gender</TableCell>
                     <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Email</TableCell>
                     <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Phone</TableCell>
+                    <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Attendance</TableCell>
+
                 </TableRow>
                 </TableHead>
 
@@ -42,10 +44,12 @@ const StudentClass = ({props}) => {
                     </TableCell>
 
                     {/* Other details */}
-                    <TableCell className="tableCell">{row.enroll}</TableCell>
-                    <TableCell className="tableCell">{row.gender}</TableCell>
-                    <TableCell className="tableCell">{row.email}</TableCell>
-                    <TableCell className="tableCell">{row.studentPhone}</TableCell>
+                    <TableCell className="tableCell">{row?.enroll}</TableCell>
+                    <TableCell className="tableCell">{row?.gender}</TableCell>
+                    <TableCell className="tableCell">{row?.email}</TableCell>
+                    <TableCell className="tableCell">{row?.studentPhone}</TableCell>
+                    <TableCell className="tableCell">{row?.attendancePercentage} %</TableCell>
+
 
                     
                     {/* Can be used to show some kind of status */}

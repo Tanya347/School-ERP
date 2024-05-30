@@ -11,6 +11,7 @@ import List from '../../pages/list/List';
 import Events from '../../pages/event/Events';
 import { AuthContext } from '../../config/context/AuthContext';
 import NewEvent from '../../pages/event/NewEvent';
+import StudentHome from '../../pages/home/StudentHome';
 
 const StudentRoutes = () => {
     const { user } = useContext(AuthContext);

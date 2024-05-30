@@ -219,7 +219,7 @@ export const enterMarksForSubject = async (req, res, next) => {
   }
 };
 
-
+// student --
 // get marks of one student
 export const getMarksOfStudent = async (req, res, next) => {
   try {
@@ -236,7 +236,7 @@ export const getMarksOfStudent = async (req, res, next) => {
   }
 };
 
-
+// teacher --
 // get marks of all students in a subject
 export const getMarksOfSubject = async (req, res, next) => {
   try {
@@ -264,6 +264,7 @@ export const getMarksOfSubject = async (req, res, next) => {
   }
 };
 
+// admin --
 // Get marks of students in all subjects in a class
 export const getMarksOfClass = async (req, res, next) => {
   try {
@@ -291,6 +292,8 @@ export const getMarksOfClass = async (req, res, next) => {
   }
 };
 
+
+// teacher --
 // clear marks for a subject
 
 export const clearMarksForSubject = async (req, res, next) => {
@@ -314,6 +317,7 @@ export const clearMarksForSubject = async (req, res, next) => {
   }
 };
 
+// admin --
 // Clear all marks for students in a class
 export const clearMarksForClass = async (req, res, next) => {
   try {

@@ -112,7 +112,7 @@ const Datatable = ({ column, name, type }) => {
             }
 
             {(type === "Admin" || type==="Creator") && <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
-              <div className="viewButton">Edit</div>
+              <div className="editButton">Edit</div>
             </Link>}
             
             {/* Only admin can delete so it will only be visible to him */}
@@ -133,6 +133,17 @@ const Datatable = ({ column, name, type }) => {
                 Add Course
               </div>
               </Link>
+            }
+
+            {/* Only faculty can add marks to a test so it will only be visible to them */}
+            {
+              (type === "Creator" && path === "tests") && <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
+                <div className="editButton"
+              >
+                Marks
+              </div>
+              </Link>
+            
             }
 
           </div >

@@ -102,6 +102,18 @@
       }
     }
 
+    .editButton {
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: green;
+      border: 1px dotted rgba(0, 128, 0, 0.821);
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--light-blue);
+      }
+    }
+
     .deleteButton {
       padding: 2px 5px;
       border-radius: 5px;

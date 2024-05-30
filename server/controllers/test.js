@@ -40,7 +40,8 @@ export const getTest = async (req, res, next) => {
     const test = await Test.findById(req.params.id)
       .populate("sclass", "name")
       .populate("author", "teachername")
-      .populate("subject", "name");
+      .populate("subject", "name")
+      .populate("marks.student_id", "name enroll")
 
     res.status(200).json(test);
   } catch (err) {
@@ -92,20 +93,28 @@ export const addEditMarks = async (req, res, next) => {
       return res.status(404).json({ message: 'Test not found' });
     }
 
-    for (let data of marksData) {
-      const { student_id, value } = data;
+    const studentsInClass = await Student.find({ class: test.sclass }).select('_id');
 
-      // Check if the student already has marks for this test
+    // Create a map of student IDs from marksData for quick lookup
+    const marksDataMap = new Map(marksData.map(({ student_id, value }) => [student_id, value]));
+
+    // Process each student in the class
+    studentsInClass.forEach(student => {
+      const student_id = student._id.toString();
+      const value = marksDataMap.has(student_id) ? marksDataMap.get(student_id) : 0;
+      const present = marksDataMap.has(student_id);
+
       const studentMarks = test.marks.find(mark => mark.student_id.toString() === student_id);
 
       if (studentMarks) {
         // Update existing marks
         studentMarks.value = value;
+        studentMarks.present = present;
       } else {
         // Add new marks entry
-        test.marks.push({ student_id, value });
+        test.marks.push({ student_id, value, present });
       }
-    }
+    });
 
     // Save the updated test document
     await test.save();
@@ -115,6 +124,7 @@ export const addEditMarks = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // Get marks of all students for a test
 export const getMarksOfAllStudents = async (req, res, next) => {
@@ -129,13 +139,14 @@ export const getMarksOfAllStudents = async (req, res, next) => {
     const studentsInClass = await Student.find({ class: test.sclass }).select('name enroll');
 
     const result = studentsInClass.map(student => {
-      const studentMarks = test.marks.find(mark => 
+      const studentMarks = test.marks.find(mark =>
         mark.student_id && mark.student_id._id.toString() === student._id.toString()
       );
       return {
         studentName: student.name,
         enrollment: student.enroll,
-        marks: studentMarks ? studentMarks.value : 0
+        marks: studentMarks ? studentMarks.value : 0,
+        present: studentMarks ? studentMarks.present : false
       };
     });
 
@@ -145,13 +156,13 @@ export const getMarksOfAllStudents = async (req, res, next) => {
   }
 };
 
+
 // Get marks of one student for a test
 export const getMarksOfOneStudent = async (req, res, next) => {
   try {
     const { testid, studentid } = req.params;
 
     const test = await Test.findById(testid);
-
     if (!test) {
       return res.status(404).json({ message: 'Test not found' });
     }
@@ -161,14 +172,15 @@ export const getMarksOfOneStudent = async (req, res, next) => {
       return res.status(404).json({ message: 'Student not found' });
     }
 
-    const studentMarks = test.marks.find(mark => 
+    const studentMarks = test.marks.find(mark =>
       mark.student_id && mark.student_id.toString() === studentid
     );
 
     const result = {
       studentName: student.name,
       enrollment: student.enroll,
-      marks: studentMarks ? studentMarks.value : 0
+      marks: studentMarks ? studentMarks.value : 0,
+      present: studentMarks ? studentMarks.present : false
     };
 
     res.status(200).json(result);
@@ -176,6 +188,7 @@ export const getMarksOfOneStudent = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // Clear marks of a test
 export const clearMarksOfTest = async (req, res, next) => {

@@ -1,0 +1,136 @@
+.view-test-marks {
+
+    .view-test-marks-container {
+
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        gap: 50px;
+        width: 100%;
+        margin-top: 30px;
+
+        .upper-container {
+            width: 60%;
+            text-align: center;
+
+            .test-info-container {
+                background-color: var(--light-gray);
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+            .mTitle {
+                font-weight: 600;
+                text-align: center;
+                text-transform: capitalize;
+                font-size: 1.5rem;
+                padding: 10px 0;
+            }
+
+            @media screen and (max-width: 600px) {
+                width: 90%;
+            } 
+
+            p {
+                padding-top: 10px;
+            }
+
+            p span {
+                font-weight: bold;
+                color: var(--blue);
+            }
+
+            .button-container {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+
+                
+                button {
+                    &:first-child {
+                        background-color: var(--green);
+                    }
+    
+                    &:last-child {
+                        background-color: var(--red);
+                    }
+                    border: none;
+                    outline: none;
+                    padding: 10px 20px;
+                    margin-top: 30px;
+                    color: white;
+                    font-weight: 600;
+                    transition: all 0.2s ease-in-out;
+                    cursor: pointer;
+    
+                    &:hover {
+                        transform: translateY(-2px);
+                    }
+                }
+            }
+        }
+
+        .lower-container {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            @media screen and (max-width: 600px) {
+                width: 90%;
+            } 
+
+            .marks-adding-table {
+                display: table;
+                margin-top: 20px;
+                width: 90%;
+                border-collapse: collapse;
+                flex-direction: column;
+    
+                @media screen and (max-width: 600px) {
+                    width: 80%;
+                    overflow-x: scroll;
+                }
+    
+                #title-row {
+                    background-color: var(--light-blue);
+                    font-weight: 600;
+                }
+    
+                .marks-row {
+                    display: table-row;
+    
+                    .marks-col {
+                        display: table-cell;
+                        padding: 8px;
+                        border: 1px solid #ddd;
+                        text-align: left;
+                      }
+    
+                  }
+            }
+
+            .add-marks-button {
+                button {
+                    border: none;
+                    outline: none;
+                    padding: 10px 20px;
+                    margin-top: 30px;
+                    color: white;
+                    font-weight: 600;
+                    background-color: var(--blue);
+                    transition: all 0.2s ease-in-out;
+                    cursor: pointer;
+    
+                    &:hover {
+                        transform: translateY(-2px);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -44,6 +44,10 @@ const TestSchema = new mongoose.Schema(
                     type: Number,
                     default: 0
                 },
+                present: {
+                    type: Boolean,
+                    default: false
+                }
             }
         ]
     }, {

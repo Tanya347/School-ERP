@@ -23,6 +23,7 @@ import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 import AddMarks from '../../pages/marks/AddMarks';
 import ViewMarks from '../../pages/marks/ViewMarks';
+import ViewTestMarks from '../../pages/test/ViewTestMarks';
 
 
 
@@ -141,6 +142,12 @@ const FacultyRoutes = () => {
           <Route 
             path="marks"
             element={<ViewMarks />}
+          />
+
+          {/* add test marks page */}
+          <Route 
+            path="tests/marks/:testId"
+            element={<ViewTestMarks />}
           />
         </Routes>
       </RequireFaculty>

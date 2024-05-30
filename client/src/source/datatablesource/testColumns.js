@@ -2,7 +2,7 @@ export const testColumns = [
     {
         field: "name",
         headerName: "Test",
-        width: 300,
+        width: 200,
     },
     {
         field: "syllabus",
@@ -17,7 +17,7 @@ export const testColumns = [
     {
         field: "date",
         headerName: "Date",
-        width: 300
+        width: 200
     },
     {
         field: "totalMarks",

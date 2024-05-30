@@ -6,7 +6,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../config/context/AuthContext.js";
 
-
 // useFetch and axios for fetching data
 import axios from "axios";
 import useFetch from "../../config/hooks/useFetch.js"
@@ -25,13 +24,7 @@ const Datatable = ({ column, name, type }) => {
   // we use location url to extract the path 
   const location = useLocation();
 
-  let path
-
-  // if we are at admin side then the end point will be at 2 because we have 
-  // additional /admin in the url
-
-
-  path = location.pathname.split("/")[2];
+  let path = location.pathname.split("/")[2];
 
 
   // fetching data using the path
@@ -154,7 +147,6 @@ const Datatable = ({ column, name, type }) => {
 
   return (
     <div className="datatable">
-      
       {/* Title will be shown based on which table is */}
       <div className="datatableHeader">
         <div className="datatableTitle">

@@ -30,6 +30,9 @@ import { facultyInputs } from "../formsource/facultyInputs";
 import { updateInputs } from "../formsource/updateInputs";
 import { courseInputs } from "../formsource/courseInputs";
 import { AuthContext } from '../../config/context/AuthContext';
+import { attendanceColumns } from '../datatablesource/attendanceColumns';
+import { marksColumns } from '../datatablesource/marksColumns';
+import TableWithoutAction from '../../pages/table/TableWithoutAction';
 
 const AdminRoutes = () => {
 
@@ -151,6 +154,20 @@ const AdminRoutes = () => {
           <Route
             path="classes"
             element={ <Class />}
+          />
+
+          {/* attendance of classes */}
+
+          <Route
+            path="classes/attendance/:classId"
+            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
+          />
+
+          {/* marks of classes */}
+
+          <Route
+            path="classes/marks/:classId"
+            element={ <TableWithoutAction column={marksColumns} name="Marks"/>}
           />
 
           {/* edit classes */}

@@ -24,7 +24,7 @@
             .classContainer {
                 height: fit-content;
                 width: 300px;
-                background-color: var(--light-gray);
+                background-color: var(--light-blue);
                 padding: 10px;
                 border-radius: 10px;
                 display: flex;
@@ -44,7 +44,23 @@
                     background-color: var(--light-green);
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: #bddebd;
+                        background-color: #9cb39c;
+                    }
+                }
+
+                .attButton {
+                    background-color: var(--light-pink);
+                    transition: all ease-in-out 0.2s;
+                    &:hover {
+                        background-color: pink;
+                    }
+                }
+
+                .marksButton {
+                    background-color: var(--light-yellow);
+                    transition: all ease-in-out 0.2s;
+                    &:hover {
+                        background-color: rgb(242, 242, 149);
                     }
                 }
             }

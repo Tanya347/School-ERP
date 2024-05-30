@@ -24,6 +24,12 @@ const Class = () => {
                             <Link to={`/admin/classes/${cl._id}`}>
                                 <button className='viewButton'>View</button>
                             </Link>
+                            <Link to={`/admin/classes/attendance/${cl._id}`}>
+                                <button className='attButton'>Attendance Status</button>
+                            </Link>
+                            <Link to={`/admin/classes/marks/${cl._id}`}>
+                                <button className='marksButton'>Marks Status</button>
+                            </Link>
                         </div>
                     ))
                 }

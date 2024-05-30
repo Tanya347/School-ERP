@@ -9,6 +9,10 @@ export const getAttendanceStatusByDate = (classid, date) => {
     return `/attendances/date/${classid}/${date}`
 }
 
+export const getClassCourses = (classId) =>{
+    return `/classes/course/${classId}`
+}
+
 export const getStudentAttendance = (studentid, classid) => {
     return `/attendances/studentperc/${studentid}/${classid}`
 }
@@ -19,6 +23,13 @@ export const getDatatableURL = (path, user) => {
         return user.isFaculty? `/tasks/faculty/${user._id}` : `/tasks/student/${user.class}`
     else    
         return `/${path}/`
+}
+
+export const getTableWithoutActionURL = (path, id) => {
+    if(path === 'attendance')
+        return `/attendances/classperc/${id}`
+    else if(path === 'marks')
+        return `/students/marks/class/${id}`
 }
 
 export const getTableURL = (user) => {

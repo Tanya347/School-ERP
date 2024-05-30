@@ -1,0 +1,42 @@
+.table-without-action {
+    .table-without-action-container {
+        height: 600px;
+    padding: 20px;
+    
+    .datatableHeader {
+        display: flex;
+        justify-content: space-between;
+    
+        .datatableTitle {
+          width: 100%;
+          font-size: 24px;
+          color: gray;
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+      
+        }
+      }
+    
+      .cellWithStatus {
+        padding: 5px;
+        border-radius: 5px;
+    
+        &.high {
+          background-color: rgba(0, 128, 0, 0.05);
+          color: green;
+        }
+    
+        &.med {
+          background-color: rgba(255, 217, 0, 0.05);
+          color: goldenrod;
+        }
+    
+        &.low {
+          background-color: rgba(255, 0, 0, 0.05);
+          color: crimson;
+        }
+      }
+    }
+}

@@ -191,7 +191,7 @@ export const getClassAttendance = async (req, res, next) => {
       }
   
       // Get the class details including all student IDs
-      const classInfo = await Class.findById(classid);
+      const classInfo = await Class.findById(classid).populate('students', 'name enroll');
       if (!classInfo) {
         return res.status(404).json({ message: 'Class not found' });
       }
@@ -202,11 +202,13 @@ export const getClassAttendance = async (req, res, next) => {
         const attendedLectures = attendanceRecords.filter(record => record.present.includes(student._id)).length;
         const attendancePercentage = (attendedLectures / totalLectures) * 100;
         return {
+          _id: student._id,
           studentId: student.enroll,
           studentName: student.name,
           attendedLectures,
           totalLectures,
-          attendancePercentage
+          attendancePercentage,
+          status: attendancePercentage > 75? "Okay" : "Low"
         };
       });
   

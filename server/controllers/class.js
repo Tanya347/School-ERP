@@ -50,81 +50,51 @@ export const deleteClass = async (req, res, next) => {
 };
 
 export const getClassDetails = async (req, res, next) => {
-    const classId = req.params.id;
-  
-    try {
-      // Fetch class info with populated subjects and students
-      const classInfo = await Class.findById(classId)
-        .populate({
+  const classId = req.params.id;
+
+  try {
+      const classDetails = await Class.findById(classId)
+      .populate({
           path: 'subjects',
           model: 'Course',
           select: 'name subjectCode teacher',
           populate: {
-            path: 'teacher',
-            model: 'Faculty',
-            select: 'teachername',
+          path: 'teacher',
+          model: 'Faculty',
+          select: 'teachername', // Only fetch the name field of the teacher
           },
-        })
-        .populate({
+      })
+      .populate({
           path: 'students',
           model: 'Student',
           select: 'name profilePicture cloud_id gender enroll email studentPhone',
-        });
-  
-      if (!classInfo) {
-        return res.status(404).json({ message: 'Class not found' });
-      }
-  
-      // Get total number of lectures for the class
-      const totalLectures = await Attendance.countDocuments({ classid: classId });
-  
-      // If there are no lectures, set the attendance percentage to 0 for all students
-      let studentAttendance = classInfo.students.map(student => ({
-        _id: student._id,
-        name: student.name,
-        profilePicture: student.profilePicture,
-        cloud_id: student.cloud_id,
-        gender: student.gender,
-        enroll: student.enroll,
-        email: student.email,
-        studentPhone: student.studentPhone,
-        attendancePercentage: 0,
-      }));
-  
-      if (totalLectures > 0) {
-        // Get attendance records for the class
-        const attendanceRecords = await Attendance.find({ classid: classId });
-  
-        // Calculate attendance percentage for each student
-        studentAttendance = classInfo.students.map(student => {
-          const attendedLectures = attendanceRecords.filter(record => record.present.includes(student._id)).length;
-          const attendancePercentage = (attendedLectures / totalLectures) * 100;
-  
-          return {
-            _id: student._id,
-            name: student.name,
-            profilePicture: student.profilePicture,
-            cloud_id: student.cloud_id,
-            gender: student.gender,
-            enroll: student.enroll,
-            email: student.email,
-            studentPhone: student.studentPhone,
-            attendancePercentage,
-          };
-        });
-      }
-  
-      // Combine class info with transformed student attendance data
-      const classDetails = {
-        ...classInfo.toObject(),
-        students: studentAttendance,
-      };
-  
+      });
+
       res.status(200).json(classDetails);
-    } catch (err) {
+  } catch (err) {
       next(err);
-    }
-  };
+  }
+};
+
+export const getClassSubjects = async (req, res, next) => {
+  const classId = req.params.id;
+
+  try {
+    const courses = await Class.findById(classId).populate('subjects');
+    
+    const subjects = courses.subjects.map(sub => {
+      return {
+        _id: sub._id,
+        name: sub.name,
+        code: sub.subjectCode
+      }
+    })
+    res.status(200).json(subjects);
+  }
+  catch(err) {
+    next(err);
+  }
+}
   
 
 export const getClassStudents = async (req, res, next) => {

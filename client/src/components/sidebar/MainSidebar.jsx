@@ -9,6 +9,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 // import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import CloseIcon from '@mui/icons-material/Close';
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -102,6 +103,14 @@ const MainSidebar = ({ setOpen }) => {
                         <li>
                             <GroupsIcon className="icon" />
                             <span>Students</span>
+                        </li>
+                    </Link>}
+
+                    {/* Takes you to list of all tasks created by admin */}
+                    {user.isFaculty && <Link to={"/faculty/marks"} style={{ textDecoration: "none" }}>
+                        <li>
+                            <AssessmentIcon className="icon" />
+                            <span>Marks</span>
                         </li>
                     </Link>}
 

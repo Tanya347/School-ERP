@@ -269,7 +269,8 @@ export const getMarksOfSubject = async (req, res, next) => {
 export const getMarksOfClass = async (req, res, next) => {
   try {
     const { classid } = req.params;
-    
+
+    // Fetch students and their marks
     const students = await Student.find({ class: classid })
       .select('name enroll marks')
       .populate({
@@ -277,20 +278,36 @@ export const getMarksOfClass = async (req, res, next) => {
         select: 'name'
       });
 
-    const result = students.map(student => ({
-      name: student.name,
-      enroll: student.enroll,
-      marks: student.marks.map(mark => ({
-        subject: mark.sub_id.name,
-        total: mark.total
-      }))
-    }));
+    // Collect all unique subjects
+    const uniqueSubjects = new Set();
+    students.forEach(student => {
+      student.marks.forEach(mark => {
+        uniqueSubjects.add(mark.sub_id.name);
+      });
+    });
 
-    res.status(200).json(result);
+    // Transform data to include marks for each subject
+    const transformedData = students.map(student => {
+      const studentData = {
+        _id: student._id,
+        studentName: student.name,
+        enrollment: student.enroll,
+      };
+      uniqueSubjects.forEach(subject => {
+        studentData[subject] = 0; // Initialize with 0 or any default value
+      });
+      student.marks.forEach(mark => {
+        studentData[mark.sub_id.name] = mark.total;
+      });
+      return studentData;
+    });
+
+    res.status(200).json(transformedData);
   } catch (error) {
     next(error);
   }
 };
+
 
 
 // teacher --

@@ -6,7 +6,8 @@ import {
   getClasses,
   updateClass,
   getClassesWithSubjects,
-  getClassStudents
+  getClassStudents,
+  getClassSubjects
 } from "../controllers/class.js";
 
 const router = express.Router();
@@ -15,6 +16,7 @@ router.post("/", createClass);
 router.put("/:id", updateClass);
 router.delete("/:id", deleteClass);
 router.get("/courses", getClassesWithSubjects)
+router.get("/course/:id", getClassSubjects)
 router.get("/details/:id", getClassDetails);
 router.get("/", getClasses);
 router.get("/students/:id", getClassStudents)

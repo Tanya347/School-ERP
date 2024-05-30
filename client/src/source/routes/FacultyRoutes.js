@@ -70,6 +70,8 @@ const FacultyRoutes = () => {
             element={<List column={taskColumns} name="Task" type="Creator" />}
           />
 
+          {/* add new tasks */}
+
           <Route
             path="tasks/new"
             element={<NewTask title="Add New Task" inputs={taskInputs} />}
@@ -138,7 +140,7 @@ const FacultyRoutes = () => {
             element={<AddMarks />}
           />
 
-          {/* add marks page */}
+          {/* view marks page */}
           <Route 
             path="marks"
             element={<ViewMarks />}

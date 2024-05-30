@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../config/context/AuthContext'
 import useFetch from '../../config/hooks/useFetch'
 import { getTableURL } from '../../source/endpoints/get'
+import axios from 'axios'
 
 const StudentHome = () => {
   const [presenceDates, setPresenceDates] = useState([]);
@@ -29,7 +30,7 @@ const StudentHome = () => {
     };
 
     fetchData();
-  }, [classId, studentId]);
+  }, [user]);
 
   console.log(presenceDates)
   console.log(absenceDates)

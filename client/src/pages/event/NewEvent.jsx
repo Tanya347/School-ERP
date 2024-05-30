@@ -2,7 +2,6 @@ import "./newEvent.scss"
 import "../../style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar/Navbar";
 
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";

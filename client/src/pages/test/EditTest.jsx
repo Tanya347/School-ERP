@@ -20,7 +20,7 @@ const EditTest = ({ title }) => {
 
   // get location and extract id out of it
   const location = useLocation();
-  const id = location.pathname.split("/")[2];
+  const id = location.pathname.split("/")[4];
   
   const classes = useFetch(getFacultyData(user._id, "classes")).data
   const courses = useFetch(getFacultyData(user._id, "courses")).data

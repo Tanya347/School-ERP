@@ -16,7 +16,7 @@ const EditTask = ({ title }) => {
   const { user } = useContext(AuthContext)
 
   const location = useLocation();
-  const id = location.pathname.split("/")[2];
+  const id = location.pathname.split("/")[4];
 
   const classes = useFetch(getFacultyData(user._id, "classes")).data
   const { data } = useFetch(getSingleData(id, "tasks"))

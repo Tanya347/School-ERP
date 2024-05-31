@@ -3,6 +3,7 @@ import "./navbar.scss";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 // import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+import LogoutIcon from '@mui/icons-material/Logout';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 import { DarkModeContext } from "../../config/context/darkModeContext";
@@ -17,9 +18,9 @@ import { getQueries } from "../../source/endpoints/get";
 
 const Navbar = () => {
 
-  const { Dispatch} = useContext(DarkModeContext);
-  const { user } = useContext(AuthContext)
-  
+  const { Dispatch } = useContext(DarkModeContext);
+  const { user, dispatch } = useContext(AuthContext);
+
   const queries = useFetch(getQueries).data
   // const updates = useFetch(`/updates/student/${user.class}`).data
 
@@ -49,11 +50,14 @@ const Navbar = () => {
     setMessages(queries.filter((item) => item.queryTo === user._id))
   }, [queries, user._id])
 
-
-
+  
   // this function is used to go to a certain end point
   const navigate = useNavigate();
-
+  
+  const handleClick = async (e) => {
+    e.preventDefault();
+    dispatch({ type: "LOGOUT" });
+  }
   // toggles open and close of notifications pop up
   // const handleNotif = () => {
   //   setOpenNotif(!openNotif)
@@ -150,6 +154,10 @@ const Navbar = () => {
               className="avatar"
               onClick={() => navigate(`/${path}/single/${user._id}`)}
             />
+          </div>
+
+          <div className="item">
+            <LogoutIcon className="icon" onClick={handleClick} />
           </div>
         </div>
       </div>

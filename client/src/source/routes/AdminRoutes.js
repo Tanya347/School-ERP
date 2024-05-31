@@ -19,6 +19,7 @@ import SingleStudent from '../../pages/singleStudent/SingleStudent';
 import Class from "../../pages/class/Class";
 import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
+import AdminNavbar from '../../components/navbar/AdminNavbar';
 
 // Datatable Columns
 import { studentColumns } from "../datatablesource/studentColumns";
@@ -166,14 +167,14 @@ const AdminRoutes = () => {
 
           <Route
             path="classes/attendance/:classId"
-            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
+            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" NavbarComponent={AdminNavbar} />}
           />
 
           {/* marks of classes */}
 
           <Route
             path="classes/marks/:classId"
-            element={ <TableWithoutAction column={marksColumns} name="Marks"/>}
+            element={ <TableWithoutAction column={marksColumns} name="Marks" NavbarComponent={AdminNavbar}/>}
           />
 
           {/* edit classes */}

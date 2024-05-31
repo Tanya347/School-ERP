@@ -15,7 +15,7 @@ import { putURLs } from "../../source/endpoints/put";
 const EditUpdate = ({ title, type }) => {
 
   const location = useLocation();
-  const id = location.pathname.split("/")[3];
+  const id = location.pathname.split("/")[4];
   const { data } = useFetch(getSingleData(id, "updates"))
   const classes = useFetch(getClasses).data
   console.log(data)

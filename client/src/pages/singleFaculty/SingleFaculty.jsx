@@ -101,7 +101,7 @@ const Single = ({ type }) => {
                   <span className="itemValue">{data.dob}</span>
                 </div>
 
-                <button className="editButton" onClick={() => navigate(`/faculty/edit/${id}`)}>Edit Profile</button>
+                {type === "Main" && <button className="editButton" onClick={() => navigate(`/faculty/edit/${id}`)}>Edit Profile</button>}
 
               </div>
           </div>

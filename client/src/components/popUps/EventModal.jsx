@@ -52,13 +52,13 @@ const EventModal = ({ setOpen, event, type }) => {
                         {/* Event details */}
                         {start.getDate() === end.getDate() ? 
                             (
-                                <p><span>Date</span> : {start.getDate()} / {start.getMonth()} / {start.getFullYear()}</p>
+                                <p><span>Date</span> : {new Date(event.startDate).toLocaleDateString()}</p>
                             )
                             :
                             (
                                 <>
-                                    <p><span>From</span> : {start.getDate()} / {start.getMonth()} / {start.getFullYear()}</p>
-                                    <p><span>To</span> : {end.getDate()} / {end.getMonth()} / {end.getFullYear()}</p>
+                                    <p><span>From</span> : {new Date(event.startDate).toLocaleDateString()}</p>
+                                    <p><span>To</span> : {new Date(event.endDate).toLocaleDateString()}</p>
                                 </>
                             )
                         }

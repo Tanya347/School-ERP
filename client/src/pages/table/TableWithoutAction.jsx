@@ -12,12 +12,13 @@ import useFetch from "../../config/hooks/useFetch.js"
 
 // Modal for showing the details about tasks and updates
 import { getClassCourses, getTableWithoutActionURL } from "../../source/endpoints/get.js";
+import AdminNavbar from "../../components/navbar/AdminNavbar.jsx";
 
 
 
 
 // column, name and type are props input at the place datatable is used
-const TableWithoutAction = ({ column, name }) => {
+const TableWithoutAction = ({ column, name, NavbarComponent }) => {
 
   // we use location url to extract the path 
   const location = useLocation();
@@ -46,7 +47,7 @@ const TableWithoutAction = ({ column, name }) => {
 
   return (
     <div className="table-without-action">
-      <Navbar />
+      <NavbarComponent />
 
       <div className="table-without-action-container">
 

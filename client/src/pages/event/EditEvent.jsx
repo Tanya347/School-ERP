@@ -52,20 +52,24 @@ const EditEvent = ({ inputs, title }) => {
                 const { url } = uploadRes.data;
                 const { public_id } = uploadRes.data;
                 const newevent = {
-                    ...info, poster: url, cloud_id: public_id
+                    ...info, poster: url, cloud_id: public_id, startDate: start, endDate: end
                 }
+
 
                 axios.put(putURLs("events", id), newevent, {
                     withCredentials: false
                 })
-                navigate(-1)
+                navigate("/admin/events/new")
 
             } catch (error) {
                 console.log(error)
             }
         } else {
             try {
-                await axios.put(`http://localhost:5500/api/events/${id}`, info, { withCredentials: false })
+                const newevent = {
+                    ...info, startDate: start, endDate: end
+                }
+                await axios.put(`http://localhost:5500/api/events/${id}`, newevent, { withCredentials: false })
                 navigate("/admin/events/new")
             }
             catch (err) {
@@ -114,7 +118,7 @@ const EditEvent = ({ inputs, title }) => {
                                 selected={start}
                                 onChange={(start) => setStart(start)}
                             />
-                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span >{s.getDate()} / {s.getMonth()} / {s.getFullYear()}
+                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span >{new Date(info.startDate).toLocaleDateString()}
                                 <span style={{color: "green", fontWeight: "bold"}}>   Original Time : </span>{s.getHours() >= 12 ? s.getHours() % 12 : s.getHours()} {s.getHours() >= 12 ? "PM" : "AM"}</label>
 
                             <DatePicker
@@ -125,7 +129,7 @@ const EditEvent = ({ inputs, title }) => {
                                 onChange={(end) => setEnd(end)}
                             />
 
-                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span>{e.getDate()} / {e.getMonth()} / {e.getFullYear()}
+                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span>{new Date(info.endDate).toLocaleDateString()}
                                 <span style={{color: "green", fontWeight: "bold"}}>    Original Date : </span>{e.getHours() >= 12 ? e.getHours() % 12 : e.getHours()} {e.getHours() >= 12 ? "PM" : "AM"}</label>
 
                             {inputs?.map((input) => (

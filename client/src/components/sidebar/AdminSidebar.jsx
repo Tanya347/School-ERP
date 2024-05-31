@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import EventIcon from '@mui/icons-material/Event';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
@@ -90,14 +89,6 @@ const AdminSidebar = ({ setOpen }) => {
                         <li>
                             <NotificationsIcon className="icon" />
                             <span>Updates</span>
-                        </li>
-                    </Link>
-
-                    {/* Takes you to list of all events created by teams */}
-                    <Link to="/admin/events" style={{ textDecoration: "none" }}>
-                        <li>
-                            <EventIcon className="icon" />
-                            <span>Events</span>
                         </li>
                     </Link>
 

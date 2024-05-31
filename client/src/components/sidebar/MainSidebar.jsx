@@ -110,7 +110,7 @@ const MainSidebar = ({ setOpen }) => {
                     {user.isFaculty && <Link to={"/faculty/marks"} style={{ textDecoration: "none" }}>
                         <li>
                             <AssessmentIcon className="icon" />
-                            <span>Students</span>
+                            <span>Marks</span>
                         </li>
                     </Link>}
 
@@ -195,7 +195,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Edit Profile */}
-                    <Link to={user.isFaculty? `/faculty/${user._id}/edit` : `/students/${user._id}/edit`} style={{ textDecoration: "none" }}>
+                    <Link to={user.isFaculty? `/faculty/edit/${user._id}` : `/student/edit/${user._id}`} style={{ textDecoration: "none" }}>
                         <li>
                             <EditIcon className="icon" />
                             <span>Edit Profile</span>

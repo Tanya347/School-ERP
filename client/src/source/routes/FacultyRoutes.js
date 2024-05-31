@@ -26,7 +26,7 @@ import ViewMarks from '../../pages/marks/ViewMarks';
 import TableWithoutAction from "../../pages/table/TableWithoutAction"
 import ViewTestMarks from '../../pages/test/ViewTestMarks';
 import NewEvent from '../../pages/event/NewEvent';
-
+import Navbar from '../../components/navbar/Navbar';
 
 
 const FacultyRoutes = () => {
@@ -139,7 +139,7 @@ const FacultyRoutes = () => {
           {/* student attendance percentage */}
           <Route
             path="classes/attendance/:classId"
-            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
+            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" NavbarComponent={Navbar}/>}
           />
 
           {/* add marks page */}

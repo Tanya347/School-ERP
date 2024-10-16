@@ -6,6 +6,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
+import CustomToolbar from "../../components/utils/CustomToolbar"
 
 
 import axios from "axios"
@@ -128,6 +129,9 @@ const AttendanceInfo = () => {
                             endAccessor="start"
                             style={{height: 500, margin: "50px"}}
                             onSelectEvent={handleEventPopup}
+                            components={{
+                                toolbar: CustomToolbar
+                              }}
                         />
                     </div>
 

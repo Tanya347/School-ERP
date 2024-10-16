@@ -21,7 +21,7 @@ export const updateQuery = async (req, res, next) => {
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json(Query);
+    res.status(200).json(query);
   } catch (err) {
     next(err);
   }

@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { getModalURL } from "../../source/endpoints/get";
 import { putURLs } from "../../source/endpoints/put";
+import { formatDate } from "../../source/endpoints/transform";
 
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
@@ -64,7 +65,7 @@ const Modal = ({ setOpen, id, type }) => {
                     <div className="mTasks">
                         <div className="mTitle">{data.title}</div>
                         <div className="mDesc">{data.desc}</div>
-                        <p><span>Deadline</span> : {new Date(data.deadline).toLocaleDateString()}</p>
+                        <p><span>Deadline</span> : {formatDate(data.deadline)}</p>
                         <p><span>Assigned To</span> : {data?.sclass?.name}</p>
                         <p><span>Assigned By</span>: {data?.author?.teachername}</p>
                     </div>
@@ -77,7 +78,7 @@ const Modal = ({ setOpen, id, type }) => {
                         <div className="mTitle">{data?.name}</div>
                         <p><span>Syllabus</span> : {data?.syllabus}</p>
                         <p><span>Duration</span> : {data?.duration} min</p>
-                        <p><span>Date</span> : {new Date(data.date).toLocaleDateString()}</p>
+                        <p><span>Date</span> : {formatDate(data.date)}</p>
                         <p><span>Assigned To</span> : {data?.sclass?.name}</p>
                         <p><span>Subject</span>: {data?.subject?.name}</p>
                         <p><span>Assigned By</span>: {data?.author?.teachername}</p>

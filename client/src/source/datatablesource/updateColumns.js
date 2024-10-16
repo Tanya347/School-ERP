@@ -1,3 +1,5 @@
+import { width } from "@mui/system";
+
 export const updateColumns = [
     { field: "_id", headerName: "ID", width: 100 },
     {
@@ -14,5 +16,13 @@ export const updateColumns = [
         field: "updateType",
         headerName: "Notice Type",
         width: 150,
+    },
+    {
+        field: "class",
+        headerName: "Class",
+        width: 150,
+        renderCell: (params) => {
+            return params.row.class ? params.row.class.name : '';
+        }
     }
 ];

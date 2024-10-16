@@ -46,7 +46,7 @@ export const getUpdate = async (req, res, next) => {
 
 export const getUpdates = async (req, res, next) => {
     try {
-        const updates = await Update.find();
+        const updates = await Update.find().populate("class", "name");
         res.status(200).json(updates);
     } catch (err) {
         next(err)

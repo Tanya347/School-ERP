@@ -5,6 +5,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Link } from "react-router-dom"
 
 import axios from 'axios';
+import { formatDate, formatTime } from "../../source/endpoints/transform";
 
 
 // setOpen prop, event is the event we need to display and isUser will only allow the user to delete/edit the event
@@ -52,18 +53,18 @@ const EventModal = ({ setOpen, event, type }) => {
                         {/* Event details */}
                         {start.getDate() === end.getDate() ? 
                             (
-                                <p><span>Date</span> : {new Date(event.startDate).toLocaleDateString()}</p>
+                                <p><span>Date</span> : {formatDate(start)}</p>
                             )
                             :
                             (
                                 <>
-                                    <p><span>From</span> : {new Date(event.startDate).toLocaleDateString()}</p>
-                                    <p><span>To</span> : {new Date(event.endDate).toLocaleDateString()}</p>
+                                    <p><span>From</span> : {formatDate(start)}</p>
+                                    <p><span>To</span> : {formatDate(end)}</p>
                                 </>
                             )
                         }
                         
-                        <p><span>Time</span> : {start.getHours() >= 12 ? start.getHours() % 12 : start.getHours()} {start.getHours() >= 12 ? "PM" : "AM"} - {end.getHours() >= 12 ? end.getHours() % 12 : end.getHours} {end.getHours() >= 12 ? "PM" : "AM"}</p>
+                        <p><span>Time</span> : {formatTime(start)} - {formatTime(end)}</p>
                         <p><span>Venue</span> : {event.venue}</p>
                         
 

@@ -24,7 +24,7 @@ export const attendanceColumns = () => {
         },
         {
             field: "attendancePercentage",
-            headerName: "Percentage",
+            headerName: "Percentage %",
             width: 200,
         },
         {

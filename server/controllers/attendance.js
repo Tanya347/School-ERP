@@ -200,14 +200,14 @@ export const getClassAttendance = async (req, res, next) => {
   
       const studentAttendance = classInfo.students.map(student => {
         const attendedLectures = attendanceRecords.filter(record => record.present.includes(student._id)).length;
-        const attendancePercentage = (attendedLectures / totalLectures) * 100;
+        const attendancePercentage = ((attendedLectures / totalLectures) * 100).toFixed(2);;
         return {
           _id: student._id,
           studentId: student.enroll,
           studentName: student.name,
           attendedLectures,
           totalLectures,
-          attendancePercentage,
+          attendancePercentage: parseFloat(attendancePercentage),
           status: attendancePercentage > 75? "Okay" : "Low"
         };
       });
@@ -235,8 +235,12 @@ export const getStudentAttendance = async (req, res, next) => {
       // Get number of lectures the student attended
       const attendedLectures = await Attendance.countDocuments({ classid, present: studentid });
   
-      const attendancePercentage = (attendedLectures / totalLectures) * 100;
-      res.status(200).json({ attendedLectures, totalLectures, attendancePercentage });
+      const attendancePercentage = ((attendedLectures / totalLectures) * 100).toFixed(2);
+      res.status(200).json({ 
+        attendedLectures, 
+        totalLectures, 
+        attendancePercentage: parseFloat(attendancePercentage), 
+        status: attendancePercentage > 75? "Okay" : "Low" });
     } catch (error) {
       next(error);
     }

@@ -1,3 +1,5 @@
+import { formatDate } from "../endpoints/transform";
+
 export const testColumns = [
     {
         field: "name",
@@ -17,7 +19,10 @@ export const testColumns = [
     {
         field: "date",
         headerName: "Date",
-        width: 200
+        width: 200,
+        renderCell: (params) => {
+            return formatDate(params.value);
+        }
     },
     {
         field: "totalMarks",

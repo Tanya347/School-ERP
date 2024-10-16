@@ -5,6 +5,7 @@ import useFetch from '../../config/hooks/useFetch';
 import { getSingleData } from '../../source/endpoints/get';
 import Navbar from '../../components/navbar/Navbar';
 import axios from 'axios';
+import { formatDate } from '../../source/endpoints/transform';
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});
@@ -79,7 +80,7 @@ const ViewTestMarks = () => {
               <p><span>Syllabus</span> : {data?.syllabus}</p>
               <p><span>Duration</span> : {data?.duration} min</p>
               <p><span>Marks</span>: {data?.totalMarks}</p> 
-              <p><span>Date</span> : {new Date(data.date).toLocaleDateString()}</p>
+              <p><span>Date</span> : {formatDate(data?.date)}</p>
               <p><span>Assigned To</span> : {data?.sclass?.name}</p>
               <p><span>Subject</span>: {data?.subject?.name}</p>
               <p><span>Assigned By</span>: {data?.author?.teachername}</p> 

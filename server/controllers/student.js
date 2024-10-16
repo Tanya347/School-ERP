@@ -1,9 +1,9 @@
 import Student from "../models/Student.js";
 import Class from "../models/Class.js";
+import Course from "../models/Course.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
-import Course from "../models/Course.js"; 
 
 export const registerStudent = async (req, res, next) => {
   try {
@@ -164,18 +164,8 @@ export const getSingleStudent = async (req, res, next) => {
     try {
       const students = await Student.find()
       .populate('class', 'name')
-
-      const transformedStudents = students.map(student => {
-        if (student.class) {
-          const { class: { name, ...classInfo }, ...rest } = student.toObject();
-          return { ...rest, classname: name, classInfo };
-        } else {
-          // Handle the case where 'class' property is undefined
-          return student.toObject();
-        }
-      });
   
-      res.status(200).json(transformedStudents);
+      res.status(200).json(students);
     } catch (err) {
       next(err)
     }
@@ -212,6 +202,8 @@ export const enterMarksForSubject = async (req, res, next) => {
         await student.save();
       }
     }
+
+    await Course.findByIdAndUpdate(subjectId, { marksAdded: true });
 
     res.status(200).json({ message: 'Marks entered successfully for all students' });
   } catch (error) {
@@ -257,6 +249,7 @@ export const getMarksOfSubject = async (req, res, next) => {
         marks: subjectMarks ? subjectMarks.total : null
       };
     });
+
 
     res.status(200).json(result);
   } catch (error) {
@@ -327,6 +320,8 @@ export const clearMarksForSubject = async (req, res, next) => {
       // Save the updated student document
       await student.save();
     }
+
+    await Course.findByIdAndUpdate(subjectid, { marksAdded: false });
 
     res.status(200).json({ message: 'Marks cleared for the specified subject' });
   } catch (error) {

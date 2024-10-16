@@ -22,7 +22,7 @@ const EditTask = ({ title }) => {
   const { data } = useFetch(getSingleData(id, "tasks"))
   
   const [info, setInfo] = useState({});
-  const [deadline, setDeadline] = useState(new Date());
+  const [deadline, setDeadline] = useState(null);
   const [sclass, setSclass] = useState("");
 
   const navigate = useNavigate();
@@ -30,7 +30,9 @@ const EditTask = ({ title }) => {
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
     setInfo(data)
-  }, [data])
+    if(data.deadline)
+      setDeadline(new Date(data.deadline))
+  }, [data, data.deadline])
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -111,7 +113,7 @@ const EditTask = ({ title }) => {
 
               <div className="formInput">
 
-                <label>Set Deadline<span style={{color: "green", fontWeight: "bold"}}>Original Date: {new Date(info.deadline).toLocaleDateString()}</span></label>
+                <label>Set Deadline</label>
                 <DatePicker
                   class="date-picker"
                   placeholderText="Choose Date and Time"

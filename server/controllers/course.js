@@ -89,19 +89,8 @@ export const getCourses = async (req, res, next) => {
     const courses = await Course.find()
       .populate('class', 'name')
       .populate('teacher', 'teachername');
-      const transformedCourses = courses.map(course => {
-        const { class: { name, ...classInfo }, teacher, ...rest } = course.toObject();
-      
-        let transformedCourse;
-        if (teacher && teacher.teachername) {
-          transformedCourse = { ...rest, classname: name, teachername: teacher.teachername, classInfo };
-        } else {
-          transformedCourse = { ...rest, classname: name, classInfo };
-        }
-      
-        return transformedCourse;
-      });
-    res.status(200).json(transformedCourses);
+
+    res.status(200).json(courses);
   } catch (err) {
     next(err)
   }

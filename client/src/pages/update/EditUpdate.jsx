@@ -14,17 +14,18 @@ import { putURLs } from "../../source/endpoints/put";
 
 const EditUpdate = ({ title, type }) => {
 
+  const [noticeType, setNoticeType] = useState("");
   const location = useLocation();
   const id = location.pathname.split("/")[4];
   const { data } = useFetch(getSingleData(id, "updates"))
   const classes = useFetch(getClasses).data
-  console.log(data)
 
 
   const [info, setInfo] = useState({});
 
   useEffect(() => {
     setInfo(data)
+    setNoticeType(data.updateType)
   }, [data])
 
   const navigate = useNavigate();
@@ -37,10 +38,18 @@ const EditUpdate = ({ title, type }) => {
     e.preventDefault();
 
     try {
-      await axios.put(putURLs("updates", id), info, {
+      if(noticeType === "general")
+        info.class = null
+      
+      const newupdate = {
+        ...info, updateType: noticeType
+      }
+
+
+      await axios.put(putURLs("updates", id), newupdate, {
         withCredentials: false
       })
-      navigate(-1)
+      navigate("/admin/updates")
     } catch (err) {
       console.log(err)
     }
@@ -81,7 +90,17 @@ const EditUpdate = ({ title, type }) => {
                 />
               </div>
 
-              {info.updateType === "specific" && <div className="formInput">
+              <div className="formInput">
+                  <label>Choose Notice Type</label>
+                  <select
+                    onChange={(e) => setNoticeType(e.target.value)}
+                    id="classId">
+                      <option key={1} value="general" selected={info?.updateType === "general"}>General</option>
+                      <option key={2} value="specific" selected={info?.updateType === "specific"}>Specific</option>
+                  </select>
+              </div>
+
+              {noticeType === "specific" && <div className="formInput">
                 <label>Class</label>
                 <select
                   id="class"

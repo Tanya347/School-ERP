@@ -121,13 +121,14 @@ export const deleteFaculty = async (req, res, next) => {
 
   export const getFacultyCourses = async(req, res, next) => {
     try{
-      const faculty = await Faculty.findById(req.params.id).populate('subjectsTaught', 'name subjectCode class')
+      const faculty = await Faculty.findById(req.params.id).populate('subjectsTaught', 'name subjectCode class marksAdded')
       
     const courses = faculty.subjectsTaught.map((course) => ({
       _id: course._id,
       name: course.name,
       sclass: course.class,
-      subjectCode: course.subjectCode
+      subjectCode: course.subjectCode,
+      marksAdded: course.marksAdded
     }));
 
     res.status(200).json(courses);

@@ -8,12 +8,15 @@ import useFetch from "../../config/hooks/useFetch";
 import { putURLs } from "../../source/endpoints/put";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getSingleData } from "../../source/endpoints/get";
+import { formatTime } from "../../source/endpoints/transform";
 
 const EditEvent = ({ inputs, title }) => {
     const location = useLocation();
     const id = location.pathname.split("/")[4];
     const [info, setInfo] = useState({});
     const [file, setFile] = useState("");
+    const [start, setStart] = useState(null)
+    const [end, setEnd] = useState(null)
     const { data } = useFetch(getSingleData(id, "events"))
 
     const navigate = useNavigate();
@@ -21,13 +24,11 @@ const EditEvent = ({ inputs, title }) => {
 
     useEffect(() => {
         setInfo(data)
-    }, [data])
-
-    const [start, setStart] = useState("")
-    const [end, setEnd] = useState("")
-
-    const s = new Date(info.startDate);
-    const e = new Date(info.endDate)
+        if(data.startDate)
+            setStart(new Date(data.startDate))
+        if(data.endDate)
+            setEnd(new Date(data.endDate))
+    }, [data, data.startDate, data.endDate])
 
 
     const handleChange = (e) => {
@@ -78,6 +79,8 @@ const EditEvent = ({ inputs, title }) => {
         }
     }
 
+    
+
     return (
         <div className="new">
             <div className="newContainer">
@@ -110,27 +113,34 @@ const EditEvent = ({ inputs, title }) => {
                     </div>
                         <form>
 
-                            <DatePicker
-                                class="date-picker"
-                                showTimeSelect
-                                placeholderText="Start Date"
-                                style={{ marginRight: "10px" }}
-                                selected={start}
-                                onChange={(start) => setStart(start)}
-                            />
-                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span >{new Date(info.startDate).toLocaleDateString()}
-                                <span style={{color: "green", fontWeight: "bold"}}>   Original Time : </span>{s.getHours() >= 12 ? s.getHours() % 12 : s.getHours()} {s.getHours() >= 12 ? "PM" : "AM"}</label>
+                            <div className="formInput">
+                                <label>
+                                    <span style={{color: "green", fontWeight: "bold"}}>   Time : </span>{formatTime(start)}
+                                    </label>
+                                <DatePicker
+                                    class="date-picker"
+                                    showTimeSelect
+                                    placeholderText="Start Date"
+                                    style={{ marginRight: "10px" }}
+                                    selected={start}
+                                    onChange={(start) => setStart(start)}
+                                />
+                            </div>
 
-                            <DatePicker
-                                class="date-picker"
-                                showTimeSelect
-                                placeholderText="End Date"
-                                selected={end}
-                                onChange={(end) => setEnd(end)}
-                            />
+                            <div className="formInput">
+                                <label>
+                                    <span style={{color: "green", fontWeight: "bold"}}>    Time : </span>{formatTime(end)}
+                                </label>
+                                
+                                <DatePicker
+                                    class="date-picker"
+                                    showTimeSelect
+                                    placeholderText="End Date"
+                                    selected={end}
+                                    onChange={(end) => setEnd(end)}
+                                />
+                            </div>
 
-                            <label><span style={{color: "green", fontWeight: "bold"}}>Original Date : </span>{new Date(info.endDate).toLocaleDateString()}
-                                <span style={{color: "green", fontWeight: "bold"}}>    Original Date : </span>{e.getHours() >= 12 ? e.getHours() % 12 : e.getHours()} {e.getHours() >= 12 ? "PM" : "AM"}</label>
 
                             {inputs?.map((input) => (
                                 <div className="formInput" key={input.id}>

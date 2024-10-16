@@ -8,10 +8,11 @@ import useFetch from "../../config/hooks/useFetch";
 import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
 import { getFacultyData, getSingleData } from "../../source/endpoints/get";
+import { putURLs } from "../../source/endpoints/put";
 
 const EditTest = ({ title }) => {
   
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   const [sclass, setSclass] = useState("");
   const [course, setCourse] = useState("");
   const [info, setInfo] = useState({});
@@ -32,8 +33,11 @@ const EditTest = ({ title }) => {
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
+  
     setInfo(data)
-  }, [data])
+    if(data.date)
+      setDate(new Date(data?.date)); 
+  }, [data, data.date])
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -49,8 +53,9 @@ const EditTest = ({ title }) => {
         info.sclass = sclass
       if(course)
         info.subject = course
+
       
-      await axios.put("tests", id, info, {
+      await axios.put(putURLs("tests", id), info, {
         withCredentials: false
       });
 
@@ -152,7 +157,7 @@ const EditTest = ({ title }) => {
 
               <div className="formInput">
 
-                <label>Set Deadline<span style={{color: "green", fontWeight: "bold"}}>Original Date: {new Date(info.date).toLocaleDateString()}</span></label>
+                <label>Set Test Date</label>
                 <DatePicker
                   class="date-picker"
                   placeholderText="Choose Date and Time"
@@ -170,7 +175,7 @@ const EditTest = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submitButton">
-              <button onClick={handleClick} id="submit" className="form-btn">Edit Task</button>
+              <button onClick={handleClick} id="submit" className="form-btn">Edit Test</button>
             </div>
           </div>
         </div>

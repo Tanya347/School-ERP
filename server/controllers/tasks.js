@@ -56,7 +56,7 @@ export const getFacultyTasks = async (req, res, next) => {
   const facultyId = req.params.id;
   
   try {
-    const tasks = await Task.find({ author: facultyId });
+    const tasks = await Task.find({ author: facultyId }).populate('sclass', 'name');
     res.status(200).json(tasks);
   } catch (err) {
     next(err)
@@ -67,7 +67,7 @@ export const getStudentTasks = async (req, res, next) => {
   const classId = req.params.id;
   
   try {
-    const tasks = await Task.find({ sclass: classId });
+    const tasks = await Task.find({ sclass: classId }).populate('sclass', 'name');
     res.status(200).json(tasks);
   } catch (err) {
     next(err)

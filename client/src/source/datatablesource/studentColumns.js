@@ -28,9 +28,12 @@ export const studentColumns = [
         width: 100,
     },
     {
-        field: "classname",
+        field: "class",
         headerName: "Class",
         width: 100,
+        renderCell: (params) => {
+            return params.row.class ? params.row.class.name : '';
+        }
     },
     {
         field: "gender",

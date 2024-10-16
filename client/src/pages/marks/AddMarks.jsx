@@ -15,6 +15,7 @@ const AddMarks = () => {
   const { user } = useContext(AuthContext)
   const courses = useFetch(getFacultyData(user._id, "courses")).data
   const [course, setCourse ]= useState("");
+  const [marksAdded, setMarksAdded] = useState(false);
   const [sclass, setSclass] = useState("");
   const [courseName, setCourseName] = useState("");
   const [stuData, setStuData] = useState({});
@@ -41,6 +42,7 @@ const AddMarks = () => {
     setCourse(cl._id);
     setCourseName(cl.subjectCode);
     setSclass(cl.sclass)
+    setMarksAdded(cl.marksAdded)
   };
   
   const handleMarksChange = (studentId, marks) => {
@@ -67,6 +69,8 @@ const AddMarks = () => {
     }
   };
 
+  console.log(marksAdded)
+
   return (
     <div className='add-marks'>
       <Navbar />
@@ -78,11 +82,18 @@ const AddMarks = () => {
             ))
           }
         </div>
-        {sclass ? (
+        {course ? (
           <>
             <h1>Course: {courseName}</h1>
 
-            <div className="marks-adding-table">
+            {marksAdded ? 
+              (
+                <>
+                  <h1>Marks already added for this course</h1>
+                </>
+              ) : (
+                <>
+                  <div className="marks-adding-table">
               <div className="marks-row" id='title-row'>
                 <div className="marks-col">Enrollment Number</div>
                 <div className="marks-col">Student</div>
@@ -105,6 +116,9 @@ const AddMarks = () => {
             <div className="add-marks-button">
               <button onClick={handleSubmit}>Add Marks</button>
             </div>
+                </>
+              )
+            }
           </>
         ) : (
           <>

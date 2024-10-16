@@ -10,13 +10,19 @@ export const courseColumns = [
         width: 100,
     },
     {
-        field: "classname",
+        field: "class",
         headerName: "Class",
         width: 100,
+        renderCell: (params) => {
+            return params.row.class.name
+        }
     },
     {
-        field: "teachername",
+        field: "teacher",
         headerName: "Teacher",
         width: 200,
+        renderCell: (params) => {
+            return params.row.teacher ? params.row.teacher.teachername : '';
+        }
     }
 ];

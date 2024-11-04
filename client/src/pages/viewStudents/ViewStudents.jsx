@@ -1,16 +1,16 @@
 import React from 'react'
 import "./viewStudents.scss"
-import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../config/context/AuthContext';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../config/context/AuthContext';
 import axios from 'axios';
-import useFetch from '../../config/hooks/useFetch';
+import useFetch from '../../config/service/useFetch';
 import Navbar from '../../components/navbar/Navbar';
 import StudentClass from '../../components/table/StudentClass'
-import { getFacultyData } from '../../source/endpoints/get';
+import { getFacultyData } from '../../config/endpoints/get';
 
 
 const ViewStudents = () => {
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth()
   const classes = useFetch(getFacultyData(user._id, "classes")).data
   const [sclass, setSclass] = useState("");
   const [className, setClassName] = useState("");

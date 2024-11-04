@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import './addClass.scss'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AdminNavbar from '../../components/navbar/AdminNavbar';
-import useFetch from '../../config/hooks/useFetch';
+import useFetch from '../../config/service/useFetch';
 import axios from 'axios';
-import { getCourseClasses } from '../../source/endpoints/get';
+import { getCourseClasses } from '../../config/endpoints/get';
+import {toast} from "react-toastify"
+
 const AddClass = () => {
 
     const location = useLocation();
     const classes = useFetch(getCourseClasses).data;
-    const facId = location.pathname.split("/")[3]
+    const facId = location.pathname.split("/")[4]
     const [sclass, setSclass] = useState("");
     const [classIndex, setClassIndex] = useState();
     const [course, setCourse] = useState("");
@@ -18,11 +20,15 @@ const AddClass = () => {
     const handleClick = async(e) => {
         e.preventDefault();
         try {
-            await axios.patch(`/faculties/addCourse/${facId}/${sclass}/${course}`, {
-                withCredentials: false
+            const res = await axios.patch(`${process.env.REACT_APP_API_URL}/faculties/addCourse/${facId}/${sclass}/${course}`, {
+                withCredentials: true
               })
 
-            navigate(`/admin/faculties/${facId}`)
+            if(res.data.status === 'success') {
+                toast.success("Course assigned to faculty successfully!");
+                navigate(`/admin/faculties/single/${facId}`)
+            }
+
         }
         catch(err) {
             console.log(err)

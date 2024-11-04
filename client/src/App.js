@@ -1,56 +1,57 @@
 // CSS
-import "./style/dark.scss";
-import "./style/base.scss";
+import "./config/style/dark.scss";
+import "./config/style/base.scss";
 
 // React Stuff
 import { useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import { DarkModeContext } from "./config/context/darkModeContext";
 
 // Common Pages
 import Login from "./pages/login/Login";
 import Landing from "./pages/Landing/Landing";
-import AdminRoutes from "./source/routes/AdminRoutes";
-import FacultyRoutes from "./source/routes/FacultyRoutes";
-import StudentRoutes from "./source/routes/StudentRoutes";
-import { AuthContext } from "./config/context/AuthContext";
+import AdminRoutes from "./config/routes/AdminRoutes";
+import FacultyRoutes from "./config/routes/FacultyRoutes";
+import StudentRoutes from "./config/routes/StudentRoutes";
+import { useAuth } from "./config/context/AuthContext";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const LoggedIn = ({ children }) => {
     if (user) {
-      if (user.isAdmin) return <Navigate to="/admin" />;
-      else if (user.isFaculty) return <Navigate to="/faculty" />;
-      else if (user.isStudent) return <Navigate to="/student" />;
+      return <Navigate to={`/${user.role}`}/>
     } else return children;
   };
 
   return (
     // darkmode context
-    <div className={darkMode ? "app dark" : "app"}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoggedIn><Landing /></LoggedIn>} />
-          <Route path="/adminLogin" element={<LoggedIn><Login type="Admin" /></LoggedIn>} />
-          <Route path="/facultyLogin" element={<LoggedIn><Login type="Faculty" /></LoggedIn>} />
-          <Route path="/studentLogin" element={<LoggedIn><Login type="Student" /></LoggedIn>} />
+    <>
+      <ToastContainer />
+      <div className={darkMode ? "app dark" : "app"}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LoggedIn><Landing /></LoggedIn>} />
+            <Route path="/adminLogin" element={<LoggedIn><Login type="Admin" /></LoggedIn>} />
+            <Route path="/facultyLogin" element={<LoggedIn><Login type="Faculty" /></LoggedIn>} />
+            <Route path="/studentLogin" element={<LoggedIn><Login type="Student" /></LoggedIn>} />
 
-          {/* Admin Routes */}
-          <Route path="/admin/*" element={<AdminRoutes />} />
+            {/* Admin Routes */}
+            <Route path="/admin/*" element={<AdminRoutes />} />
 
-          {/* Faculty Routes */}
-          <Route path="/faculty/*" element={<FacultyRoutes />} />
+            {/* Faculty Routes */}
+            <Route path="/faculty/*" element={<FacultyRoutes />} />
 
-          {/* Student Routes */}
-          <Route path="student/*" element={<StudentRoutes />} />
+            {/* Student Routes */}
+            <Route path="/student/*" element={<StudentRoutes />} />
 
 
-        </Routes>
-      </BrowserRouter>
-    </div>
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </>
   );
 }
 

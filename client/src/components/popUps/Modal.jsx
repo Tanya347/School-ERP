@@ -1,13 +1,13 @@
 import "./modal.css"
 
 import CancelIcon from '@mui/icons-material/Cancel';
-import useFetch from "../../config/hooks/useFetch"
+import useFetch from "../../config/service/useFetch"
 import { useState } from "react";
 import axios from "axios";
-import { getModalURL } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
-import { formatDate } from "../../source/endpoints/transform";
-
+import { getModalURL } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { formatDate } from "../../config/endpoints/transform";
+import { toast } from "react-toastify"
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
 
@@ -29,13 +29,19 @@ const Modal = ({ setOpen, id, type }) => {
         e.preventDefault();
         
         try {
-            await axios.put(putURLs("queries", id), info, {
-                withCredentials: false
+            const res = await axios.put(putURLs("queries", id), info, {
+                withCredentials: true
             })
+            if(res.data.status === 'success') {
+                toast.success("Query updated successfully!");
+            }
             setOpen(false)
         }
         catch (err) {
-            console.log(err)
+            const errorMessage = err.response?.data?.message || "Failed to create user. Please try again.";
+            toast.error(errorMessage);
+            console.error(err);
+            return err;
         }
     }
 

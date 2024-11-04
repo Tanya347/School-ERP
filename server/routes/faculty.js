@@ -1,27 +1,27 @@
 import express from "express";
 import {
-  registerFaculty,
-  loginFaculty,
   updateFaculty,
   deleteFaculty,
   getFaculty,
   getFacultys,
   getFacultyClasses,
   getFacultyCourses,
+  registerFaculty,
   AddNewCourse,
 } from "../controllers/faculty.js";
+import { restrictTo, protect } from "../controllers/auth.js";
+
 
 const router = express.Router();
 
-router.post("/registerFaculty", registerFaculty);
-router.post("/loginFaculty", loginFaculty);
-router.put("/:id", updateFaculty);
-router.delete("/:id", deleteFaculty);
-router.get("/:id", getFaculty);
-router.get("/", getFacultys);
-router.get("/classes/:id", getFacultyClasses);
-router.get("/courses/:id", getFacultyCourses);
-router.patch('/addCourse/:facId/:classId/:courseId', AddNewCourse);
+router.post("/registerFaculty", protect(), restrictTo("admin"), registerFaculty);
+router.put("/:id", protect(), restrictTo("admin"), updateFaculty);
+router.delete("/:id", protect(), restrictTo("admin"), deleteFaculty);
+router.get("/:id", protect(), getFaculty);
+router.get("/", protect(), getFacultys);
+router.get("/classes/:id", protect(), getFacultyClasses);
+router.get("/courses/:id", protect(), getFacultyCourses);
+router.patch('/addCourse/:facId/:classId/:courseId', protect(), restrictTo("admin"), AddNewCourse);
 
 export default router;
 

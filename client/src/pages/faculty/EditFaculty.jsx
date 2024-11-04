@@ -1,17 +1,15 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import useFetch from "../../config/hooks/useFetch";
-import axios from "axios"
-
+import useFetch from "../../config/service/useFetch";
 import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { getSingleData } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
+import { getSingleData } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { editElementWithPicture } from "../../config/service/usePut";
+import { ClipLoader } from "react-spinners";
 
 
 const EditFaculty = ({ title, type }) => {
@@ -33,7 +31,6 @@ const EditFaculty = ({ title, type }) => {
   }, [data])
 
 
-
   const navigate = useNavigate();
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -42,44 +39,17 @@ const EditFaculty = ({ title, type }) => {
   const handleClick = async (e) => {
     e.preventDefault();
     setSending(true)
-    if (file) {
-
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
-
-      try {
-        const uploadRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
-          data, {
-          withCredentials: false
-        }
-        )
-        const { url } = uploadRes.data;
-        const { public_id } = uploadRes.data;
-        const newuser = {
-          ...info, profilePicture: url, cloud_id: public_id
-        }
-
-        axios.put(putURLs("faculties", id), newuser, {
-          withCredentials: false
-        })
-        navigate(-1)
-
-      } catch (error) {
-        console.log(error)
+    try {
+      const res = await editElementWithPicture(file, info, "faculty", putURLs("faculties", id));
+      if(res.data.status === 'success') {
+        navigate(`/admin/faculties/single/${id}`)
       }
-    } else {
-      try {
-        await axios.put(`http://localhost:5500/api/faculties/${id}`, info, { withCredentials: false })
-        navigate(-1)
-      }
-      catch (err) {
-        console.log(err)
-      }
+    } catch(err) {
+      console.error(err);
+    } finally {
+      setSending(false);
     }
   }
-
 
   return (
     <div className="new">
@@ -218,6 +188,10 @@ const EditFaculty = ({ title, type }) => {
 
             </form>
             <div className="submitButton">
+              {sending && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                updating student data...
+              </div>}
               <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit User</button>
             </div>
 

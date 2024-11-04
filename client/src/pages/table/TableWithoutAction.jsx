@@ -4,18 +4,12 @@ import "./tableWithoutAction.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navbar from "../../components/navbar/AdminNavbar.jsx"
-
 
 // useFetch and axios for fetching data
-import useFetch from "../../config/hooks/useFetch.js"
+import useFetch from "../../config/service/useFetch.js"
 
 // Modal for showing the details about tasks and updates
-import { getClassCourses, getTableWithoutActionURL } from "../../source/endpoints/get.js";
-import AdminNavbar from "../../components/navbar/AdminNavbar.jsx";
-
-
-
+import { getClassCourses, getTableWithoutActionURL } from "../../config/endpoints/get.js";
 
 // column, name and type are props input at the place datatable is used
 const TableWithoutAction = ({ column, name, NavbarComponent }) => {
@@ -31,6 +25,8 @@ const TableWithoutAction = ({ column, name, NavbarComponent }) => {
   const { data } = useFetch(getTableWithoutActionURL(path, id))
   const courses = useFetch(getClassCourses(id)).data;
 
+  console.log(data)
+
   // array usestate that gets fed every time page loads
   const [list, setList] = useState([]);
   const [course, setCourses] = useState([]);
@@ -43,7 +39,6 @@ const TableWithoutAction = ({ column, name, NavbarComponent }) => {
   useEffect(() => {
     setCourses(courses)
   }, [courses])
-
 
   return (
     <div className="table-without-action">

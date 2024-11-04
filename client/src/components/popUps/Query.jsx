@@ -3,9 +3,10 @@ import './query.css'
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useState } from 'react';
 import axios from "axios"
-import useFetch from '../../config/hooks/useFetch';
-import { getClassDetails } from '../../source/endpoints/get';
-import { postURLs } from '../../source/endpoints/post';
+import useFetch from '../../config/service/useFetch';
+import { getClassDetails } from '../../config/endpoints/get';
+import { postURLs } from '../../config/endpoints/post';
+import { toast } from "react-toastify"
 
 const Query = ({ setOpen, user }) => {
 
@@ -26,14 +27,20 @@ const Query = ({ setOpen, user }) => {
             ...info, author: user.name, queryTo: queryTo
         }
         try {
-            await axios.post(postURLs("queries", "normal"), newQuery, {
-                withCredentials: false
+            const res = await axios.post(postURLs("queries", "normal"), newQuery, {
+                withCredentials: true
             })
+            if(res.data.status === 'success') {
+                toast.success("Query submitted successfully!");
+            }
             setOpen(false)
-            console.log(newQuery)
+            
         }
         catch (err) {
-            console.log(err)
+            const errorMessage = err.response?.data?.message || "Failed to create user. Please try again.";
+            toast.error(errorMessage);
+            console.error(err);
+            return err;
         }
     }
 

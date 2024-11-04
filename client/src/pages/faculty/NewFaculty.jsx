@@ -1,22 +1,17 @@
-import "../../style/form.scss";
-
-// choice for gender, designation, department
-
+import "../../config/style/form.scss";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-
-import axios from "axios"
-
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { postURLs } from "../../source/endpoints/post";
+import { createElementWithPicture } from "../../config/service/usePost";
+import { ClipLoader } from "react-spinners";
+import { postURLs } from "../../config/endpoints/post";
 
 const NewFaculty = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -24,45 +19,17 @@ const NewFaculty = ({ inputs, title }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    
-    if (file) {
-
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
-
-      try {
-        const uploadRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
-          data, {
-          withCredentials: false
-        }
-        )
-        const { url } = uploadRes.data;
-        const { public_id } = uploadRes.data;
-        const newuser = {
-          ...info, profilePicture: url, cloud_id: public_id
-        }
-
-        axios.post("http://localhost:5500/api/faculties/registerFaculty", newuser, {
-          withCredentials: false
-        })
-        navigate(-1)
-
-      } catch (error) {
-        console.log(error)
+    setLoading(true);
+    try {
+      const res = await createElementWithPicture(file, info, "faculty", postURLs("faculty", "register"));
+      if(res.data.status === 'success') {
+        navigate(`/admin/faculties/single/${res.data.data.user._id}`);
       }
-    
-    } else {
-      try {
-        await axios.post(postURLs("faculties", "register"), info, {
-          withCredentials: false
-        })
-        navigate(-1)
-      }
-      catch (err) {
-        console.log(err)
-      }
+    }
+    catch(err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -104,7 +71,7 @@ const NewFaculty = ({ inputs, title }) => {
 
             <form>
 
-              <div className="formInput">
+            <div className="formInput">
                 <label>Gender</label>
                 <select
                   id="gender"
@@ -131,6 +98,10 @@ const NewFaculty = ({ inputs, title }) => {
 
             </form>
             <div className="submitButton">
+              {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                creating faculty...
+              </div>}
               <button onClick={handleClick} className="form-btn">Create Faculty</button>
             </div>
           </div>

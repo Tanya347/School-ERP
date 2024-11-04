@@ -4,8 +4,8 @@ import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import SchoolIcon from '@mui/icons-material/School';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleIcon from '@mui/icons-material/People';
-import useFetch from '../../config/hooks/useFetch';
-import { getAllCount } from '../../source/endpoints/get';
+import useFetch from '../../config/service/useFetch';
+import { getAllCount } from '../../config/endpoints/get';
 
 const AdminWidgets = () => {
 

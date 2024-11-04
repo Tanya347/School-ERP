@@ -18,9 +18,9 @@ export const getStudentAttendance = (studentid, classid) => {
 }
 export const getDatatableURL = (path, user) => {
     if(path === 'tests')
-        return user.isFaculty? `/tests/faculty/${user._id}` : `/tests/student/${user.class}`
+        return user.role === 'student' ? `/tests/${user.role}/${user.class}` : `/tests/${user.role}/${user._id}`;
     else if(path === 'tasks')
-        return user.isFaculty? `/tasks/faculty/${user._id}` : `/tasks/student/${user.class}`
+        return user.role === 'student' ? `/tasks/${user.role}/${user.class}` : `/tasks/${user.role}/${user._id}`;
     else    
         return `/${path}/`
 }
@@ -33,9 +33,9 @@ export const getTableWithoutActionURL = (path, id) => {
 }
 
 export const getTableURL = (user) => {
-    if(user.isFaculty)
+    if(user.role === 'faculty')
         return `/updates/faculty/${user._id}`
-    else if(user.isStudent)
+    else if(user.role === 'student')
         return `/updates/student/${user.class}`
     else
         return '/updates'
@@ -53,16 +53,16 @@ export const getModalURL = (path, id) => {
 }
 
 export const getTaskCalenderURL = (user) => {
-    if(user.isFaculty)
+    if(user.role === 'faculty')
         return `/tasks/faculty/${user._id}`
-    else if(user.isStudent)
+    else if(user.role === 'student')
         return `/tasks/student/${user.class}`
 }
 
 export const getTestCalenderURL = (user) => {
-    if(user.isFaculty)
+    if(user.role === 'faculty')
         return `/tests/faculty/${user._id}`
-    else if(user.isStudent)
+    else if(user.role === 'student')
         return `/tests/student/${user.class}`
 }
 

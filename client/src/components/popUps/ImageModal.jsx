@@ -1,5 +1,3 @@
-// ImageModal.js
-
 import React from 'react';
 import './imageModal.scss'; // Import your CSS file
 import CancelIcon from '@mui/icons-material/Cancel';

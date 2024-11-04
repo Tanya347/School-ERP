@@ -1,138 +1,125 @@
 import Class from "../models/Class.js";
 import Student from "../models/Student.js";
-import Attendance from "../models/Attendance.js"
+import { catchAsync } from "../utils/catchAsync.js";
 
-export const createClass = async (req, res, next) => {
+// Create a new class
+export const createClass = catchAsync(async (req, res, next) => {
+  const newClass = new Class(req.body);
+  const savedClass = await newClass.save();
+  res.status(200).json({
+    status: 'success',
+    data: savedClass,
+    message: 'Class created successfully!'
+  });
+});
 
-    const newClass = new Class(req.body);
-    try {
-        const savedClass = await newClass.save();
-        res.status(200).json(savedClass);
-    } catch (err) {
-        next(err);
-    }
-};
+// Update an existing class
+export const updateClass = catchAsync(async (req, res, next) => {
+  const sclass = await Class.findByIdAndUpdate(
+    req.params.id,
+    { $set: req.body },
+    { new: true }
+  );
+  res.status(200).json({
+    status: 'success',
+    data: sclass,
+    message: 'Class updated successfully!'
+  });
+});
 
-export const updateClass = async (req, res, next) => {
-    try {
-        const sclass = await Class.findByIdAndUpdate(
-            req.params.id,
-            { $set: req.body },
-            { new: true }
-        );
-        res.status(200).json(sclass);
-    } catch (err) {
-        next(err);
-    }
-};
-
-export const deleteClass = async (req, res, next) => {
-    try {
-        const deletedClass = await Class.findById(req.params.id);
-
-        if (!deletedClass) {
-        return res.status(404).json({ message: 'Class not found' });
-        }
-
-        // Remove class reference from associated students
-        await Student.updateMany(
-        { class: deletedClass._id },
-        { $unset: { class: 1 } }
-        );
-
-        // Now, delete the class
-        await deletedClass.remove();
-
-        res.status(200).json("the Class has been deleted");
-    } catch (err) {
-        next(err);
-    }
-};
-
-export const getClassDetails = async (req, res, next) => {
-  const classId = req.params.id;
-
-  try {
-      const classDetails = await Class.findById(classId)
-      .populate({
-          path: 'subjects',
-          model: 'Course',
-          select: 'name subjectCode teacher',
-          populate: {
-          path: 'teacher',
-          model: 'Faculty',
-          select: 'teachername', // Only fetch the name field of the teacher
-          },
-      })
-      .populate({
-          path: 'students',
-          model: 'Student',
-          select: 'name profilePicture cloud_id gender enroll email studentPhone',
-      });
-
-      res.status(200).json(classDetails);
-  } catch (err) {
-      next(err);
+// Delete a class and unset class reference from students
+export const deleteClass = catchAsync(async (req, res, next) => {
+  const deletedClass = await Class.findById(req.params.id);
+  if (!deletedClass) {
+    return res.status(404).json({ message: 'Class not found' });
   }
-};
 
-export const getClassSubjects = async (req, res, next) => {
+  // Remove class reference from associated students
+  await Student.updateMany(
+    { class: deletedClass._id },
+    { $unset: { class: 1 } }
+  );
+
+  // Delete the class
+  await deletedClass.remove();
+  res.status(200).json({
+    message: "The class has been deleted",
+    status: 'success'
+  });
+});
+
+// Get class details with populated subjects and students
+export const getClassDetails = catchAsync(async (req, res, next) => {
   const classId = req.params.id;
-
-  try {
-    const courses = await Class.findById(classId).populate('subjects');
-    
-    const subjects = courses.subjects.map(sub => {
-      return {
-        _id: sub._id,
-        name: sub.name,
-        code: sub.subjectCode
-      }
+  const classDetails = await Class.findById(classId)
+    .populate({
+      path: 'subjects',
+      model: 'Course',
+      select: 'name subjectCode teacher',
+      populate: {
+        path: 'teacher',
+        model: 'Faculty',
+        select: 'teachername',
+      },
     })
-    res.status(200).json(subjects);
-  }
-  catch(err) {
-    next(err);
-  }
-}
-  
+    .populate({
+      path: 'students',
+      model: 'Student',
+      select: 'name profilePicture cloud_id gender enroll email studentPhone',
+    });
+  res.status(200).json({
+    data: classDetails,
+    status: 'success'
+  });
+});
 
-export const getClassStudents = async (req, res, next) => {
-    const classId = req.params.id;
+// Get class subjects
+export const getClassSubjects = catchAsync(async (req, res, next) => {
+  const classId = req.params.id;
+  const courses = await Class.findById(classId).populate('subjects');
+  const subjects = courses.subjects.map((sub) => ({
+    _id: sub._id,
+    name: sub.name,
+    code: sub.subjectCode,
+  }));
+  res.status(200).json({
+    data: subjects,
+    status: 'success'
+  });
+});
 
-    try {
-        const classStudents = await Class.findById(classId)
-        .populate({
-            path: 'students',
-            model: 'Student',
-            select: 'name profilePicture cloud_id gender enroll studentPhone email',
-        });
+// Get class students
+export const getClassStudents = catchAsync(async (req, res, next) => {
+  const classId = req.params.id;
+  const classStudents = await Class.findById(classId).populate({
+    path: 'students',
+    model: 'Student',
+    select: 'name profilePicture cloud_id gender enroll studentPhone email',
+  });
+  res.status(200).json({
+    data: classStudents,
+    status: 'success'
+  });
+});
 
-        res.status(200).json(classStudents);
-    } catch (err) {
-        next(err);
-    }
-};
+// Get all classes
+export const getClasses = catchAsync(async (req, res, next) => {
+  const classes = await Class.find().sort({classNumber: 1});
+  res.status(200).json({
+    data: classes,
+    status: 'success'
+  });
+});
 
-export const getClasses = async (req, res, next) => {
-    try {
-        const classes = await Class.find();
-        res.status(200).json(classes);
-    } catch (err) {
-        next(err)
-    }
-}
-
-export const getClassesWithSubjects = async(req, res, next) => {
-    try {
-        const classes = await Class.find().populate({
-            path: 'subjects',
-            model: 'Course', // Specify the model for the 'subjects' path
-          });
-
-        res.status(200).json(classes);
-    }
-    catch(err) {
-        next(err)
-    }
-}
+// Get all classes with subjects populated
+export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
+  const classes = await Class.find().populate({
+    path: 'subjects',
+    model: 'Course',
+  }).sort({classNumber: 1});
+  res.status(200).json({
+    data: classes,
+    status: 'success'
+  });
+});
+ 

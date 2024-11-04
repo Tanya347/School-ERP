@@ -1,16 +1,16 @@
 import React from 'react'
 import "./studentHome.scss"
 import Navbar from '../../components/navbar/Navbar'
-import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../../config/context/AuthContext'
-import useFetch from '../../config/hooks/useFetch'
-import { getTableURL } from '../../source/endpoints/get'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../../config/context/AuthContext'
+import useFetch from '../../config/service/useFetch'
+import { getTableURL } from '../../config/endpoints/get'
 import axios from 'axios'
 
 const StudentHome = () => {
   const [presenceDates, setPresenceDates] = useState([]);
   const [absenceDates, setAbsenceDates] = useState([]);
-  const {user} = useContext(AuthContext)
+  const {user} = useAuth();
   const { data } = useFetch(getTableURL(user));
 
   useEffect(() => {
@@ -31,9 +31,6 @@ const StudentHome = () => {
 
     fetchData();
   }, [user]);
-
-  console.log(presenceDates)
-  console.log(absenceDates)
  
   return (
     <div className='student-home'>

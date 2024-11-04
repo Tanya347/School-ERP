@@ -1,9 +1,7 @@
 import "./mainSidebar.scss"
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
-
 import { motion } from "framer-motion";
-
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TaskIcon from '@mui/icons-material/Task';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
@@ -22,25 +20,21 @@ import AddchartIcon from '@mui/icons-material/Addchart';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import GroupsIcon from '@mui/icons-material/Groups';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-
-import { useContext } from "react";
-import { AuthContext } from "../../config/context/AuthContext";
+import { useAuth } from "../../config/context/AuthContext";
 import { DarkModeContext } from "../../config/context/darkModeContext";
-
 import Query from '../popUps/Query';
-
 
 const MainSidebar = ({ setOpen }) => {
 
     const { Dispatch } = useContext(DarkModeContext);
-    const { dispatch, user } = useContext(AuthContext)
+    const { user, logout } = useAuth();
     
     // useState for opening query pop up
     const [openQuery, setOpenQuery] = useState(false);
 
     const handleClick = async (e) => {
         e.preventDefault();
-        dispatch({ type: "LOGOUT" });
+        await logout("Logged Out Successfully!");
     }
 
     return (
@@ -56,7 +50,7 @@ const MainSidebar = ({ setOpen }) => {
 
 
                     <p className="title">Main</p>
-                    <Link to={user.isFaculty? "/faculty" : "/student"} style={{ textDecoration: "none" }}>
+                    <Link to={`/${user.role}`} style={{ textDecoration: "none" }}>
                         <li>
                             <DashboardIcon className="icon" />
                             <span>Dashboard</span>
@@ -68,14 +62,14 @@ const MainSidebar = ({ setOpen }) => {
                     <p className="title">Information</p>
 
                     {/* Calender Page */}
-                    <Link to={user.isFaculty? "/faculty/calender" : "/student/calender"} style={{"textDecoration": "none"}}>
+                    <Link to={`/${user.role}/calender`} style={{"textDecoration": "none"}}>
                         <li>
                             <CalendarMonthIcon className="icon"/>
                             <span>Calender</span>
                         </li>
                     </Link>
 
-                    {(user.isFaculty) && <Link to="/faculty/attendance" style={{ textDecoration: "none" }}>
+                    {(user.role === 'faculty') && <Link to="/faculty/attendance" style={{ textDecoration: "none" }}>
                         <li>
                             <CoPresentIcon className="icon" />
                             <span>Attendance</span>
@@ -83,7 +77,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>}
 
                     {/* Takes you to list of all tasks created by admin */}
-                    <Link to={user.isFaculty? "/faculty/tasks" : "/student/tasks"} style={{ textDecoration: "none" }}>
+                    <Link to={`/${user.role}/tasks`} style={{ textDecoration: "none" }}>
                         <li>
                             <TaskIcon className="icon" />
                             <span>Tasks</span>
@@ -91,7 +85,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Takes you to list of all tasks created by admin */}
-                    <Link to={user.isFaculty? "/faculty/tests" : "/student/tests"} style={{ textDecoration: "none" }}>
+                    <Link to={`/${user.role}/tests`} style={{ textDecoration: "none" }}>
                         <li>
                             <NoteAddIcon className="icon" />
                             <span>Tests</span>
@@ -99,7 +93,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Takes you to list of all tasks created by admin */}
-                    {user.isFaculty && <Link to={"/faculty/class/students"} style={{ textDecoration: "none" }}>
+                    {user.role === 'faculty' && <Link to={"/faculty/class/students"} style={{ textDecoration: "none" }}>
                         <li>
                             <GroupsIcon className="icon" />
                             <span>Students</span>
@@ -107,7 +101,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>}
 
                     {/* Takes you to list of all tasks created by admin */}
-                    {user.isFaculty && <Link to={"/faculty/marks"} style={{ textDecoration: "none" }}>
+                    {user.role === 'faculty' && <Link to={"/faculty/marks"} style={{ textDecoration: "none" }}>
                         <li>
                             <AssessmentIcon className="icon" />
                             <span>Marks</span>
@@ -116,7 +110,7 @@ const MainSidebar = ({ setOpen }) => {
 
 
                     {/* Takes you to list of all responses sent by faculties */}
-                    {user.isStudent && <Link to="/student/responses" style={{ textDecoration: "none" }}>
+                    {user.role === 'student' && <Link to="/student/responses" style={{ textDecoration: "none" }}>
                         <li>
                             <MarkChatReadIcon className="icon" />
                             <span>Responses</span>
@@ -126,50 +120,35 @@ const MainSidebar = ({ setOpen }) => {
                     {/* Create events/queries */}
                     <p className="title">Create</p>
 
-                    {(user.isFaculty) && <Link to="/faculty/tasks/new" style={{ textDecoration: "none" }}>
+                    {(user.role === 'faculty') && <Link to="/faculty/tasks/new" style={{ textDecoration: "none" }}>
                         <li>
                             <AddTaskIcon className="icon" />
                             <span>Tasks</span>
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="/faculty/tests/new" style={{ textDecoration: "none" }}>
+                    {(user.role === 'faculty') && <Link to="/faculty/tests/new" style={{ textDecoration: "none" }}>
                         <li>
                             <PostAddIcon className="icon" />
                             <span>Tests</span>
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="/faculty/attendance/new" style={{ textDecoration: "none" }}>
+                    {(user.role === 'faculty') && <Link to="/faculty/attendance/new" style={{ textDecoration: "none" }}>
                         <li>
                             <PlaylistAddIcon className="icon" />
                             <span>Attendance</span>
                         </li>
                     </Link>}
 
-                    {(user.isFaculty) && <Link to="/faculty/marks/new" style={{ textDecoration: "none" }}>
+                    {(user.role === 'faculty') && <Link to="/faculty/marks/new" style={{ textDecoration: "none" }}>
                         <li>
                             <AddchartIcon className="icon" />
                             <span>Marks</span>
                         </li>
                     </Link>}
-
-                    {/* {(user.isFaculty) && <Link to="/material/new" style={{ textDecoration: "none" }}>
-                        <li>
-                            <PostAddIcon className="icon" />
-                            <span>Material</span>
-                        </li>
-                    </Link>} */}
-{/* 
-                    {(user.isFaculty) && <Link to="/marks/new" style={{ textDecoration: "none" }}>
-                        <li>
-                            <QueuePlayNextIcon className="icon" />
-                            <span>Videos</span>
-                        </li>
-                    </Link>} */}
                     
-
-                    <Link to={user.isFaculty ? "/faculty/events" : "/student/events"} style={{ textDecoration: "none" }}>
+                    <Link to={`/${user.role}/events`} style={{ textDecoration: "none" }}>
                             <li>
                                 <EmojiEventsIcon className="icon" />
                                 <span>Event</span>
@@ -177,7 +156,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>
                     
                     {/* On click set usestate to true */}
-                    {user.isStudent && <li onClick={() => setOpenQuery(true)}>
+                    {user.role === 'student' && <li onClick={() => setOpenQuery(true)}>
                         <ContactSupportIcon className="icon" />
                         <span>Query</span>
                     </li>}
@@ -187,7 +166,7 @@ const MainSidebar = ({ setOpen }) => {
                     <p className="title">User</p>
 
                     {/* View Profile */}
-                    <Link to={user.isFaculty? `/faculty/single/${user._id}` : `/student/single/${user._id}`} style={{ textDecoration: "none" }}>
+                    <Link to={`/${user.role}/single/${user._id}`} style={{ textDecoration: "none" }}>
                         <li>
                             <AccountCircleOutlinedIcon className="icon" />
                             <span>Profile</span>
@@ -195,7 +174,7 @@ const MainSidebar = ({ setOpen }) => {
                     </Link>
 
                     {/* Edit Profile */}
-                    <Link to={user.isFaculty? `/faculty/edit/${user._id}` : `/student/edit/${user._id}`} style={{ textDecoration: "none" }}>
+                    <Link to={`/${user.role}/edit/${user._id}`} style={{ textDecoration: "none" }}>
                         <li>
                             <EditIcon className="icon" />
                             <span>Edit Profile</span>

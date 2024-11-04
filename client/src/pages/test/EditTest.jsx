@@ -1,14 +1,16 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import useFetch from "../../config/hooks/useFetch";
-import { AuthContext } from "../../config/context/AuthContext";
+import useFetch from "../../config/service/useFetch";
 import Navbar from "../../components/navbar/Navbar";
-import { getFacultyData, getSingleData } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
+import { getFacultyData, getSingleData } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { useAuth } from "../../config/context/AuthContext";
+import { ClipLoader } from "react-spinners";
+import { editElement } from "../../config/service/usePut";
 
 const EditTest = ({ title }) => {
   
@@ -16,8 +18,10 @@ const EditTest = ({ title }) => {
   const [sclass, setSclass] = useState("");
   const [course, setCourse] = useState("");
   const [info, setInfo] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const { user } = useContext(AuthContext)
+
+  const { user } = useAuth();
 
   // get location and extract id out of it
   const location = useLocation();
@@ -54,13 +58,10 @@ const EditTest = ({ title }) => {
       if(course)
         info.subject = course
 
-      
-      await axios.put(putURLs("tests", id), info, {
-        withCredentials: false
-      });
-
-      // go back to previous page
-      navigate(-1)
+      const res = await editElement(info, putURLs("tests", id), "test")
+      if(res.data.status === 'success') {
+        navigate("/faculty/tests")
+      }
     } catch (err) {
       console.log(err)
     }
@@ -175,6 +176,10 @@ const EditTest = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submitButton">
+            {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing update...
+              </div>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Test</button>
             </div>
           </div>

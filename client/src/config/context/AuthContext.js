@@ -1,73 +1,107 @@
-import { createContext, useReducer, useEffect } from "react"
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-// set the initial state, if not already set then make it null other wise get the item saved in localstorage
-const INITIAL_STATE = {
-    user: JSON.parse(localStorage.getItem("user")) || null,
-    loading: false,
-    error: null,
+const AuthContext = createContext();
+
+const initialState = {
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  loading: false,
+  error: null
 };
 
-// this function is used to create the context
-export const AuthContext = createContext(INITIAL_STATE)
+// Define action types
+const actionTypes = {
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  DEACTIVATE: "DEACTIVATE",
+  VERIFY_USER: "VERIFY_USER",
+  SET_ERROR: "SET_ERROR",
+  SET_LOADING: "SET_LOADING"
+};
 
-const AuthReducer = (state, action) => {
-    switch (action.type) {
+// Reducer function to handle state updates
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case actionTypes.LOGIN:
+      return { ...state, user: action.payload, loading: false, error: null };
+    case actionTypes.LOGOUT:
+      return { ...state, user: null, loading: false, error: null };
+    case actionTypes.DEACTIVATE:
+      return { ...state, user: null, loading: false, error: null };
+    case actionTypes.VERIFY_USER:
+      return { ...state, user: action.payload, loading: false };
+    case actionTypes.SET_ERROR:
+      return { ...state, error: action.payload, loading: false };
+    case actionTypes.SET_LOADING:
+      return { ...state, loading: true };
+    default:
+      return state;
+  }
+};
 
-        // if no login then initially everything is null
-        case "LOGIN_START":
-            return {
-                user: null,
-                loading: true,
-                error: null
-            };
-        
-        // once login is successful, set the user object to action.payload
-        case "LOGIN_SUCCESS":
-            return {
-                user: action.payload,
-                loading: false,
-                error: null
-            };
-        
-        // if login fails set the error to action.payload
-        case "LOGIN_FAILURE":
-            return {
-                user: null,
-                loading: false,
-                error: action.payload
-            };
-        
-        // if user logs out set the user object to null
-        case "LOGOUT":
-            return {
-                user: null,
-                loading: false,
-                error: null
-            };
-        default:
-            return state;
+export const AuthProvider = ({ children }) => {
+  const [cookies, removeCookie] = useCookies(["jwt"]);
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  const login = (userData) => {
+    dispatch({ type: actionTypes.LOGIN, payload: userData });
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  const logout = async (message) => {
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      if(res.data.status === 'success') {
+        toast.success(`${message}`);
+      }
+      removeCookie("jwt");
+      dispatch({ type: actionTypes.LOGOUT });
+      localStorage.removeItem("user");
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Failed to logout. Please try again.";
+      toast.error(errorMessage);
+      console.error(err);
+      dispatch({ type: actionTypes.SET_ERROR, payload: "Logout error" });
     }
-}
+  };
 
-export const AuthContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE)
+  const deactivate = async () => {
+    try { 
+      const res = await axios.delete(`${process.env.REACT_APP_API_URL}/users`, {withCredentials: true});
+      if(res.data.status === 'success') {
+        toast.success("Deactivated Successfully. We're sorry to hear you go :(");
+        removeCookie("jwt");
+        dispatch({ type: actionTypes.DEACTIVATE });
+        localStorage.removeItem("user");
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Failed to logout. Please try again.";
+      toast.error(errorMessage);
+      console.error(err);
+      dispatch({ type: actionTypes.SET_ERROR, payload: "Logout error" });
+    }
+  };
 
-    // save the state of the user in local storage
-    useEffect(() => {
-        localStorage.setItem("user", JSON.stringify(state.user))
-    }, [state.user])
+  return (
+    <AuthContext.Provider
+      value={{
+        user: state.user,
+        loading: state.loading,
+        error: state.error,
+        deactivate,
+        login,
+        logout
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-
-    return (
-        <AuthContext.Provider
-            value={{
-                user: state.user,
-                loading: state.loading,
-                error: state.error,
-                dispatch
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    )
-}
+export const useAuth = () => useContext(AuthContext);

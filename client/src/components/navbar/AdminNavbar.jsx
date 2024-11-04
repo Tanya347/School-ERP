@@ -10,17 +10,17 @@ import { useContext, useState } from "react";
 import { Link} from "react-router-dom"
 
 import AdminSidebar from "../sidebar/AdminSidebar"
-import { AuthContext } from "../../config/context/AuthContext";
+import { useAuth } from "../../config/context/AuthContext";
 
 const AdminNavbar = () => {
 
   // calling dispatch function that enables dark mode
   const { Dispatch } = useContext(DarkModeContext);
-  const { dispatch } = useContext(AuthContext)
+  const { logout } = useAuth();
 
   const handleClick = async (e) => {
     e.preventDefault();
-    dispatch({ type: "LOGOUT" });
+    await logout("Logged Out Successfully!");
 }
 
   // use state for opening and closing sidebar 

@@ -26,21 +26,21 @@ import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import { Link } from 'react-router-dom';
 
 // contexts
-import { useContext } from "react";
-import { AuthContext } from "../../config/context/AuthContext";
+import { useAuth } from "../../config/context/AuthContext";
 import { DarkModeContext } from "../../config/context/darkModeContext";
+import { useContext } from "react";
 
 
 const AdminSidebar = ({ setOpen }) => {
 
     // Dispatch for Dark Mode Toggle and dispatch for logout functionality
     const { Dispatch } = useContext(DarkModeContext);
-    const { dispatch } = useContext(AuthContext)
+    const { logout } = useAuth();
 
     // function to handle logout
     const handleClick = async (e) => {
         e.preventDefault();
-        dispatch({ type: "LOGOUT" });
+        await logout("Logged Out Successfully!");
     }
 
     return (

@@ -2,13 +2,10 @@ import "./login.scss"
 
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
-import { useContext, useState } from 'react'
-import { AuthContext } from '../../config/context/AuthContext'
-import { postURLs } from "../../source/endpoints/post"
-
-
-
+import { useState } from 'react'
+import { postURLs } from "../../config/endpoints/post"
+import { toast } from "react-toastify";
+import { useAuth } from "../../config/context/AuthContext"
 
 // type will tell whether admin or student
 function Login({ type }) {
@@ -25,10 +22,8 @@ function Login({ type }) {
     url = "/Assets/admin.jfif"
   }
 
-
   // function to navigate to a certain page once logged in
   const navigate = useNavigate();
-
 
   // sets the credentials entered by the user
   const [credentials, setCredentials] = useState({
@@ -36,42 +31,32 @@ function Login({ type }) {
     password: undefined
   })
 
-
-  // call login functions from authcontext
-  const { loading, error, dispatch } = useContext(AuthContext)
-  
+  const {login} = useAuth();
 
   // set the use state to what the user entered
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
-
-
   const handleClick = async (e) => {
    
     e.preventDefault();
     
-    dispatch({ type: "LOGIN_START" });
-    
     try {
-      const res = await axios.post(postURLs(type, "login"), credentials, { withCredentials: false })
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
+      const { data } = await axios.post(postURLs(type, "login"), credentials, { withCredentials: true })
       
-      // if admin then redirect to /admin i.e. localhost:3000/admin/
-      if (type === "Admin") {
-          navigate("/admin")
+      if(data.status === "success") {
+        toast.success("You have logged in successfully!");
+        login(data.user)
+        navigate(`/${data.user.role}`);
       }
-
-      // if not admin redirect to / i.e localhost:3000/
-      else if(res.data.isFaculty) {
-        navigate("/faculty");
-      }
-
-      else navigate("/student");
-
     } catch (err) {
-      dispatch({ type: "LOGIN_FAILURE", payload: err.response.data })
+      const errorMessage = err.response?.data?.message || "Failed to log in. Please try again.";
+      toast.error(errorMessage);
+      console.error(err);
+      throw err;
+    } finally {
+      // setLoading(false);
     }
   }
 
@@ -108,12 +93,9 @@ function Login({ type }) {
         <p style={{"marginTop": "20px", "marginBottom": "10px"}}>Forgot Password?</p>
 
         {/* When button is clicked called handleclick so all the operations can be performed*/}
-        <button disabled={loading} onClick={handleClick} className="lButton">
+        <button onClick={handleClick} className="lButton">
           Login
         </button>
-
-        {/* If there is error display error message */}
-        {error && <span>{error.message}</span>}
       </div>
     </div>
   )

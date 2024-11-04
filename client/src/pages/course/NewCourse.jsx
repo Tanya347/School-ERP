@@ -1,17 +1,19 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../config/hooks/useFetch";
-import axios from "axios";
+import useFetch from "../../config/service/useFetch";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { getClasses } from "../../source/endpoints/get";
-import { postURLs } from "../../source/endpoints/post";
+import { getClasses } from "../../config/endpoints/get";
+import { postURLs } from "../../config/endpoints/post";
+import { createElementWithPicture } from "../../config/service/usePost";
+import { ClipLoader } from "react-spinners";
 
 const NewCourse = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
+  const [loading, setLoading] = useState(false);
   const classes = useFetch(getClasses).data
   classes.sort((a, b) => a.classNumber - b.classNumber)
 
@@ -25,44 +27,16 @@ const NewCourse = ({ inputs, title }) => {
     const button = document.getElementsByClassName("form-btn")
     button.disabled = "true"
     e.preventDefault();
-    
-    if(file) {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
-
-      try {
-        const uploadRes = await axios.post( "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
-        data, {
-        withCredentials: false
-      })
-      const {url} = uploadRes.data;
-      const {public_id} = uploadRes.data;
-        const newcourse = {
-          ...info, syllabusPicture: url, cloud_id: public_id
-        }
-  
-        await axios.post(postURLs("courses", "normal"), newcourse, {
-          withCredentials: false
-        });
-        navigate(-1)
-      } catch (err) {
-        console.log(err)
+    setLoading(true);
+    try {
+      const res = await createElementWithPicture(file, info, "course", postURLs("courses", "normal"));
+      if(res.data.status === 'success') {
+        navigate('/admin/courses');
       }
-    }
-    else {
-      try {
-        const newcourse = {
-          ...info,
-        }
-  
-        await axios.post(postURLs("courses", "normal"), newcourse, {
-          withCredentials: false
-        });
-        navigate(-1)
-      } catch (err) {
-        console.log(err)
-      }
+    } catch(err) {
+      console.log(err)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -130,6 +104,10 @@ const NewCourse = ({ inputs, title }) => {
 
             </form>
             <div className="submitButton">
+              {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                creating course...
+              </div>}
               <button onClick={handleClick} className="form-btn">Create Course</button>
             </div>
           </div>

@@ -1,11 +1,11 @@
 import React from 'react'
 import './viewClass.scss'
 import AdminNavbar from '../../components/navbar/AdminNavbar'
-import useFetch from '../../config/hooks/useFetch'
+import useFetch from '../../config/service/useFetch'
 import { useLocation } from 'react-router-dom'
 import Course from '../../components/course/Course'
 import StudentClass from '../../components/table/StudentClass'
-import { getClassDetails } from '../../source/endpoints/get'
+import { getClassDetails } from '../../config/endpoints/get'
 
 const ViewClass = () => {
 
@@ -19,11 +19,6 @@ const ViewClass = () => {
         <AdminNavbar />
         <div className="viewClassContainer">
                 <h2>{classData.name} Standard</h2>
-                {/* <div className="add-buttons">
-                    <button className='courseButton'>Add Course</button>
-                    <button className='studentButton'>Add Student</button>
-                    <button className='facultyButton'>Add Faculty</button>
-                </div> */}
 
                 <div className="top">
                 {

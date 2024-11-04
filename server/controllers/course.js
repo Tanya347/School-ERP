@@ -1,97 +1,83 @@
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
+import { catchAsync } from "../utils/catchAsync.js";
 
-export const createCourse = async (req, res, next) => {
-
-
+// Create a new course and add it to the class
+export const createCourse = catchAsync(async (req, res, next) => {
   const newCourse = new Course(req.body);
-  
-  try {
 
-    // add course to courses array in class
-    try{
-      await Class.updateOne(
-        {_id: newCourse.class},
-        {$addToSet: {subjects: newCourse._id}}
-      )
-    }
-    catch (err) {
-      next(err)
-    }
+  // Add course to the class's subjects array
+  await Class.updateOne(
+    { _id: newCourse.class },
+    { $addToSet: { subjects: newCourse._id } }
+  );
 
-    const savedCourse = await newCourse.save();
-    res.status(200).json(savedCourse);
-  } catch (err) {
-    next(err);
+  const savedCourse = await newCourse.save();
+  res.status(200).json({
+    status: 'success',
+    data: savedCourse,
+    message: "The course has been successfully created"
+  });
+});
+
+// Update a course
+export const updateCourse = catchAsync(async (req, res, next) => {
+  const course = await Course.findByIdAndUpdate(
+    req.params.id,
+    { $set: req.body },
+    { new: true }
+  );
+  res.status(200).json({
+    status: 'success',
+    data: course,
+    message: "The course has been successfully updated!"
+  });
+});
+
+// Delete a course and remove it from the class
+export const deleteCourse = catchAsync(async (req, res, next) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) {
+    return res.status(404).json({ message: "Course not found" });
   }
-};
 
-export const updateCourse = async (req, res, next) => {
-  try {
-    
-    const course = await Course.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body},
-      { new: true }
-    );
-    res.status(200).json(course);
-  } catch (err) {
-    next(err);
-  }
-};
+  // Remove course from the class's subjects array
+  await Class.findByIdAndUpdate(course.class, { $pull: { subjects: req.params.id } });
 
-export const deleteCourse = async (req, res, next) => {
+  await course.remove();
+  res.status(200).json({
+    status: 'success',
+    message: "The course has been deleted"
+  });
+});
+
+// Get a course with populated fields
+export const getCourse = catchAsync(async (req, res, next) => {
   const course = await Course.findById(req.params.id)
+    .populate('class', 'name')
+    .populate('teacher', 'teachername');
+  res.status(200).json({
+    status: 'success',
+    data: course
+  });
+});
 
-  if(!course) {
-    return res.status(404).json({message: "Course not found"})
-  }
+// Get a single course without populating fields
+export const getSingleCourse = catchAsync(async (req, res, next) => {
+  const course = await Course.findById(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    data: course
+  });
+});
 
-  try {
-    try {
-      await Class.findByIdAndUpdate(course.class, {$pull: {subjects: req.params.id}})
-    }
-    catch(err) {
-
-    }
-
-    await course.remove();
-    res.status(200).json("the Course has been deleted");
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getCourse = async (req, res, next) => {
-  try {
-    const course = await Course.findById(req.params.id)
-      .populate('class', 'name')
-      .populate('teacher', 'teachername');
-    
-      res.status(200).json(course)
-  } catch (err) {
-    next(err);
-  }
-};
-
-// this function fetches info without populate
-export const getSingleCourse = async (req, res, next) => {
-  try {
-    const course = await Course.findById(req.params.id);
-    res.status(200).json(course);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getCourses = async (req, res, next) => {
-  try {
-    const courses = await Course.find()
-      .populate('class', 'name')
-      .populate('teacher', 'teachername');
-
-    res.status(200).json(courses);
-  } catch (err) {
-    next(err)
-  }
-}
+// Get all courses with populated fields
+export const getCourses = catchAsync(async (req, res, next) => {
+  const courses = await Course.find()
+    .populate('class', 'name')
+    .populate('teacher', 'teachername');
+  res.status(200).json({
+    status: 'success',
+    data: courses
+  });
+});

@@ -1,14 +1,15 @@
 import express from "express";
 import {
-  registerAdmin,
-  loginAdmin,
+  deleteAdmin,
   updateAdmin,
 } from "../controllers/admin.js";
+import Admin from "../models/Admin.js";
+import {protect, isOwner, restrictTo} from "../controllers/auth.js"
 
 const router = express.Router();
 
-router.post("/registerAdmin", registerAdmin);
-router.post("/loginAdmin", loginAdmin);
-router.put("/:id", updateAdmin);
+
+router.put("/:id", protect(), isOwner(Admin), restrictTo("admin"), updateAdmin);
+router.delete("/", protect(), isOwner(Admin), restrictTo("admin"), deleteAdmin)
 
 export default router;

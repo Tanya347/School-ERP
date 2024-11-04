@@ -1,17 +1,15 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import useFetch from "../../config/hooks/useFetch";
-import axios from "axios"
-
+import useFetch from "../../config/service/useFetch";
 import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { getClasses, getSingleData } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
+import { getClasses, getSingleData } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { ClipLoader } from "react-spinners";
+import { editElementWithPicture } from "../../config/service/usePut";
 
 const EditUser = ({ title, type }) => {
 
@@ -21,7 +19,8 @@ const EditUser = ({ title, type }) => {
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
-
+  console.log(id)
+ 
   const { data } = useFetch(getSingleData(id, "single-student"))
   const classes = useFetch(getClasses).data
 
@@ -42,46 +41,17 @@ const EditUser = ({ title, type }) => {
   const handleClick = async (e) => {
     e.preventDefault();
     setSending(true)
-    if (file) {
-
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
-
-      try {
-        const uploadRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dnzkakna0/image/upload",
-          data, {
-          withCredentials: false
-        }
-        )
-        const { url } = uploadRes.data;
-        const { public_id } = uploadRes.data;
-        const newuser = {
-          ...info, profilePicture: url, cloud_id: public_id
-        }
-
-        axios.put(`http://localhost:5500/api/students/${id}`, newuser, {
-          withCredentials: false
-        })
-        navigate(-1)
-
-      } catch (error) {
-        console.log(error)
+    try {
+      const res = await editElementWithPicture(file, info, "student", putURLs("students", id));
+      if(res.data.status === 'success') {
+        navigate(`/admin/students/single/${id}`);
       }
-    } else {
-      try {
-        await axios.put(putURLs("students", id), info, { withCredentials: false })
-        navigate(-1)
-      }
-      catch (err) {
-        console.log(err)
-      }
+    } catch(err) {
+      console.error(err);
+    } finally {
+      setSending(false);
     }
   }
-
-  console.log(info)
-
 
   return (
     <div className="new">
@@ -97,7 +67,7 @@ const EditUser = ({ title, type }) => {
               src={
                 (file)
                   ? URL.createObjectURL(file)
-                  : (info.profilePicture) ? info.profilePicture : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  : (info?.profilePicture) ? info.profilePicture : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
               alt=""
             />
@@ -224,6 +194,10 @@ const EditUser = ({ title, type }) => {
             </form>
 
             <div className="submitButton">
+              {sending && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                updating student data...
+              </div>}
               <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit Student</button>
             </div>
           

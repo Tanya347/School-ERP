@@ -2,8 +2,8 @@ import React from 'react'
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import "./class.scss"
 import { Link } from 'react-router-dom';
-import useFetch from '../../config/hooks/useFetch';
-import { getClasses } from '../../source/endpoints/get';
+import useFetch from '../../config/service/useFetch';
+import { getClasses } from '../../config/endpoints/get';
 
 const Class = () => {
 

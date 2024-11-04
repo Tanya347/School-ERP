@@ -22,9 +22,11 @@ const EditEvent = ({ inputs, title }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setInfo(data);
-        setStart(data.startDate ? new Date(data.startDate) : null);
-        setEnd(data.endDate ? new Date(data.endDate) : null);
+        setInfo(data)
+        if(data.startDate)
+            setStart(new Date(data.startDate))
+        if(data.endDate)
+            setEnd(new Date(data.endDate))
     }, [data, data.startDate, data.endDate])
 
     const handleChange = (e) => {
@@ -90,14 +92,14 @@ const EditEvent = ({ inputs, title }) => {
                                 <label>
                                     <span style={{color: "green", fontWeight: "bold"}}>   Time : </span>{formatTime(start)}
                                     </label>
-                                    {/* {start && (
-                                        <DatePicker
-                                            selected={start}
-                                            onChange={(date) => setStart(date)}
-                                            placeholderText="Start Date"
-                                            showTimeSelect
-                                        />
-                                    )} */}
+                                <DatePicker
+                                    class="date-picker"
+                                    showTimeSelect
+                                    placeholderText="Start Date"
+                                    style={{ marginRight: "10px" }}
+                                    selected={start}
+                                    onChange={(start) => setStart(start)}
+                                />
                             </div>
 
                             <div className="formInput">
@@ -105,14 +107,14 @@ const EditEvent = ({ inputs, title }) => {
                                     <span style={{color: "green", fontWeight: "bold"}}>    Time : </span>{formatTime(end)}
                                 </label>
                                 
-                                {/* <DatePicker
+                                <DatePicker
                                     class="date-picker"
                                     showTimeSelect
                                     placeholderText="End Date"
                                     selected={end}
                                     onChange={(end) => setEnd(end)}
-                                /> */}
-                            </div> 
+                                />
+                            </div>
 
 
                             {inputs?.map((input) => (

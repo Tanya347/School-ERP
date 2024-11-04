@@ -10,16 +10,17 @@ import CustomToolbar from "../../components/utils/CustomToolbar"
 
 
 import axios from "axios"
-import { AuthContext } from "../../config/context/AuthContext"
-import useFetch from "../../config/hooks/useFetch"
-import { getAttendanceDates, getFacultyData, getLectureCount } from "../../source/endpoints/get"
+import { useAuth } from "../../config/context/AuthContext"
+import useFetch from "../../config/service/useFetch"
+import { getAttendanceDates, getFacultyData, getLectureCount } from "../../config/endpoints/get"
 import "./attendanceInfo.scss"
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from "../../components/navbar/Navbar"
 import AttendanceTable from "../../components/popUps/AttendanceTable";
-import { getClearClassURL } from "../../source/endpoints/delete";
+import { getClearClassURL } from "../../config/endpoints/delete";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const locales = {
     "en-US": require("date-fns/locale/en-US"),
@@ -33,7 +34,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const AttendanceInfo = () => {
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
   const [sclass, setSclass] = useState("");
   const [className, setClassName] = useState("");
   const [dates, setDates] = useState([]);
@@ -94,13 +95,17 @@ const AttendanceInfo = () => {
   const handleClear = async() => {
     // this deletes data from the database
     try {
-        await axios.delete(getClearClassURL(sclass), { withCredentials: false }
-        );
-  
+        const res = await axios.delete(getClearClassURL(sclass), { withCredentials: true });
+        if(res.data.status === 'success') {
+            toast.success("Attendance has been cleared!");
+        }
         // this filters the array by filtering out the deleted element based on the id
         setDates([]);
       } catch (err) {
-        console.log(err)
+        const errorMessage = err.response?.data?.message || "Failed to clear attendance. Please try again.";
+        toast.error(errorMessage);
+        console.error(err);
+        return err;
       }
   }
 

@@ -8,17 +8,18 @@ import {
   getStudentTasks,
   getFacultyTasks,
 } from "../controllers/tasks.js";
-import { verifyUser } from "../utils/verifyToken.js";
+import { protect } from "../controllers/auth.js";
+
 
 const router = express.Router();
 
-router.post("/", createTask);
-router.put("/:id", updateTask);
-router.delete("/:id", deleteTask);
-router.get("/:id", getTask);
-router.get("/single/:id", getSingleTask);
-router.get("/faculty/:id", getFacultyTasks);
-router.get("/student/:id", getStudentTasks);
+router.post("/", protect(), createTask);
+router.put("/:id", protect(), updateTask);
+router.delete("/:id", protect(), deleteTask);
+router.get("/:id", protect(), getTask);
+router.get("/single/:id", protect(), getSingleTask);
+router.get("/faculty/:id", protect(), getFacultyTasks);
+router.get("/student/:id", protect(), getStudentTasks);
 
 
 export default router;

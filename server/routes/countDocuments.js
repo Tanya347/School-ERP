@@ -22,12 +22,14 @@ async function getDocumentCount(model) {
       const teacherCount = await getDocumentCount(Faculty);
       const studentCount = await getDocumentCount(Student);
   
-      res.status(200).json(
-        {class: classCount,
+      res.status(200).json({
+        data: {
+          class: classCount,
         subject: subjectCount,
         teacher: teacherCount,
-        student: studentCount},
-      )
+        student: studentCount
+        }
+      })
     } catch (error) {
       console.error(error);
     }

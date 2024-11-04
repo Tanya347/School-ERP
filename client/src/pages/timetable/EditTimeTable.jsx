@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 
 const EditTimeTable = () => {

@@ -1,49 +1,33 @@
 import "./navbar.scss";
 
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-// import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import LogoutIcon from '@mui/icons-material/Logout';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 import { DarkModeContext } from "../../config/context/darkModeContext";
-import { AuthContext } from "../../config/context/AuthContext";
 
 import { useContext, useEffect, useState } from "react";
-import useFetch from "../../config/hooks/useFetch";
+import useFetch from "../../config/service/useFetch";
 import { Link, useNavigate } from "react-router-dom"
 
 import NavSidebar from "../sidebar/MainSidebar"
-import { getQueries } from "../../source/endpoints/get";
+import { getQueries } from "../../config/endpoints/get";
+import { useAuth } from "../../config/context/AuthContext";
 
 const Navbar = () => {
 
   const { Dispatch } = useContext(DarkModeContext);
-  const { user, dispatch } = useContext(AuthContext);
+  const { user, logout } = useAuth();
 
-  const queries = useFetch(getQueries).data
-  // const updates = useFetch(`/updates/student/${user.class}`).data
+  const queries = useFetch(getQueries).data;
 
 
-  let path
+  let path = user.role;
 
-  if(user.isFaculty) {
-    path = "faculty"
-  } else if(user.isStudent) {
-    path = "student"
-  }
-  
-  // use states for setting notifications, opening notification popup and opening side bar
-  // const [notifs, setNotifs] = useState([])
   const [messages, setMessages] = useState([])
-  // const [openNotif, setOpenNotif] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openMessages, setOpenMessages] = useState(false);
-
-  // // feeds all notifications into the notifs array whenever page rerenders or data changes
-  // useEffect(() => {
-  //   setNotifs(updates)
-  // }, [updates])
 
   // feeds all messages into the messages array whenever page rerenders or data changes  
   useEffect(() => {
@@ -56,12 +40,8 @@ const Navbar = () => {
   
   const handleClick = async (e) => {
     e.preventDefault();
-    dispatch({ type: "LOGOUT" });
+    await logout("Logged Out Successfully!");
   }
-  // toggles open and close of notifications pop up
-  // const handleNotif = () => {
-  //   setOpenNotif(!openNotif)
-  // }
 
   // toggles open and close of notifications pop up
   const handleMessages = () => {
@@ -76,7 +56,7 @@ const Navbar = () => {
       <div className="wrapper">
 
         {/* takes to main landing page and if it is darkmode changes the brand so it's visible*/}
-        <Link to={user.isFaculty? "/faculty" : "/student"}>
+        <Link to={`/${user.role}`}>
           {/* {darkMode ? <p className="brand"><img src={process.env.PUBLIC_URL + "/Assets/brand2.png"} height="60px" alt="" /></p> : <p className="brand"><img src={process.env.PUBLIC_URL + "/Assets/brand.png"} height="60px" alt="" /></p>} */}
           <div className="logo" style={{textDecoration: "none"}}>
             <img src="/Assets/logo.png" alt="" style={{height: "50px"}}/>
@@ -94,27 +74,8 @@ const Navbar = () => {
             />
           </div>
 
-          {/* Notifications */}
-          {/* {user.isStudent && <div className="item" id="notif">
-            <NotificationsNoneOutlinedIcon className="icon" onClick={handleNotif} />
-            <div className="counter">{notifs.length}</div> 
-          </div>} */}
-
-          {/* Notifs drop down will show when user clicks and useState gets set to true */}
-          {/* {openNotif && <ul id="notif-menu">
-            {notifs?.map((item) => (
-              <li>
-                <h3>{item.title}</h3>
-                <p>{item.desc.slice(0, 25)} ...</p>
-              </li>
-            ))}
-          </ul>} */}
-
-
-
-
           {/* Messages */}
-          {user.isFaculty && <div className="item" id="notif">
+          {user.role === 'faculty' && <div className="item" id="notif">
             <MailOutlineIcon className="icon" onClick={handleMessages} />
             <div className="counter">{messages.length}</div> {/* Shows number of notifications */}
           </div>}

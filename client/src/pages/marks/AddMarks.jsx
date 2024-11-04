@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./addMarks.scss"
 
-import { AuthContext } from '../../config/context/AuthContext'
-import useFetch from '../../config/hooks/useFetch'
-import { getFacultyData } from '../../source/endpoints/get'
+import { useAuth } from '../../config/context/AuthContext'
+import useFetch from '../../config/service/useFetch'
+import { getFacultyData } from '../../config/endpoints/get'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../components/navbar/Navbar'
 import axios from 'axios'
-import { addMarks } from '../../source/endpoints/put'
+import { addMarks } from '../../config/endpoints/put'
 
 
 const AddMarks = () => {
 
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
   const courses = useFetch(getFacultyData(user._id, "courses")).data
   const [course, setCourse ]= useState("");
   const [marksAdded, setMarksAdded] = useState(false);

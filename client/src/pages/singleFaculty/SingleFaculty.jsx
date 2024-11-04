@@ -6,8 +6,8 @@ import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Course from "../../components/course/Course";
 
-import useFetch from "../../config/hooks/useFetch";
-import { getSingleData } from "../../source/endpoints/get";
+import useFetch from "../../config/service/useFetch";
+import { getSingleData } from "../../config/endpoints/get";
 
 const Single = ({ type }) => {
   

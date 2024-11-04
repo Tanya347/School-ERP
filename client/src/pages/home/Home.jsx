@@ -48,19 +48,6 @@ const Home = ({ type }) => {
           )}
 
         </div>
-        
-
-        {/* <iframe src="https://drive.google.com/file/d/1O0i1yYkclXOuZ6xY_SAXjp5PsL0KFvJj/preview"
-          width="800"
-          height="400"
-        /> */}
-
-        {/* total revenue and charts */}
-        {/* <div className="charts">
-          <Featured />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
-        </div> */}
-
       </div>
     </div>
   );

@@ -1,16 +1,15 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import axios from "axios";
-import useFetch from "../../config/hooks/useFetch";
+import useFetch from "../../config/service/useFetch";
 
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Navbar from "../../components/navbar/Navbar";
-import { getClasses, getSingleData } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
+import { getClasses, getSingleData } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { editElement } from "../../config/service/usePut";
 
 const EditUpdate = ({ title, type }) => {
 
@@ -46,10 +45,11 @@ const EditUpdate = ({ title, type }) => {
       }
 
 
-      await axios.put(putURLs("updates", id), newupdate, {
-        withCredentials: false
-      })
-      navigate("/admin/updates")
+      const res = await editElement(newupdate, putURLs("updates", id), "update");
+
+      if(res.data.status === 'success') {
+        navigate("/admin/updates")
+      }
     } catch (err) {
       console.log(err)
     }

@@ -1,12 +1,11 @@
 import "./eventModal.css"
 
 import CancelIcon from '@mui/icons-material/Cancel';
-
 import { Link } from "react-router-dom"
-
 import axios from 'axios';
-import { formatDate, formatTime } from "../../source/endpoints/transform";
-
+import { formatDate, formatTime } from "../../config/endpoints/transform";
+import { getDeleteURL } from "../../config/endpoints/delete";
+import { toast } from "react-toastify"
 
 // setOpen prop, event is the event we need to display and isUser will only allow the user to delete/edit the event
 
@@ -19,10 +18,16 @@ const EventModal = ({ setOpen, event, type }) => {
     // deleting the event
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5500/api/events/${event._id}`, { withCredentials: false });
+            const res = await axios.delete(getDeleteURL("events", event._id), { withCredentials: true });
+            if(res.data.status === 'success') {
+                toast.success("Event deleted successfully!");
+            }
             window.location.reload();
         } catch (err) {
-            console.log(err)
+            const errorMessage = err.response?.data?.message || "Failed to create user. Please try again.";
+            toast.error(errorMessage);
+            console.error(err);
+            return err;
         }
     };
 

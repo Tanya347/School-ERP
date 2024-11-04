@@ -115,11 +115,20 @@
         }
 
         .submitButton {
+
+          .create-loader {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+          }
           
           width: 100%;
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
+          margin-top: 30px;
           
           .form-btn {
             width: 150px;

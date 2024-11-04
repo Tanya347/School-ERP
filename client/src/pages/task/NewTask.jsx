@@ -1,23 +1,22 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
-import { useContext, useState } from "react";
+import { createElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import axios from "axios";
 import DatePicker from "react-datepicker";
-
+import { ClipLoader } from "react-spinners";
 import Navbar from "../../components/navbar/Navbar";
-import { AuthContext } from "../../config/context/AuthContext";
-import useFetch from "../../config/hooks/useFetch";
-import { getFacultyData } from "../../source/endpoints/get";
-import { postURLs } from "../../source/endpoints/post";
+import { useAuth } from "../../config/context/AuthContext";
+import useFetch from "../../config/service/useFetch";
+import { getFacultyData } from "../../config/endpoints/get";
+import { postURLs } from "../../config/endpoints/post";
 
 const NewTask = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(new Date());
   const [sclass, setSclass] = useState("");
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const classes = useFetch(getFacultyData(user._id, "classes")).data
 
   const navigate = useNavigate();
@@ -29,17 +28,20 @@ const NewTask = ({ inputs, title }) => {
   const handleClick = async (e) => {
     const button = document.getElementsByClassName("form-btn")
     button.disabled = "true"
+    setLoading(true)
     e.preventDefault();
     try {
       const newtask = {
         ...info, deadline: deadline, author: user._id, sclass: sclass 
       }
-      await axios.post(postURLs("tasks", "normal"), newtask, {
-        withCredentials: false
-      });
-      navigate('/facTasks')
+      const res = await createElement(newtask, postURLs("tasks", "normal"), "Task");
+      if(res.data.status === 'success') {
+        navigate("/faculty/tasks")
+      }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -101,6 +103,10 @@ const NewTask = ({ inputs, title }) => {
 
             </form>
             <div className="submitButton">
+            {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing update...
+              </div>}
               <button onClick={handleClick} className="form-btn">Create Task</button>
             </div>
           </div>

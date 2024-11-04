@@ -1,5 +1,5 @@
 // src/routes/adminRoutes.js
-import React, { useContext } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Home from '../../pages/home/Home';
@@ -32,7 +32,7 @@ import { studentInputs } from "../formsource/studentInputs";
 import { facultyInputs } from "../formsource/facultyInputs";
 import { updateInputs } from "../formsource/updateInputs";
 import { courseInputs } from "../formsource/courseInputs";
-import { AuthContext } from '../../config/context/AuthContext';
+import { useAuth } from '../../config/context/AuthContext';
 import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
 import { eventInputs } from '../formsource/eventInputs';
@@ -43,10 +43,10 @@ import Timetable from '../../pages/timetable/Timetable';
 
 const AdminRoutes = () => {
 
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   
   const RequireAdmin = ({ children }) => {
-    return user && user.isAdmin ? children : <Navigate to="/" />;
+    return user && user.role === 'admin' ? children : <Navigate to="/" />;
 };
 
   return (

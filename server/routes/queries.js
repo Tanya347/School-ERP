@@ -6,13 +6,14 @@ import {
   getQuerys,
   updateQuery,
 } from "../controllers/queries.js";
+import { protect } from "../controllers/auth.js";
 
 const router = express.Router();
 
-router.post("/", createQuery);
-router.put("/:id", updateQuery);
-router.delete("/:id", deleteQuery);
-router.get("/:id", getQuery);
-router.get("/", getQuerys);
+router.post("/", protect(), createQuery);
+router.put("/:id", protect(), updateQuery);
+router.delete("/:id", protect(), deleteQuery);
+router.get("/:id", protect(), getQuery);
+router.get("/", protect(), getQuerys);
 
 export default router;

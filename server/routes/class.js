@@ -9,16 +9,17 @@ import {
   getClassStudents,
   getClassSubjects
 } from "../controllers/class.js";
+import { protect, restrictTo } from "../controllers/auth.js";
 
 const router = express.Router();
 
-router.post("/", createClass);
-router.put("/:id", updateClass);
-router.delete("/:id", deleteClass);
-router.get("/courses", getClassesWithSubjects)
-router.get("/course/:id", getClassSubjects)
-router.get("/details/:id", getClassDetails);
-router.get("/", getClasses);
-router.get("/students/:id", getClassStudents)
+router.post("/", protect(), restrictTo("admin"), createClass);
+router.put("/:id", protect(), restrictTo("admin"), updateClass);
+router.delete("/:id", protect(), restrictTo("admin"), deleteClass);
+router.get("/courses", protect(), restrictTo("admin"), getClassesWithSubjects)
+router.get("/course/:id", protect(), getClassSubjects)
+router.get("/details/:id", protect(), getClassDetails);
+router.get("/", protect(), restrictTo("admin"), getClasses);
+router.get("/students/:id", protect(), getClassStudents)
 
 export default router;

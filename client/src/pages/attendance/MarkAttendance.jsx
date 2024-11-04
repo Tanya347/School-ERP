@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./markAttendance.scss"
-import { AuthContext } from '../../config/context/AuthContext'
-import useFetch from '../../config/hooks/useFetch'
-import { getFacultyData } from '../../source/endpoints/get'
+import { useAuth } from '../../config/context/AuthContext'
+import useFetch from '../../config/service/useFetch'
+import { getFacultyData } from '../../config/endpoints/get'
 import axios from "axios";
 import DatePicker from 'react-datepicker'
 import Navbar from "../../components/navbar/Navbar";
-import { postURLs } from '../../source/endpoints/post'
+import { postURLs } from '../../config/endpoints/post'
 import { useNavigate } from 'react-router-dom'
-
+import { createElement } from '../../config/service/usePost'
 
 const MarkAttendance = () => {
 
-    const { user } = useContext(AuthContext)
+    const { user } = useAuth();
     const classes = useFetch(getFacultyData(user._id, "classes")).data
     const [sclass, setSclass] = useState("");
     const [className, setClassName] = useState("");
@@ -60,10 +60,7 @@ const MarkAttendance = () => {
                 classid: sclass,
                 author: user._id
             }
-
-            await axios.post(postURLs('attendances', "normal"), newAtt, {
-                withCredentials: false
-            })
+            await createElement(newAtt, postURLs('attendances', "normal"), "Attendance");
 
             navigate("/faculty/attendance")
         }
@@ -121,7 +118,7 @@ const MarkAttendance = () => {
                       ))}
                     </div>
         
-        
+                    
                     <div className="mark-attendance-button">
                         <button onClick={handleSubmit}>Mark Attendance</button>
                     </div>

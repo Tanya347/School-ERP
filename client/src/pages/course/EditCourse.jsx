@@ -1,22 +1,23 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import axios from "axios";
-import useFetch from "../../config/hooks/useFetch";
+import useFetch from "../../config/service/useFetch";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { getSingleData } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
+import { getSingleData } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { ClipLoader } from "react-spinners";
+import { editElementWithPicture } from "../../config/service/usePut";
 
 const EditCourse = ({ title }) => {
   
   // get location and extract id out of it
   const location = useLocation();
-  const id = location.pathname.split("/")[3];
+  const id = location.pathname.split("/")[4];
   const [info, setInfo] = useState({});
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
 
   // fetch data using id
@@ -36,45 +37,16 @@ const EditCourse = ({ title }) => {
   // update the data in the data base using put method
   const handleClick = async (e) => {
     e.preventDefault();
-
-    if(file) {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
-
-      try {
-        const uploadRes = await axios.post( process.env.REACT_APP_CLOUDINARY,
-        data, {
-        withCredentials: false
-      })
-      const {url} = uploadRes.data;
-      const {public_id} = uploadRes.data;
-      const newcourse = {
-        ...info, syllabusPicture: url, cloud_id: public_id
+    setLoading(true)
+    try {
+      const res = await editElementWithPicture(file, info, "course", putURLs("courses", id));
+      if(res.data.status === 'success') {
+        navigate('/admin/courses');
       }
-
-      await axios.put(putURLs("courses", id), newcourse, {
-          withCredentials: false
-        });
-      }
-      catch (err) {
-        console.log(err)
-      }
-    }
-    else {
-
-      try {
-  
-        await axios.put(putURLs("courses", id), info, {
-          withCredentials: false
-        });
-  
-        // go back to previous page
-        navigate(-1)
-      }
-    catch (err) {
-      console.log(err)
-    }
+    } catch(err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -142,6 +114,10 @@ const EditCourse = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submitButton">
+              {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing course...
+              </div>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Course</button>
             </div>
           </div>

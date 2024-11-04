@@ -7,14 +7,15 @@ import {
   getCourses,
   updateCourse,
 } from "../controllers/course.js";
+import { restrictTo, protect } from "../controllers/auth.js";
 
 const router = express.Router();
 
-router.post("/", createCourse);
-router.put("/:id", updateCourse);
-router.delete("/:id", deleteCourse);
-router.get("/:id", getCourse);
-router.get("/single/:id", getSingleCourse);
-router.get("/", getCourses);
+router.post("/", protect(), restrictTo("admin"), createCourse);
+router.put("/:id", protect(), restrictTo("admin"), updateCourse);
+router.delete("/:id", protect(), restrictTo("admin"), deleteCourse);
+router.get("/:id", protect(), getCourse);
+router.get("/single/:id", protect(), getSingleCourse);
+router.get("/", protect(), getCourses);
 
 export default router;

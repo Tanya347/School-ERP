@@ -3,15 +3,15 @@ import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "../../components/navbar/Navbar";
-import useFetch from '../../config/hooks/useFetch';
+import useFetch from '../../config/service/useFetch';
 import Modal from '../../components/popUps/Modal';
-import { AuthContext } from '../../config/context/AuthContext';
-import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../source/endpoints/get';
+import { useAuth } from '../../config/context/AuthContext';
+import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../config/endpoints/get';
 import EventModal from '../../components/popUps/EventModal';
 
 const locales = {
@@ -27,7 +27,7 @@ const localizer = dateFnsLocalizer({
 
 
 const Events = () => {
-    const { user } = useContext(AuthContext)
+    const { user } = useAuth();
     const tasks = useFetch(getTaskCalenderURL(user)).data
     const tests = useFetch(getTestCalenderURL(user)).data
     const eventsData = useFetch(getDatatableURL("events")).data

@@ -1,23 +1,21 @@
-import "../../style/form.scss";
-
-// choice for gender, year, department
+import "../../config/style/form.scss";
 
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
+import { createElementWithPicture } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-import axios from "axios"
-
+import { ClipLoader } from "react-spinners";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import useFetch from "../../config/hooks/useFetch";
-import { postURLs } from "../../source/endpoints/post";
-import { getClasses } from "../../source/endpoints/get";
+import useFetch from "../../config/service/useFetch";
+import { getClasses } from "../../config/endpoints/get";
+import { postURLs } from "../../config/endpoints/post";
 
 const NewUser = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const classes = useFetch(getClasses).data
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -27,48 +25,22 @@ const NewUser = ({ inputs, title }) => {
   
   const handleClick = async (e) => {
     e.preventDefault();
+    setLoading(true);
     
-    if (file) {
-
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
-      
-      try {
-        const uploadRes = await axios.post(
-          process.env.REACT_APP_CLOUDINARY,
-          data, {
-            withCredentials: false
-          }
-        )
-        const { url } = uploadRes.data;
-        const { public_id } = uploadRes.data;
-        const newuser = {
-          ...info, profilePicture: url, cloud_id: public_id
-        }
-        console.log(newuser)
-
-        axios.post(postURLs("students", "register"), newuser, {
-          withCredentials: false
-        })
-        navigate(-1)
-
-      } catch (error) {
-        console.log(error)
-      }
-    
-    } else {
-      try {
-        await axios.post(postURLs("students", "register"), info, {
-          withCredentials: false
-        })
-        navigate(-1)
-      }
-      catch (err) {
-        console.log(err)
+    try {
+      const res = await createElementWithPicture(file, info, "student", postURLs("student", "register"));
+      if(res.data.status === 'success') {
+        navigate(`/admin/students/single/${res.data.data.user._id}`);
       }
     }
+    catch(err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  console.log(info)
 
 
   return (
@@ -150,7 +122,11 @@ const NewUser = ({ inputs, title }) => {
 
             </form>
             <div className="submitButton">
-              <button onClick={handleClick} className="form-btn">Create Student</button>
+            { loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                creating student...
+              </div>}
+              <button onClick={handleClick} disabled={loading} className="form-btn">Create Student</button>
             </div>
           </div>
         </div>

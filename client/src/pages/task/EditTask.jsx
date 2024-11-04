@@ -1,19 +1,22 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import axios from "axios";
-import useFetch from "../../config/hooks/useFetch";
-import { AuthContext } from "../../config/context/AuthContext";
+import useFetch from "../../config/service/useFetch";
+import { useAuth } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
-import { getFacultyData, getSingleData } from "../../source/endpoints/get";
-import { putURLs } from "../../source/endpoints/put";
+import { getFacultyData, getSingleData } from "../../config/endpoints/get";
+import { putURLs } from "../../config/endpoints/put";
+import { ClipLoader } from "react-spinners";
+import { editElement } from "../../config/service/usePut";
+
 
 const EditTask = ({ title }) => {
   
   // get location and extract id out of it
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
 
   const location = useLocation();
   const id = location.pathname.split("/")[4];
@@ -24,6 +27,8 @@ const EditTask = ({ title }) => {
   const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(null);
   const [sclass, setSclass] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -41,20 +46,22 @@ const EditTask = ({ title }) => {
   // update the data in the data base using put method
   const handleClick = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if(deadline)
         info.deadline = deadline
       if(sclass)
         info.sclass = sclass
-      
-      await axios.put(putURLs("tasks", id), info, {
-        withCredentials: false
-      });
 
-      // go back to previous page
-      navigate(-1)
+      const res = await editElement(info, putURLs("tasks", id), "task");
+
+      if(res.data.status === 'success') {
+        navigate("/faculty/tasks")
+      }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
   } 
 
@@ -131,6 +138,10 @@ const EditTask = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submitButton">
+            {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing update...
+              </div>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Task</button>
             </div>
           </div>

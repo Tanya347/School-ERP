@@ -3,10 +3,10 @@ import "./single.scss";
 import { useLocation, useNavigate} from "react-router-dom";
 import Navbar from "../../components/navbar/Navbar";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import useFetch from "../../config/hooks/useFetch";
+import useFetch from "../../config/service/useFetch";
 import Course from "../../components/course/Course";
 import { CircularProgressbar } from "react-circular-progressbar";
-import { getSingleData } from "../../source/endpoints/get";
+import { getSingleData } from "../../config/endpoints/get";
 import { useEffect, useState} from "react";
 import 'react-circular-progressbar/dist/styles.css';
 import axios from "axios";
@@ -43,9 +43,7 @@ const Single = ({ type }) => {
 
     fetchAttendance();
   }, [data])
-  
-  console.log(attendance)
-  
+
   // used to navigate to a certain link
   const navigate = useNavigate();
 
@@ -114,7 +112,7 @@ const Single = ({ type }) => {
                   <span className="itemValue">{data?.dob}</span>
                 </div>
 
-                <button className="editButton" onClick={() => navigate(`/student/edit/${id}`)}>Edit Profile</button>
+                <button className="editButton" onClick={() => navigate(`${type === "Admin" ? "/admin" : ""}/student/edit/${id}`)}>Edit Profile</button>
             </div>
           </div>
           <div className="right">

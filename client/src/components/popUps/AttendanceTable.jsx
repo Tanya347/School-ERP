@@ -8,12 +8,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import CancelIcon from '@mui/icons-material/Cancel';
-import useFetch from "../../config/hooks/useFetch"
+import useFetch from "../../config/service/useFetch"
 import axios from "axios";
 import "./attendanceTable.scss"
-import { getAttendanceStatusByDate } from '../../source/endpoints/get';
-import { getClearDayAttendance } from '../../source/endpoints/delete';
-
+import { getAttendanceStatusByDate } from '../../config/endpoints/get';
+import { getClearDayAttendance } from '../../config/endpoints/delete';
+import { toast } from "react-toastify"
 
 
 const AttendanceTable = ({classid, date, setOpen, id}) => {
@@ -23,13 +23,16 @@ const AttendanceTable = ({classid, date, setOpen, id}) => {
     const handleClear = async() => {
         // this deletes data from the database
         try {
-            await axios.delete(getClearDayAttendance(id), { withCredentials: false }
-            );
-      
-            // this filters the array by filtering out the deleted element based on the id
+            const res = await axios.delete(getClearDayAttendance(id), { withCredentials: true });
+            if(res.data.status === 'success') {
+                toast.success("Attendance has been cleared!");
+            }
             setOpen(false)
           } catch (err) {
-            console.log(err)
+            const errorMessage = err.response?.data?.message || "Failed to clear attendance. Please try again.";
+            toast.error(errorMessage);
+            console.error(err);
+            return err;
           }
       }
 
@@ -70,11 +73,6 @@ const AttendanceTable = ({classid, date, setOpen, id}) => {
                         <TableCell className="tableCell">
                             <span className={`status ${row.status}`}>{row.status}</span>
                         </TableCell>
-
-                        
-                        {/* Can be used to show some kind of status */}
-                        
-
                         </TableRow>
                     ))}
                     </TableBody>

@@ -1,5 +1,5 @@
 // src/routes/facultyRoutes.js
-import React, { useContext } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { taskColumns } from '../datatablesource/taskColumns';
@@ -18,7 +18,7 @@ import EditTest from '../../pages/test/EditTest';
 import NewTest from '../../pages/test/NewTest';
 import Events from '../../pages/event/Events';
 import ViewStudents from '../../pages/viewStudents/ViewStudents';
-import { AuthContext } from '../../config/context/AuthContext';
+import { useAuth } from '../../config/context/AuthContext';
 import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 import AddMarks from '../../pages/marks/AddMarks';
@@ -31,11 +31,11 @@ import Navbar from '../../components/navbar/Navbar';
 
 const FacultyRoutes = () => {
 
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const RequireFaculty = ({ children }) => {
     if(user) {
-      return user.isFaculty ? children : <Navigate to="/" />;
+      return user.role === 'faculty' ? children : <Navigate to="/" />;
     }
     else
       return <Navigate to="/" />;

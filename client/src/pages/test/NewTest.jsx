@@ -1,16 +1,16 @@
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
-
 import DatePicker from "react-datepicker";
-
-import { AuthContext } from "../../config/context/AuthContext";
 import Navbar from "../../components/navbar/Navbar";
-import useFetch from "../../config/hooks/useFetch";
-import { getFacultyData } from "../../source/endpoints/get";
-import { postURLs } from "../../source/endpoints/post";
+import useFetch from "../../config/service/useFetch";
+import { getFacultyData } from "../../config/endpoints/get";
+import { postURLs } from "../../config/endpoints/post";
+import { useAuth } from "../../config/context/AuthContext";
+import { ClipLoader } from "react-spinners";
+import { createElement } from "../../config/service/usePost";
 
 
 const NewTest = ({ title }) => {
@@ -18,10 +18,12 @@ const NewTest = ({ title }) => {
   const [info, setInfo] = useState({});
   const [course, setCourse] = useState();
   const [sclass, setSclass] = useState();
+  const [loading, setLoading] = useState(false);
+
   // dates
   const [start, setStart] = useState("")
   
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
   const courses = useFetch(getFacultyData(user._id, "courses")).data
   const classes = useFetch(getFacultyData(user._id, "classes")).data
   const navigate = useNavigate();
@@ -32,17 +34,19 @@ const NewTest = ({ title }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-   
+    setLoading(true);
       try {
         const newtest = {
           ...info, date: start, author: user._id, subject: course, sclass: sclass
         }
-        console.log(newtest)
-        axios.post(postURLs("tests", "normals"), newtest, { withCredentials: false })
-        navigate("/facTests")
-
+        const res = createElement(newtest, postURLs("tests", "normals"), "Test");
+        if(res.data.status === 'success') {
+          navigate("/faculty/tests")
+        }
       } catch (error) {
         console.log(error)
+      } finally {
+        setLoading(false);
       }
     } 
 
@@ -135,6 +139,10 @@ const NewTest = ({ title }) => {
             
             </form>
             <div className="submitButton">
+            {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing update...
+              </div>}
               <button onClick={handleClick} className="form-btn">Create Test</button>
             </div>
           </div>

@@ -12,19 +12,21 @@ import {
   clearMarksOfTest,
   addEditMarks,
 } from "../controllers/test.js";
+import { protect } from "../controllers/auth.js";
+
 
 const router = express.Router();
 
-router.post("/", createTest);
-router.delete("/:id", deleteTest);
-router.get("/faculty/:id", getFacultyTests);
-router.get("/student/:id", getStudentTests);
-router.get("/:id", getTest);
-router.put("/:id", updateTest);
-router.get("/single/:id", getSingleTest);
-router.put("/addMarks/:testid", addEditMarks);
-router.get("/singlemarks/:testid/:studentid", getMarksOfOneStudent)
-router.get("/allmarks/:testid", getMarksOfAllStudents)
-router.delete('/marks/:testid', clearMarksOfTest)
+router.post("/", protect(), createTest);
+router.delete("/:id", protect(), deleteTest);
+router.get("/faculty/:id", protect(), getFacultyTests);
+router.get("/student/:id", protect(), getStudentTests);
+router.get("/:id", protect(), getTest);
+router.put("/:id", protect(), updateTest);
+router.get("/single/:id", protect(), getSingleTest);
+router.put("/addMarks/:testid", protect(), addEditMarks);
+router.get("/singlemarks/:testid/:studentid", protect(), getMarksOfOneStudent)
+router.get("/allmarks/:testid", protect(), getMarksOfAllStudents)
+router.delete('/marks/:testid', protect(), clearMarksOfTest)
 
 export default router;

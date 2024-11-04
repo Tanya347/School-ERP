@@ -1,53 +1,54 @@
 import Event from "../models/Event.js";
+import { catchAsync } from "../utils/catchAsync.js";
 
-export const createEvent = async (req, res, next) => {
+// Create a new event
+export const createEvent = catchAsync(async (req, res, next) => {
+  const newEvent = new Event(req.body);
+  const savedEvent = await newEvent.save();
+  res.status(200).json({
+    data: savedEvent,
+    status: 'success',
+    message: "The event has been successfully created!"
+  });
+});
 
-    const newEvent = new Event(req.body);
-    try {
-        const savedEvent = await newEvent.save();
-        res.status(200).json(savedEvent);
-    } catch (err) {
-        next(err);
-    }
-};
+// Update an existing event
+export const updateEvent = catchAsync(async (req, res, next) => {
+  const event = await Event.findByIdAndUpdate(
+    req.params.id,
+    { $set: req.body },
+    { new: true }
+  );
+  res.status(200).json({
+    data: event,
+    message: "The event has been successfully updated!",
+    status: 'success'
+  });
+});
 
-export const updateEvent = async (req, res, next) => {
-    try {
-        const event = await Event.findByIdAndUpdate(
-            req.params.id,
-            { $set: req.body },
-            { new: true }
-        );
-        res.status(200).json(event);
-    } catch (err) {
-        next(err);
-    }
-};
+// Delete an event
+export const deleteEvent = catchAsync(async (req, res, next) => {
+  await Event.findByIdAndDelete(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    message: "The event has been deleted"
+  });
+});
 
-export const deleteEvent = async (req, res, next) => {
-    try {
-        await Event.findByIdAndDelete(req.params.id);
-        res.status(200).json("the Event has been deleted");
-    } catch (err) {
-        next(err);
-    }
-};
+// Get a specific event by ID
+export const getEvent = catchAsync(async (req, res, next) => {
+  const event = await Event.findById(req.params.id);
+  res.status(200).json({
+    data: event,
+    status: 'success'
+  });
+});
 
-export const getEvent = async (req, res, next) => {
-    try {
-        const event = await Event.findById(req.params.id);
-        res.status(200).json(event);
-    } catch (err) {
-        next(err);
-    }
-};
-
-
-export const getEvents = async (req, res, next) => {
-    try {
-        const events = await Event.find();
-        res.status(200).json(events);
-    } catch (err) {
-        next(err)
-    }
-}
+// Get all events
+export const getEvents = catchAsync(async (req, res, next) => {
+  const events = await Event.find();
+  res.status(200).json({
+    data: events,
+    status: 'success'
+  });
+});

@@ -1,22 +1,20 @@
-import "../../style/form.scss";
-
+import "../../config/style/form.scss";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Navbar from "../../components/navbar/Navbar";
-
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../config/hooks/useFetch";
-import { getClasses } from "../../source/endpoints/get";
-import { postURLs } from "../../source/endpoints/post";
+import useFetch from "../../config/service/useFetch";
+import { getClasses } from "../../config/endpoints/get";
+import { postURLs } from "../../config/endpoints/post";
+import { createElement } from "../../config/service/usePost";
+import { ClipLoader } from "react-spinners";
 
 const NewUpdate = ({ inputs, type }) => {
   const [info, setInfo] = useState({});
   const [noticeType, setNoticeType] = useState("general");
-
-  const classes = useFetch(getClasses).data
-  
   const navigate = useNavigate();
+  const classes = useFetch(getClasses).data
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -25,17 +23,20 @@ const NewUpdate = ({ inputs, type }) => {
   const handleClick = async (e) => {
 
     e.preventDefault();
+    setLoading(true);
 
     try {
       const newupdate = {
         ...info, updateType: noticeType
       }
-      await axios.post(postURLs("updates", "normal"), newupdate, {
-        withCredentials: false
-      })
-      navigate(-1)
+      const res = await createElement(newupdate, postURLs("updates", "normal"), "Update");
+      if(res.data.status === 'success') {
+        navigate("/admin/updates")
+      }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -93,6 +94,10 @@ const NewUpdate = ({ inputs, type }) => {
 
             </form>
             <div className="submitButton">
+              {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing update...
+              </div>}
               <button onClick={handleClick} class="form-btn">Create Update</button>
             </div>
           </div>

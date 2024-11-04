@@ -10,17 +10,15 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 // to fetch data
-import useFetch from "../../config/hooks/useFetch.js"
-import { useContext } from "react";
-import { AuthContext } from "../../config/context/AuthContext.js";
-import { getTableURL } from "../../source/endpoints/get.js";
+import useFetch from "../../config/service/useFetch.js"
+import { useAuth } from "../../config/context/AuthContext.js";
+import { getTableURL } from "../../config/endpoints/get.js";
 
 const List = () => {
 
   // fetch latest/upcoming events
-  const {user} = useContext(AuthContext)
+  const {user} = useAuth();
   const { data } = useFetch(getTableURL(user));
-  // const newData= data.slice(0, 5);
 
   return (
     <TableContainer component={Paper} className="table" style={{overflowY: "scroll", height: "400px"}}>

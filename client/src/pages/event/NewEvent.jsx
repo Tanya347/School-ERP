@@ -1,24 +1,23 @@
 import "./newEvent.scss"
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 import { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
-
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import DatePicker from "react-datepicker";
-
-import axios from "axios"
-import useFetch from "../../config/hooks/useFetch";
-
+import useFetch from "../../config/service/useFetch";
 import EventModal from "../../components/popUps/EventModal";
-import { postURLs } from "../../source/endpoints/post";
+import { postURLs } from "../../config/endpoints/post";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
-import { getDatatableURL } from "../../source/endpoints/get";
+import { getDatatableURL } from "../../config/endpoints/get";
+import { ClipLoader } from "react-spinners";
+import { createElementWithPicture } from "../../config/service/usePost";
 
 const NewEvent = ({ inputs, title, type }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
+  const [loading, setLoading] = useState(false);
 
   // dates
   const [start, setStart] = useState("")
@@ -34,41 +33,25 @@ const NewEvent = ({ inputs, title, type }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    if (file) {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "upload");
+    setLoading(true);
 
-      try {
-        const uploadRes = await axios.post(
-          process.env.REACT_APP_CLOUDINARY,
-          data, {
-          withCredentials: false
-        }
-        )
-        const { url } = uploadRes.data;
-        const { public_id } = uploadRes.data;
-        const newevent = {
-          ...info, poster: url, cloud_id: public_id, startDate: start, endDate: end
-        }
-        axios.post(postURLs("events", "normal"), newevent, { withCredentials: false })
+    try {
+
+      const newInfo = {
+        ...info,
+        startDate: start,
+        endDate: end
+      }
+      const res = await createElementWithPicture(file, newInfo, "event", postURLs("events", "normal"));
+      if(res.data.status === 'success') {
         window.location.reload();
-
-      } catch (error) {
-        console.log(error)
       }
-    } else {
-      try {
-        const newevent = {
-          ...info, startDate: start, endDate: end
-        }
-        await axios.post(postURLs("events", "normal"), newevent, { withCredentials: false })
-        window.location.reload()
-      }
-      catch (err) {
-        console.log(err)
-      }
+    } catch(err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
     }
+
   }
 
 
@@ -157,6 +140,10 @@ const NewEvent = ({ inputs, title, type }) => {
 
                 </form>
                 <div className="submitButton">
+                { loading && <div className="create-loader">
+                    <ClipLoader color="black" size={30} />
+                    creating event...
+                  </div>}
                   <button onClick={handleClick} className="form-btn">Create Event</button>
                 </div>
               </div>

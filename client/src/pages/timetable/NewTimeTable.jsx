@@ -1,10 +1,10 @@
 import React from 'react'
-import "../../style/form.scss";
+import "../../config/style/form.scss";
 
 
 const NewTimeTable = () => {
   return (
-    <div className=''></div>
+    <div className=''>New time table</div>
   )
 }
 

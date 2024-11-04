@@ -47,12 +47,6 @@ const StudentClass = ({props}) => {
                     <TableCell className="tableCell">{row?.gender}</TableCell>
                     <TableCell className="tableCell">{row?.email}</TableCell>
                     <TableCell className="tableCell">{row?.studentPhone}</TableCell>
-
-
-                    
-                    {/* Can be used to show some kind of status */}
-                    
-
                     </TableRow>
                 ))}
                 </TableBody>

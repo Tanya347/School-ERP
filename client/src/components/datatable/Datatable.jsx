@@ -3,17 +3,18 @@ import "./datatable.scss";
 // datagrid from library
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../config/context/AuthContext.js";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../config/context/AuthContext.js";
 
 // useFetch and axios for fetching data
 import axios from "axios";
-import useFetch from "../../config/hooks/useFetch.js"
+import useFetch from "../../config/service/useFetch.js"
 
 // Modal for showing the details about tasks and updates
 import Modal from "../popUps/Modal.jsx";
-import { getDatatableURL } from "../../source/endpoints/get.js";
-import { getDeleteURL } from "../../source/endpoints/delete.js";
+import { getDatatableURL } from "../../config/endpoints/get.js";
+import { getDeleteURL } from "../../config/endpoints/delete.js";
+import { toast } from "react-toastify"
 
 
 
@@ -28,7 +29,7 @@ const Datatable = ({ column, name, type }) => {
 
 
   // fetching data using the path
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth();
   const { data } = useFetch(getDatatableURL(path, user))
 
 
@@ -55,13 +56,18 @@ const Datatable = ({ column, name, type }) => {
     
     // this deletes data from the database
     try {
-      await axios.delete(getDeleteURL(path, id), { withCredentials: false }
-      );
+      const res = await axios.delete(getDeleteURL(path, id), { withCredentials: true });
+      if(res.data.status === 'success') {
+        toast.success(`${name} deleted successfully!`);
+      }
 
       // this filters the array by filtering out the deleted element based on the id
       setList(list.filter((item) => item._id !== id));
     } catch (err) {
-      console.log(err)
+      const errorMessage = err.response?.data?.message || "Failed to perform deletion. Please try again.";
+      toast.error(errorMessage);
+      console.error(err);
+      return err;
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { taskColumns } from '../datatablesource/taskColumns';
@@ -9,16 +9,16 @@ import SingleStudent from '../../pages/singleStudent/SingleStudent';
 import Response from "../../pages/response/Response"
 import List from '../../pages/list/List';
 import Events from '../../pages/event/Events';
-import { AuthContext } from '../../config/context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import NewEvent from '../../pages/event/NewEvent';
 import StudentHome from '../../pages/home/StudentHome';
 
 const StudentRoutes = () => {
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
   
     const RequireStudent = ({ children }) => {
         if(user) {
-          return user.isStudent ? children : <Navigate to="/" />;
+          return user.role === 'student' ? children : <Navigate to="/" />;
         }
         else
           return <Navigate to="/" />;

@@ -12,7 +12,7 @@ import useFetch from "../../config/service/useFetch.js"
 import { getClassCourses, getTableWithoutActionURL } from "../../config/endpoints/get.js";
 
 // column, name and type are props input at the place datatable is used
-const TableWithoutAction = ({ column, name, NavbarComponent }) => {
+const TableWithoutAction = ({ column, name }) => {
 
   // we use location url to extract the path 
   const location = useLocation();
@@ -24,8 +24,6 @@ const TableWithoutAction = ({ column, name, NavbarComponent }) => {
   // fetching data using the path
   const { data } = useFetch(getTableWithoutActionURL(path, id))
   const courses = useFetch(getClassCourses(id)).data;
-
-  console.log(data)
 
   // array usestate that gets fed every time page loads
   const [list, setList] = useState([]);
@@ -42,7 +40,6 @@ const TableWithoutAction = ({ column, name, NavbarComponent }) => {
 
   return (
     <div className="table-without-action">
-      <NavbarComponent />
 
       <div className="table-without-action-container">
 

@@ -26,31 +26,13 @@ export const createElementWithPicture = async(file, info, element, url) => {
         }
     }
 
-    switch(element) {
-        case "course": {
-            newElement = {
-                ...info,
-                syllabusPicture: pictureUrl ?? null,
-                cloud_id: cloudId ?? null
-            }
-        }
-        break;
-        case "event": {
-            newElement = {
-                ...info,
-                poster: pictureUrl ?? null,
-                cloud_id: cloudId ?? null
-            }
-        }
-        break;
-        default: {
-            newElement = {
-                ...info,
-                profilePicture: pictureUrl ?? null,
-                cloud_id: cloudId ?? null
-            }
-        }
-    }
+    newElement = {
+        ...info,
+        ...(element === "course" && { syllabusPicture: pictureUrl ?? null }),
+        ...(element === "event" && { poster: pictureUrl ?? null }),
+        ...(element !== "course" && element !== "event" && { profilePicture: pictureUrl ?? null }),
+        cloud_id: cloudId ?? null,
+    };
 
     try {
         const res = await axios.post(url, newElement, {

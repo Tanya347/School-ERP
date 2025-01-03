@@ -16,5 +16,8 @@ router.post("/loginAdmin", login(Admin));
 router.post("/loginFaculty", login(Faculty));
 router.post("/loginStudent", login(Student));
 router.post("/logout", protect(), logout);
+router.post('/validate', protect(), (req, res) => {
+    res.status(200).json({ status: 'success', user: req.user });
+});
 
 export default router;

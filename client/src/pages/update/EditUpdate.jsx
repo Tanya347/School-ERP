@@ -4,12 +4,10 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
-
-import AdminNavbar from "../../components/navbar/AdminNavbar";
-import Navbar from "../../components/navbar/Navbar";
 import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
+import { updateInputs } from "../../config/formsource/updateInputs";
 
 const EditUpdate = ({ title, type }) => {
 
@@ -59,7 +57,6 @@ const EditUpdate = ({ title, type }) => {
   return (
     <div className="new">
       <div className="newContainer">
-      {type === "Admin" ? <AdminNavbar /> : <Navbar />}
 
         <div className="top">
           <h1>{title}</h1>
@@ -68,27 +65,18 @@ const EditUpdate = ({ title, type }) => {
           <div className="right">
             <form>
 
-              <div className="formInput">
-                <label>Title</label>
-                <input
-                  id="title"
-                  type="text"
-                  placeholder="Enter title"
-                  onChange={handleChange}
-                  value={info.title}
-                />
-              </div>
-
-              <div className="formInput">
-                <label>Description</label>
-                <input
-                  id="desc"
-                  type="text"
-                  placeholder="Enter description"
-                  onChange={handleChange}
-                  value={info.desc}
-                />
-              </div>
+              {updateInputs.map((field) => (
+                <div className="formInput" key={field.id}>
+                  <label>{field.label}</label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={handleChange}
+                    value={info[field.id] || ""}
+                  />
+                </div>
+              ))}
 
               <div className="formInput">
                   <label>Choose Notice Type</label>

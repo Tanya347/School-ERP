@@ -2,10 +2,10 @@ import "../../config/style/form.scss";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { createElementWithPicture } from "../../config/service/usePost";
 import { ClipLoader } from "react-spinners";
 import { postURLs } from "../../config/endpoints/post";
+import Dropdown from "../../components/dropdown/Dropdown";
 
 const NewFaculty = ({ inputs, title }) => {
   
@@ -37,7 +37,6 @@ const NewFaculty = ({ inputs, title }) => {
   return (
     <div className="new">
       <div className="newContainer">
-        <AdminNavbar />
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -71,17 +70,15 @@ const NewFaculty = ({ inputs, title }) => {
 
             <form>
 
-            <div className="formInput">
-                <label>Gender</label>
-                <select
-                  id="gender"
-                  onChange={handleChange}
-                >
-                  <option value={0}>-</option>
-                  <option value={"Female"}>Female</option>
-                  <option value={"Male"}>Male</option>
-                </select>
-              </div>
+            <Dropdown
+              id="gender"
+              title="Gender"
+              options={[
+                { value: 'Male', label: 'Male' },
+                { value: 'Female', label: 'Female' },
+              ]}
+              onChange={handleChange}
+            />
 
               {inputs.map((input) => (
                 <div className="formInput" key={input.id}>

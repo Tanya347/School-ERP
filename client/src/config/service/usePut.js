@@ -20,31 +20,13 @@ export const editElementWithPicture = async(file, info, element, url) => {
               pictureUrl = uploadRes.data.url;
               cloudId = uploadRes.data.public_id;
 
-              switch(element) {
-                case "course": {
-                    newElement = {
-                        ...info,
-                        syllabusPicture: pictureUrl,
-                        cloud_id: cloudId
-                    }
-                }
-                break;
-                case "event": {
-                    newElement = {
-                        ...info,
-                        poster: pictureUrl,
-                        cloud_id: cloudId
-                    }
-                }
-                break;
-                default: {
-                    newElement = {
-                        ...info,
-                        profilePicture: pictureUrl,
-                        cloud_id: cloudId
-                    }
-                }
-              }
+              newElement = {
+                ...info,
+                ...(element === "course" && { syllabusPicture: pictureUrl }),
+                ...(element === "event" && { poster: pictureUrl }),
+                ...(element !== "course" && element !== "event" && { profilePicture: pictureUrl }),
+                cloud_id: cloudId,
+            };
         } catch (err) {
             toast.error("Failed to upload the image. Please try again.");
             console.error(err);

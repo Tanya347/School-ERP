@@ -16,7 +16,6 @@ import { getAttendanceDates, getFacultyData, getLectureCount } from "../../confi
 import "./attendanceInfo.scss"
 
 import React, { useEffect, useState } from 'react'
-import Navbar from "../../components/navbar/Navbar"
 import AttendanceTable from "../../components/popUps/AttendanceTable";
 import { getClearClassURL } from "../../config/endpoints/delete";
 import { Link } from "react-router-dom";
@@ -51,7 +50,7 @@ const AttendanceInfo = () => {
         if(sclass) {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}${getLectureCount}/${sclass}`)
-                setLectures(response.data);
+                setLectures(response.data.data);
             } catch(error) {
                 console.log("Error fetching no. of lectures", error);
             }
@@ -66,7 +65,7 @@ const AttendanceInfo = () => {
         if(sclass) {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}${getAttendanceDates}/${sclass}`)
-                const event = response?.data?.map((a) => {
+                const event = response?.data.data?.map((a) => {
                     const d = new Date(a.date)
                     return {id: a.id, title: `${a.presentCount} Pres. ${a.absentCount} Abs.`, start: d}
                 })
@@ -112,7 +111,6 @@ const AttendanceInfo = () => {
 
   return (
     <div className="attendance-info">
-        <Navbar />
         <div className="attendance-info-container">
             <div className="classes-button">
                 {
@@ -124,7 +122,7 @@ const AttendanceInfo = () => {
             {sclass ? (
                 <>
                     <h1>Class: {className}</h1>
-                    <h1>Total No. of Lectures: {lectures.lectureCount}</h1>
+                    <h1>Total No. of Lectures: {lectures}</h1>
 
                     <div className="attendance-dates-calender">
                         <Calendar

@@ -1,7 +1,4 @@
 import "./list.scss"
-
-import AdminNavbar from "../../components/navbar/AdminNavbar"
-import Navbar from "../../components/navbar/Navbar"
 import Datatable from "../../components/datatable/Datatable"
 
 // column is specifications of the columns in the datatable that needs to be displayed, they are specified in source
@@ -12,7 +9,6 @@ const List = ({ column, name, type }) => {
   return (
     <div className="list">
       <div className="AdminListContainer">
-        {(type === "Admin") ? (<AdminNavbar />) : (<Navbar />)}
 
         {/* Call datatable by passing the required props */}
         <Datatable column={column} name={name} type={type} />

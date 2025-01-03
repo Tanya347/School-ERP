@@ -1,6 +1,5 @@
 import React from 'react'
 import "./studentHome.scss"
-import Navbar from '../../components/navbar/Navbar'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
@@ -34,7 +33,6 @@ const StudentHome = () => {
  
   return (
     <div className='student-home'>
-        <Navbar />
         <div className="student-home-container">
             <div className="welcome">
                 <img src="/Assets/brand.png" alt="" />

@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../../components/navbar/Navbar";
 import useFetch from '../../config/service/useFetch';
 import Modal from '../../components/popUps/Modal';
 import { useAuth } from '../../config/context/AuthContext';
@@ -86,7 +85,6 @@ const Events = () => {
 
     return (
         <div className='events'>
-            <Navbar />
             <div>
                 <Calendar 
                     localizer={localizer} 

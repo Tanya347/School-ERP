@@ -1,8 +1,6 @@
 import "./single.scss";
 
 import { useLocation, useNavigate} from "react-router-dom";
-import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import useFetch from "../../config/service/useFetch";
 import Course from "../../components/course/Course";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -49,8 +47,6 @@ const Single = ({ type }) => {
 
   return (
     <div className="studentProfile">
-
-        {(type === "Admin") ? (<AdminNavbar />) : (<Navbar />)}
       
         <div className="top">
           <div className="left">

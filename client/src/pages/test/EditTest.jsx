@@ -3,14 +3,14 @@ import "../../config/style/form.scss";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import axios from "axios";
 import useFetch from "../../config/service/useFetch";
-import Navbar from "../../components/navbar/Navbar";
 import { getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { useAuth } from "../../config/context/AuthContext";
 import { ClipLoader } from "react-spinners";
 import { editElement } from "../../config/service/usePut";
+import { testInputs } from "../../config/formsource/testInputs";
+
 
 const EditTest = ({ title }) => {
   
@@ -50,6 +50,7 @@ const EditTest = ({ title }) => {
   // update the data in the data base using put method
   const handleClick = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if(date)
         info.date = date
@@ -64,6 +65,8 @@ const EditTest = ({ title }) => {
       }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
   } 
 
@@ -72,7 +75,6 @@ const EditTest = ({ title }) => {
     <div className="new">
 
       <div className="newContainer">
-        <Navbar />
 
         {/* Title of form */}
         <div className="top">
@@ -84,49 +86,19 @@ const EditTest = ({ title }) => {
           <div className="right">
             
             <form>
-              <div className="formInput" >
-                <label>Test Name</label>
-                <input
-                  id="name"
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Add name of task"
-                  value={info.name}
-                />
-              </div>
-
-              <div className="formInput" >
-                <label>Syllabus</label>
-                <input
-                  id="syllabus"
-                  onChange={handleChange}
-                  type="text"
-                  value={info.syllabus}
-                  placeholder="Add test syllabus"
-                />
-              </div>
-
-              <div className="formInput" >
-                <label>Total Marks</label>
-                <input
-                  id="totalMarks"
-                  onChange={handleChange}
-                  type="number"
-                  value={info.totalMarks}
-                  placeholder="Add total marks of the test"
-                />
-              </div>
-
-              <div className="formInput" >
-                <label>Duration</label>
-                <input
-                  id="duration"
-                  onChange={handleChange}
-                  type="number"
-                  value={info.duration}
-                  placeholder="Add duration of the test"
-                />
-              </div>
+            
+            {testInputs.map((field) => (
+                <div className="formInput" key={field.id}>
+                  <label>{field.label}</label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={handleChange}
+                    value={info[field.id] || ""}
+                  />
+                </div>
+            ))}
 
             <div className="formInput">
                 <label>Choose a Class</label>

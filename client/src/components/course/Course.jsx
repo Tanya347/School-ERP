@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
-import ImageModal from '../popUps/ImageModal'
 import './course.scss'
+import Popup from '../popUps/Popup'
 
 const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
   const colors = ['var(--light-blue)', 'var(--light-pink)', 'var(--light-yellow)', 'var(--light-purple)', 'var(--light-red)']
@@ -23,7 +23,15 @@ const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
             <button onClick={() => openModal(syllabusPicture)}>View Syllabus</button>
         </div>
 
-        {modalOpen && <ImageModal imageUrl={selectedImage} setModalOpen={setModalOpen} />}
+        {modalOpen && 
+          <Popup
+            title="View Syllabus"
+            content={
+              selectedImage ? <img className='syll' src={selectedImage} alt="Preview" /> : <p>Syllabus currently doesn't exist</p>
+            }
+            onClose={() => setModalOpen(false)}
+          />
+        }
     </div>
   )
 }

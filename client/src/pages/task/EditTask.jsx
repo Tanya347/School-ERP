@@ -3,14 +3,13 @@ import "../../config/style/form.scss";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import axios from "axios";
 import useFetch from "../../config/service/useFetch";
 import { useAuth } from "../../config/context/AuthContext";
-import Navbar from "../../components/navbar/Navbar";
 import { getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { ClipLoader } from "react-spinners";
 import { editElement } from "../../config/service/usePut";
+import { taskInputs } from "../../config/formsource/taskInputs";
 
 
 const EditTask = ({ title }) => {
@@ -70,7 +69,6 @@ const EditTask = ({ title }) => {
     <div className="new">
 
       <div className="newContainer">
-        <Navbar />
 
         {/* Title of form */}
         <div className="top">
@@ -82,28 +80,19 @@ const EditTask = ({ title }) => {
           <div className="right">
             
             <form>
-              <div className="formInput" >
-                <label>Task Name</label>
-                <input
-                  id="title"
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Add title of task"
-                  value={info.title}
-                />
-              </div>
-
-              <div className="formInput" >
-                <label>Description</label>
-                <input
-                  id="desc"
-                  onChange={handleChange}
-                  type="text"
-                  value={info.desc}
-                  placeholder="Add task desciption"
-                />
-              </div>
-
+              {taskInputs.map((field) => (
+                <div className="formInput" key={field.id}>
+                  <label>{field.label}</label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={handleChange}
+                    value={info[field.id] || ""}
+                  />
+                </div>
+              ))}
+              
             <div className="formInput">
                 <label>Choose a Class</label>
                 <select

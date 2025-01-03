@@ -2,16 +2,14 @@ import "./newEvent.scss"
 import "../../config/style/form.scss";
 
 import { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import DatePicker from "react-datepicker";
 import useFetch from "../../config/service/useFetch";
 import EventModal from "../../components/popUps/EventModal";
 import { postURLs } from "../../config/endpoints/post";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getDatatableURL } from "../../config/endpoints/get";
 import { ClipLoader } from "react-spinners";
 import { createElementWithPicture } from "../../config/service/usePost";
+import DatePickerComponent from "../../components/datepicker/Datepicker";
 
 const NewEvent = ({ inputs, title, type }) => {
   
@@ -76,7 +74,6 @@ const NewEvent = ({ inputs, title, type }) => {
     <div className="event-container">
       {/* <Sidebar /> */}
       <div className="newEventContainer">
-       {type === "Admin" ? <AdminNavbar /> : <Navbar />}
         {type === "Admin" && <div className="eventsButton">
           <button onClick={() => setOpenForm(false)} >View Events</button>
           <button onClick={() => setOpenForm(true)} >Create Events</button>
@@ -114,22 +111,19 @@ const NewEvent = ({ inputs, title, type }) => {
               </div>
                 <form>
 
-                  <DatePicker
-                    class="date-picker"
-                    showTimeSelect
-                    placeholderText="Start Date"
-                    style={{ marginRight: "10px" }}
-                    selected={start}
+                  <DatePickerComponent 
+                    placeholder="Start Date"
+                    selectedDate={start}
                     onChange={(start) => setStart(start)}
-                    />
+                    label="Select Start Date and Time"
+                  />
                   
-                  <DatePicker
-                    class="date-picker"
-                    showTimeSelect
-                    placeholderText="End Date"
-                    selected={end}
+                  <DatePickerComponent 
+                    placeholder="End Date"
+                    selectedDate={end}
                     onChange={(end) => setEnd(end)}
-                    />
+                    label="Select End Date and Time"
+                  />
 
                   {inputs?.map((input) => (
                     <div className="formInput" key={input.id}>

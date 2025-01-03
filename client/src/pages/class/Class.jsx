@@ -1,5 +1,4 @@
 import React from 'react'
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import "./class.scss"
 import { Link } from 'react-router-dom';
 import useFetch from '../../config/service/useFetch';
@@ -13,7 +12,6 @@ const Class = () => {
 
   return (
     <div className='classes'>
-            <AdminNavbar />
         <div className="wholeContainer">
             <h1>Classes</h1>
             <div className="classesContainer">

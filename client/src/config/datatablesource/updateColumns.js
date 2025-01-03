@@ -1,5 +1,3 @@
-import { width } from "@mui/system";
-
 export const updateColumns = [
     { field: "_id", headerName: "ID", width: 100 },
     {

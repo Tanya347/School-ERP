@@ -19,7 +19,6 @@ import SingleStudent from '../../pages/singleStudent/SingleStudent';
 import Class from "../../pages/class/Class";
 import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
-import AdminNavbar from '../../components/navbar/AdminNavbar';
 
 // Datatable Columns
 import { studentColumns } from "../datatablesource/studentColumns";
@@ -40,22 +39,29 @@ import TableWithoutAction from '../../pages/table/TableWithoutAction';
 import NewTimeTable from '../../pages/timetable/NewTimeTable';
 import EditTimeTable from '../../pages/timetable/EditTimeTable';
 import Timetable from '../../pages/timetable/Timetable';
+import Layout from '../../components/sidebar/Layout';
 
 const AdminRoutes = () => {
 
   const { user } = useAuth();
   
   const RequireAdmin = ({ children }) => {
-    return user && user.role === 'admin' ? children : <Navigate to="/" />;
+    if (user && user.role === "admin") {
+      return children;
+    } else {
+      return <Navigate to="/" />;
+    }
 };
 
   return (
       <RequireAdmin>
+        <Layout>
+
         <Routes>
           <Route 
             index
             element={<RequireAdmin><Home type="Admin" /></RequireAdmin>} 
-          />
+            />
           
         {/* ROUTES FOR STUDENTS */}
           
@@ -63,7 +69,7 @@ const AdminRoutes = () => {
           <Route 
             path="students" 
             element={<List column={studentColumns} name="Student" type="Admin" />} 
-          />
+            />
           
           {/* single page for student */}
           <Route 
@@ -75,13 +81,13 @@ const AdminRoutes = () => {
           <Route 
             path="students/edit/:studentId" 
             element={<EditStudent title="Update Student" type="Admin" />} 
-          />
+            />
 
           {/* create user student */ }
           <Route 
             path="students/new" 
             element={<NewStudent inputs={studentInputs} title="Add New Student" />} 
-          />
+            />
 
 
         {/* ROUTES FOR FACULTIES */}
@@ -90,25 +96,25 @@ const AdminRoutes = () => {
           <Route 
             path="faculties" 
             element={<List column={facultyColumns} name="Faculty" type="Admin" />}
-          />
+            />
 
           {/* single page for faculty */}
           <Route 
             path="faculties/single/:facultyId" 
             element={<SingleFaculty type="Admin" />} 
-          />
+            />
 
           {/* edit page for faculty */}
           <Route 
             path="faculties/edit/:facultyId/" 
             element={<EditFaculty title="Update Faculty" type="Admin" /> }
-          />
+            />
 
           {/* create faculty */}
           <Route 
             path="faculties/new" 
             element={<NewFaculty inputs={facultyInputs} title="Add New Faculty" />} 
-          />
+            />
 
 
         {/* ROUTES FOR UPDATES */}
@@ -117,19 +123,19 @@ const AdminRoutes = () => {
           <Route 
             path="updates" 
             element={<List column={updateColumns} name="Update" type="Admin" />} 
-          />
+            />
 
           {/* edit update */}
           <Route 
             path="updates/edit/:updateId" 
             element={ <EditUpdate title="Edit Updates" type="Admin" />} 
-          />
+            />
 
           {/* create update page */}
           <Route 
             path="updates/new" 
             element={<NewUpdate inputs={updateInputs} title="Add New Update" type="Admin" /> }
-          />
+            />
         
         {/* ROUTES FOR COURSES */}
 
@@ -138,7 +144,7 @@ const AdminRoutes = () => {
           <Route
             path="courses"
             element={ <List column={courseColumns} name="Course" type="Admin" />}
-          />
+            />
 
           {/*  create new courses */}
 
@@ -152,7 +158,7 @@ const AdminRoutes = () => {
           <Route
             path="courses/edit/:courseId/"
             element={ <EditCourse title="Edit Courses" type="Admin" />}
-          />
+            />
 
         {/* ROUTES FOR CLASSES */}
 
@@ -161,21 +167,21 @@ const AdminRoutes = () => {
           <Route
             path="classes"
             element={ <Class />}
-          />
+            />
 
           {/* attendance of classes */}
 
           <Route
             path="classes/attendance/:classId"
-            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" NavbarComponent={AdminNavbar} />}
-          />
+            element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
+            />
 
           {/* marks of classes */}
 
           <Route
             path="classes/marks/:classId"
-            element={ <TableWithoutAction column={marksColumns} name="Marks" NavbarComponent={AdminNavbar}/>}
-          />
+            element={ <TableWithoutAction column={marksColumns} name="Marks" />}
+            />
 
           {/* edit classes */}
 
@@ -188,7 +194,7 @@ const AdminRoutes = () => {
           <Route
             path="classes/:classId"
             element={ <ViewClass />}
-          />
+            />
 
         {/* ROUTES FOR EVENTS */}
 
@@ -196,13 +202,13 @@ const AdminRoutes = () => {
           <Route
             path="events/edit/:eventId"
             element={ <EditEvent inputs={eventInputs} title="Edit Event" />}
-          />
+            />
 
           {/* create events */}
           <Route
-            path="events/new"
+            path="events"
             element={ <NewEvent inputs={eventInputs}  title="Add New Event" type="Admin" />}
-          />
+            />
 
         {/* ROUTES FOR TIMETABLES */}
 
@@ -210,20 +216,21 @@ const AdminRoutes = () => {
           <Route
             path="timetables/new"
             element={ <NewTimeTable />}
-          />
+            />
 
           {/* edit timetables */}
           <Route
             path='timetables/edit/:id'
             element={ <EditTimeTable />}
-          />
+            />
 
           {/* view timetables */}
           <Route
             path='timetables'
             element={<Timetable />}
-          />
+            />
         </Routes>
+        </Layout>
       </RequireAdmin>
   );
 };

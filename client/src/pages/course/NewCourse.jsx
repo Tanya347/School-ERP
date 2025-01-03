@@ -2,20 +2,17 @@ import "../../config/style/form.scss";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../config/service/useFetch";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElementWithPicture } from "../../config/service/usePost";
 import { ClipLoader } from "react-spinners";
+import Dropdown from "../../components/dropdown/Dropdown";
 
 const NewCourse = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
-  const classes = useFetch(getClasses).data
-  classes.sort((a, b) => a.classNumber - b.classNumber)
 
   const navigate = useNavigate();
   
@@ -44,7 +41,6 @@ const NewCourse = ({ inputs, title }) => {
     <div className="new">
 
       <div className="newContainer">
-        <AdminNavbar />
         
         <div className="top">
           <h1>{title}</h1>
@@ -88,19 +84,12 @@ const NewCourse = ({ inputs, title }) => {
                 </div>
               ))}
 
-            <div className="formInput">
-                <label>Choose Class</label>
-                <select id="class" onChange={handleChange}>
-                    <option value={"-"}> </option>
-                    {
-                        classes?.map((c, index) => (
-                        <option value={c._id} key={index}>
-                          {c.name}
-                        </option>
-                        ))
-                    }
-                </select>
-            </div>  
+              <Dropdown
+                id="class"
+                title="Choose Class"
+                url={getClasses}
+                onChange={handleChange}
+              />
 
             </form>
             <div className="submitButton">

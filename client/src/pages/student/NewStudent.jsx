@@ -5,23 +5,20 @@ import { createElementWithPicture } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ClipLoader } from "react-spinners";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
-import useFetch from "../../config/service/useFetch";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
+import Dropdown from "../../components/dropdown/Dropdown";
 
 const NewUser = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const classes = useFetch(getClasses).data
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
-
   
   const handleClick = async (e) => {
     e.preventDefault();
@@ -39,14 +36,10 @@ const NewUser = ({ inputs, title }) => {
       setLoading(false);
     }
   }
-
-  console.log(info)
-
-
+  
   return (
     <div className="new">
       <div className="newContainer">
-        <AdminNavbar />
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -80,17 +73,15 @@ const NewUser = ({ inputs, title }) => {
 
             <form>
 
-              <div className="formInput">
-                <label>Gender</label>
-                <select
-                  id="gender"
-                  onChange={handleChange}
-                >
-                  <option value={0}>-</option>
-                  <option value={"Female"}>Female</option>
-                  <option value={"Male"}>Male</option>
-                </select>
-              </div>
+            <Dropdown
+              id="gender"
+              title="Gender"
+              options={[
+                { value: 'Male', label: 'Male' },
+                { value: 'Female', label: 'Female' },
+              ]}
+              onChange={handleChange}
+            />
 
               {inputs?.map((input) => (
                 <div className="formInput" key={input.id}>
@@ -104,21 +95,12 @@ const NewUser = ({ inputs, title }) => {
                 </div>
               ))}
 
-
-              <div className="formInput">
-                <label>Choose a Class</label>
-                <select
-                  id="class"
-                  onChange={handleChange}
-                >
-                  <option value={"-"}> </option>
-                  {
-                    classes&& classes.map((c, index) => (
-                      <option value={c._id} key={index}>{c.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
+              <Dropdown
+                id="class"
+                title="Choose Class"
+                url={getClasses}
+                onChange={handleChange}
+              />
 
             </form>
             <div className="submitButton">

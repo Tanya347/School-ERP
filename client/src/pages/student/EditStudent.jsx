@@ -4,12 +4,12 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
-import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
+import { studentInputs } from "../../config/formsource/studentInputs";
+import { useAuth } from "../../config/context/AuthContext";
 
 const EditUser = ({ title, type }) => {
 
@@ -19,11 +19,10 @@ const EditUser = ({ title, type }) => {
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
-  console.log(id)
  
   const { data } = useFetch(getSingleData(id, "single-student"))
   const classes = useFetch(getClasses).data
-
+  const {user} = useAuth();
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false)
@@ -56,7 +55,6 @@ const EditUser = ({ title, type }) => {
   return (
     <div className="new">
       <div className="newContainer">
-        {(type === "Admin") ? (<AdminNavbar />) : (<Navbar />)}
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -87,27 +85,18 @@ const EditUser = ({ title, type }) => {
 
             <form>
 
-              {type === "Admin" && <div className="formInput">
-                <label>Username</label>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter username"
-                  id="username"
-                  value={info.username}
-                />
-              </div>}
-
-              {type === "Admin" && <div className="formInput">
-                <label>Enrollment Number</label>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter enrollment number"
-                  id="enroll"
-                  value={info.enroll}
-                />
-              </div>}
+              {studentInputs.map((field) => (
+                (field.editAccess === user.role || field.editAccess === "both") && <div className="formInput" key={field.id}>
+                  <label>{field.label}</label>
+                    <input 
+                      id={field.id}
+                      type={field.type}
+                      value={info[field.id] || ''}
+                      onChange={handleChange}
+                      placeholder={field.placeholder}
+                    />
+                  </div>
+              ))}
 
               <div className="formInput">
                 <label>Gender</label>
@@ -116,64 +105,10 @@ const EditUser = ({ title, type }) => {
                   onChange={handleChange}
                   value={info.gender}
                 >
+                  <option value={0}>-</option>
                   <option value={"Female"}>Female</option>
                   <option value={"Male"}>Male</option>
                 </select>
-              </div>
-
-              <div className="formInput">
-                <label>Name</label>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter name"
-                  id="name"
-                  value={info.name}
-                />
-              </div>
-
-              <div className="formInput">
-                <label>Email</label>
-                <input
-                  onChange={handleChange}
-                  type="email"
-                  placeholder="Enter email"
-                  id="email"
-                  value={info.email}
-                />
-              </div>
-
-              <div className="formInput">
-                <label>Phone Number</label>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter student's phone number"
-                  id="studentPhone"
-                  value={info.studentPhone}
-                />
-              </div>
-
-              <div className="formInput">
-                <label>Address</label>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter student's address"
-                  id="studentAddress"
-                  value={info.studentAddress}
-                />
-              </div>
-
-              <div className="formInput">
-                <label>Date of Birth</label>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter student's date of birth"
-                  id="dob"
-                  value={info.dob}
-                />
               </div>
 
               {type==="Admin" && <div className="formInput">

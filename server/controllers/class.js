@@ -55,7 +55,7 @@ export const getClassDetails = catchAsync(async (req, res, next) => {
     .populate({
       path: 'subjects',
       model: 'Course',
-      select: 'name subjectCode teacher',
+      select: 'name subjectCode teacher syllabusPicture',
       populate: {
         path: 'teacher',
         model: 'Faculty',

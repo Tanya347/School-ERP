@@ -5,11 +5,11 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
+import { courseInputs } from "../../config/formsource/courseInputs"
 
 const EditCourse = ({ title }) => {
   
@@ -55,7 +55,6 @@ const EditCourse = ({ title }) => {
     <div className="new">
 
       <div className="newContainer">
-        <AdminNavbar />
 
         {/* Title of form */}
         <div className="top">
@@ -88,27 +87,19 @@ const EditCourse = ({ title }) => {
               </div>
           </div>
             <form>
-              <div className="formInput" >
-                <label>Course Name</label>
-                <input
-                  id="name"
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Add name of the course"
-                  value={info.name}
-                />
-              </div>
-
-              <div className="formInput">
-                <label>Subject Code</label>
-                <input
-                  id="subjectCode"
-                  onChange={handleChange}
-                  type="text"
-                  value={info.subjectCode}
-                  placeholder="Add unique code of subject"
-                />
-              </div>
+              
+              {courseInputs?.map((field) => (
+                <div className="formInput">
+                  <label>{field.label}</label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={handleChange}
+                    value={info[field.id] || ""}
+                  />
+                </div>
+              ))}
 
             </form>
 

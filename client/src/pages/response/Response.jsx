@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './response.css'
-import Navbar from '../../components/navbar/Navbar'
 import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
 import { getQueries } from '../../config/endpoints/get'
@@ -18,7 +17,6 @@ const Response = () => {
 
   return (
     <div className="response">
-        <Navbar />
         <div className="queries-container">
                 {
                   query?.map((item) => (

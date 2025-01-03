@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import './addClass.scss'
 import { useLocation, useNavigate } from 'react-router-dom'
-import AdminNavbar from '../../components/navbar/AdminNavbar';
 import useFetch from '../../config/service/useFetch';
 import axios from 'axios';
 import { getCourseClasses } from '../../config/endpoints/get';
@@ -37,7 +36,6 @@ const AddClass = () => {
     
   return (
     <div className='addClassPage'>
-        <AdminNavbar />
         <div className="addClassContainer">
             <form>
                 <div className="formInput">

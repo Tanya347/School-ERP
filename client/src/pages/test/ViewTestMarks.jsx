@@ -3,7 +3,6 @@ import "./viewTestMarks.scss"
 import { useLocation } from 'react-router-dom';
 import useFetch from '../../config/service/useFetch';
 import { getSingleData } from '../../config/endpoints/get';
-import Navbar from '../../components/navbar/Navbar';
 import axios from 'axios';
 import { formatDate } from '../../config/endpoints/transform';
 
@@ -72,7 +71,6 @@ const ViewTestMarks = () => {
 
   return (
     <div className='view-test-marks'>
-        <Navbar />
         <div className="view-test-marks-container">
           <div className="upper-container">
               <div className="test-info-container">

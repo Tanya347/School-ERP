@@ -5,7 +5,6 @@ import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
 import { getFacultyData } from '../../config/endpoints/get'
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../../components/navbar/Navbar'
 import axios from 'axios'
 import { addMarks } from '../../config/endpoints/put'
 
@@ -73,7 +72,6 @@ const AddMarks = () => {
 
   return (
     <div className='add-marks'>
-      <Navbar />
       <div className="add-marks-container">
         <div className="classes-button">
           {

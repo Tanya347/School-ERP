@@ -5,7 +5,6 @@ import useFetch from '../../config/service/useFetch'
 import { getFacultyData } from '../../config/endpoints/get'
 import axios from "axios";
 import DatePicker from 'react-datepicker'
-import Navbar from "../../components/navbar/Navbar";
 import { postURLs } from '../../config/endpoints/post'
 import { useNavigate } from 'react-router-dom'
 import { createElement } from '../../config/service/usePost'
@@ -71,7 +70,6 @@ const MarkAttendance = () => {
 
     return (
         <div className='mark-attendance'>
-            <Navbar />
             <div className="mark-attendance-container">
             <div className="classes-button">
               {

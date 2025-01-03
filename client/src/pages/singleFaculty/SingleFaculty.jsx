@@ -1,9 +1,6 @@
 import "./single.scss";
 
 import { useLocation, useNavigate } from "react-router-dom";
-
-import Navbar from "../../components/navbar/Navbar";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import Course from "../../components/course/Course";
 
 import useFetch from "../../config/service/useFetch";
@@ -30,8 +27,6 @@ const Single = ({ type }) => {
 
   return (
     <div className="facultyProfile">
-
-        {(type === "Admin") ? (<AdminNavbar />) : (<Navbar />)}
         
         <div className="top">
           <div className="left">

@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../config/context/AuthContext';
 import axios from 'axios';
 import useFetch from '../../config/service/useFetch';
-import Navbar from '../../components/navbar/Navbar';
-import StudentClass from '../../components/table/StudentClass'
 import { getFacultyData } from '../../config/endpoints/get';
+import GenericTable from '../../components/table/Table';
+import { studentColumns } from '../../config/tableSource/studentsColumns';
 
 
 const ViewStudents = () => {
@@ -16,13 +16,12 @@ const ViewStudents = () => {
   const [className, setClassName] = useState("");
   const [stuData, setStuData] = useState({});
 
-
   useEffect(() => {
     const fetchStudents = async () => {
       if (sclass) {
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/details/${sclass}`);
-          setStuData(response.data);
+          setStuData(response.data.data);
         } catch (error) {
           console.error("Error fetching student data:", error);
         }
@@ -35,11 +34,9 @@ const ViewStudents = () => {
     setSclass(cl._id);
     setClassName(cl.name);
   };
-
+  
   return (
     <div className='view-students'>
-
-      <Navbar />
       <div className="view-students-container">
         <div className="classes-button">
           {
@@ -60,7 +57,7 @@ const ViewStudents = () => {
             </>
           )
         }
-        {sclass && <StudentClass props={stuData.students} />}
+        {sclass && stuData && stuData?.students && <GenericTable columns={studentColumns} rows={stuData.students} rowKey='id' />}
       </div>
     </div>
   )

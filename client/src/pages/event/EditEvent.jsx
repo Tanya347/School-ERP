@@ -2,10 +2,8 @@ import "../../config/style/form.scss";
 import { useEffect, useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useLocation } from "react-router-dom";
-import DatePicker from "react-datepicker";
 import useFetch from "../../config/service/useFetch";
 import { putURLs } from "../../config/endpoints/put";
-import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getSingleData } from "../../config/endpoints/get";
 import { formatTime } from "../../config/endpoints/transform";
 import { ClipLoader } from "react-spinners";
@@ -57,7 +55,6 @@ const EditEvent = ({ inputs, title }) => {
     return (
         <div className="new">
             <div className="newContainer">
-                <AdminNavbar />
                 <div className="top">
                     <h1>{title}</h1>
                 </div>

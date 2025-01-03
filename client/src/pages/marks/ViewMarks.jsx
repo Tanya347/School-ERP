@@ -4,7 +4,6 @@ import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
 import { getFacultyData } from '../../config/endpoints/get'
 import axios from 'axios'
-import Navbar from '../../components/navbar/Navbar'
 import { getClearMarksSubject } from '../../config/endpoints/delete'
 
 const ViewMarks = () => {
@@ -49,7 +48,6 @@ const ViewMarks = () => {
 
   return (
     <div className='add-marks'>
-      <Navbar />
       <div className="add-marks-container">
         <div className="classes-button">
           {

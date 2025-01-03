@@ -12,21 +12,22 @@ import Events from '../../pages/event/Events';
 import { useAuth } from '../context/AuthContext';
 import NewEvent from '../../pages/event/NewEvent';
 import StudentHome from '../../pages/home/StudentHome';
+import Layout from '../../components/sidebar/Layout';
 
 const StudentRoutes = () => {
     const { user } = useAuth();
   
     const RequireStudent = ({ children }) => {
-        if(user) {
-          return user.role === 'student' ? children : <Navigate to="/" />;
-        }
-        else
+        if(user && user.role === 'student') {
+          return children;
+        } else
           return <Navigate to="/" />;
     };
 
   return (
 
     <RequireStudent>
+       <Layout>
         <Routes>
             <Route index element={<StudentHome type="Main" />} />
             <Route path="single/:id" element={<SingleStudent type="Main" />} />
@@ -37,6 +38,7 @@ const StudentRoutes = () => {
             <Route path="events" element={<NewEvent type="Main" />} />
             <Route path="responses" element={<Response />} />
         </Routes>
+       </Layout>
     </RequireStudent>
   );
 };

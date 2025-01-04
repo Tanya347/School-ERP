@@ -7,6 +7,7 @@ import { getFacultyData } from '../../config/endpoints/get'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { addMarks } from '../../config/endpoints/put'
+import { toast } from 'react-toastify'
 
 
 const AddMarks = () => {
@@ -28,7 +29,7 @@ const AddMarks = () => {
       if (sclass) {
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${sclass}`);
-          setStuData(response.data);
+          setStuData(response.data.data);
         } catch (error) {
           console.error("Error fetching student data:", error);
         }
@@ -58,17 +59,21 @@ const AddMarks = () => {
         marks,
       }));
 
-      await axios.put(addMarks(course), {
+      const res = await axios.put(addMarks(course), {
         marksData: formattedMarksData,
       });
 
-      navigate('/faculty/marks');
-    } catch (error) {
-      console.error('Error adding marks:', error);
+      if(res.data.status === "success") {
+        toast.success("Marks added successfully!")
+        navigate('/faculty/marks');
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || `Failed to add marks. Please try again.`;
+        toast.error(errorMessage);
+        console.error(err);
+        return err;
     }
   };
-
-  console.log(marksAdded)
 
   return (
     <div className='add-marks'>

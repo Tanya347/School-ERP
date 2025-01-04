@@ -31,7 +31,7 @@ const Single = ({ type }) => {
       if(data.classInfo._id) {
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/attendances/studentperc/${data._id}/${data.classInfo._id}`)
-          setAttendance(response.data)
+          setAttendance(response.data.data)
         }
         catch(err) {
           console.log(err)

@@ -26,7 +26,7 @@ const MarkAttendance = () => {
           if (sclass) {
             try {
               const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${sclass}`);
-              setStuData(response.data);
+              setStuData(response.data.data);
             } catch (error) {
               console.error("Error fetching student data:", error);
             }

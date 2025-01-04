@@ -34,16 +34,16 @@ const StudentSchema = new mongoose.Schema(
         validate: [
           {
             validator: function(v) {
-              return validator.isNumeric(v); // Check if the value is numeric
+              return validator.isAlphanumeric(v); // Check if the value is numeric
             },
-            message: 'Enrollment number should contain only numbers'
+            message: 'Enrollment number should contain only alphabets and numbers'
           },
-          {
-            validator: function(v) {
-              return /^\d{10}$/.test(v); // Check if the string is exactly 10 digits
-            },
-            message: 'Enrollment number must be exactly 10 digits'
-          }
+          // {
+          //   validator: function(v) {
+          //     return /^\d{10}$/.test(v); // Check if the string is exactly 10 digits
+          //   },
+          //   message: 'Enrollment number must be exactly 10 digits'
+          // }
         ]
       },
     profilePicture: {
@@ -94,12 +94,12 @@ const StudentSchema = new mongoose.Schema(
     studentPhone: {
       type: String,
       required: [true, 'Phone number is required'],
-      validate: {
-        validator: function (v) {
-          return validator.isMobilePhone(v, 'any'); // Validates phone number for any locale
-        },
-        message: 'Invalid phone number',
-      },
+      // validate: {
+      //   validator: function (v) {
+      //     return validator.isMobilePhone(v, 'any'); // Validates phone number for any locale
+      //   },
+      //   message: 'Invalid phone number',
+      // },
     },
     studentAddress: {
       type: String,
@@ -121,14 +121,14 @@ const StudentSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Username is required'],
       minLength: [5, 'Username must be at least 5 characters'],
-      maxLength: [20, 'Username must be less than 20 characters'],
+      // maxLength: [20, 'Username must be less than 20 characters'],
       unique: true,
-      validate: {
-        validator: function (v) {
-          return validator.isAlphanumeric(v);
-        },
-        message: 'Username should contain only letters and numbers',
-      },
+      // validate: {
+      //   validator: function (v) {
+      //     return validator.isAlphanumeric(v);
+      //   },
+      //   message: 'Username should contain only letters and numbers',
+      // },
     },
     role: {
       type: String,

@@ -30,7 +30,7 @@ router.get("/presentdates/:studentid/:classid", protect(), getStudentPresenceDat
 router.get("/absentdates/:studentid/:classid", protect(), getStudentAbsenceDates)
 router.put("/:id", protect(), isOwner(Attendance), restrictTo("faculty"), editAttendance);
 router.delete("/single/:id", protect(), isOwner(Attendance), restrictTo("faculty"), deleteAttendance);
-router.delete("/class/:classid", protect(), isOwner(Attendance), restrictTo("faculty"), clearAttendanceByClass);
+router.delete("/class/:classid", protect(), restrictTo("faculty"), clearAttendanceByClass);
 router.delete("/", protect(), restrictTo("admin", "faculty"), clearAllAttendanceRecords);
 
 

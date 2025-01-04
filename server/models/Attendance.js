@@ -50,7 +50,7 @@ const AttendanceSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Teacher",
+      ref: "Faculty",
     },
   },
   { timestamps: true }

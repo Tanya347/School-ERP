@@ -69,8 +69,8 @@ const NewUpdate = ({ inputs }) => {
               id="updateType"
               title="Choose Notice Type"
               options={[
-                { value: 'general', label: 'General' },
-                { value: 'specific', label: 'Specific' },
+                { _id: 'general', name: 'General' },
+                { _id: 'specific', name: 'Specific' },
               ]}
               onChange={handleChange}
             />

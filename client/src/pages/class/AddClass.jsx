@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import './addClass.scss'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useFetch from '../../config/service/useFetch';
 import axios from 'axios';
 import { getCourseClasses } from '../../config/endpoints/get';
 import {toast} from "react-toastify"
+import Dropdown from '../../components/dropdown/Dropdown';
+import Popup from '../../components/popUps/Popup';
 
-const AddClass = () => {
+const AddClass = ({ setOpen, facId }) => {
 
-    const location = useLocation();
     const classes = useFetch(getCourseClasses).data;
-    const facId = location.pathname.split("/")[4]
     const [sclass, setSclass] = useState("");
     const [classIndex, setClassIndex] = useState();
     const [course, setCourse] = useState("");
@@ -35,41 +35,33 @@ const AddClass = () => {
     }
     
   return (
-    <div className='addClassPage'>
-        <div className="addClassContainer">
-            <form>
-                <div className="formInput">
-                    <label>Select Class</label>
-                    <select onChange={(e) => {
-                                setSclass(e.target.value);
-                                setClassIndex(e.target.selectedIndex - 1); // Subtract 1 to account for the placeholder option
-                            }} id="classId">
-                        <option>-</option>
-                        {classes?.map((cl, index) => (
-                            <option value={cl._id} key={index}>{cl.name}</option>
-                        ))}
-                    </select>
-                </div>
-
-                {
-                    sclass && 
-                        <div className="formInput">
-                            <label>Select Course</label>
-                            <select onChange={(e) => setCourse(e.target.value)} id="courseId">
-                                <option>-</option>
-                                {
-                                    classes[classIndex]?.subjects.map((sb, index) => (
-                                        <option value={sb._id} key={index}>{sb.name}</option>
-                                    ))      
-                                }
-                            </select>
-                        </div>
-                }
-
-                <button className='addCourseButton' onClick={handleClick}>Add Course</button>
-            </form>
-        </div>
-    </div>
+    <Popup 
+        title= "Assign Course to Faculty"
+        content={
+            <div className="addClass">
+                <form className='addClassContainer'>
+                    <Dropdown 
+                        title="Select Class"
+                        url={getCourseClasses}
+                        onChange={(e) => {
+                            setSclass(e.target.value);
+                            setClassIndex(e.target.selectedIndex - 1); // Subtract 1 to account for the placeholder option
+                        }}
+                    />
+                    {sclass && <Dropdown
+                            title="Select Course"
+                            options={classes[classIndex]?.subjects}
+                            onChange={(e) => setCourse(e.target.value)}
+                        />
+                    }
+                </form>
+            </div>
+        }
+        actions={[
+            { label: 'Add Course', onClick: handleClick}
+        ]}
+        onClose={() => setOpen(false)}
+    />
   )
 }
 

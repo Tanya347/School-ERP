@@ -77,8 +77,8 @@ const NewUser = ({ inputs, title }) => {
               id="gender"
               title="Gender"
               options={[
-                { value: 'Male', label: 'Male' },
-                { value: 'Female', label: 'Female' },
+                { _id: 'Male', name: 'Male' },
+                { _id: 'Female', name: 'Female' },
               ]}
               onChange={handleChange}
             />

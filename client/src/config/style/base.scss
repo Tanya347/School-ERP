@@ -24,3 +24,18 @@ body {
     --orange: #EE7214;
     --blue: #3876BF;
 }
+
+.page-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    h3 {
+        font-weight: 500;
+    }
+}

@@ -3,20 +3,25 @@ import "./class.scss"
 import { Link } from 'react-router-dom';
 import useFetch from '../../config/service/useFetch';
 import { getClasses } from '../../config/endpoints/get';
+import { ClipLoader } from 'react-spinners';
 
 const Class = () => {
 
-    const classes = useFetch(getClasses).data;
-    classes.sort((a, b) => a.classNumber - b.classNumber)
+    const {data, loading} = useFetch(getClasses);
 
 
   return (
     <div className='classes'>
-        <div className="wholeContainer">
+        {loading ? (
+            <div className="page-loader">
+            <ClipLoader color="black" size={50} />
+            <h3>Loading data...</h3>
+          </div>
+        ) : (<div className="wholeContainer">
             <h1>Classes</h1>
             <div className="classesContainer">
                 {
-                    classes?.map((cl, index) => (
+                    data?.map((cl, index) => (
                         <div className="classContainer" key={index}>
                             <h3>{cl.name} Standard</h3>
                             <Link to={`/admin/classes/${cl._id}`}>
@@ -32,7 +37,7 @@ const Class = () => {
                     ))
                 }
             </div>
-        </div>
+        </div>)}
     </div>
   )
 }

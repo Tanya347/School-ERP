@@ -8,6 +8,7 @@ import { getSingleData } from "../../config/endpoints/get";
 import { useEffect, useState} from "react";
 import 'react-circular-progressbar/dist/styles.css';
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 
 
 const Single = ({ type }) => {
@@ -24,7 +25,7 @@ const Single = ({ type }) => {
     id = location.pathname.split("/")[3];
   else
     id = location.pathname.split("/")[4];
-  const { data } = useFetch(getSingleData(id, "students"))
+  const { data, loading } = useFetch(getSingleData(id, "students"))
   
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -47,8 +48,14 @@ const Single = ({ type }) => {
 
   return (
     <div className="studentProfile">
-      
-        <div className="top">
+      {loading ? (
+        <div className="page-loader">
+          <ClipLoader color="black" size={50} />
+          <h3>Loading data...</h3>
+        </div>
+      ) : (<>
+        
+      <div className="top">
           <div className="left">
             <img
               src={data.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
@@ -138,6 +145,7 @@ const Single = ({ type }) => {
             ))}
           </div>
         </div>
+      </>)}
         
     </div>
   );

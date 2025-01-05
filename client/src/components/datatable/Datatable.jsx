@@ -15,6 +15,7 @@ import Modal from "../popUps/Modal.jsx";
 import { getDatatableURL } from "../../config/endpoints/get.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
 import { toast } from "react-toastify"
+import { ClipLoader } from "react-spinners";
 
 
 
@@ -30,7 +31,7 @@ const Datatable = ({ column, name, type }) => {
 
   // fetching data using the path
   const { user } = useAuth();
-  const { data } = useFetch(getDatatableURL(path, user))
+  const { data, loading } = useFetch(getDatatableURL(path, user))
 
 
   // array usestate that gets fed every time page loads
@@ -152,32 +153,40 @@ const Datatable = ({ column, name, type }) => {
   ];
 
   return (
-    <div className="datatable">
-      {/* Title will be shown based on which table is */}
-      <div className="datatableHeader">
-        <div className="datatableTitle">
-        {name}
+    <div className="datatable-container">
+
+      {loading ? (
+         <div className="page-loader">
+          <ClipLoader color="black" size={50} />
+          <h3>Loading data...</h3>
         </div>
-        {(type === "Admin" || type==="Creator" )&& <Link to={`new`} style={{"textDecoration": "none"}}>
-          <div className="link">
-            Create
+      ) : (<div className="datatable">
+        {/* Title will be shown based on which table is */}
+        <div className="datatableHeader">
+          <div className="datatableTitle">
+          {name}
           </div>
-        </Link>}
-      </div>
+          {(type === "Admin" || type==="Creator" )&& <Link to={`new`} style={{"textDecoration": "none"}}>
+            <div className="link">
+              Create
+            </div>
+          </Link>}
+        </div>
 
-      {/* Datagrid element */}
-      {<DataGrid
-        className="datagrid"
-        rows={list} // list is the array of data we fetched from the server
-        columns={column.concat(actionColumn)} // column is contains specifications of columns and gets formatted by action column function
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        getRowId={row => row._id}
-      />}
+        {/* Datagrid element */}
+        {<DataGrid
+          className="datagrid"
+          rows={list} // list is the array of data we fetched from the server
+          columns={column.concat(actionColumn)} // column is contains specifications of columns and gets formatted by action column function
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          getRowId={row => row._id}
+        />}
 
-      {/* Modal gets shown based on how user clicks and props get passed to it */}
-      {/* id is the id of the data that needs to be displayed and path will tell which list of data we are viewing */}
-      {openModal && <Modal setOpen={setOpenModal} id={rowid} type={path} />}
+        {/* Modal gets shown based on how user clicks and props get passed to it */}
+        {/* id is the id of the data that needs to be displayed and path will tell which list of data we are viewing */}
+        {openModal && <Modal setOpen={setOpenModal} id={rowid} type={path} />}
+      </div>)}
     </div>
   );
 };

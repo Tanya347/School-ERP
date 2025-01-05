@@ -9,11 +9,13 @@ import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
 import { useAuth } from "../../config/context/AuthContext";
+import { ClipLoader } from "react-spinners";
 
 const EditUpdate = ({ title }) => {
 
   const [noticeType, setNoticeType] = useState("general");
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const id = location.pathname.split("/")[4];
   const {user} = useAuth();
   const { data } = useFetch(getSingleData(id, "updates"))
@@ -44,16 +46,10 @@ const EditUpdate = ({ title }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       if(noticeType === "general")
         info.class = null
-      
-      // const newupdate = {
-      //   ...info, updateType
-      // }
-
-      // console.log(info)
 
       const res = await editElement(info, putURLs("updates", id), "update");
 
@@ -62,11 +58,10 @@ const EditUpdate = ({ title }) => {
       }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false);
     }
   }
-
-  console.log(info)
-
 
   return (
     <div className="new">
@@ -117,6 +112,10 @@ const EditUpdate = ({ title }) => {
               </div>}
             </form>
             <div className="submitButton">
+              {loading && <div className="create-loader">
+                <ClipLoader color="black" size={30} />
+                editing update...
+              </div>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Update</button>
             </div>
           </div>

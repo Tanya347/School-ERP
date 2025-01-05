@@ -15,14 +15,14 @@ const NewEvent = ({ inputs, title, type }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   // dates
   const [start, setStart] = useState("")
   const [end, setEnd] = useState("")
   const [list, setList] = useState([])
 
-  const { data } = useFetch(getDatatableURL("events"))
+  const { data, loading } = useFetch(getDatatableURL("events"))
   
 
   const handleChange = (e) => {
@@ -31,7 +31,7 @@ const NewEvent = ({ inputs, title, type }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitLoading(true);
 
     try {
 
@@ -47,7 +47,7 @@ const NewEvent = ({ inputs, title, type }) => {
     } catch(err) {
       console.log(err)
     } finally {
-      setLoading(false)
+      setSubmitLoading(false)
     }
 
   }
@@ -134,7 +134,7 @@ const NewEvent = ({ inputs, title, type }) => {
 
                 </form>
                 <div className="submitButton">
-                { loading && <div className="create-loader">
+                { submitLoading && <div className="create-loader">
                     <ClipLoader color="black" size={30} />
                     creating event...
                   </div>}
@@ -145,7 +145,12 @@ const NewEvent = ({ inputs, title, type }) => {
               </div>
             </div></>}
 
-        {!openForm && <div className="cardsContainer">
+        {!openForm && <>{loading ? (
+          <div className="page-loader">
+            <ClipLoader color="black" size={50} />
+            <h3>Loading data...</h3>
+          </div>
+        ) : (<div className="cardsContainer">
           {list?.map((item, i) => (
             <div className="card" key={item._id}>
               <div class="content">
@@ -156,7 +161,7 @@ const NewEvent = ({ inputs, title, type }) => {
               </div>
             </div>
           ))}
-        </div>}
+        </div>)} </>}
       </div>
 
       {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} type={type} />}

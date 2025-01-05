@@ -99,7 +99,7 @@ const NewUpdate = ({ inputs }) => {
             <div className="submitButton">
               {loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
-                editing update...
+                creating update...
               </div>}
               <button onClick={handleClick} class="form-btn">Create Update</button>
             </div>

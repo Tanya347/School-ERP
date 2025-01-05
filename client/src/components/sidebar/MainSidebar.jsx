@@ -133,7 +133,7 @@ const MainSidebar = () => {
                     </li>
                     
                     {/* Toggle Theme */}
-                    {collapsed ? (
+                    {/* {collapsed ? (
                             <>
                             <p className={`title ${collapsed ? 'add-border' : ''}`}></p>
                             <li>
@@ -158,7 +158,7 @@ const MainSidebar = () => {
                                 </div>
                             </>
                         )
-                    }
+                    } */}
                 </ul>
             </motion.div >
 

@@ -1,5 +1,4 @@
 export const updateColumns = [
-    { field: "_id", headerName: "ID", width: 100 },
     {
         field: "title",
         headerName: "Update",

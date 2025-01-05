@@ -1,17 +1,19 @@
 import "../../config/style/form.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getClasses } from "../../config/endpoints/get";
+import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElement } from "../../config/service/usePost";
 import { ClipLoader } from "react-spinners";
 import Dropdown from "../../components/dropdown/Dropdown";
+import { useAuth } from "../../config/context/AuthContext";
 
 const NewUpdate = ({ inputs }) => {
   const [info, setInfo] = useState({});
   const [noticeType, setNoticeType] = useState("general");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const {user} = useAuth();
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -25,10 +27,15 @@ const NewUpdate = ({ inputs }) => {
     e.preventDefault();
     setLoading(true);
 
+    let newUpdate = {
+      ...info,
+      author: user._id
+    }
+
     try {
-      const res = await createElement(info, postURLs("updates", "normal"), "Update");
+      const res = await createElement(user.role === "admin" ? info : newUpdate, postURLs("updates", "normal"), "Update");
       if(res.data.status === 'success') {
-        navigate("/admin/updates")
+        navigate(`/${user.role}/updates`)
       }
     } catch (err) {
       console.log(err)
@@ -36,9 +43,6 @@ const NewUpdate = ({ inputs }) => {
       setLoading(false);
     }
   }
-
-  console.log(info)
-  
 
   return (
     <div className="new">
@@ -72,12 +76,23 @@ const NewUpdate = ({ inputs }) => {
             />
 
                 {noticeType && noticeType === "specific" && 
-                  <Dropdown
-                    id="class"
-                    title="Choose Class"
-                    url={getClasses}
-                    onChange={handleChange}
-                  />
+                  <div className="formInput">
+                    {user.role === 'admin' ? (
+                      <Dropdown
+                        id="class"
+                        title="Choose Class"
+                        url={getClasses}
+                        onChange={handleChange}
+                      />
+                    ) : (
+                      <Dropdown
+                        id="class"
+                        title="Choose Class"
+                        url={getFacultyData(user._id, "classes")}
+                        onChange={handleChange}
+                      />
+                    )}
+                  </div>
                 }
 
             </form>

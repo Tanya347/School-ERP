@@ -4,18 +4,26 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
-import { getClasses, getSingleData } from "../../config/endpoints/get";
+import { getClasses, getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
+import { useAuth } from "../../config/context/AuthContext";
 
-const EditUpdate = ({ title, type }) => {
+const EditUpdate = ({ title }) => {
 
-  const [noticeType, setNoticeType] = useState("");
+  const [noticeType, setNoticeType] = useState("general");
   const location = useLocation();
   const id = location.pathname.split("/")[4];
+  const {user} = useAuth();
   const { data } = useFetch(getSingleData(id, "updates"))
-  const classes = useFetch(getClasses).data
+  let path;
+  if(user.role === 'faculty') {
+    path = getFacultyData(user._id, "classes")
+  } else {
+    path = getClasses
+  }
+  const classes = useFetch(path).data
 
 
   const [info, setInfo] = useState({});
@@ -29,6 +37,9 @@ const EditUpdate = ({ title, type }) => {
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    if(e.target.id === 'updateType') {
+      setNoticeType(e.target.value)
+    }
   };
 
   const handleClick = async (e) => {
@@ -38,20 +49,23 @@ const EditUpdate = ({ title, type }) => {
       if(noticeType === "general")
         info.class = null
       
-      const newupdate = {
-        ...info, updateType: noticeType
-      }
+      // const newupdate = {
+      //   ...info, updateType
+      // }
 
+      // console.log(info)
 
-      const res = await editElement(newupdate, putURLs("updates", id), "update");
+      const res = await editElement(info, putURLs("updates", id), "update");
 
       if(res.data.status === 'success') {
-        navigate("/admin/updates")
+        navigate(`/${user.role}/updates`)
       }
     } catch (err) {
       console.log(err)
     }
   }
+
+  console.log(info)
 
 
   return (
@@ -81,14 +95,14 @@ const EditUpdate = ({ title, type }) => {
               <div className="formInput">
                   <label>Choose Notice Type</label>
                   <select
-                    onChange={(e) => setNoticeType(e.target.value)}
-                    id="classId">
+                    onChange={handleChange}
+                    id="updateType">
                       <option key={1} value="general" selected={info?.updateType === "general"}>General</option>
                       <option key={2} value="specific" selected={info?.updateType === "specific"}>Specific</option>
                   </select>
               </div>
 
-              {noticeType === "specific" && <div className="formInput">
+              {noticeType && noticeType === "specific" && <div className="formInput">
                 <label>Class</label>
                 <select
                   id="class"

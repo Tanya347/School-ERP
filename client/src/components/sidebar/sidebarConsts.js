@@ -44,6 +44,12 @@ export const sidebarConsts = {
             user: "admin",
         },
         {
+            title: "Updates",
+            path: "/faculty/updates",
+            icon: NotificationsIcon,
+            user: "faculty",
+        },
+        {
             title: "Courses",
             path: "/admin/courses",
             icon: CollectionsBookmarkIcon,
@@ -122,6 +128,12 @@ export const sidebarConsts = {
             path: "/admin/updates/new",
             icon: NotificationAddIcon,
             user: "admin",
+        },
+        {
+            title: "Create Update",
+            path: "/faculty/updates/new",
+            icon: NotificationAddIcon,
+            user: "faculty",
         },
         {
             title: "Create Course",

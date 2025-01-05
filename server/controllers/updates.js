@@ -87,9 +87,10 @@ export const getFacultyUpdates = catchAsync(async(req, res, next) => {
     const updates = await Update.find({
         $or: [
             { updateType: 'general' },
-            { updateType: 'specific', class: { $in: classesTaught } }
+            { updateType: 'specific', class: { $in: classesTaught } },
+            { author: facultyId }
         ]
-    });
+    }).populate("class", "name");;
 
     res.status(200).json({
         status: "success",

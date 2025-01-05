@@ -21,6 +21,8 @@ export const getDatatableURL = (path, user) => {
         return user.role === 'student' ? `/tests/${user.role}/${user.class}` : `/tests/${user.role}/${user._id}`;
     else if(path === 'tasks')
         return user.role === 'student' ? `/tasks/${user.role}/${user.class}` : `/tasks/${user.role}/${user._id}`;
+    else if(path === 'updates')
+        return user.role === 'faculty' ? `/updates/faculty/${user._id}`  : `/${path}/` ;
     else    
         return `/${path}/`
 }

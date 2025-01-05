@@ -34,6 +34,10 @@ const UpdateSchema = new mongoose.Schema({
     class: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Class'
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Faculty'
     }
 
 }, { timestamps: true })

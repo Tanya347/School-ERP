@@ -8,6 +8,7 @@ import { getSingleData } from "../../config/endpoints/get";
 import { formatTime } from "../../config/endpoints/transform";
 import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
+import DatePicker from "react-datepicker";
 
 const EditEvent = ({ inputs, title }) => {
     const location = useLocation();
@@ -20,9 +21,11 @@ const EditEvent = ({ inputs, title }) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setInfo(data);
-        setStart(data.startDate ? new Date(data.startDate) : null);
-        setEnd(data.endDate ? new Date(data.endDate) : null);
+        if (data) {
+            setInfo(data);
+            setStart(data.startDate ? new Date(data.startDate) : null);
+            setEnd(data.endDate ? new Date(data.endDate) : null);
+        }
     }, [data, data.startDate, data.endDate])
 
     const handleChange = (e) => {
@@ -87,14 +90,14 @@ const EditEvent = ({ inputs, title }) => {
                                 <label>
                                     <span style={{color: "green", fontWeight: "bold"}}>   Time : </span>{formatTime(start)}
                                     </label>
-                                    {/* {start && (
+                                    {start && (
                                         <DatePicker
                                             selected={start}
                                             onChange={(date) => setStart(date)}
                                             placeholderText="Start Date"
                                             showTimeSelect
                                         />
-                                    )} */}
+                                    )}
                             </div>
 
                             <div className="formInput">
@@ -102,13 +105,13 @@ const EditEvent = ({ inputs, title }) => {
                                     <span style={{color: "green", fontWeight: "bold"}}>    Time : </span>{formatTime(end)}
                                 </label>
                                 
-                                {/* <DatePicker
+                                <DatePicker
                                     class="date-picker"
                                     showTimeSelect
                                     placeholderText="End Date"
                                     selected={end}
                                     onChange={(end) => setEnd(end)}
-                                /> */}
+                                />
                             </div> 
 
 

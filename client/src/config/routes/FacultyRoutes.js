@@ -28,6 +28,10 @@ import ViewTestMarks from '../../pages/test/ViewTestMarks';
 import NewEvent from '../../pages/event/NewEvent';
 import Layout from '../../components/sidebar/Layout';
 import { testInputs } from '../formsource/testInputs';
+import { updateInputs } from '../formsource/updateInputs';
+import NewUpdate from '../../pages/update/NewUpdate';
+import EditUpdate from '../../pages/update/EditUpdate';
+import { updateColumns } from '../datatablesource/updateColumns';
 
 const FacultyRoutes = () => {
 
@@ -86,7 +90,28 @@ const FacultyRoutes = () => {
           <Route
             path="tasks/edit/:taskId"
             element={<EditTask title="Update Task" />}
-            />
+          />
+
+          {/* ROUTES FOR UPDATES */}
+
+          {/* add new updates */}
+
+          <Route
+            path="updates/new"
+            element={<NewUpdate title="Add New Update" inputs={updateInputs} />}
+            >
+          </Route>
+
+          <Route
+            path="updates"
+            element={<List column={updateColumns} name="Update" type="Creator" />}
+          />
+
+          {/* edit page for tasks */}
+          <Route
+            path="updates/edit/:taskId"
+            element={<EditUpdate title="Edit Update" />}
+          />
 
           {/* ROUTES FOR TESTS */}
 

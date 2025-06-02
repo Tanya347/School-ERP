@@ -50,6 +50,10 @@ const CourseSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    schoolID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
+    }
   },
   { timestamps: true }
 );

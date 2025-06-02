@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 
@@ -38,6 +38,10 @@ const AdminSchema = new mongoose.Schema (
             type: String,
             default: 'admin'
         },
+        schoolID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'School'
+        }
     },
     { timestamps: true }
 );

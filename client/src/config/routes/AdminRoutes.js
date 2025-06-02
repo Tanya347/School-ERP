@@ -8,8 +8,10 @@ import NewStudent from "../../pages/student/NewStudent";
 import NewFaculty from "../../pages/faculty/NewFaculty";
 import NewCourse from "../../pages/course/NewCourse";
 import NewEvent from "../../pages/event/NewEvent"
-import EditEvent from "../../pages/event/EditEvent"
+import NewClass from "../../pages/class/CreateClass";
 import NewUpdate from "../../pages/update/NewUpdate";
+import EditClass from '../../pages/class/EditClass';
+import EditEvent from "../../pages/event/EditEvent"
 import EditUpdate from "../../pages/update/EditUpdate";
 import EditCourse from "../../pages/course/EditCourse";
 import EditStudent from "../../pages/student/EditStudent";
@@ -31,6 +33,7 @@ import { studentInputs } from "../formsource/studentInputs";
 import { facultyInputs } from "../formsource/facultyInputs";
 import { updateInputs } from "../formsource/updateInputs";
 import { courseInputs } from "../formsource/courseInputs";
+import { classInputs } from '../formsource/classInputs';
 import { useAuth } from '../../config/context/AuthContext';
 import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
@@ -161,6 +164,13 @@ const AdminRoutes = () => {
             />
 
         {/* ROUTES FOR CLASSES */}
+
+          {/* create classes */}
+
+          <Route
+            path="classes/new"
+            element={ <NewClass inputs={classInputs} title="Add New Class"/>}
+          />
 
           {/* list of classes */}
 

@@ -4,8 +4,8 @@ import { catchAsync } from "../utils/catchAsync.js";
 
 // Create a new course and add it to the class
 export const createCourse = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newCourse = new Course(req.body);
-
   // Add course to the class's subjects array
   await Class.updateOne(
     { _id: newCourse.class },
@@ -62,18 +62,11 @@ export const getCourse = catchAsync(async (req, res, next) => {
   });
 });
 
-// Get a single course without populating fields
-export const getSingleCourse = catchAsync(async (req, res, next) => {
-  const course = await Course.findById(req.params.id);
-  res.status(200).json({
-    status: 'success',
-    data: course
-  });
-});
-
 // Get all courses with populated fields
 export const getCourses = catchAsync(async (req, res, next) => {
-  const courses = await Course.find()
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  const courses = await Course.find(filter)
     .populate('class', 'name')
     .populate('teacher', 'teachername');
   res.status(200).json({

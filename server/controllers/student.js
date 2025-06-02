@@ -4,6 +4,7 @@ import Course from "../models/Course.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
 export const registerStudent = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newUser  = await Student.create(req.body);
   res.status(201).json({
     status: 'success',
@@ -66,7 +67,9 @@ export const getSingleStudent = catchAsync(async (req, res, next) => {
 });
 
 export const getStudents = catchAsync(async (req, res, next) => {
-  const students = await Student.find().populate('class', 'name');
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  const students = await Student.find(filter).populate('class', 'name');
   res.status(200).json({
     status: "success",
     data: students

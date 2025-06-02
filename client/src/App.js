@@ -10,6 +10,7 @@ import { DarkModeContext } from "./config/context/darkModeContext";
 // Common Pages
 import Login from "./pages/login/Login";
 import Landing from "./pages/Landing/Landing";
+import RegisterSchool from "./pages/registerSchool/RegisterSchool"
 import AdminRoutes from "./config/routes/AdminRoutes";
 import FacultyRoutes from "./config/routes/FacultyRoutes";
 import StudentRoutes from "./config/routes/StudentRoutes";
@@ -37,7 +38,7 @@ function App() {
             <Route path="/adminLogin" element={<LoggedIn><Login type="Admin" /></LoggedIn>} />
             <Route path="/facultyLogin" element={<LoggedIn><Login type="Faculty" /></LoggedIn>} />
             <Route path="/studentLogin" element={<LoggedIn><Login type="Student" /></LoggedIn>} />
-
+            <Route path="/registerSchool" element={<RegisterSchool />} />
             {/* Admin Routes */}
             <Route path="/admin/*" element={<AdminRoutes />} />
 

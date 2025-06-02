@@ -3,6 +3,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 
 // Create a new event
 export const createEvent = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newEvent = new Event(req.body);
   const savedEvent = await newEvent.save();
   res.status(200).json({
@@ -46,7 +47,9 @@ export const getEvent = catchAsync(async (req, res, next) => {
 
 // Get all events
 export const getEvents = catchAsync(async (req, res, next) => {
-  const events = await Event.find();
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  const events = await Event.find(filter);
   res.status(200).json({
     data: events,
     status: 'success'

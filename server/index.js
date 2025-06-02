@@ -27,6 +27,7 @@ import classRoute from "./routes/class.js";
 import attendanceRoute from "./routes/attendance.js";
 import authRoute from "./routes/auth.js"
 import countAllRoute from "./routes/countDocuments.js";
+import schoolRoute from "./routes/school.js";
 
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
@@ -100,6 +101,7 @@ app.use("/api/classes", classRoute);
 app.use("/api/attendances", attendanceRoute);
 app.use("/api/auth", authRoute);
 app.use("/api", countAllRoute);
+app.use("/api/schools", schoolRoute);
 
 // unhandled routes
 app.all('*', (req, res, next) => {

@@ -2,6 +2,7 @@ import Task from "../models/Task.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
 export const createTask = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newTask = new Task(req.body);
   const savedTask = await newTask.save();
   res.status(200).json({
@@ -42,29 +43,17 @@ export const getTask = catchAsync(async (req, res, next) => {
   });
 });
 
-// Fetches tasks without population
-export const getSingleTask = catchAsync(async (req, res, next) => {
-  const task = await Task.findById(req.params.id);
-  res.status(200).json({
-    status: "success",
-    data: task
-  });
-});
+export const getTasks = catchAsync(async (req, res, next) => {
+  const { facultyId, classId } = req.query;
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  if (facultyId) filter.author = facultyId;
+  if (classId) filter.sclass = classId;
 
-export const getFacultyTasks = catchAsync(async (req, res, next) => {
-  const facultyId = req.params.id;
-  const tasks = await Task.find({ author: facultyId }).populate('sclass', 'name');
+  const tasks = await Task.find(filter).populate("sclass", "name");
+
   res.status(200).json({
     status: "success",
     data: tasks,
   });
-});
-
-export const getStudentTasks = catchAsync(async (req, res, next) => {
-  const classId = req.params.id;
-  const tasks = await Task.find({ sclass: classId }).populate('sclass', 'name');
-  res.status(200).json({
-    status: "success",
-    data: tasks,
-  });
-});
+})

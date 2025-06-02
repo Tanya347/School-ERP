@@ -152,6 +152,10 @@ const FacultySchema = new mongoose.Schema(
         ref: 'Class',
       },
     ],
+    schoolID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
+    }
   },
   { timestamps: true }
 );

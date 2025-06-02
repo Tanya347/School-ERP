@@ -52,6 +52,10 @@ const AttendanceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Faculty",
     },
+    schoolID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
+    }
   },
   { timestamps: true }
 );

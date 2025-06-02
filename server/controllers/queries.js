@@ -5,6 +5,7 @@ import { AppError } from "../utils/customError.js";
 
 // Create a new query
 export const createQuery = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newQuery = new Query(req.body);
 
   const faculty = await Faculty.findById(newQuery.queryTo);

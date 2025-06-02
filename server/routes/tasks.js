@@ -3,10 +3,8 @@ import {
   createTask,
   deleteTask,
   getTask,
-  getSingleTask,
   updateTask,
-  getStudentTasks,
-  getFacultyTasks,
+  getTasks,
 } from "../controllers/tasks.js";
 import { protect } from "../controllers/auth.js";
 
@@ -17,9 +15,7 @@ router.post("/", protect(), createTask);
 router.put("/:id", protect(), updateTask);
 router.delete("/:id", protect(), deleteTask);
 router.get("/:id", protect(), getTask);
-router.get("/single/:id", protect(), getSingleTask);
-router.get("/faculty/:id", protect(), getFacultyTasks);
-router.get("/student/:id", protect(), getStudentTasks);
+router.get("/", protect(), getTasks);
 
 
 export default router;

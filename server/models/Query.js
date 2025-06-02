@@ -22,6 +22,10 @@ const QuerySchema = new mongoose.Schema({
     },
     response: {
         type: String
+    },
+    schoolID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'School'
     }
 }, { timestamps: true })
 

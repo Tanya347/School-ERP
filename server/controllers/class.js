@@ -4,6 +4,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 
 // Create a new class
 export const createClass = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newClass = new Class(req.body);
   const savedClass = await newClass.save();
   res.status(200).json({
@@ -104,7 +105,9 @@ export const getClassStudents = catchAsync(async (req, res, next) => {
 
 // Get all classes
 export const getClasses = catchAsync(async (req, res, next) => {
-  const classes = await Class.find().sort({classNumber: 1});
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  const classes = await Class.find(filter).sort({classNumber: 1});
   res.status(200).json({
     data: classes,
     status: 'success'
@@ -113,7 +116,9 @@ export const getClasses = catchAsync(async (req, res, next) => {
 
 // Get all classes with subjects populated
 export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
-  const classes = await Class.find().populate({
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  const classes = await Class.find(filter).populate({
     path: 'subjects',
     model: 'Course',
   }).sort({classNumber: 1});

@@ -90,6 +90,10 @@ const EventSchema = new mongoose.Schema({
     },
     cloud_id: {
         type: String
+    },
+    schoolID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
     }
 }, { timestamps: true })
 

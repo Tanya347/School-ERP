@@ -6,7 +6,7 @@ import { AppError } from '../utils/customError.js';
 
 export const createAttendance = catchAsync(async (req, res, next) => {
   const { date, present, classid, author } = req.body;
-
+  schoolID = req.user.schoolID
   // Get all students in the class
   const classInfo = await Class.findById(classid);
   if (!classInfo) {
@@ -21,7 +21,8 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     present,
     absent,
     classid,
-    author
+    author,
+    schoolID
   });
 
   await attendance.save();

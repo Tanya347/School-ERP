@@ -41,27 +41,41 @@ const GenericTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.map((row) => (
-            <TableRow
-              key={row[rowKey]}
-              onClick={() => onRowClick && onRowClick(row)}
-              className="tableRow"
-              style={customStyles?.row}
-            >
-              {columns.map((col, index) => (
-                <TableCell key={index} className="tableCell">
-                  {col.render ? col.render(row[col.field], row) : row[col.field]}
-                </TableCell>
-              ))}
-              {actions && (
-                <TableCell className="tableCell">
-                  {actions.map((ActionComponent, index) => (
-                    <ActionComponent key={index} row={row} />
+          {
+            rows?.length > 0 ? (
+              rows.map((row) => (
+                <TableRow
+                  key={row[rowKey]}
+                  onClick={() => onRowClick && onRowClick(row)}
+                  className="tableRow"
+                  style={customStyles?.row}
+                >
+                  {columns.map((col, index) => (
+                    <TableCell key={index} className="tableCell">
+                      {col.render ? col.render(row[col.field], row) : row[col.field]}
+                    </TableCell>
                   ))}
+                  {actions && (
+                    <TableCell className="tableCell">
+                      {actions.map((ActionComponent, index) => (
+                        <ActionComponent key={index} row={row} />
+                      ))}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length + (actions ? 1 : 0)}
+                  className="tableCell"
+                  align="center"
+                >
+                  No data available
                 </TableCell>
-              )}
-            </TableRow>
-          ))}
+              </TableRow>
+            )
+          }
         </TableBody>
       </Table>
     </TableContainer>

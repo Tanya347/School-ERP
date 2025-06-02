@@ -25,6 +25,11 @@ const Landing = () => {
             <button>Login as Admin</button>
           </Link>
         </div>
+        <div className="isAdmin">
+          <Link to="/registerSchool">
+            <button>Register School</button>
+          </Link>
+        </div>
       </div>
     </div>
   )

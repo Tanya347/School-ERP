@@ -4,6 +4,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 
 export const createTest = catchAsync(async (req, res, next) => {
+  req.body.schoolID = req.user.schoolID;
   const newTest = new Test(req.body);
   const savedTest = await newTest.save();
   res.status(200).json({
@@ -55,25 +56,20 @@ export const getSingleTest = catchAsync(async (req, res, next) => {
   });
 });
 
-// faculty can see his/her tests
-export const getFacultyTests = catchAsync(async (req, res, next) => {
-  const facultyId = req.params.id;
-  const tests = await Test.find({ author: facultyId });
-  res.status(200).json({
-    status: "success",
-    data: tests,
-  });
-});
+export const getTests = catchAsync(async (req, res, next) => {
+  const { facultyId, classId } = req.query;
+  const schoolId = req.user.schoolID;
+  let filter = { schoolID: schoolId };
+  if (facultyId) filter.author = facultyId;
+  if (classId) filter.sclass = classId;
 
-// student can see his/her tests
-export const getStudentTests = catchAsync(async (req, res, next) => {
-  const classId = req.params.id;
-  const tests = await Test.find({ sclass: classId });
+  const tasks = await Test.find(filter);
+
   res.status(200).json({
     status: "success",
-    data: tests,
+    data: tasks,
   });
-});
+})
 
 // Add/Edit marks for a test
 export const addEditMarks = catchAsync(async (req, res, next) => {

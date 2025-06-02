@@ -3,11 +3,12 @@ import Class from "../models/Class.js"
 import Course from "../models/Course.js"
 import Faculty from "../models/Faculty.js";
 import Student from "../models/Student.js";
+import { protect } from "../controllers/auth.js";
 const router = express.Router();
 
-async function getDocumentCount(model) {
+  async function getDocumentCount(model, schoolId) {
     try {
-      const count = await model.countDocuments({});
+      const count = await model.countDocuments({ schoolID: schoolId });
       return count;
     } catch (error) {
       console.error(error);
@@ -15,26 +16,30 @@ async function getDocumentCount(model) {
     }
   }
 
-  const getCounts = async(req, res, next) => {
+  // Controller to get counts for a specific school
+  const getCounts = async (req, res, next) => {
     try {
-      const classCount = await getDocumentCount(Class);
-      const subjectCount = await getDocumentCount(Course);
-      const teacherCount = await getDocumentCount(Faculty);
-      const studentCount = await getDocumentCount(Student);
-  
+      const schoolId = req.user.schoolID;
+
+      const classCount = await getDocumentCount(Class, schoolId);
+      const subjectCount = await getDocumentCount(Course, schoolId);
+      const teacherCount = await getDocumentCount(Faculty, schoolId);
+      const studentCount = await getDocumentCount(Student, schoolId);
+
       res.status(200).json({
         data: {
           class: classCount,
-        subject: subjectCount,
-        teacher: teacherCount,
-        student: studentCount
-        }
-      })
+          subject: subjectCount,
+          teacher: teacherCount,
+          student: studentCount,
+        },
+      });
     } catch (error) {
       console.error(error);
+      res.status(500).json({ message: "Failed to fetch counts" });
     }
-  }
+  };
 
-  router.get("/getAllCount", getCounts)
+  router.get("/getAllCount", protect(), getCounts)
 
   export default router

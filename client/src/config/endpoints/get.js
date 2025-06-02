@@ -22,7 +22,7 @@ export const getDatatableURL = (path, user) => {
     else if(path === 'tasks')
         return user.role === 'student' ? `/tasks/${user.role}/${user.class}` : `/tasks/${user.role}/${user._id}`;
     else if(path === 'updates')
-        return user.role === 'faculty' ? `/updates/faculty/${user._id}`  : `/${path}/` ;
+        return getTableURL(user) ;
     else    
         return `/${path}/`
 }
@@ -35,12 +35,10 @@ export const getTableWithoutActionURL = (path, id) => {
 }
 
 export const getTableURL = (user) => {
-    if(user.role === 'faculty')
-        return `/updates/faculty/${user._id}`
-    else if(user.role === 'student')
-        return `/updates/student/${user.class}`
-    else
-        return '/updates'
+    const base = `/updates`;
+    if (user.role === 'faculty') return `${base}?facultyId=${user._id}`;
+    if (user.role === 'student') return `${base}?classId=${user.class}`;
+    return base;
 }
 
 export const getModalURL = (path, id) => {
@@ -74,7 +72,7 @@ export const getClassDetails = (cl) => {
 
 export const getSingleData = (id, type) => {
     switch(type) {
-        case "courses" : return `/courses/single/${id}`;
+        case "courses" : return `/courses/${id}`;
         case "faculties" : return `/faculties/${id}`;
         case "students" : return `/students/${id}`;
         case "single-student" : return `/students/single/${id}`;

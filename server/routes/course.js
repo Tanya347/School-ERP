@@ -2,7 +2,6 @@ import express from "express";
 import {
   createCourse,
   deleteCourse,
-  getSingleCourse,
   getCourse,
   getCourses,
   updateCourse,
@@ -15,7 +14,6 @@ router.post("/", protect(), restrictTo("admin"), createCourse);
 router.put("/:id", protect(), restrictTo("admin"), updateCourse);
 router.delete("/:id", protect(), restrictTo("admin"), deleteCourse);
 router.get("/:id", protect(), getCourse);
-router.get("/single/:id", protect(), getSingleCourse);
 router.get("/", protect(), getCourses);
 
 export default router;

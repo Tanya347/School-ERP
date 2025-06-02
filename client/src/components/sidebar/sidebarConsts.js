@@ -12,6 +12,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import GroupIcon from '@mui/icons-material/Group';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import AddModeratorIcon from '@mui/icons-material/AddModerator';
 import BookIcon from '@mui/icons-material/Book';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
@@ -146,6 +147,12 @@ export const sidebarConsts = {
             path: "/admin/timetables/new",
             icon: MoreTimeIcon,
             user: "admin",
+        },
+        {
+            title: "Classes",
+            path: "/admin/classes/new",
+            icon: AddModeratorIcon,
+            user: "admin"
         },
         {
             title: "Tasks",

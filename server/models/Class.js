@@ -40,6 +40,10 @@ const ClassSchema = new mongoose.Schema({
           ref: 'Faculty',
         },
     ],
+    schoolID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
+    }
 }, { timestamps: true })
 
 export default mongoose.model("Class", ClassSchema);

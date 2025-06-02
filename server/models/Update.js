@@ -38,6 +38,10 @@ const UpdateSchema = new mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Faculty'
+    },
+    schoolID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'School'
     }
 
 }, { timestamps: true })

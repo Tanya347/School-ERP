@@ -30,6 +30,7 @@ export const createElementWithPicture = async(file, info, element, url) => {
         ...info,
         ...(element === "course" && { syllabusPicture: pictureUrl ?? null }),
         ...(element === "event" && { poster: pictureUrl ?? null }),
+        ...(element === "school" && {logo: pictureUrl ?? null}),
         ...(element !== "course" && element !== "event" && { profilePicture: pictureUrl ?? null }),
         cloud_id: cloudId ?? null,
     };
@@ -39,7 +40,7 @@ export const createElementWithPicture = async(file, info, element, url) => {
             withCredentials: true
         })
         if(res.data.status === 'success') {
-            toast.success(`${element} created Successfully!`);
+            toast.success(`${element} ${element === "school" ? 'registered' : 'created'} Successfully!`);
         }
 
         return res;

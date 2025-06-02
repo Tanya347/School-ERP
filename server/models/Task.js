@@ -43,6 +43,10 @@ const TaskSchema = new mongoose.Schema(
       ref: "Faculty",
       required: [true, "Author is required"],
     },
+    schoolID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
+    }
   },
   { timestamps: true }
 );

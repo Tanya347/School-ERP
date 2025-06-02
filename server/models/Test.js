@@ -58,6 +58,10 @@ const TestSchema = new mongoose.Schema(
             ref: 'Class',
             required: [true, 'Class is required']
         },
+        schoolID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'School'
+        },
         totalMarks: {
             type: Number,
             required: [true, 'Total marks is required'],

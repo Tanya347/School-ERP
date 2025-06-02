@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
 import Update from "../models/Update.js";
 import Faculty from "../models/Faculty.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
 export const createUpdate = catchAsync(async (req, res, next) => {
+    req.body.schoolID = req.user.schoolID;
     const newUpdate = new Update(req.body);
     const savedUpdate = await newUpdate.save();
     res.status(200).json({
@@ -43,57 +43,44 @@ export const getUpdate = catchAsync(async (req, res, next) => {
 });
 
 export const getUpdates = catchAsync(async (req, res, next) => {
-    const updates = await Update.find().populate("class", "name");
-    res.status(200).json({
-        status: "success",
-        data: updates
-    });
-});
+    const { classId, facultyId } = req.query;
+    let updates = [];
+    if (facultyId) {
+        const faculty = await Faculty.findById(facultyId).populate('classesTaught');
+        if (!faculty) return res.status(404).json({ message: "Faculty not found" });
 
-export const getStudentUpdates = catchAsync(async (req, res, next) => {
-    const classId = mongoose.Types.ObjectId(req.params.id);
-    const updates = await Update.find();
+        const classesTaught = faculty.classesTaught.map(c => c._id);
 
-    const filteredUpdates = updates.filter(update => {
-        if (update.updateType === "general") {
-            return true;
-        } else if (update.updateType === "specific") {
-            return update.class.equals(classId);
-        }
-        return false;
-    });
-
-    res.status(200).json({
-        status: "success",
-        data: filteredUpdates
-    });
-});
-
-export const getFacultyUpdates = catchAsync(async(req, res, next) => {
-    
-    const facultyId = mongoose.Types.ObjectId(req.params.id);
-    
-    // Fetch the faculty member data
-    const faculty = await Faculty.findById(facultyId).populate('classesTaught');
-
-    if (!faculty) {
-        return res.status(404).json({ message: "Faculty not found" });
+        updates = await Update.find({
+            $or: [
+                { updateType: 'general' },
+                { updateType: 'specific', class: { $in: classesTaught } },
+                { author: facultyId }
+            ],
+            ...({ schoolID: req.user.schoolID })
+        }).populate("class", "name");
     }
 
-    // Get the classes taught by the faculty member
-    const classesTaught = faculty.classesTaught.map(c => c._id);
-
-    // Query the updates
-    const updates = await Update.find({
+    else if (classId) {
+        const filter = {
         $or: [
             { updateType: 'general' },
-            { updateType: 'specific', class: { $in: classesTaught } },
-            { author: facultyId }
-        ]
-    }).populate("class", "name");;
+            { updateType: 'specific', class: classId }
+        ],
+        ...({ schoolID: req.user.schoolID })
+        };
+
+        updates = await Update.find(filter).populate("class", "name");
+    }
+
+    else {
+        updates = await Update.find({
+            schoolID: req.user.schoolID
+        }).populate("class", "name");
+    }
 
     res.status(200).json({
         status: "success",
         data: updates
     });
-})
+});

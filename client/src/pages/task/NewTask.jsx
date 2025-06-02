@@ -1,6 +1,7 @@
 import "../../config/style/form.scss";
 
-import { createElement, useState } from "react";
+import { useState } from "react";
+import { createElement } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { useAuth } from "../../config/context/AuthContext";
@@ -91,7 +92,7 @@ const NewTask = ({ inputs, title }) => {
             <div className="submitButton">
             {loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
-                editing update...
+                creating task...
               </div>}
               <button onClick={handleClick} className="form-btn">Create Task</button>
             </div>

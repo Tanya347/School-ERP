@@ -5,12 +5,15 @@ import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const RegisterSchool = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -128,14 +131,23 @@ const RegisterSchool = () => {
             className="lInput"
           />
 
-          <label htmlFor="phone">Enter Password</label>
-          <input
-            type="password"
-            placeholder="Admin password"
-            id="password"
-            onChange={handleChange}
-            className="lInput"
-          />
+          <div className="password-input">
+            <label htmlFor="phone">Enter Password</label>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Admin password"
+              id="password"
+              onChange={handleChange}
+              className="lInput"
+              style={{"width": "100%"}}
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </span>
+          </div>
 
           <div className="submitButton">
             {loading && <div className="create-loader">

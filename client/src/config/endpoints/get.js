@@ -27,6 +27,13 @@ export const getDatatableURL = (path, user) => {
         return `/${path}/`
 }
 
+export const getTimeTableURL = (id, type) => {
+    if(type === 'faculty')
+        return `/timetables?facultyId=${id}`;
+    else if(type === 'class')
+        return `/timetables?classId=${id}`;
+}
+
 export const getTableWithoutActionURL = (path, id) => {
     if(path === 'attendance')
         return `/attendances/classperc/${id}`

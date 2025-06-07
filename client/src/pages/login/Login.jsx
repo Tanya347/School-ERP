@@ -6,9 +6,20 @@ import { useState } from 'react'
 import { postURLs } from "../../config/endpoints/post"
 import { toast } from "react-toastify";
 import { useAuth } from "../../config/context/AuthContext"
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 // type will tell whether admin or student
 function Login({ type }) {
+  const [showPassword, setShowPassword] = useState(false);
+  // function to navigate to a certain page once logged in
+  const navigate = useNavigate();
+
+  // sets the credentials entered by the user
+  const [credentials, setCredentials] = useState({
+    username: undefined,
+    password: undefined
+  })
 
   var url;
 
@@ -21,15 +32,6 @@ function Login({ type }) {
   } else {
     url = "/Assets/admin.jfif"
   }
-
-  // function to navigate to a certain page once logged in
-  const navigate = useNavigate();
-
-  // sets the credentials entered by the user
-  const [credentials, setCredentials] = useState({
-    username: undefined,
-    password: undefined
-  })
 
   const {login} = useAuth();
 
@@ -81,14 +83,23 @@ function Login({ type }) {
           className="lInput"
         />
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          placeholder="password"
-          id="password"
-          onChange={handleChange}
-          className="lInput"
-        />
+        <div className="password-input">
+          <label htmlFor="password">Password</label>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="password"
+            id="password"
+            onChange={handleChange}
+            className="lInput"
+            style={{"width": "100%", "marginTop": "10px"}}
+          />
+          <span
+            className="eye-icon"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+          </span>
+        </div>
 
         <p style={{"marginTop": "20px", "marginBottom": "10px"}}>Forgot Password?</p>
 

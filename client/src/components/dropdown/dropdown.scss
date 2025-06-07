@@ -1,0 +1,9 @@
+.formInput {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    select {
+        padding: 2px;
+    }
+}

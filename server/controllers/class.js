@@ -82,6 +82,7 @@ export const getClassSubjects = catchAsync(async (req, res, next) => {
     _id: sub._id,
     name: sub.name,
     code: sub.subjectCode,
+    teacher: sub.teacher
   }));
   res.status(200).json({
     data: subjects,

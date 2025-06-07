@@ -1,22 +1,18 @@
 import mongoose from "mongoose";
-import validator from "validator";
 
 const SessionSchema = new mongoose.Schema(
     {
         name: {
-
+            type: String,
+            required: [true, 'Session name is required']
         },
-        startDate: {
-
-        },
-        endDate: {
-
-        },
-        schoolId: {
-
+        schoolID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'School'
         },
         isActive: {
-
+            type: Boolean,
+            default: false
         }
     }
 );

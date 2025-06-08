@@ -10,7 +10,6 @@ import NewCourse from "../../pages/course/NewCourse";
 import NewEvent from "../../pages/event/NewEvent"
 import NewClass from "../../pages/class/CreateClass";
 import NewUpdate from "../../pages/update/NewUpdate";
-import EditClass from '../../pages/class/EditClass';
 import EditEvent from "../../pages/event/EditEvent"
 import EditUpdate from "../../pages/update/EditUpdate";
 import EditCourse from "../../pages/course/EditCourse";
@@ -21,6 +20,9 @@ import SingleStudent from '../../pages/singleStudent/SingleStudent';
 import Class from "../../pages/class/Class";
 import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
+import TableWithoutAction from '../../pages/table/TableWithoutAction';
+import NewTimeTable from '../../pages/timetable/NewTimeTable';
+import Layout from '../../components/sidebar/Layout';
 
 // Datatable Columns
 import { studentColumns } from "../datatablesource/studentColumns";
@@ -38,11 +40,7 @@ import { useAuth } from '../../config/context/AuthContext';
 import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
 import { eventInputs } from '../formsource/eventInputs';
-import TableWithoutAction from '../../pages/table/TableWithoutAction';
-import NewTimeTable from '../../pages/timetable/NewTimeTable';
-import EditTimeTable from '../../pages/timetable/EditTimeTable';
-import Timetable from '../../pages/timetable/Timetable';
-import Layout from '../../components/sidebar/Layout';
+import Timetable from '../../components/timetable/Timetable';
 
 const AdminRoutes = () => {
 
@@ -228,15 +226,9 @@ const AdminRoutes = () => {
             element={ <NewTimeTable />}
             />
 
-          {/* edit timetables */}
-          <Route
-            path='timetables/edit/:id'
-            element={ <EditTimeTable />}
-            />
-
           {/* view timetables */}
           <Route
-            path='timetables'
+            path='timetables/:classId'
             element={<Timetable />}
             />
         </Routes>

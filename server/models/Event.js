@@ -94,6 +94,10 @@ const EventSchema = new mongoose.Schema({
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
+    },
+    sessionID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'School'
     }
 }, { timestamps: true })
 

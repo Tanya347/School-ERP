@@ -1,9 +1,12 @@
 import Update from "../models/Update.js";
 import Faculty from "../models/Faculty.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { getActiveSession } from "./session.js";
 
 export const createUpdate = catchAsync(async (req, res, next) => {
     req.body.schoolID = req.user.schoolID;
+    const activeSession = await getActiveSession(req.user);
+    req.body.sessionID = activeSession._id;
     const newUpdate = new Update(req.body);
     const savedUpdate = await newUpdate.save();
     res.status(200).json({

@@ -95,7 +95,11 @@ const TestSchema = new mongoose.Schema(
                     default: false
                 }
             }
-        ]
+        ],
+        sessionID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'School'
+        }
     },
     {
         timestamps: true

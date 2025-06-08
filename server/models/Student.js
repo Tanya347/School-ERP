@@ -151,7 +151,15 @@ const StudentSchema = new mongoose.Schema(
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
-    }
+    },
+    sessionID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Session'
+    },
+    passedOut: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

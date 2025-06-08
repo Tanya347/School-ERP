@@ -33,6 +33,9 @@ const Class = () => {
                             <Link to={`/admin/classes/marks/${cl._id}`}>
                                 <button className='marksButton'>Marks Status</button>
                             </Link>
+                            <Link to={`/admin/timetables/${cl._id}`}>
+                                <button className='ttButton'>Timetable</button>
+                            </Link>
                         </div>
                     ))
                 }

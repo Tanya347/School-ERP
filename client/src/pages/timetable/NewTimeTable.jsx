@@ -3,9 +3,9 @@ import axios from 'axios';
 import Dropdown from '../../components/dropdown/Dropdown';
 import { getClasses, getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
 import "./newTimeTable.scss";
-
-const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const periods = Array.from({ length: 8 }, (_, i) => i + 1);
+import { getClearTimetableForClass } from '../../config/endpoints/delete';
+import {toast} from "react-toastify"
+import { periodTimes, days, periods } from '../../config/commons';
 
 const NewTimeTable = () => {
 
@@ -13,17 +13,7 @@ const NewTimeTable = () => {
   const [courses, setCourses] = useState([]);
   const [slots, setSlots] = useState({});
   const [existingSlots, setExistingSlots] = useState({});
-
-  const periodTimes = {
-    1: { start: "08:00", end: "08:45" },
-    2: { start: "08:50", end: "09:35" },
-    3: { start: "09:40", end: "10:25" },
-    4: { start: "10:30", end: "11:15" },
-    5: { start: "11:20", end: "12:05" },
-    6: { start: "12:10", end: "12:55" },
-    7: { start: "13:00", end: "13:45" },
-    8: { start: "13:50", end: "14:35" },
-  };
+  const [clearedSlots, setClearedSlots] = useState({});
 
   useEffect(() => {
     if (selectedClass) {
@@ -60,6 +50,27 @@ const NewTimeTable = () => {
     setSelectedClass(e.target.value)
   }
 
+  const handleClearAllSlots = async () => {
+    if (!selectedClass) return;
+
+    // const confirmClear = window.confirm("Are you sure you want to clear all slots for this class?");
+    // if (!confirmClear) return;
+
+    try {
+      const res = await axios.delete(getClearTimetableForClass(selectedClass), { withCredentials: true });
+      setClearedSlots({});
+      setSlots({});
+      setExistingSlots({});
+
+      if(res.data.status === 'success') {
+        toast.success(`Slots cleared successfully!`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to clear slots.");
+    }
+  };
+
   const handleSubmit = async () => {
     const slotData = [];
 
@@ -82,6 +93,7 @@ const NewTimeTable = () => {
       });
     }
     await axios.post(process.env.REACT_APP_API_URL + '/timetables/bulkCreate', { slots: slotData });
+    window.location.reload(); // Reload to reflect changes
   };
 
   return (
@@ -111,13 +123,18 @@ const NewTimeTable = () => {
                 <td>{day}</td>
                 {periods.map(period => (
                   <td key={period} style={{ padding: "8px 12px" }}>
-                    {existingSlots[`${day}_${period}`] && (
+                    {existingSlots[`${day}_${period}`] && !clearedSlots[`${day}_${period}`] && (
                       <div className="existing-slot">
                         <p>{existingSlots[`${day}_${period}`].courseName}</p>
                         <span>({existingSlots[`${day}_${period}`].facultyName})</span>
+                        <button
+                          onClick={() => setClearedSlots(prev => ({ ...prev, [`${day}_${period}`]: true }))}
+                        >
+                          Clear
+                        </button>
                       </div>
                     )}
-                    <select
+                    {(!existingSlots[`${day}_${period}`] || clearedSlots[`${day}_${period}`]) &&(<select
                       value={slots[`${day}_${period}`] || ''}
                       onChange={(e) => handleCourseChange(day, period, e.target.value)}
                     >
@@ -127,13 +144,23 @@ const NewTimeTable = () => {
                           {course.name}
                         </option>
                       ))}
-                    </select>
+                    </select>)}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
+      )}
+
+      {selectedClass && (
+        <button
+          className="form-btn danger-btn"
+          onClick={handleClearAllSlots}
+          style={{ marginTop: "1rem", backgroundColor: "#dc3545", color: "white" }}
+        >
+          🧹 Clear All Slots for This Class
+        </button>
       )}
 
       {selectedClass && <button className='form-btn' onClick={handleSubmit}>Save Timetable</button>}

@@ -1,9 +1,12 @@
 import Event from "../models/Event.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { getActiveSession } from "./session.js";
 
 // Create a new event
 export const createEvent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
+  const activeSession = await getActiveSession(req.user);
+  req.body.sessionID = activeSession._id;
   const newEvent = new Event(req.body);
   const savedEvent = await newEvent.save();
   res.status(200).json({

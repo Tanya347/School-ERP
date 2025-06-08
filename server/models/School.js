@@ -80,7 +80,13 @@ const SchoolSchema = new mongoose.Schema(
         admin: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Admin',
-        }
+        },
+        sessions: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Session',
+            },
+        ],
     }
 );
 

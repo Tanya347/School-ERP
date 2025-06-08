@@ -28,7 +28,8 @@ import attendanceRoute from "./routes/attendance.js";
 import authRoute from "./routes/auth.js"
 import countAllRoute from "./routes/countDocuments.js";
 import schoolRoute from "./routes/school.js";
-import timetableRoute from "./routes/timetable.js"
+import timetableRoute from "./routes/timetable.js";
+import sessionRoute from "./routes/session.js";
 
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
@@ -104,6 +105,7 @@ app.use("/api/auth", authRoute);
 app.use("/api", countAllRoute);
 app.use("/api/schools", schoolRoute);
 app.use("/api/timetables", timetableRoute);
+app.use("/api/sessions", sessionRoute);
 
 // unhandled routes
 app.all('*', (req, res, next) => {

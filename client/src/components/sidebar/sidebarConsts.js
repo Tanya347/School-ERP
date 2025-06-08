@@ -17,7 +17,6 @@ import BookIcon from '@mui/icons-material/Book';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import SchoolIcon from '@mui/icons-material/School';
-import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -62,12 +61,6 @@ export const sidebarConsts = {
             icon: SchoolIcon,
             user: "admin",
         },
-        {
-            title: "Timetables",
-            path: "/admin/timetables",
-            icon: ViewTimelineIcon,
-            user: "admin",
-        },    
         {
             title: 'Calender',
             getPath: (user) => `/${user.role}/calender`,
@@ -145,7 +138,7 @@ export const sidebarConsts = {
         {
             title: "Create Timetable",
             path: "/admin/timetables/new",
-            icon: MoreTimeIcon,
+            icon: ViewTimelineIcon,
             user: "admin",
         },
         {

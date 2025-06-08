@@ -2,9 +2,12 @@ import Student from "../models/Student.js";
 import Class from "../models/Class.js";
 import Course from "../models/Course.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { getActiveSession } from "./session.js";
 
 export const registerStudent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
+  const activeSession = await getActiveSession(req.user);
+  req.body.sessionID = activeSession._id;
   const newUser  = await Student.create(req.body);
   res.status(201).json({
     status: 'success',

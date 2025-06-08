@@ -1,5 +1,6 @@
 import Timetable from "../models/Timetable.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { getActiveSession } from "./session.js";
 
 // Create slot
 export const createSlot = catchAsync(async (req, res, next) => {
@@ -12,10 +13,12 @@ export const createSlot = catchAsync(async (req, res, next) => {
 
 export const bulkCreateSlots = catchAsync(async (req, res, next) => {
   const { slots } = req.body;
+  const activeSession = await getActiveSession(req.user);
 
   const enrichedSlots = slots.map(slot => ({
     ...slot,
-    schoolID: req.user.schoolID
+    schoolID: req.user.schoolID,
+    sessionID: activeSession._id,
   }));
 
   const created = await Timetable.insertMany(enrichedSlots);
@@ -53,11 +56,17 @@ export const updateSlot = catchAsync(async (req, res, next) => {
 });
 
 // Delete a slot
-export const deleteSlot = catchAsync(async (req, res, next) => {
-  await Timetable.findOneAndDelete({
-    _id: req.params.id,
+export const deleteSlotsForClass = catchAsync(async (req, res, next) => {
+  const classId = req.params.id;
+  if (!classId) {
+    return res.status(400).json({ status: "fail", message: "classId query parameter is required" });
+  }
+
+  await Timetable.deleteMany({
+    sclass: classId,
     schoolID: req.user.schoolID,
   });
-  res.status(204).json({ status: "success", message: "Slot deleted" });
+
+  res.status(200).json({ status: "success", message: "All slots for the class deleted" });
 });
  

@@ -57,6 +57,12 @@
         }
 
         .existing-slot {
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
             
             p {
                 font-weight: bold;
@@ -65,6 +71,21 @@
 
             span {
                 font-weight: lighter;
+            }
+
+            button {
+                padding: 5px 10px;
+                border: none;
+                background-color: #B4B4B8;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: #d9c7ec;
+                }
             }
         }
     }

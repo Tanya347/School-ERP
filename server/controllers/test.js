@@ -2,9 +2,12 @@ import Test from "../models/Test.js";
 import Student from "../models/Student.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
+import { getActiveSession } from "./session.js";
 
 export const createTest = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
+  const activeSession = await getActiveSession(req.user);
+  req.body.sessionID = activeSession._id;
   const newTest = new Test(req.body);
   const savedTest = await newTest.save();
   res.status(200).json({

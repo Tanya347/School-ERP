@@ -39,6 +39,10 @@ const timetableSlotSchema = new mongoose.Schema({
     ref: "School",
     required: true,
   },
+  sessionID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'School'
+  }
 }, { timestamps: true });
 
 export default mongoose.model("TimetableSlot", timetableSlotSchema);

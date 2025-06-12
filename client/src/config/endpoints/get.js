@@ -18,9 +18,9 @@ export const getStudentAttendance = (studentid, classid) => {
 }
 export const getDatatableURL = (path, user) => {
     if(path === 'tests')
-        return user.role === 'student' ? `/tests/${user.role}/${user.class}` : `/tests/${user.role}/${user._id}`;
+        return user.role === 'student' ? `/tests?classId=${user.class}` : `/tests?facultyId=${user._id}`;
     else if(path === 'tasks')
-        return user.role === 'student' ? `/tasks/${user.role}/${user.class}` : `/tasks/${user.role}/${user._id}`;
+        return user.role === 'student' ? `/tasks?classId=${user.class}` : `/tasks?facultyId=${user._id}`;
     else if(path === 'updates')
         return getTableURL(user) ;
     else    

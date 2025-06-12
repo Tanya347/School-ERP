@@ -98,7 +98,12 @@ const TestSchema = new mongoose.Schema(
         ],
         sessionID: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'School'
+            ref: 'Session',
+        },
+        state: {
+            type: String,
+            enum: ['completed', 'canceled', 'pending'],
+            default: 'pending',
         }
     },
     {

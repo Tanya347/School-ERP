@@ -48,6 +48,10 @@ export const getUpdate = catchAsync(async (req, res, next) => {
 export const getUpdates = catchAsync(async (req, res, next) => {
     const { classId, facultyId } = req.query;
     let updates = [];
+
+    const now = new Date();
+    const baseFilter = { schoolID: req.user.schoolID, expiresAt: { $gt: now } };
+
     if (facultyId) {
         const faculty = await Faculty.findById(facultyId).populate('classesTaught');
         if (!faculty) return res.status(404).json({ message: "Faculty not found" });
@@ -60,7 +64,7 @@ export const getUpdates = catchAsync(async (req, res, next) => {
                 { updateType: 'specific', class: { $in: classesTaught } },
                 { author: facultyId }
             ],
-            ...({ schoolID: req.user.schoolID })
+            ...baseFilter
         }).populate("class", "name");
     }
 
@@ -70,7 +74,7 @@ export const getUpdates = catchAsync(async (req, res, next) => {
             { updateType: 'general' },
             { updateType: 'specific', class: classId }
         ],
-        ...({ schoolID: req.user.schoolID })
+        ...baseFilter
         };
 
         updates = await Update.find(filter).populate("class", "name");
@@ -82,8 +86,41 @@ export const getUpdates = catchAsync(async (req, res, next) => {
         }).populate("class", "name");
     }
 
+    const enrichedUpdates = updates.map(update => ({
+        ...update.toObject(),
+        isRead: update.readBy.some(read => read.user.toString() === req.user._id.toString())
+    }));
+
     res.status(200).json({
         status: "success",
-        data: updates
+        data: enrichedUpdates
+    });
+});
+
+export const markUpdateAsRead = catchAsync(async (req, res, next) => {
+    const { userId, userModel } = req.body;
+    const update = await Update.findById(req.params.id);
+
+    if (!update) {
+        return res.status(404).json({ message: "Update not found" });
+    }
+
+    // Check if the user has already read the update
+    const alreadyRead = update.readBy.some(
+        (read) => read.user.toString() === userId && read.userModel === userModel
+    );
+
+    if (alreadyRead) {
+        return res.status(400).json({ message: "Update already marked as read" });
+    }
+
+    // Add the user to the readBy array
+    update.readBy.push({ user: userId, userModel });
+    await update.save();
+
+    res.status(200).json({
+        status: "success",
+        message: 'Update marked as read successfully!',
+        data: update
     });
 });

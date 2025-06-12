@@ -4,7 +4,7 @@ export const testColumns = [
     {
         field: "name",
         headerName: "Test",
-        width: 200,
+        width: 100,
     },
     {
         field: "syllabus",
@@ -14,12 +14,17 @@ export const testColumns = [
     {
         field: "duration",
         headerName: "Duration",
+        width: 100
+    },
+    {
+        field: "state",
+        headerName: "Status",
         width: 150
     },
     {
         field: "date",
         headerName: "Date",
-        width: 200,
+        width: 150,
         renderCell: (params) => {
             return formatDate(params.value);
         }
@@ -27,7 +32,7 @@ export const testColumns = [
     {
         field: "totalMarks",
         headerName: "Marks",
-        width: 150
-    }
+        width: 100
+    },
 
 ];

@@ -199,3 +199,45 @@ export const clearMarksOfTest = catchAsync(async (req, res, next) => {
     message: 'Marks cleared successfully'
   });
 });
+
+export const completeTest = catchAsync(async (req, res, next) => {
+  const { testid } = req.params;
+
+  const test = await Test.findById(testid);
+  if (!test) {
+    return res.status(404).json({ message: 'Test not found' });
+  }
+
+  // Update the state of the test to 'completed'
+  test.state = 'completed';
+
+  // Save the updated test document
+  await test.save();
+
+  res.status(200).json({
+    status: "success",
+    message: 'Test completed successfully',
+    data: test
+  });
+});
+
+export const cancelTest = catchAsync(async (req, res, next) => {
+  const { testid } = req.params;
+
+  const test = await Test.findById(testid);
+  if (!test) {
+    return res.status(404).json({ message: 'Test not found' });
+  }
+
+  // Update the state of the test to 'canceled'
+  test.state = 'canceled';
+
+  // Save the updated test document
+  await test.save();
+
+  res.status(200).json({
+    status: "success",
+    message: 'Test canceled successfully',
+    data: test
+  });
+});

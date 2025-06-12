@@ -72,14 +72,14 @@ function Login({ type }) {
       <div className="lContainer">
 
         <h1>Welcome to {type} Portal!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <p>Please enter your username and password to access your {type.toLowerCase()} account.</p>
 
         <label htmlFor="username">Enter Username</label>
         <input
           type="text"
           placeholder="username"
           id="username"
-          onChange={handleChange} // handlechange sets the value to usestate
+          onChange={handleChange}
           className="lInput"
         />
 
@@ -103,7 +103,6 @@ function Login({ type }) {
 
         <p style={{"marginTop": "20px", "marginBottom": "10px"}}>Forgot Password?</p>
 
-        {/* When button is clicked called handleclick so all the operations can be performed*/}
         <button onClick={handleClick} className="lButton">
           Login
         </button>

@@ -11,7 +11,6 @@ const UpdateSchema = new mongoose.Schema({
             },
             message: 'Title should be between 5 and 50 characters'
         }
-
     },
     desc: {
         type: String,
@@ -45,9 +44,26 @@ const UpdateSchema = new mongoose.Schema({
     },
     sessionID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'School'
+        ref: 'Session'
+    },
+    readBy: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            refPath: 'readBy.userModel'
+        },
+        userModel: {
+            type: String,
+            enum: ['Faculty', 'Student']
+        }
+    }],
+    expiresAt: {
+        type: Date,
+        default: () => {
+        const now = new Date();
+        now.setMonth(now.getMonth() + 3);
+        return now;
+        }
     }
-
 }, { timestamps: true })
 
 export default mongoose.model("Update", UpdateSchema);

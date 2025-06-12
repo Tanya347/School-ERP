@@ -1,6 +1,7 @@
 import Student from "../models/Student.js";
 import Class from "../models/Class.js";
 import Course from "../models/Course.js";
+import { sendEmail } from "../utils/email.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 
@@ -22,6 +23,13 @@ export const updateStudent = catchAsync(async (req, res, next) => {
     { $set: req.body },
     { new: true }
   );
+  const mailOptions = {
+    email: updatedStudent.email,
+    subject: "Student Information Updated",
+    message: `Dear ${updatedStudent.name},\n\nYour student information has been successfully updated. If you have any questions, please contact the administration.\n\nBest regards,\nSchool Administration`
+  };
+  await sendEmail(mailOptions);
+  if (!updatedStudent) return res.status(404).json({ message: "Student not found" });
   res.status(200).json({
     status: "success",
     data: updatedStudent,

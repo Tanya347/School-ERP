@@ -50,11 +50,25 @@ const Datatable = ({ column, name, type }) => {
     setPopupName(type);
   };
 
+  const handleActionOnTest = async (id, action) => {
+    try {
+      const url = process.env.REACT_APP_API_URL + `/tests/${action}/${id}`;
+      const res = await axios.put(url, {}, { withCredentials: true });
+      if (res.data.status === "success") {
+        window.location.reload();
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Failed to perform action. Please try again.";
+      toast.error(errorMessage);
+      console.error(err);
+    }
+  }
+
   const actionColumn = [
     {
       field: "action",
       headerName: "Action",
-      width: 300,
+      width: 600,
       renderCell: (params) => (
         <div className="cellAction">
           {path === "students" || path === "faculties" ? (
@@ -86,9 +100,17 @@ const Datatable = ({ column, name, type }) => {
           )}
 
           {type === "Creator" && path === "tests" && (
-            <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
-              <div className="editButton">Marks</div>
-            </Link>
+            <>
+              <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
+                <div className="viewButton">Add Marks</div>
+              </Link>
+              <div className="editButton" onClick={() => handleActionOnTest(params.row._id, "complete")}>
+                Mark Complete
+              </div>
+              <div className="deleteButton" onClick={() => handleActionOnTest(params.row._id, "cancel")}>
+                Mark Cancelled
+              </div>
+            </>
           )}
         </div>
       ),

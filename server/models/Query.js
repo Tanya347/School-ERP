@@ -29,7 +29,7 @@ const QuerySchema = new mongoose.Schema({
     },
     sessionID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'School'
+        ref: 'Session'
     }
 }, { timestamps: true })
 

@@ -5,6 +5,7 @@ import {
     getUpdate,
     getUpdates,
     updateUpdate,
+    markUpdateAsRead
 } from "../controllers/updates.js";
 import { protect } from "../controllers/auth.js";
 
@@ -17,7 +18,7 @@ router.put("/:id", protect(), updateUpdate);
 router.delete("/:id", protect(), deleteUpdate);
 router.get("/:id", protect(), getUpdate);
 router.get("/", protect(), getUpdates);
-
+router.patch("/markread/:id", protect(), markUpdateAsRead);
 
 
 export default router;

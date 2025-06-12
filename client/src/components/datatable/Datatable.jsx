@@ -11,6 +11,7 @@ import { getDeleteURL } from "../../config/endpoints/delete.js";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import AddClass from "../../pages/class/AddClass.jsx";
+import ExportButton from "../excelButton/ExcelButton.jsx";
 
 const Datatable = ({ column, name, type }) => {
   const location = useLocation();
@@ -128,6 +129,16 @@ const Datatable = ({ column, name, type }) => {
         <div className="datatable">
           <div className="datatableHeader">
             <div className="datatableTitle">{name}</div>
+            <ExportButton
+              data={list}
+              formatted={list.map((item) => ({
+                ...item,
+                createdAt: new Date(item.createdAt).toLocaleString(),
+                updatedAt: new Date(item.updatedAt).toLocaleString(),
+              }))}
+              filename={`${name}_data`}
+              title={name}
+            />
             {(type === "Admin" || type === "Creator") && (
               <Link to={`new`} style={{ textDecoration: "none" }}>
                 <div className="link">Create</div>

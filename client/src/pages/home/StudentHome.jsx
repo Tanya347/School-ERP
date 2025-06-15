@@ -1,4 +1,3 @@
-import React from 'react'
 import "./studentHome.scss"
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../config/context/AuthContext'

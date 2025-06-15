@@ -22,6 +22,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import TaskIcon from '@mui/icons-material/Task';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
 export const sidebarConsts = {
     information: [
@@ -140,6 +141,12 @@ export const sidebarConsts = {
             path: "/admin/timetables/new",
             icon: ViewTimelineIcon,
             user: "admin",
+        },
+        {
+            title: "Materials",
+            path: "/admin/materials/new",
+            icon: CreateNewFolderIcon,
+            user: "admin"
         },
         {
             title: "Classes",

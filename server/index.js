@@ -30,6 +30,7 @@ import countAllRoute from "./routes/countDocuments.js";
 import schoolRoute from "./routes/school.js";
 import timetableRoute from "./routes/timetable.js";
 import sessionRoute from "./routes/session.js";
+import materialRoute from "./routes/material.js";
 
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
@@ -106,6 +107,7 @@ app.use("/api", countAllRoute);
 app.use("/api/schools", schoolRoute);
 app.use("/api/timetables", timetableRoute);
 app.use("/api/sessions", sessionRoute);
+app.use("/api/materials", materialRoute)
 
 // unhandled routes
 app.all('*', (req, res, next) => {

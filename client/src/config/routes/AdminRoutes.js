@@ -41,6 +41,7 @@ import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
 import { eventInputs } from '../formsource/eventInputs';
 import Timetable from '../../components/timetable/Timetable';
+import UploadMaterial from '../../pages/materials/Material';
 
 const AdminRoutes = () => {
 
@@ -160,6 +161,13 @@ const AdminRoutes = () => {
             path="courses/edit/:courseId/"
             element={ <EditCourse title="Edit Courses" type="Admin" />}
             />
+
+        {/* ROUTES FOR CLASSES */}
+
+         <Route
+            path="materials/new"
+            element={ <UploadMaterial/>}
+          />
 
         {/* ROUTES FOR CLASSES */}
 

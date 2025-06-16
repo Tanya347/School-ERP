@@ -9,12 +9,13 @@ import {
   registerFaculty,
   AddNewCourse,
 } from "../controllers/faculty.js";
+import upload from "../utils/multer.js";
 import { restrictTo, protect } from "../controllers/auth.js";
 
 
 const router = express.Router();
 
-router.post("/registerFaculty", protect(), restrictTo("admin"), registerFaculty);
+router.post("/registerFaculty", protect(), restrictTo("admin"), upload.single('file'), registerFaculty);
 router.put("/:id", protect(), restrictTo("admin"), updateFaculty);
 router.delete("/:id", protect(), restrictTo("admin"), deleteFaculty);
 router.get("/:id", protect(), getFaculty);

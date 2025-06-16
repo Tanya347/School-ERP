@@ -2,10 +2,32 @@ import Faculty from "../models/Faculty.js";
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import fs from "fs";
+import cloudinary from "../utils/cloudinary.js";
 
 export const registerFaculty = catchAsync(async (req, res, next) => {
+  
   req.body.schoolID = req.user.schoolID;
-  const newUser  = await Faculty.create(req.body);
+
+  let profilePicture = null;
+  let cloud_id = null;
+
+  if(req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "erp_portal",
+    });
+    profilePicture = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+  }
+
+  const newUser  = await Faculty.create({
+    ...req.body,
+    profilePicture,
+    cloud_id,
+  });
+
   res.status(201).json({
     status: 'success',
     data: { user: newUser  },
@@ -28,6 +50,10 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
 
 // Delete a faculty member
 export const deleteFaculty = catchAsync(async (req, res, next) => {
+  const faculty = await Faculty.findById(req.params.id);
+  if (faculty.cloud_id) {
+    await cloudinary.uploader.destroy(faculty.cloud_id);
+  }
   await Faculty.findByIdAndDelete(req.params.id);
   res.status(200).json({
     status: "success",

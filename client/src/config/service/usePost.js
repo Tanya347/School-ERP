@@ -2,50 +2,32 @@ import axios from "axios"
 import {toast} from "react-toastify"
 
 export const createElementWithPicture = async(file, info, element, url) => {
-    let pictureUrl;
-    let cloudId;
-    let newElement;
+    const formData = new FormData();
 
     if(file) {
-        const data = new FormData();
-        data.append("file", file);
-        data.append("upload_preset", "upload");
-
-        try {
-            const uploadRes = await axios.post(
-              `${process.env.REACT_APP_CLOUDINARY}`,
-              data,
-              { withCredentials: false } 
-            );
-            pictureUrl = uploadRes.data.url;
-            cloudId = uploadRes.data.public_id;
-          } catch (err) {
-            toast.error("Failed to upload the image. Please try again.");
-            console.error(err);
-            return; 
-        }
+        formData.append("file", file);
     }
 
-    newElement = {
-        ...info,
-        ...(element === "course" && { syllabusPicture: pictureUrl ?? null }),
-        ...(element === "event" && { poster: pictureUrl ?? null }),
-        ...(element === "school" && {logo: pictureUrl ?? null}),
-        ...(element !== "course" && element !== "event" && { profilePicture: pictureUrl ?? null }),
-        cloud_id: cloudId ?? null,
-    };
+    Object.entries(info).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
 
     try {
-        const res = await axios.post(url, newElement, {
+        
+        const res = await axios.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
             withCredentials: true
-        })
+        });
+
         if(res.data.status === 'success') {
             toast.success(`${element} ${element === "school" ? 'registered' : 'created'} Successfully!`);
         }
 
         return res;
-    }
-    catch(err) {
+
+    } catch(err) {
         const errorMessage = err.response?.data?.message || `Failed to create ${element}. Please try again.`;
         toast.error(errorMessage);
         console.error(err);

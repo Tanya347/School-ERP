@@ -2,15 +2,31 @@ import School from "../models/School.js";
 import Admin from "../models/Admin.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
+import fs from "fs";
+import cloudinary from "../utils/cloudinary.js";
 
 export const createSchool = catchAsync(async (req, res, next) => {
+    let logo = null;
+    let cloud_id = null;
+
+    if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'erp_portal/school_logos',
+            resource_type: 'image'
+        });
+
+        logo = result.secure_url;
+        cloud_id = result.public_id;
+
+        // Clean up the local file after upload
+        fs.unlinkSync(req.file.path);
+    }
 
     const {
         name,
         address,
         email,
         phone,
-        logo,
         principal,
         viceprincipal,
         username,
@@ -23,6 +39,8 @@ export const createSchool = catchAsync(async (req, res, next) => {
         phone,
         logo,
         principal,
+        logo, 
+        cloud_id,
         viceprincipal,
     });
     const newAdmin = await Admin.create({

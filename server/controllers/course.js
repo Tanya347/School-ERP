@@ -1,18 +1,38 @@
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import fs from "fs";
+import cloudinary from "../utils/cloudinary.js";
 
 // Create a new course and add it to the class
 export const createCourse = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const newCourse = new Course(req.body);
-  // Add course to the class's subjects array
+  
   await Class.updateOne(
     { _id: newCourse.class },
     { $addToSet: { subjects: newCourse._id } }
   );
 
-  const savedCourse = await newCourse.save();
+  let syllabusPicture = null;
+  let cloud_id = null;
+
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "erp_portal",
+    });
+
+    syllabusPicture = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+  }
+
+  const savedCourse = await Course.create({
+    ...req.body,
+    syllabusPicture,
+    cloud_id
+  });
   res.status(200).json({
     status: 'success',
     data: savedCourse,
@@ -43,6 +63,11 @@ export const deleteCourse = catchAsync(async (req, res, next) => {
 
   // Remove course from the class's subjects array
   await Class.findByIdAndUpdate(course.class, { $pull: { subjects: req.params.id } });
+
+  // Delete syllabus image from Cloudinary if it exists
+  if (course.cloud_id) {
+    await cloudinary.uploader.destroy(course.cloud_id);
+  }
 
   await course.remove();
   res.status(200).json({

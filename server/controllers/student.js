@@ -4,12 +4,34 @@ import Course from "../models/Course.js";
 import { sendEmail } from "../utils/email.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
+import fs from "fs";
+import cloudinary from "../utils/cloudinary.js";
 
 export const registerStudent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const activeSession = await getActiveSession(req.user);
   req.body.sessionID = activeSession._id;
-  const newUser  = await Student.create(req.body);
+
+  // image upload handler
+  let profilePicture = null;
+  let cloud_id = null;
+
+  if(req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "erp_portal",
+    });
+
+    profilePicture = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+
+  }
+  const newUser  = await Student.create({
+    ...req.body,
+    profilePicture,
+    cloud_id,
+  });
   res.status(201).json({
     status: 'success',
     data: { user: newUser  },
@@ -40,7 +62,9 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 export const deleteStudent = catchAsync(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) return res.status(404).json({ message: "Student not found" });
-
+  if( student.cloud_id) {
+    await cloudinary.uploader.destroy(student.cloud_id);
+  }
   await Class.findByIdAndUpdate(student.class, { $pull: { students: req.params.id } });
   await student.remove();
   res.status(200).json({

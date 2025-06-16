@@ -6,11 +6,12 @@ import {
   getCourses,
   updateCourse,
 } from "../controllers/course.js";
+import upload from "../utils/multer.js";
 import { restrictTo, protect } from "../controllers/auth.js";
 
 const router = express.Router();
 
-router.post("/", protect(), restrictTo("admin"), createCourse);
+router.post("/", protect(), restrictTo("admin"), upload.single('file'), createCourse);
 router.put("/:id", protect(), restrictTo("admin"), updateCourse);
 router.delete("/:id", protect(), restrictTo("admin"), deleteCourse);
 router.get("/:id", protect(), getCourse);

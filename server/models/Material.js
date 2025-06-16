@@ -28,7 +28,7 @@ const MaterialSchema = new mongoose.Schema({
         message: 'Invalid URL for profile picture',
       },
     },
-    sclass: {
+    classId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Class',
       required: true

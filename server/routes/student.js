@@ -14,10 +14,11 @@ import {
   clearMarksForClass
 } from "../controllers/student.js";
 import { restrictTo, protect } from "../controllers/auth.js";
+import upload from "../utils/multer.js";
 
 const router = express.Router();
 
-router.post("/registerStudent", protect(), restrictTo("admin"), registerStudent);
+router.post("/registerStudent", protect(), restrictTo("admin"), upload.single('file'), registerStudent);
 router.put("/:id", protect(), restrictTo("admin", "student"), updateStudent);
 router.delete("/:id", protect(), restrictTo("admin"), deleteStudent);
 router.get("/:id", protect(), getStudent);

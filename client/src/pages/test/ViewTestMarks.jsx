@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import useFetch from '../../config/service/useFetch';
 import { getSingleData } from '../../config/endpoints/get';
 import axios from 'axios';
-import { formatDate } from '../../config/endpoints/transform';
+import { formatDate } from '../../config/commons';
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});

@@ -23,6 +23,8 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import TaskIcon from '@mui/icons-material/Task';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 export const sidebarConsts = {
     information: [
@@ -104,6 +106,18 @@ export const sidebarConsts = {
             icon: MarkChatReadIcon,
             user: 'student'
         },
+        {
+            title: "Materials",
+            getPath: (user) => `/${user.role}/materials`,
+            icon: FolderCopyIcon,
+            user: 'all'
+        },
+        {
+            title: "Events",
+            getPath: (user) => `/${user.role}/events`,
+            icon: EmojiEventsIcon,
+            user: 'all'
+        },
     ],
     create: [
         {
@@ -143,10 +157,16 @@ export const sidebarConsts = {
             user: "admin",
         },
         {
-            title: "Materials",
+            title: "Add Material",
             path: "/admin/materials/new",
             icon: CreateNewFolderIcon,
             user: "admin"
+        },
+        {
+            title: "Add Material",
+            path: "/faculty/materials/new",
+            icon: CreateNewFolderIcon,
+            user: "faculty"
         },
         {
             title: "Classes",

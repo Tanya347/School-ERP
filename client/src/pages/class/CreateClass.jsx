@@ -57,7 +57,7 @@ const CreateClass = ({ inputs, title}) => {
                                 <ClipLoader color="black" size={30} />
                                     creating class...
                                 </div>}
-                            <button onClick={handleClick} className="form-btn">Create Task</button>
+                            <button onClick={handleClick} className="form-btn">Create Class</button>
                         </div>
                     </div>
                 </div>

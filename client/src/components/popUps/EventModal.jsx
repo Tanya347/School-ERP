@@ -3,7 +3,7 @@ import "./eventModal.css"
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Link } from "react-router-dom"
 import axios from 'axios';
-import { formatDate, formatTime } from "../../config/endpoints/transform";
+import { formatDate, formatTime } from "../../config/commons";
 import { getDeleteURL } from "../../config/endpoints/delete";
 import { toast } from "react-toastify"
 

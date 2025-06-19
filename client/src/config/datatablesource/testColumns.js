@@ -1,4 +1,4 @@
-import { formatDate } from "../endpoints/transform";
+import { formatDate } from "../commons";
 
 export const testColumns = [
     {

@@ -7,7 +7,7 @@ import useFetch from "../../config/service/useFetch";
 import { putURLs } from "../../config/endpoints/put";
 import AdminNavbar from "../../components/navbar/AdminNavbar";
 import { getSingleData } from "../../config/endpoints/get";
-import { formatTime } from "../../config/endpoints/transform";
+import { formatTime } from "../../config/commons";
 import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
 

@@ -72,7 +72,18 @@ const Datatable = ({ column, name, type }) => {
       width: 600,
       renderCell: (params) => (
         <div className="cellAction">
-          {path === "students" || path === "faculties" ? (
+          {path === "materials" ? (
+            <div
+              className="viewButton"
+              onClick={() => {
+                if (params.row.fileUrl) {
+                  window.open(params.row.fileUrl, "_blank", "noopener,noreferrer");
+                }
+              }}
+            >
+              View
+            </div>
+          ) : path === "students" || path === "faculties" ? (
             <Link to={`/admin/${path}/single/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>

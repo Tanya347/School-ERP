@@ -40,18 +40,39 @@ export const registerStudent = catchAsync(async (req, res, next) => {
 })
 
 export const updateStudent = catchAsync(async (req, res, next) => {
-  const updatedStudent = await Student.findByIdAndUpdate(
-    req.params.id,
-    { $set: req.body },
-    { new: true }
-  );
-  const mailOptions = {
-    email: updatedStudent.email,
-    subject: "Student Information Updated",
-    message: `Dear ${updatedStudent.name},\n\nYour student information has been successfully updated. If you have any questions, please contact the administration.\n\nBest regards,\nSchool Administration`
-  };
-  await sendEmail(mailOptions);
-  if (!updatedStudent) return res.status(404).json({ message: "Student not found" });
+  let profilePicture = null;
+  let cloud_id = null;
+  
+   const student = await Student.findById(req.params.id);
+  
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    if (req.file) {
+      if (student.cloud_id) {
+        await cloudinary.uploader.destroy(student.cloud_id);
+      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "erp_portal",
+      });
+      profilePicture = result.secure_url;
+      cloud_id = result.public_id;
+  
+      fs.unlinkSync(req.file.path);
+    } else {
+      profilePicture = student.profilePicture;
+      cloud_id = student.cloud_id;
+    }
+  
+    const updatedStudent = await Student.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...req.body,
+        profilePicture,
+        cloud_id,
+      },
+      { new: true }
+    );
   res.status(200).json({
     status: "success",
     data: updatedStudent,

@@ -6,7 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { getModalURL } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
-import { formatDate } from "../../config/endpoints/transform";
+import { formatDate } from "../../config/commons";
 import { toast } from "react-toastify"
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update

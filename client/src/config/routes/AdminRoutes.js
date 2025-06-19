@@ -41,7 +41,10 @@ import { attendanceColumns } from '../datatablesource/attendanceColumns';
 import { marksColumns } from '../datatablesource/marksColumns';
 import { eventInputs } from '../formsource/eventInputs';
 import Timetable from '../../components/timetable/Timetable';
-import UploadMaterial from '../../pages/materials/Material';
+import UploadMaterial from '../../pages/materials/UploadMaterial';
+import { materialInputs } from '../formsource/materialInputs';
+import { materialColumns } from '../datatablesource/materialColumns';
+import EditMaterial from '../../pages/materials/EditMaterial';
 
 const AdminRoutes = () => {
 
@@ -162,11 +165,24 @@ const AdminRoutes = () => {
             element={ <EditCourse title="Edit Courses" type="Admin" />}
             />
 
-        {/* ROUTES FOR CLASSES */}
+        {/* ROUTES FOR MATERIALS */}
 
-         <Route
+          {/* create material */}
+          <Route
             path="materials/new"
-            element={ <UploadMaterial/>}
+            element={ <UploadMaterial title="Create Material" inputs={materialInputs}/>}
+          />
+
+          {/* list of materials */}
+          <Route
+            path="materials"
+            element={ <List column={materialColumns} name="Material" type="Admin"/>}
+          />
+
+          {/* edit materials */}
+          <Route
+            path="materials/edit/:materialId"
+            element={ <EditMaterial title="Edit Material" type="Admin"/>}
           />
 
         {/* ROUTES FOR CLASSES */}

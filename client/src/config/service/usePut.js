@@ -2,43 +2,20 @@ import axios from "axios"
 import {toast} from "react-toastify"
 
 export const editElementWithPicture = async(file, info, element, url) => {
-    let pictureUrl;
-    let cloudId;
-    let newElement;
-
+    const formData = new FormData();
     if(file) {
-        const data = new FormData();
-        data.append("file", file);
-        data.append("upload_preset", "upload");
-
-        try {
-            const uploadRes = await axios.post(
-                `${process.env.REACT_APP_CLOUDINARY}`,
-                data,
-                { withCredentials: false } 
-              );
-              pictureUrl = uploadRes.data.url;
-              cloudId = uploadRes.data.public_id;
-
-              newElement = {
-                ...info,
-                ...(element === "course" && { syllabusPicture: pictureUrl }),
-                ...(element === "event" && { poster: pictureUrl }),
-                ...(element !== "course" && element !== "event" && { profilePicture: pictureUrl }),
-                cloud_id: cloudId,
-            };
-        } catch (err) {
-            toast.error("Failed to upload the image. Please try again.");
-            console.error(err);
-            return; 
-        }
-    } else {
-        newElement = info;
+        formData.append("file", file);
     }
 
+     Object.entries(info).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
 
     try {
-        const res = await axios.put(url, newElement, {
+        const res = await axios.put(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
             withCredentials: true
         })
         if(res.data.status === 'success') {

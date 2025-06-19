@@ -5,12 +5,10 @@ import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { useAuth } from "../../config/context/AuthContext";
 import { DarkModeContext } from "../../config/context/darkModeContext";
 import Query from '../popUps/Query';
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { sidebarConsts } from "./sidebarConsts";
 
 
@@ -59,11 +57,11 @@ const MainSidebar = () => {
                             <> 
                                 {
                                     (item.user === user.role || 
-                                    (item.user === 'both' && user.role !== 'admin')) && ( // Exclude admin for 'both'
+                                    (item.user === 'both' && user.role !== 'admin')) && (
                                         <Link
                                             to={item.getPath ? item.getPath(user) : item.path}
                                             style={{ textDecoration: "none" }}
-                                            key={item.title} // Ensure a unique key for each item
+                                            key={item.title}
                                         >
                                             <li>
                                                 <item.icon className="icon" />
@@ -76,12 +74,26 @@ const MainSidebar = () => {
                         ))
                     }
 
-                    <Link to={`/${user.role}/events`} style={{ textDecoration: "none" }}>
-                            <li>
-                                <EmojiEventsIcon className="icon" />
-                                <span>{!collapsed && 'Event'}</span>
-                            </li>
-                    </Link>
+                    {
+                        sidebarConsts.information.map((item) => (
+                            <>
+                                {
+                                    (item.user === 'all') && (
+                                        <Link
+                                            to={item.getPath ? item.getPath(user) : item.path}
+                                            style={{ textDecoration: "none" }}
+                                            key={item.title}
+                                        >
+                                            <li>
+                                                <item.icon className="icon" />
+                                                <span>{!collapsed && item.title}</span>
+                                            </li>
+                                        </Link>
+                                    )
+                                }
+                            </>
+                        ))
+                    }
 
                     <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Create'}</p>
 

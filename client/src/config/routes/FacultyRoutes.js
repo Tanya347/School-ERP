@@ -32,6 +32,9 @@ import { updateInputs } from '../formsource/updateInputs';
 import NewUpdate from '../../pages/update/NewUpdate';
 import EditUpdate from '../../pages/update/EditUpdate';
 import { updateColumns } from '../datatablesource/updateColumns';
+import { materialColumns } from '../datatablesource/materialColumns';
+import { materialInputs } from '../formsource/materialInputs';
+import UploadMaterial from '../../pages/materials/UploadMaterial';
 
 const FacultyRoutes = () => {
 
@@ -111,6 +114,26 @@ const FacultyRoutes = () => {
           <Route
             path="updates/edit/:taskId"
             element={<EditUpdate title="Edit Update" />}
+          />
+
+          {/* ROUTES FOR MATERIALS */}
+
+          {/* create materials */}
+          <Route
+            path="materials/new"
+            element={ <UploadMaterial title="Create Material" inputs={materialInputs}/>}
+          />
+
+          {/* list of materials */}
+          <Route
+            path="materials"
+            element={ <List column={materialColumns} name="Material" type="Creator"/>}
+          />
+
+          {/* edit materials */}
+          <Route
+            path="materials/edit/:materialId"
+            element={ <List title="Edit Material" type="Creator"/>}
           />
 
           {/* ROUTES FOR TESTS */}

@@ -34,13 +34,42 @@ export const createEvent = catchAsync(async (req, res, next) => {
 
 // Update an existing event
 export const updateEvent = catchAsync(async (req, res, next) => {
-  const event = await Event.findByIdAndUpdate(
+  let poster = null;
+  let cloud_id = null;
+  const event = await Event.findById(req.params.id);
+  if (!event) {
+    return next(new Error("Event not found"));
+  }
+
+  if (req.file) {
+    if (event.cloud_id) {
+      await cloudinary.uploader.destroy(event.cloud_id);
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "erp_portal",
+    });
+
+    poster = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+  } else {
+    poster = event.poster;
+    cloud_id = event.cloud_id;
+  }
+
+  const updatedEvent = await Event.findByIdAndUpdate(
     req.params.id,
-    { $set: req.body },
+    {
+      ...req.body,
+      poster,
+      cloud_id
+    },
     { new: true }
   );
   res.status(200).json({
-    data: event,
+    data: updatedEvent,
     message: "The event has been successfully updated!",
     status: 'success'
   });

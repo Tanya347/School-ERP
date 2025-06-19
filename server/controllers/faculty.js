@@ -37,9 +37,37 @@ export const registerFaculty = catchAsync(async (req, res, next) => {
 
 // Update a faculty member
 export const updateFaculty = catchAsync(async (req, res, next) => {
+  let profilePicture = null;
+  let cloud_id = null;
+
+  const faculty = await Faculty.findById(req.params.id);
+
+  if (!faculty) {
+    return res.status(404).json({ message: "Faculty not found" });
+  }
+  if (req.file) {
+    if (faculty.cloud_id) {
+      await cloudinary.uploader.destroy(faculty.cloud_id);
+    }
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "erp_portal",
+    });
+    profilePicture = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+  } else {
+    profilePicture = faculty.profilePicture;
+    cloud_id = faculty.cloud_id;
+  }
+
   const updatedFaculty = await Faculty.findByIdAndUpdate(
     req.params.id,
-    { $set: req.body },
+    {
+      ...req.body,
+      profilePicture,
+      cloud_id,
+    },
     { new: true }
   );
   res.status(200).json({

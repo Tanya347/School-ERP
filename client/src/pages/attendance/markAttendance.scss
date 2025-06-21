@@ -1,5 +1,9 @@
 .mark-attendance {
-    
+    text-align: center;
+
+    h1 {
+        margin: 30px;
+    }
     .mark-attendance-container {
         display: flex;
         flex-direction: column;

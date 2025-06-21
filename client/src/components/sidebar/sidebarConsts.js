@@ -25,6 +25,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import AlarmAddIcon from '@mui/icons-material/AlarmAdd';
 
 export const sidebarConsts = {
     information: [
@@ -172,6 +173,12 @@ export const sidebarConsts = {
             title: "Classes",
             path: "/admin/classes/new",
             icon: AddModeratorIcon,
+            user: "admin"
+        },
+        {
+            title: "Create Event",
+            path: "/admin/events/new",
+            icon: AlarmAddIcon,
             user: "admin"
         },
         {

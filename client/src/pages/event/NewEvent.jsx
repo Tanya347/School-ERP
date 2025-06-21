@@ -1,28 +1,22 @@
-import "./newEvent.scss"
 import "../../config/style/form.scss";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import useFetch from "../../config/service/useFetch";
-import EventModal from "../../components/popUps/EventModal";
 import { postURLs } from "../../config/endpoints/post";
-import { getDatatableURL } from "../../config/endpoints/get";
 import { ClipLoader } from "react-spinners";
 import { createElementWithPicture } from "../../config/service/usePost";
 import DatePickerComponent from "../../components/datepicker/Datepicker";
+import { useNavigate } from "react-router-dom";
 
-const NewEvent = ({ inputs, title, type }) => {
+const NewEvent = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [submitLoading, setSubmitLoading] = useState(false);
-
+  const navigate = useNavigate();
   // dates
   const [start, setStart] = useState("")
   const [end, setEnd] = useState("")
-  const [list, setList] = useState([])
-
-  const { data, loading } = useFetch(getDatatableURL("events"))
   
 
   const handleChange = (e) => {
@@ -42,7 +36,7 @@ const NewEvent = ({ inputs, title, type }) => {
       }
       const res = await createElementWithPicture(file, newInfo, "event", postURLs("events", "normal"));
       if(res.data.status === 'success') {
-        window.location.reload();
+        navigate("/admin/events")
       }
     } catch(err) {
       console.log(err)
@@ -52,35 +46,12 @@ const NewEvent = ({ inputs, title, type }) => {
 
   }
 
-
-  const [openForm, setOpenForm] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [clickedEvent, setClickedEvent] = useState({});
-
-  useEffect(() => {
-    setList(data)
-  }, [data])
-
-  const handleEventPopup = (id) => {
-    const event = data.filter((item) => { return item["_id"] === id }
-    );
-    setClickedEvent(event[0]);
-    setOpenModal(true)
-  }
-
-
   return (
 
     <div className="event-container">
       {/* <Sidebar /> */}
       <div className="newEventContainer">
-        {type === "Admin" && <div className="eventsButton">
-          <button onClick={() => setOpenForm(false)} >View Events</button>
-          <button onClick={() => setOpenForm(true)} >Create Events</button>
-        </div>}
-        {openForm && type === "Admin" &&
-          <>
-          <div className="new">
+        <div className="new">
           <div className="newContainer">
 
           <div className="top">
@@ -143,28 +114,8 @@ const NewEvent = ({ inputs, title, type }) => {
               </div>
               </div>
               </div>
-            </div></>}
-
-        {!openForm && <>{loading ? (
-          <div className="page-loader">
-            <ClipLoader color="black" size={50} />
-            <h3>Loading data...</h3>
-          </div>
-        ) : (<div className="cardsContainer">
-          {list?.map((item, i) => (
-            <div className="card" key={item._id}>
-              <div class="content">
-                {item.poster ? <img id="post-image" src={item.poster} alt="" /> : "no image"}
-                <h4>{item.name}</h4>
-                <p>{item.desc.slice(0, 60)}...</p>
-                <button onClick={() => handleEventPopup(item._id)}>View</button>
-              </div>
-            </div>
-          ))}
-        </div>)} </>}
+        </div>
       </div>
-
-      {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} type={type} />}
     </div>
   );
 };

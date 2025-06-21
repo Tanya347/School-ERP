@@ -53,9 +53,6 @@ const NewTimeTable = () => {
   const handleClearAllSlots = async () => {
     if (!selectedClass) return;
 
-    // const confirmClear = window.confirm("Are you sure you want to clear all slots for this class?");
-    // if (!confirmClear) return;
-
     try {
       const res = await axios.delete(getClearTimetableForClass(selectedClass), { withCredentials: true });
       setClearedSlots({});

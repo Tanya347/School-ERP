@@ -7,10 +7,25 @@ import cloudinary from "../utils/cloudinary.js";
 // Create a new event
 export const createEvent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
+  console.log(req.body)
   const activeSession = await getActiveSession(req.user);
   req.body.sessionID = activeSession._id;
   let poster = null;
   let cloud_id = null;
+
+  // Ensure startDate and endDate are valid ISO 8601 strings
+  if (req.body.startDate) {
+    const start = new Date(req.body.startDate);
+    if (!isNaN(start)) {
+      req.body.startDate = start.toISOString();
+    }
+  }
+  if (req.body.endDate) {
+    const end = new Date(req.body.endDate);
+    if (!isNaN(end)) {
+      req.body.endDate = end.toISOString();
+    }
+  }
 
   if (req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {

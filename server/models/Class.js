@@ -43,6 +43,10 @@ const ClassSchema = new mongoose.Schema({
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
+    },
+    classTeacher: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Faculty'
     }
 }, { timestamps: true })
 

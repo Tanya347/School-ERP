@@ -16,7 +16,7 @@ import { getClearDayAttendance } from '../../config/endpoints/delete';
 import { toast } from "react-toastify"
 
 
-const AttendanceTable = ({classid, date, setOpen, id}) => {
+const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
 
     const {data} = useFetch(getAttendanceStatusByDate(classid, date));
     
@@ -26,6 +26,7 @@ const AttendanceTable = ({classid, date, setOpen, id}) => {
             const res = await axios.delete(getClearDayAttendance(id), { withCredentials: true });
             if(res.data.status === 'success') {
                 toast.success("Attendance has been cleared!");
+                refreshTrigger(prev => prev + 1)
             }
             setOpen(false)
           } catch (err) {

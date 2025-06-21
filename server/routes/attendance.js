@@ -4,7 +4,6 @@ import {
     clearAttendanceByClass,
     createAttendance,
     deleteAttendance,
-    editAttendance,
     getAttendanceDates,
     getAttendanceStatusByDate,
     getClassAttendance,
@@ -28,7 +27,6 @@ router.get("/classperc/:classid", protect(), getClassAttendance)
 router.get("/studentperc/:studentid/:classid", protect(), getStudentAttendance)
 router.get("/presentdates/:studentid/:classid", protect(), getStudentPresenceDates)
 router.get("/absentdates/:studentid/:classid", protect(), getStudentAbsenceDates)
-router.put("/:id", protect(), isOwner(Attendance), restrictTo("faculty"), editAttendance);
 router.delete("/single/:id", protect(), isOwner(Attendance), restrictTo("faculty"), deleteAttendance);
 router.delete("/class/:classid", protect(), restrictTo("faculty"), clearAttendanceByClass);
 router.delete("/", protect(), restrictTo("admin", "faculty"), clearAllAttendanceRecords);

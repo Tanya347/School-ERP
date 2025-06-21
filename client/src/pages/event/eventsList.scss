@@ -2,30 +2,6 @@
   width: 100%;
   display: flex;
 
-  .newEventContainer {
-    width: 100%;
-
-    .eventsButton {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-
-      button {
-        padding: 10px 25px;
-        margin: 20px 10px;
-        background-color: #5353AF;
-        color: white;
-        cursor: pointer;
-        border-radius: 20px;
-        font-weight: bolder;
-
-        &:hover {
-          transform: translateY(-2px);
-          background-color: #7551f8a1;
-        }
-      }
-    }
-
     .cardsContainer {
 
       display: flex;
@@ -115,4 +91,3 @@
     }
 
   }
-}

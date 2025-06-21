@@ -15,7 +15,7 @@ import useFetch from "../../config/service/useFetch"
 import { getAttendanceDates, getFacultyData, getLectureCount } from "../../config/endpoints/get"
 import "./attendanceInfo.scss"
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AttendanceTable from "../../components/popUps/AttendanceTable";
 import { getClearClassURL } from "../../config/endpoints/delete";
 import { Link } from "react-router-dom";
@@ -35,9 +35,10 @@ const localizer = dateFnsLocalizer({
 const AttendanceInfo = () => {
   const { user } = useAuth();
   const [sclass, setSclass] = useState("");
-  const [className, setClassName] = useState("");
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [dates, setDates] = useState([]);
   const [lectures, setLectures ]= useState(0);
+  const [className, setClassName] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [viewDate, setViewDate] = useState('');
   const [attId, setAttId] = useState('');
@@ -58,7 +59,7 @@ const AttendanceInfo = () => {
       }
 
       fetchLectures();
-  }, [sclass])
+  }, [sclass, refreshTrigger])
 
   useEffect(() => {
     const fetchDates = async() => {
@@ -77,7 +78,7 @@ const AttendanceInfo = () => {
       }
 
       fetchDates();
-  }, [sclass])
+  }, [sclass, refreshTrigger])
 
   const handleClick = (cl) => {
     setSclass(cl._id);
@@ -97,6 +98,7 @@ const AttendanceInfo = () => {
         const res = await axios.delete(getClearClassURL(sclass), { withCredentials: true });
         if(res.data.status === 'success') {
             toast.success("Attendance has been cleared!");
+            setRefreshTrigger(prev => prev + 1);
         }
         // this filters the array by filtering out the deleted element based on the id
         setDates([]);

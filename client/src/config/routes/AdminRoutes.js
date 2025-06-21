@@ -1,5 +1,4 @@
 // src/routes/adminRoutes.js
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Home from '../../pages/home/Home';
@@ -22,13 +21,19 @@ import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
 import TableWithoutAction from '../../pages/table/TableWithoutAction';
 import NewTimeTable from '../../pages/timetable/NewTimeTable';
+import UploadMaterial from '../../pages/materials/UploadMaterial';
 import Layout from '../../components/sidebar/Layout';
+import EditMaterial from '../../pages/materials/EditMaterial';
+import Timetable from '../../components/timetable/Timetable';
 
 // Datatable Columns
 import { studentColumns } from "../datatablesource/studentColumns";
 import { facultyColumns } from "../datatablesource/facultyColumns";
 import { updateColumns } from "../datatablesource/updateColumns";
 import { courseColumns } from "../datatablesource/courseColumns";
+import { attendanceColumns } from '../datatablesource/attendanceColumns';
+import { marksColumns } from '../datatablesource/marksColumns';
+import { materialColumns } from '../datatablesource/materialColumns';
 
 // Form Inputs
 import { studentInputs } from "../formsource/studentInputs";
@@ -36,15 +41,11 @@ import { facultyInputs } from "../formsource/facultyInputs";
 import { updateInputs } from "../formsource/updateInputs";
 import { courseInputs } from "../formsource/courseInputs";
 import { classInputs } from '../formsource/classInputs';
-import { useAuth } from '../../config/context/AuthContext';
-import { attendanceColumns } from '../datatablesource/attendanceColumns';
-import { marksColumns } from '../datatablesource/marksColumns';
 import { eventInputs } from '../formsource/eventInputs';
-import Timetable from '../../components/timetable/Timetable';
-import UploadMaterial from '../../pages/materials/UploadMaterial';
 import { materialInputs } from '../formsource/materialInputs';
-import { materialColumns } from '../datatablesource/materialColumns';
-import EditMaterial from '../../pages/materials/EditMaterial';
+
+import { useAuth } from '../../config/context/AuthContext';
+import EventsList from '../../pages/event/EventsList';
 
 const AdminRoutes = () => {
 
@@ -238,9 +239,15 @@ const AdminRoutes = () => {
 
           {/* create events */}
           <Route
+            path="events/new"
+            element={ <NewEvent inputs={eventInputs}  title="Add New Event" />}
+          />
+
+          {/* list of events */}
+          <Route
             path="events"
-            element={ <NewEvent inputs={eventInputs}  title="Add New Event" type="Admin" />}
-            />
+            element={ <EventsList type="Admin"/>}
+          />
 
         {/* ROUTES FOR TIMETABLES */}
 

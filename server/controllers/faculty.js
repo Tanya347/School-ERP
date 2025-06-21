@@ -115,12 +115,13 @@ export const getFacultys = catchAsync(async (req, res, next) => {
 export const getFacultyClasses = catchAsync(async (req, res, next) => {
   const faculty = await Faculty.findById(req.params.id).populate(
     "classesTaught",
-    "name"
+    "name classTeacher"
   );
 
   const classes = faculty.classesTaught.map((sclass) => ({
     _id: sclass._id,
     name: sclass.name,
+    classTeacher: sclass.classTeacher
   }));
 
   res.status(200).json({

@@ -7,11 +7,12 @@ import {
     updateEvent,
 } from "../controllers/events.js";
 import { protect } from "../controllers/auth.js";
+import upload from "../utils/multer.js";
 // router variable
 
 const router = express.Router();
 
-router.post("/", protect(), createEvent);
+router.post("/", protect(),  upload.single('file'), createEvent);
 router.put("/:id", protect(), updateEvent);
 router.delete("/:id", protect(), deleteEvent);
 router.get("/:id", protect(), getEvent);

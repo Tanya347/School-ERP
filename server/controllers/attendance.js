@@ -2,12 +2,14 @@ import moment from 'moment';
 import Attendance from '../models/Attendance.js';
 import Class from "../models/Class.js";
 import { catchAsync } from '../utils/catchAsync.js';
+import { getActiveSession } from "./session.js";
 import { AppError } from '../utils/customError.js';
 
 export const createAttendance = catchAsync(async (req, res, next) => {
   const { date, present, classid, author } = req.body;
   schoolID = req.user.schoolID
   const activeSession = await getActiveSession(req.user);
+
   // Get all students in the class
   const classInfo = await Class.findById(classid);
   if (!classInfo) {
@@ -16,7 +18,27 @@ export const createAttendance = catchAsync(async (req, res, next) => {
 
   const allStudents = classInfo.students;
   const absent = allStudents.filter(studentId => !present.includes(studentId.toString()));
-    
+
+  // Check if attendance already exists for this class and date
+  const existingAttendance = await Attendance.findOne({
+    classid,
+    date: { $gte: new Date(moment(date).startOf('day')), $lte: new Date(moment(date).endOf('day')) }
+  });
+
+  if (existingAttendance) {
+    // Update only present and absent fields if attendance already exists
+    existingAttendance.present = present;
+    existingAttendance.absent = absent;
+    await existingAttendance.save();
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Attendance updated successfully',
+      data: existingAttendance
+    });
+  }
+
+  // Create new attendance if not exists
   const attendance = new Attendance({
     date,
     present,
@@ -26,12 +48,11 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     schoolID,
     sessionId: activeSession._id
   });
-
   await attendance.save();
-  res.status(201).json({ 
+  res.status(201).json({
     status: 'success',
-    message: 'Attendance marked successfully', 
-    data: attendance 
+    message: 'Attendance marked successfully',
+    data: attendance
   });
 });
 
@@ -66,40 +87,6 @@ export const getAttendanceDates = catchAsync(async(req, res, next) => {
     data: attendanceSummary
   });
 });
-
-// edit attendance --
-export const editAttendance = catchAsync(async (req, res, next) => {
-  const { id } = req.params; // Attendance ID
-  const { date, present, classid, author } = req.body;
-  
-  // Get all students in the class
-  const classInfo = await Class.findById(classid).populate('students');
-  if (!classInfo) {
-    return next(new AppError('Class does not exist', 404));
-  }
-  
-  const allStudents = classInfo.students.map(student => student._id);
-  const absent = allStudents.filter(studentId => !present.includes(studentId));
-  
-  const updatedAttendance = await Attendance.findByIdAndUpdate(id, {
-    date,
-    present,
-    absent,
-    classid,
-    author
-  }, { new: true });
-  
-  if (!updatedAttendance) {
-    return next(new AppError('Attendance record not found!', 404));
-  }
-  
-  res.status(200).json({ 
-    status: 'success',
-    message: 'Attendance updated successfully', 
-    data: updatedAttendance 
-  });
-});
-  
 
 // get attendance of class on a particular day 
 // -

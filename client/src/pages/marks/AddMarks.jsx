@@ -15,7 +15,6 @@ const AddMarks = () => {
   const { user } = useAuth();
   const courses = useFetch(getFacultyData(user._id, "courses")).data
   const [course, setCourse ]= useState("");
-  const [marksAdded, setMarksAdded] = useState(false);
   const [sclass, setSclass] = useState("");
   const [courseName, setCourseName] = useState("");
   const [stuData, setStuData] = useState({});
@@ -38,11 +37,32 @@ const AddMarks = () => {
     fetchStudents();
   }, [sclass])
 
+  useEffect(() => {
+    const fetchMarks = async () => {
+      if (course) {
+        try {
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/students/marks/subject/${course}`);
+          const data = response.data.data;
+
+          // Populate marks data if available
+          const prefilledMarks = {};
+          data.forEach((entry) => {
+            prefilledMarks[entry._id] = entry.marks || "";
+          });
+          setMarksData(prefilledMarks);
+          console.log(marksData)
+        } catch (error) {
+          console.error("Error fetching marks data:", error);
+        }
+      }
+    };
+    fetchMarks();
+  }, [course, marksData])
+
   const handleClick = (cl) => {
     setCourse(cl._id);
     setCourseName(cl.subjectCode);
     setSclass(cl.sclass)
-    setMarksAdded(cl.marksAdded)
   };
   
   const handleMarksChange = (studentId, marks) => {
@@ -89,13 +109,7 @@ const AddMarks = () => {
           <>
             <h1>Course: {courseName}</h1>
 
-            {marksAdded ? 
-              (
-                <>
-                  <h1>Marks already added for this course</h1>
-                </>
-              ) : (
-                <>
+            
                   <div className="marks-adding-table">
               <div className="marks-row" id='title-row'>
                 <div className="marks-col">Enrollment Number</div>
@@ -108,7 +122,13 @@ const AddMarks = () => {
                   <div className="marks-col">{st.enroll}</div>
                   <div className="marks-col">{st.name}</div>
                   <div className="marks-col">
-                    <input type="number" name="marks" id="marks" min="0" max="100"
+                    <input
+                      type="number"
+                      name="marks"
+                      id="marks"
+                      min="0"
+                      max="100"
+                      value={marksData[st._id] || ""}
                       onChange={(e) => handleMarksChange(st._id, e.target.value)}
                     />
                   </div>
@@ -119,9 +139,6 @@ const AddMarks = () => {
             <div className="add-marks-button">
               <button onClick={handleSubmit}>Add Marks</button>
             </div>
-                </>
-              )
-            }
           </>
         ) : (
           <>

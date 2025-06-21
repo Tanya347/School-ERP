@@ -7,13 +7,12 @@ export const createElementWithPicture = async(file, info, element, url) => {
     if(file) {
         formData.append("file", file);
     }
-
+    
     Object.entries(info).forEach(([key, value]) => {
         formData.append(key, value);
     });
 
     try {
-        
         const res = await axios.post(url, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'

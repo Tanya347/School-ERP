@@ -179,6 +179,7 @@ export const getMarksOfSubject = catchAsync(async (req, res, next) => {
   const result = students.map((student) => {
     const subjectMarks = student.marks.find((mark) => mark.sub_id._id.toString() === subjectid);
     return {
+      _id: student._id,
       studentName: student.name,
       enrollment: student.enroll,
       marks: subjectMarks ? subjectMarks.total : null,

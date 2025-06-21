@@ -87,8 +87,9 @@ const EditEvent = ({ inputs, title }) => {
                         <form>
 
                             <div className="formInput">
-                                <label>
-                                    <span style={{color: "green", fontWeight: "bold"}}>   Time : </span>{formatTime(start)}
+                                    <label>
+                                        <span style={{ color: "green", fontWeight: "bold" }}>Time : </span>
+                                        {start ? formatTime(start) : "No start time selected"}
                                     </label>
                                     {start && (
                                         <DatePicker
@@ -102,7 +103,8 @@ const EditEvent = ({ inputs, title }) => {
 
                             <div className="formInput">
                                 <label>
-                                    <span style={{color: "green", fontWeight: "bold"}}>    Time : </span>{formatTime(end)}
+                                    <span style={{ color: "green", fontWeight: "bold" }}>Time : </span>
+                                    {end ? formatTime(end) : "No end time selected"}
                                 </label>
                                 
                                 <DatePicker

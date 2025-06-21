@@ -1,12 +1,6 @@
 // src/routes/facultyRoutes.js
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import { taskColumns } from '../datatablesource/taskColumns';
-import { queryColumns } from '../datatablesource/queryColumns';
-import { testColumns } from '../datatablesource/testColumns';
-import {attendanceColumns} from "../datatablesource/attendanceColumns"
-import { taskInputs } from '../formsource/taskInputs';
 
 import NewTask from '../../pages/task/NewTask';
 import List from '../../pages/list/List';
@@ -18,23 +12,31 @@ import EditTest from '../../pages/test/EditTest';
 import NewTest from '../../pages/test/NewTest';
 import Events from '../../pages/event/Events';
 import ViewStudents from '../../pages/viewStudents/ViewStudents';
-import { useAuth } from '../../config/context/AuthContext';
 import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 import AddMarks from '../../pages/marks/AddMarks';
 import ViewMarks from '../../pages/marks/ViewMarks';
 import TableWithoutAction from "../../pages/table/TableWithoutAction"
 import ViewTestMarks from '../../pages/test/ViewTestMarks';
-import NewEvent from '../../pages/event/NewEvent';
 import Layout from '../../components/sidebar/Layout';
-import { testInputs } from '../formsource/testInputs';
-import { updateInputs } from '../formsource/updateInputs';
 import NewUpdate from '../../pages/update/NewUpdate';
 import EditUpdate from '../../pages/update/EditUpdate';
+import UploadMaterial from '../../pages/materials/UploadMaterial';
+
+import { taskInputs } from '../formsource/taskInputs';
+import { testInputs } from '../formsource/testInputs';
+import { updateInputs } from '../formsource/updateInputs';
+import { materialInputs } from '../formsource/materialInputs';
+
+import { taskColumns } from '../datatablesource/taskColumns';
+import { queryColumns } from '../datatablesource/queryColumns';
+import { testColumns } from '../datatablesource/testColumns';
+import {attendanceColumns} from "../datatablesource/attendanceColumns"
 import { updateColumns } from '../datatablesource/updateColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
-import { materialInputs } from '../formsource/materialInputs';
-import UploadMaterial from '../../pages/materials/UploadMaterial';
+
+import { useAuth } from '../../config/context/AuthContext';
+import EventsList from '../../pages/event/EventsList';
 
 const FacultyRoutes = () => {
 
@@ -70,8 +72,8 @@ const FacultyRoutes = () => {
           <Route
             path="edit/:id"
             element={<EditFaculty title="Edit Profile" type="Main" />}
-            />
-
+          />
+          
 
           {/* ROUTES FOR TASKS */}
 
@@ -188,7 +190,7 @@ const FacultyRoutes = () => {
 
           {/* student attendance percentage */}
           <Route
-            path="classes/attendance/:classId"
+            path="courses/attendance/:courseId"
             element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
             />
 
@@ -213,7 +215,7 @@ const FacultyRoutes = () => {
           {/* view events page */}
           <Route 
             path="events"
-            element={<NewEvent type="Main" />}
+            element={<EventsList type="Faculty"/>}
             />
         </Routes>
         </Layout>

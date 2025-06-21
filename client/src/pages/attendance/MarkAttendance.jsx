@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import "./markAttendance.scss"
 import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
-import { getFacultyData } from '../../config/endpoints/get'
+import { getAttendanceStatusByDate, getFacultyData } from '../../config/endpoints/get'
 import axios from "axios";
 import DatePicker from 'react-datepicker'
 import { postURLs } from '../../config/endpoints/post'
 import { useNavigate } from 'react-router-dom'
+import moment from 'moment';
 import { createElement } from '../../config/service/usePost'
 
 const MarkAttendance = () => {
@@ -14,18 +15,19 @@ const MarkAttendance = () => {
     const { user } = useAuth();
     const classes = useFetch(getFacultyData(user._id, "classes")).data
     const [sclass, setSclass] = useState("");
-    const [className, setClassName] = useState("");
     const [stuData, setStuData] = useState({});
-    const [adate, setAdate] = useState(new Date());
+    const [editMode, setEditMode] = useState(false);
+    const [sdate, setSdate] = useState(new Date());
     const [presentStudents, setPresentStudents] = useState([]);
 
     const navigate = useNavigate();
+    let isClassTeacher = sclass?.classTeacher === user._id;;
 
     useEffect(() => {
         const fetchStudents = async () => {
           if (sclass) {
             try {
-              const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${sclass}`);
+              const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${sclass._id}`);
               setStuData(response.data.data);
             } catch (error) {
               console.error("Error fetching student data:", error);
@@ -34,10 +36,39 @@ const MarkAttendance = () => {
         };
         fetchStudents();
       }, [sclass])
+    
+      useEffect(() => {
+        const fetchDates = async() => {
+        if(sclass && sdate) {
+            try {
+                const formattedDate = moment(sdate).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}${getAttendanceStatusByDate(sclass._id, formattedDate)}`)
+                
+                const attData = response.data.data;
+
+                if (attData && attData.length > 0) {
+                  setEditMode(true);
+                  const present = attData
+                    .filter((a) => a.status === "present")
+                    .map((a) => a._id);
+                  setPresentStudents(present);
+                } else {
+                  setEditMode(false);
+                  setPresentStudents([]);
+                }
+            } catch(error) {
+                console.log("Error fetching attendance dates", error);
+                setEditMode(false);
+                setPresentStudents([]);
+            }
+          }
+        }
+
+        fetchDates();
+      }, [sclass, sdate])
 
       const handleClick = (cl) => {
-        setSclass(cl._id);
-        setClassName(cl.name);
+        setSclass(cl);
       };
 
       const handleCheckboxChange = (studentId) => {
@@ -55,7 +86,7 @@ const MarkAttendance = () => {
         try {
             const newAtt = {
                 present: presentStudents,
-                date: adate,
+                date: sdate,
                 classid: sclass,
                 author: user._id
             }
@@ -70,6 +101,7 @@ const MarkAttendance = () => {
 
     return (
         <div className='mark-attendance'>
+        <h1>Mark / Edit Attendance</h1>
             <div className="mark-attendance-container">
             <div className="classes-button">
               {
@@ -81,21 +113,30 @@ const MarkAttendance = () => {
             {sclass ? 
                 (
                     <>
-                    <h1>Class: {className}</h1>
-
-                    <div className="attendance-date-picker">
+                    <h1>Class: {sclass.name}</h1>
+                    {editMode && isClassTeacher && (
+                      <div className="edit-mode-banner">
+                        <p>Attendance for this date already exists. You are now editing it.</p>
+                      </div>
+                    )}
+                    {!isClassTeacher && (
+                      <div className="not-authorized-banner">
+                        <p>You are not authorized to mark attendance for this class.</p>
+                      </div>
+                    )}
+                    {isClassTeacher && <div className="attendance-date-picker">
                         <label>Select a Date</label>
                         <DatePicker
                           class="date-picker"
                           placeholderText="Choose Date"
                           style={{ marginRight: "10px" }}
-                          selected={adate}
-                          onChange={(adate) => setAdate(adate)}
+                          selected={sdate}
+                          onChange={(sdate) => setSdate(sdate)}
                         />
-                    </div>
+                    </div>}
         
         
-                    <div className="attendance-marking-table">
+                    {isClassTeacher && <div className="attendance-marking-table">
                       <div className="attendance-row" id='title-row'>
                           <div className="attendance-col">Enrollment Number</div>
                           <div className="attendance-col">Student</div>
@@ -107,19 +148,19 @@ const MarkAttendance = () => {
                               <div className="attendance-col">{st.enroll}</div>
                               <div className="attendance-col">{st.name}</div>
                               <div className="attendance-col">
-                                  <input type="checkbox" name="attendance" id="attendance" 
+                                  <input type="checkbox" name="attendance" id="attendance"
                                       checked={presentStudents.includes(st._id)}
                                       onChange={() => handleCheckboxChange(st._id)}
                                   />
                               </div>
                           </div>
                       ))}
-                    </div>
+                    </div>}
         
                     
-                    <div className="mark-attendance-button">
-                        <button onClick={handleSubmit}>Mark Attendance</button>
-                    </div>
+                    {isClassTeacher && <div className="mark-attendance-button">
+                        <button onClick={handleSubmit}>{editMode ? "Update Attendance" : "Mark Attendance"}</button>
+                    </div>}
                     </>
                 ) : (
                     <>

@@ -3,7 +3,9 @@ import {
     logout,
     protect,
     registerAdmin,
-    login
+    login,
+    forgotPassword,
+    resetPassword
 } from "../controllers/auth.js";
 import Student from "../models/Student.js";
 import Admin from "../models/Admin.js";
@@ -16,6 +18,10 @@ router.post("/loginAdmin", login(Admin));
 router.post("/loginFaculty", login(Faculty));
 router.post("/loginStudent", login(Student));
 router.post("/logout", protect(), logout);
+router.post('/forgotPassword/student', forgotPassword(Student,"student"));
+router.post('/forgotPassword/faculty', forgotPassword(Faculty, "faculty"));
+router.patch('/resetPassword/student/:token', resetPassword(Student));
+router.patch('/resetPassword/faculty/:token', resetPassword(Faculty));
 router.post('/validate', protect(), (req, res) => {
     res.status(200).json({ status: 'success', user: req.user });
 });

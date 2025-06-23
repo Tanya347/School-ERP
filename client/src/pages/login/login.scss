@@ -30,6 +30,15 @@
     align-items: center;
     gap: 10px;
     text-align: center;
+
+    .forgot-password-link {
+        cursor: pointer;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        &hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 .lContainer label {

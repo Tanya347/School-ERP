@@ -16,6 +16,7 @@ import FacultyRoutes from "./config/routes/FacultyRoutes";
 import StudentRoutes from "./config/routes/StudentRoutes";
 import { useAuth } from "./config/context/AuthContext";
 import { ToastContainer } from "react-toastify";
+import ResetPassword from "./pages/resetPassword/ResetPassword";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -39,6 +40,8 @@ function App() {
             <Route path="/facultyLogin" element={<LoggedIn><Login type="Faculty" /></LoggedIn>} />
             <Route path="/studentLogin" element={<LoggedIn><Login type="Student" /></LoggedIn>} />
             <Route path="/registerSchool" element={<RegisterSchool />} />
+            <Route path="/resetPassword/student/:token" element={<ResetPassword type="student" />} />
+            <Route path="/resetPassword/faculty/:token" element={<ResetPassword type="faculty" />} />
             {/* Admin Routes */}
             <Route path="/admin/*" element={<AdminRoutes />} />
 

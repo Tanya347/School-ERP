@@ -8,10 +8,12 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../config/context/AuthContext"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ForgotPassword from "../../components/popUps/ForgotPassword"
 
 // type will tell whether admin or student
 function Login({ type }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   // function to navigate to a certain page once logged in
   const navigate = useNavigate();
 
@@ -101,12 +103,18 @@ function Login({ type }) {
           </span>
         </div>
 
-        <p style={{"marginTop": "20px", "marginBottom": "10px"}}>Forgot Password?</p>
+        {type !== "Admin" && <p
+          className="forgot-password-link"
+          onClick={() => setOpenModal(true)}
+        >
+          Forgot Password?
+        </p>}
 
         <button onClick={handleClick} className="lButton">
           Login
         </button>
       </div>
+      {openModal && <ForgotPassword setOpen={setOpenModal} type={type.toLowerCase()} />}
     </div>
   )
 }

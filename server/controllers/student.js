@@ -1,7 +1,6 @@
 import Student from "../models/Student.js";
 import Class from "../models/Class.js";
 import Course from "../models/Course.js";
-import { sendEmail } from "../utils/email.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 import fs from "fs";

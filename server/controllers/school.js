@@ -4,6 +4,31 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import fs from "fs";
 import cloudinary from "../utils/cloudinary.js";
+import { sendEmail } from "../utils/email.js";
+
+function generateStrongPassword() {
+    const lower = 'abcdefghijklmnopqrstuvwxyz';
+    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const symbols = '!@#$%^&*()_+-=';
+    let password = 
+        lower[Math.floor(Math.random() * lower.length)] +
+        upper[Math.floor(Math.random() * upper.length)] +
+        numbers[Math.floor(Math.random() * numbers.length)] +
+        symbols[Math.floor(Math.random() * symbols.length)];
+    const all = lower + upper + numbers + symbols;
+    while (password.length < 8) {
+        password += all[Math.floor(Math.random() * all.length)];
+    }
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
+}
+
+function getUsername(name) {
+    let baseUsername = name.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    if (baseUsername.length < 5) baseUsername = baseUsername.padEnd(5, '0');
+    if (baseUsername.length > 15) baseUsername = baseUsername.slice(0, 15);
+    return baseUsername + Math.floor(1000 + Math.random() * 9000);
+}
 
 export const createSchool = catchAsync(async (req, res, next) => {
     let logo = null;
@@ -29,9 +54,8 @@ export const createSchool = catchAsync(async (req, res, next) => {
         phone,
         principal,
         viceprincipal,
-        username,
-        password
     } = req.body;
+
     const newSchool = await School.create({
         name,
         address,
@@ -43,11 +67,26 @@ export const createSchool = catchAsync(async (req, res, next) => {
         cloud_id,
         viceprincipal,
     });
+
+    // Generate a valid alphanumeric username (5-20 chars)
+    const username = getUsername(name);
+
+    // Generate a strong password (min 6 chars, 1 lowercase, 1 uppercase, 1 number, 1 symbol)
+    const password = generateStrongPassword();
+
     const newAdmin = await Admin.create({
         username,
         password,
         schoolID: newSchool._id
     });
+
+    // Send credentials to school's email
+    await sendEmail({
+        email: email,
+        subject: 'Your Admin Portal Credentials',
+        message: `Welcome to the ERP Portal!\n\nYour admin username: ${username}\nYour temporary password: ${password}\n\nPlease log in to the admin portal and change your username and password as soon as possible.`
+    });
+
     newSchool.admin = newAdmin._id;
     await newSchool.save();
 

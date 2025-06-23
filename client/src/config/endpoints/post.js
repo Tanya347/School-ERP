@@ -18,3 +18,12 @@ export const postURLs = (path, type) => {
         return `${api_url}/${path}`
 }
 
+export const forgotPaswordURL = (type) => {
+    return `${api_url}/auth/forgotPassword/${type}`
+}
+
+export const resetPasswordURL = (type, token) => {
+    return `${api_url}/auth/resetPassword/${type}/${token}`
+}
+
+

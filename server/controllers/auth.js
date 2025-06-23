@@ -6,6 +6,8 @@ import {promisify} from 'util';
 import { catchAsync } from "../utils/catchAsync.js";
 const USER_MODELS = [Admin, Student, Faculty];
 import { AppError } from "../utils/customError.js";
+import { sendEmail } from "../utils/email.js";
+import crypto from "crypto"
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT, {
@@ -104,21 +106,6 @@ export const logout = catchAsync(async (req, res, next) => {
   })
 })
 
-export const updatePassword = (model) => catchAsync(async(req, res, next) => {
-  const user = await model.findById(req.user.id).select('+password');
-  if(!(await user.correctPassword(req.body.password, user.password))) {
-    return next(new AppError('The password provided is incorrect.', 401));
-  }
-  user.password = req.body.password;
-  await user.save();
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    user,
-    token
-  })
-})
-
 export const isOwner = (model) => catchAsync(async (req, res, next) => {
   const resource = await model.findById(req.params.id);
   if(!resource) {
@@ -130,4 +117,63 @@ export const isOwner = (model) => catchAsync(async (req, res, next) => {
   next();
 })
 
+export const forgotPassword = (model, type) => catchAsync(async(req, res, next) => {
+  const user = await model.findOne({email: req.body.email});
+  
+  if(!user) {
+    return next(new AppError("There is no user with email address", 404))
+  }
+
+  const resetToken = user.createPasswordResetToken();
+  await user.save({validateBeforeSave: false});
+
+  const resetURL = `${process.env.client}/resetPassword/${type}/${resetToken}`;
+  const message = `Forgot your password? Submit a patch request to: ${resetURL}.\nIf you didn't forget your password, please ignore this email`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Your password reset token(valid for 10 min)',
+      message
+    })
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email'
+    })
+  } catch(err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({validateBeforeSave: false});
+
+    return next(
+      new AppError('There was an error senging the email. Try again later!', 500)
+    )
+  }
+})
+
+export const resetPassword = (model) => catchAsync(async(req, res, next) => {
+  const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+  const user = await model.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: {$gt: Date.now()}
+  });
+
+  if(!user) {
+    return next(new AppError('Token is invalid or has expired', 400))
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  await user.save();
+
+  const token = signToken(user._id);
+
+  res.status(200).json({
+    status: 'success',
+    token
+  })
+})
 

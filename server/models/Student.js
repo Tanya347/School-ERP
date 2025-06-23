@@ -1,6 +1,7 @@
 import mongoose from "mongoose"; 
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const StudentSchema = new mongoose.Schema(
   {
@@ -160,6 +161,10 @@ const StudentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    passwordChangeAt: Date,
+    passwordConfirm: String,
   },
   { timestamps: true }
 );
@@ -174,5 +179,17 @@ StudentSchema.methods.correctPassword = async function(candidatePassword, userPa
     return await bcrypt.compare(candidatePassword, userPassword);
 }
 
+StudentSchema.methods.createPasswordResetToken = function() {
+  	const resetToken = crypto.randomBytes(32).toString('hex');
+	  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+	  this.passwordResetExpires = Date.now() + 10*60*1000;
+	  return resetToken;
+}
+
+StudentSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangeAt = Date.now() - 1000;
+  next();
+});
 
 export default mongoose.model("Student", StudentSchema);

@@ -5,12 +5,12 @@ import {
     editSchoolInfo
 } from "../controllers/school.js"
 import upload from "../utils/multer.js";
-import { protect } from "../controllers/auth.js";
+import { protect, restrictTo } from "../controllers/auth.js";
 
 const router = express.Router();
 
 router.post("/", upload.single('file'), createSchool);
 router.get("/:id", protect(), getSchoolInfo);
-router.put("/:id", protect(), editSchoolInfo);
+router.put("/:id", protect(), restrictTo("admin"), upload.single('file'), editSchoolInfo);
 
 export default router;

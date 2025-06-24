@@ -33,21 +33,6 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     });
   });
 
-  export const updatePassword = (model) => catchAsync(async(req, res, next) => {
-    const user = await model.findById(req.user.id).select('+password');
-    if(!(await user.correctPassword(req.body.password, user.password))) {
-      return next(new AppError('The password provided is incorrect.', 401));
-    }
-    user.password = req.body.password;
-    await user.save();
-    const token = signToken(user._id);
-    res.status(200).json({
-      status: 'success',
-      user,
-      token
-    })
-  })
-
   export const deleteAdmin = catchAsync(async (req, res, next) => {
     res.cookie('jwt', '', { expires: new Date(0), httpOnly: true });
     await Await.findByIdAndDelete(req.user.id);

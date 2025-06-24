@@ -4,6 +4,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import './resetPassword.scss'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuth } from "../../config/context/AuthContext";
 import axios from 'axios';
 import { resetPasswordURL } from '../../config/endpoints/post';
 
@@ -14,6 +15,7 @@ const ResetPassword = ({type}) => {
         password: undefined,
         passwordConfirm: undefined
     })
+    const {logout} = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
 
@@ -27,7 +29,10 @@ const ResetPassword = ({type}) => {
             const res = await axios.patch(resetPasswordURL(type, token), passwordCreds, {withCredentials: true})
             if(res.data.status === "success") {
                 toast.success("Password changed successfully!");
-                navigate(type === 'student'? "/studentLogin" : "/facultyLogin");
+                if(type === 'admin') {
+                    await logout("Logged Out Successfully!");
+                }
+                navigate(`/${type}Login`);
             }
         } catch(err) {
             const errorMessage = err.response?.data?.message || "Something went wrong";
@@ -41,12 +46,12 @@ const ResetPassword = ({type}) => {
         <div className='reset-password-container'>
             <div className="reset-input-container">
                 <h1>Reset Password</h1>
-                <label htmlFor="password">Enter Password</label>
+                <label htmlFor="password">Enter {type==='admin' && 'Old'} Password</label>
                 <div className="password-input">
                     <input
                         type={showPassword ? "text" : "password"}
-                        placeholder='Password'
-                        id='password'
+                        placeholder='Enter password'
+                        id={type === 'admin' ? 'passwordConfirm' : 'password'}
                         onChange={handleChange}
                         className='reset-input'
                         style={{"width": "100%", "marginTop": "10px"}}
@@ -58,12 +63,12 @@ const ResetPassword = ({type}) => {
                         {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                     </span>
                 </div>
-                <label htmlFor="passwordConfirm">Confirm Password</label>
+                <label htmlFor="passwordConfirm">{type !== 'admin' && 'Confirm '}Password</label>
                 <div className="password-input">
                     <input
                         type={showPassword ? "text" : "password"}
-                        placeholder='Confirm password'
-                        id='passwordConfirm'
+                        placeholder='Enter password'
+                        id={type === 'admin' ? 'password' : 'passwordConfirm'}
                         onChange={handleChange}
                         className='reset-input'
                         style={{"width": "100%", "marginTop": "10px"}}

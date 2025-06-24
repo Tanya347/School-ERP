@@ -155,7 +155,11 @@ const FacultySchema = new mongoose.Schema(
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
-    }
+    },
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    passwordChangeAt: Date,
+    passwordConfirm: String,
   },
   { timestamps: true }
 );
@@ -169,5 +173,18 @@ FacultySchema.pre('save', async function(next) {
 FacultySchema.methods.correctPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
 }
+
+FacultySchema.methods.createPasswordResetToken = function() {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.passwordResetExpires = Date.now() + 10*60*1000;
+    return resetToken;
+}
+
+FacultySchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangeAt = Date.now() - 1000;
+  next();
+});
 
 export default mongoose.model("Faculty", FacultySchema);

@@ -91,7 +91,7 @@ app.get("/", (req, res) => {
   res.send("Hello from Express!");
 });
 
-app.use("/api/admins", adminRoute);
+app.use("/api/admin", adminRoute);
 app.use("/api/faculties", facultyRoute);
 app.use("/api/students", studentRoute);
 app.use("/api/tasks", taskRoute);

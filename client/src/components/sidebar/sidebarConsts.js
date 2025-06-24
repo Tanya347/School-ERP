@@ -26,6 +26,7 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AlarmAddIcon from '@mui/icons-material/AlarmAdd';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 export const sidebarConsts = {
     information: [
@@ -207,6 +208,18 @@ export const sidebarConsts = {
         },
     ],
     user: [
+        {
+            title: 'Change Password',
+            getPath: (user) => `/${user.role}/updatePassword/${user._id}`,
+            icon: LockResetIcon,
+            user: 'admin'
+        },
+        {
+            title: 'Edit School Info',
+            getPath: (user) => `/${user.role}/school/edit/${user.schoolID}`,
+            icon: EditIcon,
+            user: 'admin'
+        },
         {
             title: 'Profile',
             getPath: (user) => `/${user.role}/single/${user._id}`,

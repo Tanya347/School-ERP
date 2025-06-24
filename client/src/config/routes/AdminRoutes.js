@@ -46,6 +46,8 @@ import { materialInputs } from '../formsource/materialInputs';
 
 import { useAuth } from '../../config/context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
+import ResetPassword from '../../pages/auth/ResetPassword';
+import EditSchool from '../../pages/school/EditSchool';
 
 const AdminRoutes = () => {
 
@@ -262,6 +264,26 @@ const AdminRoutes = () => {
             path='timetables/:classId'
             element={<Timetable />}
             />
+
+        {/* ROUTES FOR SCHOOLS & SESSIONS */}
+          {/* create new timetables */}
+          <Route
+            path='school/edit/:schoolId'
+            element={<EditSchool title="Edit School Info" />}
+          />
+
+          {/* edit password */}
+          <Route
+            path="updatePassword/:adminId"
+            element={<ResetPassword type="admin"/>}
+          />
+
+          <Route
+            path="session"
+          />
+
+
+
         </Routes>
         </Layout>
       </RequireAdmin>

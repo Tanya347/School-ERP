@@ -8,15 +8,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DarkModeContext } from "./config/context/darkModeContext";
 
 // Common Pages
-import Login from "./pages/login/Login";
+import Login from "./pages/auth/Login";
 import Landing from "./pages/Landing/Landing";
-import RegisterSchool from "./pages/registerSchool/RegisterSchool"
+import RegisterSchool from "./pages/school/RegisterSchool"
 import AdminRoutes from "./config/routes/AdminRoutes";
 import FacultyRoutes from "./config/routes/FacultyRoutes";
 import StudentRoutes from "./config/routes/StudentRoutes";
 import { useAuth } from "./config/context/AuthContext";
 import { ToastContainer } from "react-toastify";
-import ResetPassword from "./pages/resetPassword/ResetPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);

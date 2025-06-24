@@ -124,15 +124,30 @@ const MainSidebar = () => {
                         sidebarConsts?.user?.map((item) => (
                             <>
                                 {
-                                    (item.user === 'both'  && user.role !== 'admin') && <Link
-                                        to={item.getPath ? item.getPath(user) : item.path}
-                                        style={{textDecoration: "none"}}
-                                    >
-                                        <li>
-                                            <item.icon className="icon" />
-                                            <span>{!collapsed && item.title}</span>
-                                        </li>
-                                    </Link>
+                                    (item.user === 'both'  && user.role !== 'admin') && (
+                                        <Link
+                                            to={item.getPath ? item.getPath(user) : item.path}
+                                            style={{textDecoration: "none"}}
+                                        >
+                                            <li>
+                                                <item.icon className="icon" />
+                                                <span>{!collapsed && item.title}</span>
+                                            </li>
+                                        </Link>
+                                    )
+                                }
+                                {
+                                    (item.user === 'admin') && (
+                                        <Link
+                                            to={item.getPath ? item.getPath(user) : item.path}
+                                            style={{textDecoration: "none"}}
+                                        >
+                                            <li>
+                                                <item.icon className="icon" />
+                                                <span>{!collapsed && item.title}</span>
+                                            </li>
+                                        </Link>
+                                    )
                                 }
                             </>
                         ))

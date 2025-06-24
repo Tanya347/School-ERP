@@ -113,7 +113,7 @@ export const getSchoolInfo = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        data: { school }
+        data: school
     });
 });
 
@@ -131,18 +131,37 @@ export const editSchoolInfo = catchAsync(async (req, res, next) => {
         return next(new AppError('You are not authorized to update this school', 403));
     }
 
-    const updatableFields = ['name', 'address', 'email', 'phone', 'logo', 'principal', 'viceprincipal'];
-    updatableFields.forEach(field => {
-        if (req.body[field] !== undefined) {
-            school[field] = req.body[field];
-        }
-    });
+    let logo = null;
+    let cloud_id = null;
 
-    await school.save();
+    if(req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "erp_portal"
+        });
+        logo = result.secure_url;
+        cloud_id = result.public_id;
+
+        fs.unlinkSync(req.file.path);
+    } else {
+        logo = school.logo;
+        cloud_id = school.cloud_id;
+    }
+
+    const updateSchool = await School.findByIdAndUpdate(
+        req.params.id,
+        {
+            ...req.body,
+            logo,
+            cloud_id,
+            admin: school.admin,
+            sessions: school.sessions
+        },
+        { new: true}
+    )
 
     res.status(200).json({
         status: 'success',
         message: 'School information updated successfully',
-        data: { school }
+        data: updateSchool
     });
 });

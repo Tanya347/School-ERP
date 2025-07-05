@@ -249,3 +249,17 @@ export const clearMarksForClass = catchAsync(async (req, res, next) => {
     message: "All marks cleared for the specified class" 
   });
 });
+
+export const getGenderCount = catchAsync(async (req, res, next) => {
+  const schoolId = req.user.schoolID;
+  const students = await Student.find({ schoolID: schoolId }).select('gender');
+  let boys = 0, girls = 0;
+  students.forEach(student => {
+    if (student.gender && student.gender.toLowerCase() === 'male') boys++;
+    if (student.gender && student.gender.toLowerCase() === 'female') girls++;
+  });
+  res.status(200).json({
+    status: "success",
+    data: { boys, girls }
+  });
+});

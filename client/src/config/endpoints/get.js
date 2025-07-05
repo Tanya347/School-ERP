@@ -4,6 +4,7 @@ export const getCourseClasses = '/classes/courses';
 export const getClasses = "/classes"
 export const getLectureCount = "/attendances/lecturecount"
 export const getAttendanceDates = "/attendances/dates"
+export const schoolGenderCount = '/students/genderCount';
 
 export const getAttendanceStatusByDate = (classid, date) => {
     return `/attendances/date/${classid}/${date}`
@@ -86,6 +87,10 @@ export const getSingleData = (id, type) => {
 
 export const getFacultyData = (id, type) => {
     return `/faculties/${type}/${id}`
+}
+
+export const getSession = (school) => {
+    return `/sessions/${school}`
 }
 
 

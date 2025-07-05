@@ -117,6 +117,15 @@ const RegisterSchool = () => {
             className="lInput"
           />
 
+          <label htmlFor="phone">Enter School Moto</label>
+          <input
+            type="text"
+            placeholder="School Moto"
+            id="moto"
+            onChange={handleChange}
+            className="lInput"
+          />
+
         
           <div className="submitButton">
             {loading && <div className="create-loader">

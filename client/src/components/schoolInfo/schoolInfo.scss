@@ -1,0 +1,35 @@
+.school-info-container {
+    width: 90%;
+    padding: 0 0 20px 0;
+    border-radius: 5px;
+    align-items: center;
+    display: flex;
+    background-color: white;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: auto;
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    gap: 10px;
+
+    .text {
+        width: 80%;
+        text-align: center;
+
+        h1 {
+          margin-bottom: 10px;
+        }
+    }
+
+    img {
+        width: 50%;
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+
+    }
+
+    h3 {
+        margin-top: 10px;
+    }
+}

@@ -4,7 +4,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import NewTask from '../../pages/task/NewTask';
 import List from '../../pages/list/List';
-import Home from '../../pages/home/Home';
 import SingleFaculty from "../../pages/singleFaculty/SingleFaculty";
 import EditFaculty from '../../pages/faculty/EditFaculty';
 import EditTask from '../../pages/task/EditTask';
@@ -37,6 +36,7 @@ import { materialColumns } from '../datatablesource/materialColumns';
 
 import { useAuth } from '../../config/context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
+import FacultyHome from '../../pages/home/FacultyHome';
 
 const FacultyRoutes = () => {
 
@@ -59,7 +59,7 @@ const FacultyRoutes = () => {
           {/* dashboard of main */}
           <Route
             index
-            element={ <Home type="Main" />}
+            element={ <FacultyHome />}
             />
 
           {/* profile page for faculty */}

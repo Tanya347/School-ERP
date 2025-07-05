@@ -54,6 +54,7 @@ export const createSchool = catchAsync(async (req, res, next) => {
         phone,
         principal,
         viceprincipal,
+        moto,
     } = req.body;
 
     const newSchool = await School.create({
@@ -63,6 +64,7 @@ export const createSchool = catchAsync(async (req, res, next) => {
         phone,
         logo,
         principal,
+        moto,
         logo, 
         cloud_id,
         viceprincipal,

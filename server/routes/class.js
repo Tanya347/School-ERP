@@ -7,7 +7,8 @@ import {
   updateClass,
   getClassesWithSubjects,
   getClassStudents,
-  getClassSubjects
+  getClassSubjects,
+  addClassTeacher
 } from "../controllers/class.js";
 import { protect, restrictTo } from "../controllers/auth.js";
 
@@ -20,6 +21,7 @@ router.get("/courses", protect(), restrictTo("admin"), getClassesWithSubjects)
 router.get("/course/:id", protect(), getClassSubjects)
 router.get("/details/:id", protect(), getClassDetails);
 router.get("/", protect(), restrictTo("admin"), getClasses);
-router.get("/students/:id", protect(), getClassStudents)
+router.get("/students/:id", protect(), getClassStudents);
+router.put("/classTeacher/:id", protect(), restrictTo("admin"), addClassTeacher);
 
 export default router;

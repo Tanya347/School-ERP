@@ -36,5 +36,11 @@ export const schoolInputs = [
         type: "text",
         placeholder: "Enter vice principal name for the school",
     },
+    {
+        id: "moto",
+        label: "School Moto",
+        type: "text",
+        placeholder: "Enter moto for the school",
+    }
 
 ];

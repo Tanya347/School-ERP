@@ -156,6 +156,10 @@ const FacultySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
     },
+    classTeacherTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Class'
+    },
     passwordResetToken: String,
     passwordResetExpires: Date,
     passwordChangeAt: Date,

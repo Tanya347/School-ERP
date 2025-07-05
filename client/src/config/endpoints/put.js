@@ -8,3 +8,7 @@ export const putURLs = (path, id) => {
 export const addMarks = (course) => {
     return `${api_url}/students/marks/${course}`
 }
+
+export const addClassTeacher = (sclass) => {
+    return `${api_url}/classes/classTeacher/${sclass}`
+}

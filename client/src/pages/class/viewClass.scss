@@ -17,6 +17,19 @@
             font-size: 1.2rem;
             width: 150px;
         }
+        .class-teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+            .icon {
+                cursor: pointer;
+            }
+        }
+
+        h3 span {
+            font-weight: 400;
+        }
 
         .add-buttons {
             display: flex;

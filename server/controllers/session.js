@@ -192,6 +192,17 @@ export const createSession = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
       message: "New session created successfully.",
+      status: "success",
       session: savedNewSession,
     });
 });
+
+export const getSession = catchAsync(async (req, res, next) => {
+  const schoolID = req.params.schoolId
+  const session = await Session.find({schoolID: schoolID, isActive: true})
+  res.status(200).json({
+    status: "success",
+    data: session[0]
+  })
+
+})

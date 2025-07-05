@@ -1,5 +1,6 @@
 import Class from "../models/Class.js";
 import Student from "../models/Student.js";
+import Faculty from "../models/Faculty.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
 // Create a new class
@@ -60,14 +61,36 @@ export const getClassDetails = catchAsync(async (req, res, next) => {
       populate: {
         path: 'teacher',
         model: 'Faculty',
-        select: 'teachername',
+        select: '_id teachername',
       },
     })
     .populate({
       path: 'students',
       model: 'Student',
       select: 'name profilePicture cloud_id gender enroll email studentPhone',
+    })
+    .populate({
+      path: 'classTeacher',
+      model: 'Faculty',
+      select: 'teachername',
     });
+
+  // Extract unique teachers from subjects
+  let teachers = [];
+  if (classDetails && classDetails.subjects) {
+    const teacherMap = new Map();
+    classDetails.subjects.forEach(sub => {
+      if (sub.teacher && sub.teacher._id) {
+        teacherMap.set(sub.teacher._id.toString(), {
+          _id: sub.teacher._id,
+          name: sub.teacher.teachername
+        });
+      }
+    });
+    teachers = Array.from(teacherMap.values());
+  }
+  // Attach teachers array to response
+  classDetails._doc.teachers = teachers;
   res.status(200).json({
     data: classDetails,
     status: 'success'
@@ -128,4 +151,38 @@ export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
     status: 'success'
   });
 });
- 
+
+export const addClassTeacher = catchAsync(async (req, res, next) => {
+  const classId = req.params.id;
+  const teacherId = req.body.teacher;
+
+  // Check if the class already has a class teacher
+  const sclass = await Class.findById(classId).populate('classTeacher');
+  if (!sclass) {
+    return res.status(404).json({ message: 'Class not found' });
+  }
+
+  const teacher = await Faculty.findById(teacherId).populate('classTeacherTo');
+  if (!teacher) {
+    return res.status(404).json({ message: 'Teacher not found' });
+  }
+  if (teacher.classTeacherTo) {
+    return res.status(400).json({ message: 'This teacher is already assigned as a class teacher to another class.' });
+  }
+
+  // Set the classTeacher field in Class and classTeacherTo in Faculty
+  sclass.classTeacher = teacherId;
+  await sclass.save();
+
+  teacher.classTeacherTo = classId;
+  await teacher.save();
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Class teacher assigned successfully!',
+    data: {
+      class: sclass,
+      teacher: teacher
+    }
+  });
+});

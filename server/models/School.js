@@ -33,6 +33,10 @@ const SchoolSchema = new mongoose.Schema(
                 message: 'Invalid email address',
             },
         },
+        moto: {
+            type: String,
+            requi: [true, "School moto is required"]
+        },
         phone: {
             type: String,
             required: [true, 'Phone number is required'],
@@ -45,6 +49,7 @@ const SchoolSchema = new mongoose.Schema(
         },
         logo: {
             type: String,
+            required: [true, 'Logo is required'],
             validate: {
                 validator: function (v) {
                     return !v || validator.isURL(v); 

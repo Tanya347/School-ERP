@@ -1,7 +1,6 @@
 // src/routes/adminRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Home from '../../pages/home/Home';
 import List from '../../pages/list/List';
 import NewStudent from "../../pages/student/NewStudent";
 import NewFaculty from "../../pages/faculty/NewFaculty";
@@ -48,6 +47,7 @@ import { useAuth } from '../../config/context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
 import ResetPassword from '../../pages/auth/ResetPassword';
 import EditSchool from '../../pages/school/EditSchool';
+import AdminHome from '../../pages/home/AdminHome';
 
 const AdminRoutes = () => {
 
@@ -68,7 +68,7 @@ const AdminRoutes = () => {
         <Routes>
           <Route 
             index
-            element={<RequireAdmin><Home type="Admin" /></RequireAdmin>} 
+            element={<RequireAdmin><AdminHome type="Admin" /></RequireAdmin>} 
             />
           
         {/* ROUTES FOR STUDENTS */}

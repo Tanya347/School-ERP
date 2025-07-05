@@ -1,0 +1,47 @@
+.calendar-container {
+  position: relative;
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+}
+
+.react-calender { 
+  border: 1px solid white;
+}
+
+.highlight {
+  background: var(--light-blue) !important;
+  border-radius: 50%;
+  color: black;
+  position: relative;
+}
+
+.react-calendar__tile--now {
+    background-color: var(--light-pink);
+}
+
+.event-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+  margin: auto;
+  margin-top: 2px;
+}
+
+.selected-event {
+  background-color: var(--blue);
+  color: white;
+  border-radius: 50%;
+}
+
+.event-popup {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}

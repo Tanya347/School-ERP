@@ -4,7 +4,7 @@ export const getCourseClasses = '/classes/courses';
 export const getClasses = "/classes"
 export const getLectureCount = "/attendances/lecturecount"
 export const getAttendanceDates = "/attendances/dates"
-export const schoolGenderCount = '/students/genderCount';
+export const schoolGenderCount = '/students/gender/count';
 
 export const getAttendanceStatusByDate = (classid, date) => {
     return `/attendances/date/${classid}/${date}`
@@ -93,4 +93,10 @@ export const getSession = (school) => {
     return `/sessions/${school}`
 }
 
+export const getLectures = (id, type) => {
+    if(type === 'faculty')
+        return `/timetables?facultyId=${id}`
+    else if(type === 'student')
+        return `/timetables?classId=${id}`
+}
 

@@ -29,9 +29,9 @@ const Single = ({ type }) => {
   
   useEffect(() => {
     const fetchAttendance = async () => {
-      if(data.classInfo._id) {
+      if(data?.classInfo?._id) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/attendances/studentperc/${data._id}/${data.classInfo._id}`)
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/attendances/studentperc/${data?._id}/${data?.classInfo._id}`)
           setAttendance(response.data.data)
         }
         catch(err) {

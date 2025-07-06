@@ -22,7 +22,7 @@ const router = express.Router();
 router.post("/registerStudent", protect(), restrictTo("admin"), upload.single('file'), registerStudent);
 router.put("/:id", protect(), restrictTo("admin", "student"), updateStudent);
 router.delete("/:id", protect(), restrictTo("admin"), deleteStudent);
-// router.get("/:id", protect(), getStudent);
+router.get("/:id", protect(), getStudent);
 router.get("/single/:id", protect(), getSingleStudent);
 router.get("/", protect(), getStudents);
 router.put('/marks/:subjectId', protect(), enterMarksForSubject);
@@ -31,7 +31,7 @@ router.get('/marks/subject/:subjectid', protect(), getMarksOfSubject);
 router.get('/marks/class/:classid', protect(), getMarksOfClass);
 router.delete('/marks/subject/:subjectid', protect(), clearMarksForSubject);
 router.delete('/marks/class/:classid', protect(), clearMarksForClass);
-router.get('/genderCount', protect(), restrictTo("admin"), getGenderCount)
+router.get('/gender/count', protect(), restrictTo("admin"), getGenderCount)
 
 export default router;
 

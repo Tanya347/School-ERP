@@ -1,65 +1,32 @@
 import "./studentHome.scss"
-import { useEffect, useState } from 'react'
 import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
 import { getTableURL } from '../../config/endpoints/get'
-import axios from 'axios'
+import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
+import GenericTable from "../../components/table/Table"
+import EventCalender from "../../components/calender/Calender"
+import Lecture from "../../components/lecture/Lecture"
+import { updateColumns } from "../../config/tableSource/updateColumns"
 
 const StudentHome = () => {
-  const [presenceDates, setPresenceDates] = useState([]);
-  const [absenceDates, setAbsenceDates] = useState([]);
   const {user} = useAuth();
   const { data } = useFetch(getTableURL(user));
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [presenceResponse, absenceResponse] = await Promise.all([
-          axios.get(`${process.env.REACT_APP_API_URL}/attendances/presentdates/${user._id}/${user.class}`),
-          axios.get(`${process.env.REACT_APP_API_URL}/attendances/absentdates/${user._id}/${user.class}`)
-        ]);
-
-        setPresenceDates(presenceResponse.data.presenceDates.map(date => new Date(date)));
-        setAbsenceDates(absenceResponse.data.absenceDates.map(date => new Date(date)));
-      } catch (error) {
-        console.error("Error fetching attendance data", error);
-      } finally {
-      }
-    };
-
-    fetchData();
-  }, [user]);
  
   return (
-    <div className='student-home'>
-        <div className="student-home-container">
-            <div className="welcome">
-                <img src="/Assets/brand.png" alt="" />
-                <div className="text">
-                    <h1>Welcome to Edu-Sangam</h1>
-                    <p>Providing seamless navigation for your learning via our portal</p>
-                </div>
-            </div>
-            
-            <div className="middleContainer">
-                <div className="notifications-container">
-                    <h2>Latest Updates</h2>
-                    {data?.map((d, i) => (
-                        <div className="notification" key={i}>
-                            <div className="title">
-                                {d.title}
-                            </div>
-                            <div className="description">
-                                {d.desc}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div className="attendance-status">
-
-                </div>
-            </div>
+    <div className='student-home-container'>
+      <div className="main-container">
+        <div className="left-container">
+          <SchoolInfo schoolID={user.schoolID} />
+          <div className="notifications-container">
+            <h2 className="listTitle">Latest Notifications</h2>
+              <GenericTable columns={updateColumns} rows = {data} rowKey="id" isScrollable={true}/>
+          </div>
         </div>
+         <div className="right-container">
+          <EventCalender />
+          <Lecture id={user?.class} type={user?.role} />
+        </div>
+      </div>
     </div>
   )
 }

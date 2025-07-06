@@ -111,10 +111,10 @@ const MainSidebar = () => {
                     }
                     
                     {/* On click set usestate to true */}
-                    {user.role === 'student' && <li onClick={() => setOpenQuery(true)}>
+                    {/* {user.role === 'student' && <li onClick={() => setOpenQuery(true)}>
                         <ContactSupportIcon className="icon" />
                         <span>{!collapsed && 'Query'}</span>
-                    </li>}
+                    </li>} */}
 
                     {/* Options for Users */}
                     
@@ -137,7 +137,7 @@ const MainSidebar = () => {
                                     )
                                 }
                                 {
-                                    (item.user === 'admin') && (
+                                    (item.user === 'admin' && user.role === 'admin') && (
                                         <Link
                                             to={item.getPath ? item.getPath(user) : item.path}
                                             style={{textDecoration: "none"}}

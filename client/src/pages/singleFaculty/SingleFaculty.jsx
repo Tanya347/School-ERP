@@ -8,9 +8,6 @@ import { getSingleData } from "../../config/endpoints/get";
 import { ClipLoader } from "react-spinners";
 
 const Single = ({ type }) => {
-  
-  // get id of the user using location
-  // auth context can also be used 
 
   const location = useLocation();
   
@@ -25,6 +22,11 @@ const Single = ({ type }) => {
 
   // used to navigate to a certain link
   const navigate = useNavigate();
+
+  // Find the class object where _id matches classTeacherTo
+  const classTeacherClass = data?.classesTaught?.find(
+    (cls) => cls._id === data.classTeacherTo
+  );
 
   return (
     <div className="facultyProfile">
@@ -85,12 +87,6 @@ const Single = ({ type }) => {
                     <span className="itemValue">{data.joiningYear}</span>
                   </div>
 
-                  {/* Courses */}
-                  <div className="detailItem">
-                    <span className="itemKey">Course:</span>
-                    {/* <span className="itemValue">{data.subject.name}</span> */}
-                  </div>
-
                   {/* Gender */}
                   <div className="detailItem">
                     <span className="itemKey">Gender:</span>
@@ -108,6 +104,7 @@ const Single = ({ type }) => {
                 </div>
             </div>
             <div className="right">
+             {classTeacherClass && <h3>Class Teacher To: <span>{classTeacherClass.name} Standard</span></h3>}
               <h2 className="cTitle">Classes</h2>
               <div className="classesContainer">
                 {data?.classesTaught?.map((item, index) => (

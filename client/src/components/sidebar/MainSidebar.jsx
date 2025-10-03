@@ -1,9 +1,8 @@
 import "./mainSidebar.scss"
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useAuth } from "../../config/context/AuthContext";
 import { DarkModeContext } from "../../config/context/darkModeContext";
@@ -33,7 +32,7 @@ const MainSidebar = () => {
     return (
         <div className={`navSidebarContainer ${collapsed ? 'collapsed' : ''}`}>
 
-            <motion.div animate={{  width: collapsed ? "50px" : "200px" }} className="sidebar">
+            <motion.div animate={{  width: collapsed ? "70px" : "250px" }} className="sidebar">
                 <ul>
 
                     <li id="menu">
@@ -152,12 +151,6 @@ const MainSidebar = () => {
                             </>
                         ))
                     }
-
-                    {/* Logout Button */}
-                    <li onClick={handleClick}>
-                        <ExitToAppIcon className="icon" />
-                        <span>{!collapsed && 'Logout'}</span>
-                    </li>
                     
                     {/* Toggle Theme */}
                     {/* {collapsed ? (

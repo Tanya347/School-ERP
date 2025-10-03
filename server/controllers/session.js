@@ -145,10 +145,16 @@ export const createSession = catchAsync(async (req, res, next) => {
         ),
         // clear course associations
         Course.updateMany(
-        { schoolID },
-        { $set: { teacher: null } }
+          { schoolID },
+          {
+            $set: {
+              'examStatus.status': 'pending',
+              'examStatus.examDate': null,
+              teacher: null,
+            },
+          }
         ),
-    ];
+      ];
 
     // Run saves and clears in parallel
     const [, savedNewSession] = await Promise.all([

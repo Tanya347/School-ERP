@@ -16,6 +16,8 @@
             padding: 10px;
             display: flex;
             gap: 10px;
+            height: 80px;
+            background-color: var(--white);
             width: 20%;
             -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
             box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
@@ -34,9 +36,10 @@
                 padding: 10px;
 
                 .icon {
-                    background-color: white;
                     border-radius: 30px;
                     padding: 10px;
+                    // color: var(--white);
+                    font-size: 2rem;
                 }
                 background-color: inherit;
             }
@@ -45,8 +48,9 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
-                h3 {
+                h4 {
                     color: var(--gray);
+                    font-weight: 700;
                 }
             }
         }

@@ -13,40 +13,40 @@ const AdminWidgets = () => {
 
   return (
     <div className="AdminWidgets">
-        <div className='widget' style={{"backgroundColor":"var(--light-blue)"}}>
+        <div className='widget'>
             <div className="leftContainer">
-                <SchoolIcon className='icon'/>
+                <SchoolIcon className='icon' style={{"backgroundColor": "var(--light-green)", "color": "var(--green)"}}/>
             </div>
             <div className="rightContainer">
+                <h2>{data.student}</h2>
                 <h4>Students</h4>
-                <h3>{data.student}</h3>
             </div>
         </div>
-        <div className='widget' style={{"backgroundColor":"var(--light-pink)"}}>
+        <div className='widget'>
             <div className="leftContainer">
-                <EmojiPeopleIcon className='icon'/>
+                <EmojiPeopleIcon className='icon' style={{"backgroundColor": "var(--light-blue)", "color": "var(--blue)"}}/>
             </div>
             <div className="rightContainer">
+                <h2>{data.teacher}</h2>
                 <h4>Teachers</h4>
-                <h3>{data.teacher}</h3>
             </div>
         </div>
-        <div className='widget' style={{"backgroundColor":"var(--light-yellow)"}}>
+        <div className='widget'>
             <div className="leftContainer" >
-                <LibraryBooksIcon className='icon'/>
+                <LibraryBooksIcon className='icon' style={{"backgroundColor": "var(--light-purple)", "color": "var(--purple)"}}/>
             </div>
             <div className="rightContainer">
+                <h2>{data.subject}</h2>
                 <h4>Subjects</h4>
-                <h3>{data.subject}</h3>
             </div>
         </div>
-        <div className='widget' style={{"backgroundColor":"var(--light-green)"}}>
+        <div className='widget'>
             <div className="leftContainer">
-                <PeopleIcon className='icon'/>
+                <PeopleIcon className='icon' style={{"backgroundColor": "var(--light-pink)", "color": "var(--pink)"}}/>
             </div>
             <div className="rightContainer">
+                <h2>{data.class}</h2>
                 <h4>Classes</h4>
-                <h3>{data.class}</h3>
             </div>
         </div>
     </div>

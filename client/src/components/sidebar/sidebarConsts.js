@@ -26,7 +26,9 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AlarmAddIcon from '@mui/icons-material/AlarmAdd';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 export const sidebarConsts = {
     information: [
@@ -102,10 +104,16 @@ export const sidebarConsts = {
             icon: NoteAddIcon,
             user: 'both'
         },
+        // {
+        //     title: "Responses",
+        //     path: "/student/responses",
+        //     icon: MarkChatReadIcon,
+        //     user: 'student'
+        // },
         {
-            title: "Responses",
-            path: "/student/responses",
-            icon: MarkChatReadIcon,
+            title: "Exam Dates",
+            path: "/student/exams",
+            icon: DriveFileRenameOutlineIcon,
             user: 'student'
         },
         {
@@ -157,6 +165,12 @@ export const sidebarConsts = {
             path: "/admin/timetables/new",
             icon: ViewTimelineIcon,
             user: "admin",
+        },
+        {
+            title: "Add Exam Dates",
+            path: "/admin/exams/dates",
+            icon: PendingActionsIcon,
+            user: "admin"
         },
         {
             title: "Add Material",

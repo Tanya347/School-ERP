@@ -1,7 +1,7 @@
 .navSidebarContainer {
     .sidebar {
-        background-color: #5353AF;
-        color: white;
+        background-color: var(--black);
+        color: var(--white);
         height: 100vh;
         position: fixed;
         z-index: 1000;
@@ -12,22 +12,22 @@
 
     .collapsed {
         .sidebar{
-            width: 50px;
+            width: 70px;
         }
     }
 
     .title {
         font-size: 1rem;
         font-weight: 500;
-        color: white;
+        color: var(--white);
         margin-top: 15px;
         margin-bottom: 5px;
     }
 
     .add-border {
-        width: 40px;
+        width: 55px;
         height: 5px;
-        background-color: #d5cbf967;
+        background-color: #676666;
         border-radius: 10px;
     }
 
@@ -37,12 +37,12 @@
         padding: 0;
 
         #menu {
-            color: white;
+            color: var(--white);
             margin-bottom: 10px;
 
             &:hover {
-                background-color: #5353AF;
-                color: white;
+                background-color: #353535;
+                color: var(--white);
             }
 
             h3 {
@@ -53,28 +53,24 @@
                 transition: 0.3s all ease-in-out;
                 font-size: 30px;
                 margin-right: 10px;
-
-                &:hover {
-                    background-color: #d5cbf93f;
-                }
             }
         }
 
         li {
             display: flex;
             align-items: center;
-            padding: 5px;
+            padding: 10px;
             cursor: pointer;
             color: gainsboro;
             transition: 0.3s all ease-in-out;
 
             &:hover {
-                background-color: #d5cbf93f;
+                background-color: #353535;
             }
 
             .icon {
                 font-size: 30px;
-                color: #d5cbf9;
+                color: var(--grey);
             }
 
             span {
@@ -93,7 +89,7 @@
                 width: 20px;
                 height: 20px;
                 border-radius: 5px;
-                border: 1px solid #7451f8;
+                border: 1px solid #353535;
                 cursor: pointer;
                 margin: 5px;
 

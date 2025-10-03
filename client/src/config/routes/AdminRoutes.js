@@ -48,6 +48,7 @@ import EventsList from '../../pages/event/EventsList';
 import ResetPassword from '../../pages/auth/ResetPassword';
 import EditSchool from '../../pages/school/EditSchool';
 import AdminHome from '../../pages/home/AdminHome';
+import AddExamDates from '../../pages/exams/AddExamDates';
 
 const AdminRoutes = () => {
 
@@ -264,6 +265,12 @@ const AdminRoutes = () => {
             path='timetables/:classId'
             element={<Timetable />}
             />
+
+        {/* Add exam dates */}
+        <Route
+          path="exams/dates"
+          element={<AddExamDates />}
+        />
 
         {/* ROUTES FOR SCHOOLS & SESSIONS */}
           {/* create new timetables */}

@@ -99,3 +99,97 @@ export const getCourses = catchAsync(async (req, res, next) => {
     data: courses
   });
 });
+
+export const setExamDatesForClass = catchAsync(async (req, res, next) => {
+  const { classId, exams } = req.body;
+
+  if (!classId || !Array.isArray(exams)) {
+    return res.status(400).json({ message: 'classId and exams array are required' });
+  }
+
+  // Optional: Validate all exam entries
+  const bulkOps = exams.map((exam) => ({
+    updateOne: {
+      filter: { _id: exam.courseId, class: classId },
+      update: {
+        $set: {
+          'examStatus.status': 'planned',
+          'examStatus.examDate': new Date(exam.examDate),
+        },
+      },
+    },
+  }));
+
+  const result = await Course.bulkWrite(bulkOps);
+
+  res.status(200).json({
+    message: 'Exam dates updated successfully',
+    status: "success",
+    modifiedCount: result.modifiedCount,
+  });
+});
+
+// Clear exam date and status for a course
+export const clearExamDatesForClass = catchAsync(async (req, res, next) => {
+  const { classId } = req.params;
+
+  if (!classId) {
+    return res.status(400).json({ message: "classId is required" });
+  }
+
+  // Get all course IDs for the class
+  const classDoc = await Class.findById(classId).select('subjects');
+  if (!classDoc) {
+    return res.status(404).json({ message: "Class not found" });
+  }
+
+  const courseIds = classDoc.subjects;
+
+  // Clear examStatus fields for all courses in the class
+  const result = await Course.updateMany(
+    { _id: { $in: courseIds } },
+    { $unset: { 'examStatus.examDate': "", 'examStatus.status': "pending" } }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Exam dates cleared successfully for all courses in the class',
+    modifiedCount: result.modifiedCount
+  });
+});
+
+export const getExamDatesForClass = catchAsync(async (req, res, next) => {
+  const { classId } = req.params;
+
+  const courses = await Course.find({ class: classId })
+    .populate('class', 'name')
+    .populate('teacher', 'teachername');
+
+  if (!courses || courses.length === 0) {
+    return res.status(404).json({
+      message: 'No courses found for this class',
+      data: [],
+      allExamsPlanned: false
+    });
+  }
+
+  const examDates = courses.map(course => ({
+    _id: course._id,
+    name: course.name,
+    examDate: course.examStatus?.examDate || null,
+    teacherName: course.teacher?.teachername || 'N/A',
+    code: course.subjectCode,
+  }));
+
+  // Check if all courses have examStatus.status === 'planned'
+  const allExamsPlanned = courses.every(
+    course => course.examStatus?.status === 'planned'
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: examDates,
+    allExamsPlanned
+  });
+});
+

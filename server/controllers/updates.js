@@ -96,31 +96,3 @@ export const getUpdates = catchAsync(async (req, res, next) => {
         data: enrichedUpdates
     });
 });
-
-export const markUpdateAsRead = catchAsync(async (req, res, next) => {
-    const { userId, userModel } = req.body;
-    const update = await Update.findById(req.params.id);
-
-    if (!update) {
-        return res.status(404).json({ message: "Update not found" });
-    }
-
-    // Check if the user has already read the update
-    const alreadyRead = update.readBy.some(
-        (read) => read.user.toString() === userId && read.userModel === userModel
-    );
-
-    if (alreadyRead) {
-        return res.status(400).json({ message: "Update already marked as read" });
-    }
-
-    // Add the user to the readBy array
-    update.readBy.push({ user: userId, userModel });
-    await update.save();
-
-    res.status(200).json({
-        status: "success",
-        message: 'Update marked as read successfully!',
-        data: update
-    });
-});

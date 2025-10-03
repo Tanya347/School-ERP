@@ -7,6 +7,7 @@ body {
 }
 
 :root {
+    --very-light-purple: #F5EFFF;
     --light-purple: #DBC4F0;
     --light-red: #FFCACC;
     --light-green: #D4E2D4;
@@ -15,7 +16,7 @@ body {
     --light-pink: #F8E8EE;
     --light-blue: #CDF5FD;
     --gray: #7D7C7C;
-    --light-gray: #EEEEEE;
+    --light-gray: #F2F4F5;
     --turquoise: #1AACAC;
     --yellow: #F2F7A1;
     --red: #EF4040;
@@ -23,6 +24,10 @@ body {
     --green: #527853;
     --orange: #EE7214;
     --blue: #3876BF;
+    --purple: #7E60BF;
+    --black: #000000;
+    --white: white;
+    --dark-blue: #1F003F;
 }
 
 .page-loader {

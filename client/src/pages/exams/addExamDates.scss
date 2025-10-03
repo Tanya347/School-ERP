@@ -1,0 +1,59 @@
+.add-exam-date-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    h1 {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    .class-dropdown {
+        label {
+            font-size: 1.2rem;
+        }
+    }
+
+    .form-btn {
+        width: 200px;
+        padding: 10px;
+        border: none;
+        background-color: #474E93;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            background-color: #5353AF;
+        }
+    }
+
+    .danger-btn {
+        background-color: #D9534F;
+
+        &:hover {
+            background-color: #C9302C;
+        }
+    }
+
+    .exam-dates-table {
+        margin: 30px 0;
+        padding: 20px;
+        border: 5px solid #E5D9F2;
+
+        th {
+            padding: 10px;
+            background-color: #474E93;
+            color: white;
+        }
+
+        td {
+            padding: 10px;
+            background-color: #F5EFFF;
+        }
+    }
+}

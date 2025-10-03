@@ -53,7 +53,17 @@ const CourseSchema = new mongoose.Schema(
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
-    }
+    },
+    examStatus: {
+      status: {
+        type: String,
+        enum: ['pending', 'completed', 'marks_published'],
+        default: 'pending',
+      },
+      examDate: {
+        type: String,
+      },
+    },
   },
   { timestamps: true }
 );

@@ -13,6 +13,7 @@ import { materialColumns } from '../datatablesource/materialColumns';
 
 import { useAuth } from '../context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
+import ViewExamDates from '../../pages/exams/ViewExamDates';
 
 const StudentRoutes = () => {
     const { user } = useAuth();
@@ -37,6 +38,7 @@ const StudentRoutes = () => {
             <Route path="calender" element={<Events />} />
             <Route path="events" element={<EventsList type="Student"/>} />
             <Route path="materials" element={ <List column={materialColumns} name="Material" type="Main"/>}/>
+            <Route path="exams" element={<ViewExamDates />} />
         </Routes>
        </Layout>
     </RequireStudent>

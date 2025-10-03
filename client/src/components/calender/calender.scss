@@ -4,10 +4,12 @@
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
 
 }
-
-.react-calender { 
-  border: 1px solid white;
+.react-calendar { 
+  border: 1px solid white !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
 }
+
 
 .highlight {
   background: var(--light-blue) !important;

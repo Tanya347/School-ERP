@@ -2,10 +2,10 @@ import "./adminHome.scss";
 
 import AdminWidgets from "../../components/adminWidgets/AdminWidgets";
 import useFetch from "../../config/service/useFetch";
-import { getSession, getTableURL, schoolGenderCount } from "../../config/endpoints/get";
+import { getSession, schoolGenderCount } from "../../config/endpoints/get";
 import { useAuth } from "../../config/context/AuthContext";
-import GenericTable from "../../components/table/Table";
-import { updateColumns } from "../../config/tableSource/updateColumns";
+// import GenericTable from "../../components/table/Table";
+// import { updateColumns } from "../../config/tableSource/updateColumns";
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo";
 import { MyPieChart } from "../../components/graphs/PieChart";
 import { useEffect, useState } from "react";
@@ -20,7 +20,6 @@ import EventCalender from "../../components/calender/Calender";
 const AdminHome = () => {
 
   const {user} = useAuth();
-  const { data } = useFetch(getTableURL(user));
   const [sessionName, setSessionName] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -58,6 +57,7 @@ const AdminHome = () => {
 
   return (
     <div className="home">
+      {/* <Navbar /> */}
       <div className="AdminHomeContainer">
         {/* Navbar according to the type of user */}
 
@@ -67,10 +67,10 @@ const AdminHome = () => {
             <div className="widgets">
               <AdminWidgets />
             </div>
-            <div className="notifications-container">
+            {/* <div className="notifications-container">
               <h2 className="listTitle">Latest Notifications</h2>
               <GenericTable columns={updateColumns} rows = {data} rowKey="id" isScrollable={true}/>
-            </div>
+            </div> */}
           </div>
           <div className="right-container">
             <div className="pie-chart-container">
@@ -82,7 +82,6 @@ const AdminHome = () => {
               <AccessAlarmIcon className="icon"/>
               <h2>Session</h2>
               <h3>{sessionName}</h3>
-              <p>Restart new session. Caution! This action is irreversible</p>
               {loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
                   creating class...

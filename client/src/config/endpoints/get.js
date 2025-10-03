@@ -23,7 +23,7 @@ export const getDatatableURL = (path, user) => {
     else if(path === 'tasks')
         return user.role === 'student' ? `/tasks?classId=${user.class}` : `/tasks?facultyId=${user._id}`;
     else if(path === 'updates')
-        return getTableURL(user) ;
+        return getUpdateURL(user) ;
     else    
         return `/${path}/`
 }
@@ -42,7 +42,7 @@ export const getTableWithoutActionURL = (path, id) => {
         return `/students/marks/class/${id}`
 }
 
-export const getTableURL = (user) => {
+export const getUpdateURL = (user) => {
     const base = `/updates`;
     if (user.role === 'faculty') return `${base}?facultyId=${user._id}`;
     if (user.role === 'student') return `${base}?classId=${user.class}`;

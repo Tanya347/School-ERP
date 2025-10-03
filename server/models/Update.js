@@ -53,7 +53,7 @@ const UpdateSchema = new mongoose.Schema({
         },
         userModel: {
             type: String,
-            enum: ['Faculty', 'Student']
+            enum: ['Faculty', 'Student', 'Admin']
         }
     }],
     expiresAt: {

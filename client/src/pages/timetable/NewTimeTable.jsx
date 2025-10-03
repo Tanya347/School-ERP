@@ -16,27 +16,36 @@ const NewTimeTable = () => {
   const [clearedSlots, setClearedSlots] = useState({});
 
   useEffect(() => {
-    if (selectedClass) {
-      axios.get(process.env.REACT_APP_API_URL + getClassCourses(selectedClass, "courses"))
-        .then(res => setCourses(res.data.data))
-        .catch(console.error);
-    }
+    const fetchData = async () => {
+      if (selectedClass) {
+        try {
+          const coursesRes = await axios.get(
+            process.env.REACT_APP_API_URL + getClassCourses(selectedClass, "courses"),
+            { withCredentials: true }
+          );
+          setCourses(coursesRes.data.data);
 
-    axios.get(process.env.REACT_APP_API_URL + getTimeTableURL(selectedClass, 'class'))
-      .then(res => {
-        const timetableArray = res.data.data;
-        const mapped = {};
-        timetableArray.forEach(slot => {
-          const key = `${slot.day}_${slot.period}`;
-          mapped[key] = {
-            courseId: slot.course._id,
-            courseName: slot.course.name,
-            facultyName: slot.faculty.teachername
-          };
-        });
-        setExistingSlots(mapped);
-      })
-      .catch(console.error);
+          const timetableRes = await axios.get(
+            process.env.REACT_APP_API_URL + getTimeTableURL(selectedClass, 'class'),
+            { withCredentials: true }
+          );
+          const timetableArray = timetableRes.data.data;
+          const mapped = {};
+          timetableArray.forEach(slot => {
+            const key = `${slot.day}_${slot.period}`;
+            mapped[key] = {
+              courseId: slot.course._id,
+              courseName: slot.course.name,
+              facultyName: slot.faculty.teachername
+            };
+          });
+          setExistingSlots(mapped);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchData();
   }, [selectedClass]);
 
   const handleCourseChange = (day, period, courseId) => {
@@ -55,11 +64,11 @@ const NewTimeTable = () => {
 
     try {
       const res = await axios.delete(getClearTimetableForClass(selectedClass), { withCredentials: true });
-      setClearedSlots({});
-      setSlots({});
-      setExistingSlots({});
-
+      
       if(res.data.status === 'success') {
+        setClearedSlots({});
+        setSlots({});
+        setExistingSlots({});
         toast.success(`Slots cleared successfully!`);
       }
     } catch (error) {

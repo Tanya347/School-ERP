@@ -10,10 +10,12 @@ import Layout from '../../components/sidebar/Layout';
 import { taskColumns } from '../datatablesource/taskColumns';
 import { testColumns } from '../datatablesource/testColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
+import { updateColumns } from '../datatablesource/updateColumns';
 
 import { useAuth } from '../context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
 import ViewExamDates from '../../pages/exams/ViewExamDates';
+import Marksheet from '../../pages/marks/Marksheet';
 
 const StudentRoutes = () => {
     const { user } = useAuth();
@@ -39,6 +41,8 @@ const StudentRoutes = () => {
             <Route path="events" element={<EventsList type="Student"/>} />
             <Route path="materials" element={ <List column={materialColumns} name="Material" type="Main"/>}/>
             <Route path="exams" element={<ViewExamDates />} />
+            <Route path="marks" element={<Marksheet />}/>
+            <Route path="updates" element={<List column={updateColumns} name="Update" type="Creator" />}/>
         </Routes>
        </Layout>
     </RequireStudent>

@@ -2,13 +2,13 @@ import * as XLSX from 'xlsx';
 import "./excelButton.scss"
 import DownloadIcon from '@mui/icons-material/Download';
 
-const ExportButton = ({data, formatted, filename, title}) => {
+const ExportButton = ({formatted, filename, title}) => {
 
-  const exportToExcel = (data, filename = `${filename}.xlsx`) => {
+  const exportToExcel = (data, fileName) => {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, title);
-    XLSX.writeFile(workbook, filename);
+    XLSX.writeFile(workbook, fileName);
   };
 
   return (

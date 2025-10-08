@@ -3,20 +3,12 @@ import "./single.scss";
 import { useLocation, useNavigate} from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
 import Course from "../../components/course/Course";
-import { CircularProgressbar } from "react-circular-progressbar";
 import { getSingleData } from "../../config/endpoints/get";
-import { useEffect, useState} from "react";
 import 'react-circular-progressbar/dist/styles.css';
-import axios from "axios";
 import { ClipLoader } from "react-spinners";
 
 
 const Single = ({ type }) => {
-  
-  // get id of the user using location
-  // auth context can also be used 
-
-  const [attendance, setAttendance] = useState({})
 
   const location = useLocation();
   
@@ -26,22 +18,6 @@ const Single = ({ type }) => {
   else
     id = location.pathname.split("/")[4];
   const { data, loading } = useFetch(getSingleData(id, "students"))
-  
-  useEffect(() => {
-    const fetchAttendance = async () => {
-      if(data?.classInfo?._id) {
-        try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/attendances/studentperc/${data?._id}/${data?.classInfo._id}`)
-          setAttendance(response.data.data)
-        }
-        catch(err) {
-          console.log(err)
-        }
-      }
-    }
-
-    fetchAttendance();
-  }, [data])
 
   // used to navigate to a certain link
   const navigate = useNavigate();
@@ -119,16 +95,6 @@ const Single = ({ type }) => {
             </div>
           </div>
           <div className="right">
-            {Object.keys(attendance).length > 0  && <div className="attendance">
-              <h2 className="title">Attendance</h2>
-              <CircularProgressbar value={parseFloat(attendance?.attendancePercentage?.toFixed(2))} text={`${attendance?.attendancePercentage?.toFixed(2)}%`} strokeWidth={10} className="progressbar" />
-              <div><span>Classes Attended:</span> {attendance?.attendedLectures}</div>
-              <div><span>Total Classes:</span> {attendance?.totalLectures}</div>
-            </div>}
-            <div className="marks">
-            <div className="title">Marks</div>
-
-            </div>
           </div>
         </div>
         <div className="bottom">

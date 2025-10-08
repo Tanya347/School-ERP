@@ -1,6 +1,5 @@
-import "./table.scss";
+ import "./table.scss";
 
-import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

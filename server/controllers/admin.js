@@ -9,7 +9,9 @@ const filterObj = (obj, ...allowedFields) => {
     })
     return newObj;
   }
-  
+
+// update admin data
+// --
 export const updateAdmin = catchAsync(async (req, res, next) => {
   
     // create error if user posts password data
@@ -33,6 +35,8 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     });
   });
 
+  // delete admin profile
+  // --
   export const deleteAdmin = catchAsync(async (req, res, next) => {
     res.cookie('jwt', '', { expires: new Date(0), httpOnly: true });
     await Await.findByIdAndDelete(req.user.id);

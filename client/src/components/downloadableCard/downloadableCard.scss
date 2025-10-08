@@ -1,0 +1,106 @@
+.downloadable-card-container {
+
+    .card {
+        margin-top: 20px;
+        display: flex;
+        width: 600px;
+        height: 1000px;
+        align-items: center;
+        flex-direction: column;
+        border: 2px solid black;
+        padding: 50px 100px;
+
+        .card-header {
+
+            img {
+                height: 100px;
+                width: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 20px;
+            }
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            h3 {
+                margin-top: 10px;
+            }
+        }
+
+        .card-student-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 50px;
+
+            .left-container {
+                p {
+                    margin-bottom: 10px
+                }
+                text-align: left;
+                width: 50%;
+            }
+
+            .right-container {
+                width: 45%;
+                display: flex;
+                justify-content: flex-end;
+                img {
+                    height: 200px;
+                }
+            }
+        }
+
+        .card-table {
+            margin-top: 50px;
+            width: 100%;
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 0 auto;
+                background: #fff;
+                width: 100%;
+            }
+        }
+
+        .card-signatures {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            .left-signature, .right-signature {
+                text-align: center;
+                p {
+                    margin: 5px 0;
+                }
+                img {
+                    height: 100px;
+                    margin-bottom: 5px;
+                }
+            }
+
+            .left-signature {
+                margin-top: 100px;
+            }
+        }
+    }
+
+    .download-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}

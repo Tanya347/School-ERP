@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import "./addMarks.scss"
 
 import { useAuth } from '../../config/context/AuthContext'
@@ -50,14 +50,13 @@ const AddMarks = () => {
             prefilledMarks[entry._id] = entry.marks || "";
           });
           setMarksData(prefilledMarks);
-          console.log(marksData)
         } catch (error) {
           console.error("Error fetching marks data:", error);
         }
       }
     };
     fetchMarks();
-  }, [course, marksData])
+  }, [course])
 
   const handleClick = (cl) => {
     setCourse(cl._id);

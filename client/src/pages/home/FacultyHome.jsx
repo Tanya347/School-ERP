@@ -2,30 +2,58 @@
 import './facultyHome.scss'
 import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
 import { useAuth } from '../../config/context/AuthContext';
-// import GenericTable from '../../components/table/Table';
-// import { updateColumns } from "../../config/tableSource/updateColumns";
-// import useFetch from '../../config/service/useFetch';
-// import { getUpdateURL } from '../../config/endpoints/get';
 import EventCalender from '../../components/calender/Calender';
 import Lecture from '../../components/lecture/Lecture';
+import useFetch from '../../config/service/useFetch';
+import { getSingleData } from '../../config/endpoints/get';
+import FacultyProfile from '../../components/profile/FacultyProfile';
+import Course from '../../components/course/Course';
 
 const FacultyHome = () => {
   const {user} = useAuth();
+  const { data } = useFetch(getSingleData(user._id, "faculties"))
+
+  const colors = ['var(--light-blue)', 'var(--light-pink)', 'var(-light-yellow)', 'var(light-green)', 'var(light-red)']
+
+  const classTeacherClass = data?.classesTaught?.find(
+    (cls) => cls._id === data.classTeacherTo
+  );
 
   return (
     <div className='faculty-home-container'>
-      {/* <Navbar /> */}
       <div className="main-container">
 
         <div className="left-container">
           <SchoolInfo schoolID={user.schoolID} />
-          {/* <div className="notifications-container">
-            <h2 className="listTitle">Latest Notifications</h2>
-              <GenericTable columns={updateColumns} rows = {data} rowKey="id" isScrollable={true}/>
-          </div> */}
+          <div className="bottom-container">
+            <EventCalender />
+            <div className="faculty-courses-container">
+              {classTeacherClass && <h3>Class Teacher To: <span>{classTeacherClass.name} Standard</span></h3>}
+                <h2 className="cTitle">Classes</h2>
+                <div className="classesContainer">
+                {data?.classesTaught?.map((item, index) => (
+                  <div className="classContainer" key={index} style={{ backgroundColor: colors[index % colors.length]}}>
+                    {item.name} Standard
+                </div>
+              ))}
+              </div>
+              <h2 className="cTitle">Courses</h2>
+              <div className="coursesContainer">
+                {data?.subjectsTaught?.map((item, index) => (
+                  <Course
+                    name={item.name}
+                    index={index}
+                    subjectCode={item.subjectCode}
+                    syllabusPicture={item.syllabusPicture} 
+                  />
+                ))}
+              </div>
+            </div>
+
+          </div>
         </div>
         <div className="right-container">
-          <EventCalender />
+          <FacultyProfile data={data}/>
           <Lecture id={user?._id} type={user?.role}/>
         </div>
       </div>

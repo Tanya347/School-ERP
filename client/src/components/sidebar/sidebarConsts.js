@@ -4,9 +4,7 @@ import AddchartIcon from '@mui/icons-material/Addchart';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import EditIcon from '@mui/icons-material/Edit';
-import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -28,7 +26,6 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AlarmAddIcon from '@mui/icons-material/AlarmAdd';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import LockResetIcon from '@mui/icons-material/LockReset';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 export const sidebarConsts = {
     information: [
@@ -55,6 +52,12 @@ export const sidebarConsts = {
             path: "/faculty/updates",
             icon: NotificationsIcon,
             user: "faculty",
+        },
+        {
+            title: "Updates",
+            path: "/student/updates",
+            icon: NotificationsIcon,
+            user: "student",
         },
         {
             title: "Courses",
@@ -104,16 +107,16 @@ export const sidebarConsts = {
             icon: NoteAddIcon,
             user: 'both'
         },
-        // {
-        //     title: "Responses",
-        //     path: "/student/responses",
-        //     icon: MarkChatReadIcon,
-        //     user: 'student'
-        // },
         {
-            title: "Exam Dates",
+            title: "Admit Card",
             path: "/student/exams",
-            icon: DriveFileRenameOutlineIcon,
+            icon: PendingActionsIcon,
+            user: 'student'
+        },
+        {
+            title: "Marksheet",
+            path: "/student/marks",
+            icon: CollectionsBookmarkIcon,
             user: 'student'
         },
         {
@@ -234,17 +237,5 @@ export const sidebarConsts = {
             icon: EditIcon,
             user: 'admin'
         },
-        {
-            title: 'Profile',
-            getPath: (user) => `/${user.role}/single/${user._id}`,
-            icon: AccountCircleOutlinedIcon,
-            user: 'both'
-        },
-        {
-            title: 'Edit Profile',
-            getPath: (user) => `/${user.role}/edit/${user._id}`,
-            icon: EditIcon,
-            user: 'both',
-        }
     ]
 }

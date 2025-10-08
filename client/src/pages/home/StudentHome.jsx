@@ -1,28 +1,70 @@
 import "./studentHome.scss"
 import { useAuth } from '../../config/context/AuthContext'
-// import useFetch from '../../config/service/useFetch'
-// import { getUpdateURL } from '../../config/endpoints/get'
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
-// import GenericTable from "../../components/table/Table"
 import EventCalender from "../../components/calender/Calender"
+import { CircularProgressbar } from "react-circular-progressbar";
 import Lecture from "../../components/lecture/Lecture"
-// import { updateColumns } from "../../config/tableSource/updateColumns"
+import useFetch from "../../config/service/useFetch"
+import { getSingleData } from "../../config/endpoints/get"
+import StudentProfile from "../../components/profile/StudentProfile"
+import Course from "../../components/course/Course"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 const StudentHome = () => {
   const {user} = useAuth();
+  const [attendance, setAttendance] = useState({})
+  const { data } = useFetch(getSingleData(user._id, "students"))
  
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      if(data?.classInfo?._id) {
+        try {
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/attendances/studentperc/${data?._id}/${data?.classInfo._id}`)
+          setAttendance(response.data.data)
+        }
+        catch(err) {
+          console.log(err)
+        }
+      }
+    }
+
+    fetchAttendance();
+  }, [data])
+
   return (
     <div className='student-home-container'>
       <div className="main-container">
         <div className="left-container">
           <SchoolInfo schoolID={user.schoolID} />
-          {/* <div className="notifications-container">
-            <h2 className="listTitle">Latest Notifications</h2>
-              <GenericTable columns={updateColumns} rows = {data} rowKey="id" isScrollable={true}/>
-          </div> */}
+          <div className="bottom-container">
+            <EventCalender />
+            <div className="student-courses-container">
+              <h2 className="courseTitle">Courses</h2>
+          <div className="coursesContainer">
+            {data?.classInfo?.subjects?.map((item, index) => (
+              <Course
+                name={item?.name}
+                index={index}
+                subjectCode={item?.subjectCode}
+                syllabusPicture={item?.syllabusPicture} 
+                teacher={item?.teacher?.teachername}
+              />
+            ))}
+            </div>
+            </div>
+            <div className="attendance-container">
+              {Object.keys(attendance).length > 0  && <div className="attendance">
+                <h2 className="title">Attendance</h2>
+                <CircularProgressbar value={parseFloat(attendance?.attendancePercentage?.toFixed(2))} text={`${attendance?.attendancePercentage?.toFixed(2)}%`} strokeWidth={10} className="progressbar" />
+                <div><span>Classes Attended:</span> {attendance?.attendedLectures}</div>
+                <div><span>Total Classes:</span> {attendance?.totalLectures}</div>
+              </div>}
+            </div>
+          </div>
         </div>
          <div className="right-container">
-          <EventCalender />
+          <StudentProfile data={data}/>
           <Lecture id={user?.class} type={user?.role} />
         </div>
       </div>

@@ -26,19 +26,67 @@
             -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
             box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
             border-radius: 5px;
+            gap: 50px;
 
             .school-info-container {
                 margin-top: 30px;
             }
 
-            .notifications-container {
-                margin: 30px 0;
-                width: 90%;
-                .listTitle {
-                    margin: 20px 0;
-                }
-                .genericTable {
-                    max-height: 350px;
+
+            .bottom-container {
+                display: flex;
+                gap: 30px;
+                justify-content: center;
+                align-items: center;
+                padding-bottom: 50px;
+
+                .faculty-courses-container {
+                    width: 70%;
+                    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+                    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+                    padding: 20px;
+                    border-radius: 10px;
+                    text-align: center;
+
+                    h3 {
+                        span {
+                        background-color: #F5F5F5;
+                        padding: 5px 10px;
+                        margin-left: 5px;
+                        border-radius: 7px;
+                        font-weight: 600;
+                        } 
+                    }
+
+                    .cTitle {
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                        color: #555;
+                        text-align: center;
+                    }
+                
+                    .coursesContainer {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        align-items: center;
+                        justify-content: center;
+                        
+                    }
+
+                    .classesContainer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 20px;
+
+                        .classContainer {
+                        width: 150px;
+                        padding: 10px;
+                        border-radius: 10px;
+                        text-align: center;
+                        }
+                    }
                 }
             }
         }

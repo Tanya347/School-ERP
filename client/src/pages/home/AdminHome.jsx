@@ -4,8 +4,6 @@ import AdminWidgets from "../../components/adminWidgets/AdminWidgets";
 import useFetch from "../../config/service/useFetch";
 import { getSession, schoolGenderCount } from "../../config/endpoints/get";
 import { useAuth } from "../../config/context/AuthContext";
-// import GenericTable from "../../components/table/Table";
-// import { updateColumns } from "../../config/tableSource/updateColumns";
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo";
 import { MyPieChart } from "../../components/graphs/PieChart";
 import { useEffect, useState } from "react";
@@ -62,17 +60,11 @@ const AdminHome = () => {
         {/* Navbar according to the type of user */}
 
         <div className="mainContainer">
-          <div className="left-container">
             <SchoolInfo schoolID={user.schoolID} />
             <div className="widgets">
               <AdminWidgets />
             </div>
-            {/* <div className="notifications-container">
-              <h2 className="listTitle">Latest Notifications</h2>
-              <GenericTable columns={updateColumns} rows = {data} rowKey="id" isScrollable={true}/>
-            </div> */}
-          </div>
-          <div className="right-container">
+          <div className="bottom-container">
             <div className="pie-chart-container">
               <h3>Girls vs Boys Count</h3>
               <MyPieChart entryCounts={genderCount} showLegend={false}/>

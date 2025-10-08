@@ -7,8 +7,6 @@ const Lecture = ({id, type}) => {
 
   const slots = useFetch(getLectures(id, type)).data;
 
-  console.log(slots)
-
   const today = new Date();
   const todayDay = today.toLocaleDateString('en-US', { weekday: 'long' });
   // Filter slots for today and map to lectures format

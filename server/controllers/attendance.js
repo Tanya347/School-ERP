@@ -5,9 +5,11 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { getActiveSession } from "./session.js";
 import { AppError } from '../utils/customError.js';
 
-export const createAttendance = catchAsync(async (req, res, next) => {
+// create or update attendance
+// --
+export const createAttendance = catchAsync(async (req, res) => {
   const { date, present, classid, author } = req.body;
-  schoolID = req.user.schoolID
+  const schoolID = req.user.schoolID;
   const activeSession = await getActiveSession(req.user);
 
   // Get all students in the class
@@ -131,6 +133,7 @@ export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
   
 
 // clear attendance by class
+// --
 export const clearAttendanceByClass = catchAsync(async (req, res, next) => {
   const { classid } = req.params;
   
@@ -144,7 +147,7 @@ export const clearAttendanceByClass = catchAsync(async (req, res, next) => {
   
 
 // clear attendance of one day 
-
+// --
 export const deleteAttendance = catchAsync(async (req, res, next) => {
   const { id } = req.params; // Attendance ID
   
@@ -162,7 +165,7 @@ export const deleteAttendance = catchAsync(async (req, res, next) => {
   
 
 // get class attendance percent 
-
+// --
 export const getClassAttendance = catchAsync(async (req, res, next) => {
   const { classid } = req.params;
   
@@ -203,7 +206,7 @@ export const getClassAttendance = catchAsync(async (req, res, next) => {
   
 
 // get one student attendance percent
-
+// --
 export const getStudentAttendance = catchAsync(async (req, res, next) => {
   const { studentid, classid } = req.params;
   
@@ -230,7 +233,7 @@ export const getStudentAttendance = catchAsync(async (req, res, next) => {
 });
   
 // get one student attendance
-
+// --
 export const getStudentPresenceDates = catchAsync(async (req, res, next) => {
   const { classid, studentid } = req.params;
   
@@ -245,6 +248,8 @@ export const getStudentPresenceDates = catchAsync(async (req, res, next) => {
   });
 });
 
+// get one student absence
+// --
 export const getStudentAbsenceDates = catchAsync(async (req, res, next) => {
   const { classid, studentid } = req.params;
   
@@ -260,8 +265,8 @@ export const getStudentAbsenceDates = catchAsync(async (req, res, next) => {
 });
   
 
-// clear all attendance
-
+// clear all attendance records
+// --
 export const clearAllAttendanceRecords = catchAsync(async (req, res, next) => {
   await Attendance.deleteMany({});
   res.status(200).json({ 

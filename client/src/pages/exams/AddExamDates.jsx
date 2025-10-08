@@ -44,7 +44,7 @@ const AddExamDates = () => {
       }
     };
     fetchData();
-  }, [selectedClass]);
+  }, [selectedClass, examDates]);
 
   const handleDateChange = (courseId, date) => {
     setExamDates((prev) => ({ ...prev, [courseId]: date }));

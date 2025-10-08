@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
     <div style={{ display: 'flex' }}>
       <MainSidebar />
       <Navbar />
-      <div style={{ flex: 1, marginLeft: '70px', marginTop: '70px' }}>
+      <div style={{ flex: 1, marginLeft: '100px', marginTop: '100px' }}>
         {/* This will render the page content */}
         {children}
       </div>

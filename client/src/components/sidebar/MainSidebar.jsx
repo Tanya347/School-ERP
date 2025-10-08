@@ -3,7 +3,6 @@ import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useAuth } from "../../config/context/AuthContext";
 import { DarkModeContext } from "../../config/context/darkModeContext";
 import Query from '../popUps/Query';
@@ -14,16 +13,11 @@ import { sidebarConsts } from "./sidebarConsts";
 const MainSidebar = () => {
 
     const { Dispatch } = useContext(DarkModeContext);
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const [collapsed, setCollapsed] = useState(true);
     
     // useState for opening query pop up
     const [openQuery, setOpenQuery] = useState(false);
-
-    const handleClick = async (e) => {
-        e.preventDefault();
-        await logout("Logged Out Successfully!");
-    }
 
     const handleToggle = () => {
         setCollapsed(!collapsed);
@@ -94,7 +88,7 @@ const MainSidebar = () => {
                         ))
                     }
 
-                    <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Create'}</p>
+                    {user.role !== 'student' && <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Create'}</p>}
 
                     {
                         sidebarConsts?.create?.map((item) => (
@@ -117,24 +111,10 @@ const MainSidebar = () => {
 
                     {/* Options for Users */}
                     
-                    <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'User'}</p>
 
                     {
                         sidebarConsts?.user?.map((item) => (
                             <>
-                                {
-                                    (item.user === 'both'  && user.role !== 'admin') && (
-                                        <Link
-                                            to={item.getPath ? item.getPath(user) : item.path}
-                                            style={{textDecoration: "none"}}
-                                        >
-                                            <li>
-                                                <item.icon className="icon" />
-                                                <span>{!collapsed && item.title}</span>
-                                            </li>
-                                        </Link>
-                                    )
-                                }
                                 {
                                     (item.user === 'admin' && user.role === 'admin') && (
                                         <Link

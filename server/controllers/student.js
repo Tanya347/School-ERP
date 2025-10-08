@@ -159,13 +159,41 @@ export const enterMarksForSubject = catchAsync(async (req, res, next) => {
 
 export const getMarksOfStudent = catchAsync(async (req, res, next) => {
   const { studentid } = req.params;
-  const student = await Student.findById(studentid).populate('marks.sub_id', 'name');
+  // Populate class and its subjects, and marks.sub_id
+  const student = await Student.findById(studentid)
+    .populate({
+      path: 'class',
+      select: 'subjects',
+      populate: { path: 'subjects', model: 'Course', select: 'name' }
+    })
+    .populate('marks.sub_id', 'name');
 
   if (!student) return res.status(404).json({ message: "Student not found" });
 
+  // Get all subjects from class
+  const allSubjects = student.class?.subjects || [];
+  // Map subjectId to marks for quick lookup
+  const marksMap = {};
+  student.marks.forEach(mark => {
+    marksMap[mark.sub_id._id.toString()] = mark;
+  });
+
+  // Prepare marks array for all subjects
+  const marksData = allSubjects.map(subject => {
+    const mark = marksMap[subject._id.toString()];
+    return {
+      subjectId: subject._id,
+      subjectName: subject.name,
+      marks: mark ? mark.total : null
+    };
+  });
+
+  // Check if all subjects have marks
+  const allMarksPresent = marksData.every(m => m.marks !== null);
+
   res.status(200).json({
     status: "success",
-    data: student.marks
+    data: {marksData, allMarksPresent}
   });
 });
 

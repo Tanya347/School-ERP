@@ -26,19 +26,49 @@
     -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
     box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
     border-radius: 5px;
+    gap: 50px;
 
     .school-info-container {
       margin-top: 30px;
     }
 
-    .notifications-container {
-      margin: 30px 0;
-      width: 90%;
-      .listTitle {
-        margin: 20px 0;
+    .bottom-container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 50px;
+
+      .student-courses-container {
+        width: 50%;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+
+        .courseTitle {
+          margin-top: 20px;
+          margin-bottom: 20px;
+          color: #555;
+          text-align: center;
+        }
+        .coursesContainer {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          align-items: center;
+          justify-content: center;
+          
+        }
       }
-      .genericTable {
-        max-height: 350px;
+
+      .attendance-container {
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
       }
     }
   }

@@ -188,8 +188,11 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: examDates,
-    allExamsPlanned
+    data: {
+      examDates,
+      allExamsPlanned,
+      className: courses[0].class.name
+    }
   });
 });
 

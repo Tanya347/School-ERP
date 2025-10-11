@@ -44,6 +44,12 @@ const NewUpdate = ({ inputs }) => {
     }
   }
 
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    window.location.reload(false);
+  }
+
   return (
     <div className="new">
       <div className="newContainer">
@@ -101,6 +107,7 @@ const NewUpdate = ({ inputs }) => {
                 <ClipLoader color="black" size={30} />
                 creating update...
               </div>}
+              <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} class="form-btn">Create Update</button>
             </div>
           </div>

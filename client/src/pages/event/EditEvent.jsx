@@ -68,7 +68,7 @@ const EditEvent = ({ inputs, title }) => {
                             src={
                                 (file)
                                     ? URL.createObjectURL(file)
-                                    : (info.poster) ? info.poster : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                                    : (info.poster) ? info.poster : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                             }
                             alt=""
                         />

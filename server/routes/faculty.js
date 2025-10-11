@@ -8,6 +8,7 @@ import {
   getFacultyCourses,
   registerFaculty,
   AddNewCourse,
+  bulkDeleteFaculty
 } from "../controllers/faculty.js";
 import upload from "../utils/multer.js";
 import { restrictTo, protect } from "../controllers/auth.js";
@@ -23,6 +24,7 @@ router.get("/", protect(), getFacultys);
 router.get("/classes/:id", protect(), getFacultyClasses);
 router.get("/courses/:id", protect(), getFacultyCourses);
 router.patch('/addCourse/:facId/:classId/:courseId', protect(), restrictTo("admin"), AddNewCourse);
+router.post("/bulk/delete", protect(), restrictTo("admin"), bulkDeleteFaculty);
 
 export default router;
 

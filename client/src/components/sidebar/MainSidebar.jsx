@@ -8,6 +8,7 @@ import { DarkModeContext } from "../../config/context/darkModeContext";
 import Query from '../popUps/Query';
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { sidebarConsts } from "./sidebarConsts";
+import Tooltip from "../tooltip/Tooltip";
 
 
 const MainSidebar = () => {
@@ -36,8 +37,10 @@ const MainSidebar = () => {
 
                     <Link to={`/${user.role}`} style={{ textDecoration: "none" }}>
                         <li>
-                            <DashboardIcon className="icon" />
-                            <span>{!collapsed && 'Dashboard'}</span>
+                            <Tooltip content="Dashboard" position="right">
+                                <DashboardIcon className="icon" />
+                            </Tooltip>
+                            <span  className="sidebar-item">{!collapsed && 'Dashboard'}</span>
                         </li>
                     </Link>
 
@@ -57,8 +60,10 @@ const MainSidebar = () => {
                                             key={item.title}
                                         >
                                             <li>
-                                                <item.icon className="icon" />
-                                                <span>{!collapsed && item.title}</span>
+                                                <Tooltip content={item.title} position="right">
+                                                    <item.icon className="icon" />
+                                                </Tooltip>
+                                                <span className="sidebar-item">{!collapsed && item.title}</span>
                                             </li>
                                         </Link>
                                     )
@@ -78,8 +83,10 @@ const MainSidebar = () => {
                                             key={item.title}
                                         >
                                             <li>
-                                                <item.icon className="icon" />
-                                                <span>{!collapsed && item.title}</span>
+                                                <Tooltip content={item.title} position="right">
+                                                    <item.icon className="icon" />
+                                                </Tooltip>
+                                                <span className="sidebar-item">{!collapsed && item.title}</span>
                                             </li>
                                         </Link>
                                     )
@@ -88,28 +95,22 @@ const MainSidebar = () => {
                         ))
                     }
 
-                    {user.role !== 'student' && <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Create'}</p>}
+                    {user.role !== 'student' && <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Create and Update'}</p>}
 
                     {
                         sidebarConsts?.create?.map((item) => (
                             <>
                                 {user.role === item.user && <Link to={item.path} style={{textDecoration: "none"}}>
                                     <li>
-                                        <item.icon className="icon" />
-                                        <span>{!collapsed && item.title}</span>
+                                        <Tooltip content={item.title} position="right">
+                                            <item.icon className="icon" />
+                                        </Tooltip>
+                                        <span className="sidebar-item">{!collapsed && item.title}</span>
                                     </li>
                                 </Link>}
                             </>
                         ))
                     }
-                    
-                    {/* On click set usestate to true */}
-                    {/* {user.role === 'student' && <li onClick={() => setOpenQuery(true)}>
-                        <ContactSupportIcon className="icon" />
-                        <span>{!collapsed && 'Query'}</span>
-                    </li>} */}
-
-                    {/* Options for Users */}
                     
 
                     {
@@ -122,8 +123,10 @@ const MainSidebar = () => {
                                             style={{textDecoration: "none"}}
                                         >
                                             <li>
-                                                <item.icon className="icon" />
-                                                <span>{!collapsed && item.title}</span>
+                                                <Tooltip content={item.title} position="right">
+                                                    <item.icon className="icon" />
+                                                </Tooltip>
+                                                <span className="sidebar-item">{!collapsed && item.title}</span>
                                             </li>
                                         </Link>
                                     )

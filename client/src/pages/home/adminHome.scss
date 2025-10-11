@@ -1,6 +1,7 @@
 .home {
   background-color: var(--light-gray);
   display: flex;
+  height: 100vh;
 
   .AdminHomeContainer {
     width: 100%;
@@ -55,7 +56,7 @@
               width: 150px;
               padding: 10px;
               border: none;
-              background-color: teal;
+              background-color: #077A7D;
               color: white;
               font-weight: bold;
               cursor: pointer;

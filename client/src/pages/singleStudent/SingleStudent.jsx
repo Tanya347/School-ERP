@@ -95,6 +95,7 @@ const Single = ({ type }) => {
             </div>
           </div>
           <div className="right">
+            Future scope: show attendance chart, marks history etc.
           </div>
         </div>
         <div className="bottom">

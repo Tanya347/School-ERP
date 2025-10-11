@@ -1,7 +1,7 @@
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 
-const COLORS = ['#DBC4F0', '#D4E2D4', '#FFCACC', '#CDF5FD']; // or any color palette
+const COLORS = ['#48A6A7', '#9ACBD0', '#F2EFE7', '#006A71']; // or any color palette
 
 export const MyPieChart = ({entryCounts, showLegend}) => {
     const data = Object.entries(entryCounts).map(([name, value]) => ({

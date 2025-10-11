@@ -37,6 +37,18 @@ export const deleteUpdate = catchAsync(async (req, res, next) => {
     });
 });
 
+export const bulkDeleteUpdate = catchAsync(async (req, res, next) => {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ message: "No IDs provided for deletion" });
+    }
+    await Update.deleteMany({ _id: { $in: ids } });
+    res.status(200).json({
+        status: "success",
+        message: `${ids.length} updates deleted successfully!`,
+    });
+});
+
 export const getUpdate = catchAsync(async (req, res, next) => {
     const update = await Update.findById(req.params.id).populate("class", "name");
     res.status(200).json({

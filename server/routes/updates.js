@@ -4,7 +4,8 @@ import {
     deleteUpdate,
     getUpdate,
     getUpdates,
-    updateUpdate
+    updateUpdate,
+    bulkDeleteUpdate
 } from "../controllers/updates.js";
 import { protect } from "../controllers/auth.js";
 
@@ -17,5 +18,6 @@ router.put("/:id", protect(), updateUpdate);
 router.delete("/:id", protect(), deleteUpdate);
 router.get("/:id", protect(), getUpdate);
 router.get("/", protect(), getUpdates);
+router.post("/bulk/delete", protect(), bulkDeleteUpdate);
 
 export default router;

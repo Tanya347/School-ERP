@@ -36,7 +36,6 @@ const AddExamDates = () => {
               }
             });
             setExamDates(initialExamDates);
-            console.log(examDates)
           }
         } catch (err) {
           console.error(err);

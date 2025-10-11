@@ -89,6 +89,23 @@ export const deleteFaculty = catchAsync(async (req, res, next) => {
   });
 });
 
+export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
+  const ids = req.body.ids;
+
+  // Find all faculty members to be deleted
+  const faculties = await Faculty.find({ _id: { $in: ids } });
+  for (const faculty of faculties) {
+    if (faculty.cloud_id) {
+      await cloudinary.uploader.destroy(faculty.cloud_id);
+    }
+    await Faculty.findByIdAndDelete(faculty._id);
+  }
+  res.status(200).json({
+    status: "success",
+    message: "Faculty members deleted successfully"
+  });
+});
+
 // Get a single faculty member
 export const getFaculty = catchAsync(async (req, res, next) => {
   const faculty = await Faculty.findById(req.params.id)

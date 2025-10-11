@@ -43,7 +43,11 @@ const NewTask = ({ inputs, title }) => {
     }
   }
 
-
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    window.location.reload(false);
+  }
 
   return (
     <div className="new">
@@ -94,6 +98,7 @@ const NewTask = ({ inputs, title }) => {
                 <ClipLoader color="black" size={30} />
                 creating task...
               </div>}
+              <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Task</button>
             </div>
           </div>

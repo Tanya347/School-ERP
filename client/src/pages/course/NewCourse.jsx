@@ -37,6 +37,13 @@ const NewCourse = ({ inputs, title }) => {
     }
   }
 
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    setFile("");
+    window.location.reload(false);
+  }
+
   return (
     <div className="new">
 
@@ -54,7 +61,7 @@ const NewCourse = ({ inputs, title }) => {
               src={
                 (file)
                 ? URL.createObjectURL(file)
-                : (info.profilePicture) ? info.profilePicture : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                : (info.syllabusPicture) ? info.syllabusPicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
               }
               alt=""
               />
@@ -97,6 +104,7 @@ const NewCourse = ({ inputs, title }) => {
                 <ClipLoader color="black" size={30} />
                 creating course...
               </div>}
+              <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Course</button>
             </div>
           </div>

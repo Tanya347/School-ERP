@@ -52,7 +52,7 @@
 
 .eventModal .mEvents p span {
     font-weight: bold;
-    color: #7451F8;
+    color: #48A6A7;
 }
 
 .eventModal .mClose {
@@ -66,7 +66,7 @@
 
 .eventModal .mIcon {
     margin-top: 10px;
-    color: #a53eef;
+    color: #48A6A7;
 }
 
 .eventModal .mClose:hover {
@@ -95,7 +95,7 @@
 .crudButton button {
     padding: 5px 20px;
     margin: 10px 10px;
-    background-color: #5353AF;
+    background-color: black;
     color: white;
     cursor: pointer;
     border-radius: 20px;
@@ -104,13 +104,13 @@
 
 .crudButton button:hover {
     transform: translateY(-2px);
-    background-color: #7551f8a1;
+    background-color: #424242;
 }
 
 .eventModal .mButton {
     border: none;
     padding: 10px 20px;
-    background-color: #7451F8;
+    background-color: #006A71;
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -126,7 +126,7 @@
 }
 
 .eventModal .mButton:hover {
-    background-color: #7551f8a1;
+    background-color: #48A6A7;
 }
 
 @media screen and (max-width: 600px) {

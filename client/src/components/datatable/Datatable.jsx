@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import AddClass from "../../pages/class/AddClass.jsx";
 import ExportButton from "../excelButton/ExcelButton.jsx";
+import ConfirmPopup from "../popUps/ConfirmatinPopup.jsx";
+import Tooltip from "../../components/tooltip/Tooltip.jsx";
 
 const Datatable = ({ column, name, type }) => {
   const location = useLocation();
@@ -22,6 +24,10 @@ const Datatable = ({ column, name, type }) => {
   const [openModal, setOpenModal] = useState(false);
   const [popupName, setPopupName] = useState("");
   const [rowid, setRowid] = useState("");
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
     if (path === "queries") {
@@ -32,18 +38,50 @@ const Datatable = ({ column, name, type }) => {
   }, [data, path, user._id]);
 
   const handleDelete = async (id) => {
-    try {
-      const res = await axios.delete(getDeleteURL(path, id), { withCredentials: true });
-      if (res.data.status === "success") {
-        toast.success(`${name} deleted successfully!`);
-        setList((prevList) => prevList.filter((item) => item._id !== id));
+    setConfirmMessage(`Are you sure you want to delete this ${name}?`);
+    setConfirmAction(() => async () => {
+      try {
+        const res = await axios.delete(getDeleteURL(path, id), { withCredentials: true });
+        if (res.data.status === "success") {
+          toast.success(`${name} deleted successfully!`);
+          setList((prevList) => prevList.filter((item) => item._id !== id));
+        }
+      } catch (err) {
+        const errorMessage = err.response?.data?.message || "Failed to perform deletion. Please try again.";
+        toast.error(errorMessage);
+        console.error(err);
+      } finally {
+        setShowConfirm(false);
       }
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || "Failed to perform deletion. Please try again.";
-      toast.error(errorMessage);
-      console.error(err);
-    }
+    });
+    setShowConfirm(true);
   };
+
+  const handleBulkDelete = async () => {
+    setConfirmMessage(`Are you sure you want to delete ${selectedRows.length} ${name}(s)?`);
+    setConfirmAction(() => async () => {
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/${path}/bulk/delete`,
+          { ids: selectedRows },
+          { withCredentials: true }
+        );
+        if (res.data.status === "success") {
+          toast.success(`${selectedRows.length} ${name}(s) deleted successfully!`);
+          setList((prev) => prev.filter((item) => !selectedRows.includes(item._id)));
+          setSelectedRows([]);
+        }
+      } catch (err) {
+        const errorMessage = err.response?.data?.message || "Failed to delete items. Please try again.";
+        toast.error(errorMessage);
+        console.error(err);
+      } finally {
+        setShowConfirm(false);
+      }
+    });
+    setShowConfirm(true);
+  };
+
 
   const handleClick = (id, type) => {
     setOpenModal(true);
@@ -140,20 +178,33 @@ const Datatable = ({ column, name, type }) => {
         <div className="datatable">
           <div className="datatableHeader">
             <div className="datatableTitle">{name}</div>
-            <ExportButton
-              data={list}
-              formatted={list.map((item) => ({
-                ...item,
-                createdAt: new Date(item.createdAt).toLocaleString(),
-                updatedAt: new Date(item.updatedAt).toLocaleString(),
-              }))}
-              filename={`${name}_data`}
-              title={name}
-            />
+            <Tooltip content={"Export to Excel"} position="top">
+              <ExportButton
+                data={list}
+                formatted={list.map((item) => ({
+                  ...item,
+                  createdAt: new Date(item.createdAt).toLocaleString(),
+                  updatedAt: new Date(item.updatedAt).toLocaleString(),
+                }))}
+                filename={`${name}_data`}
+                title={name}
+              />
+            </Tooltip>
             {(type === "Admin" || type === "Creator") && (
-              <Link to={`new`} style={{ textDecoration: "none" }}>
-                <div className="link">Create</div>
-              </Link>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <Link to={`new`} style={{ textDecoration: "none" }}>
+                  <div className="link">Create</div>
+                </Link>
+
+                {selectedRows.length > 0 && (
+                  <div
+                    className="link delete"
+                    onClick={() => handleBulkDelete()}
+                  >
+                    Delete
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -161,6 +212,9 @@ const Datatable = ({ column, name, type }) => {
             className="datagrid"
             rows={list}
             columns={column.concat(actionColumn)}
+            checkboxSelection
+            onSelectionModelChange={(ids) => setSelectedRows(ids)}
+            selectionModel={selectedRows}
             pageSize={10}
             rowsPerPageOptions={[10]}
             getRowId={(row) => row._id}
@@ -173,6 +227,13 @@ const Datatable = ({ column, name, type }) => {
             </>
           )}
         </div>
+      )}
+      {showConfirm && (
+        <ConfirmPopup
+          message={confirmMessage}
+          onConfirm={confirmAction}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
     </div>
   );

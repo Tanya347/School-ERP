@@ -4,7 +4,8 @@ import {
     editMaterial,
     getMaterials,
     deleteMaterial,
-    getMaterial
+    getMaterial,
+    bulkDeleteMaterial
 } from "../controllers/material.js"
 import { protect } from '../controllers/auth.js';
 const router = express.Router();
@@ -15,4 +16,5 @@ router.put('/:id', protect(), upload.single('file'), editMaterial);
 router.get('/', protect(), getMaterials);
 router.delete('/:id', protect(), deleteMaterial);
 router.get('/:id', protect(), getMaterial);
+router.post('/bulk/delete', protect(), bulkDeleteMaterial);
 export default router;

@@ -12,7 +12,8 @@ import {
   enterMarksForSubject,
   clearMarksForSubject,
   clearMarksForClass,
-  getGenderCount
+  getGenderCount,
+  bulkDeleteStudent
 } from "../controllers/student.js";
 import { restrictTo, protect } from "../controllers/auth.js";
 import upload from "../utils/multer.js";
@@ -31,7 +32,8 @@ router.get('/marks/subject/:subjectid', protect(), getMarksOfSubject);
 router.get('/marks/class/:classid', protect(), getMarksOfClass);
 router.delete('/marks/subject/:subjectid', protect(), clearMarksForSubject);
 router.delete('/marks/class/:classid', protect(), clearMarksForClass);
-router.get('/gender/count', protect(), restrictTo("admin"), getGenderCount)
+router.get('/gender/count', protect(), restrictTo("admin"), getGenderCount);
+router.post("/bulk/delete", protect(), restrictTo("admin"), bulkDeleteStudent);
 
 export default router;
 

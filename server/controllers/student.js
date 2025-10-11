@@ -78,11 +78,10 @@ export const updateStudent = catchAsync(async (req, res, next) => {
     message: "Student has been updated successfully!"
   });
 });
-
 export const deleteStudent = catchAsync(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) return res.status(404).json({ message: "Student not found" });
-  if( student.cloud_id) {
+  if (student.cloud_id) {
     await cloudinary.uploader.destroy(student.cloud_id);
   }
   await Class.findByIdAndUpdate(student.class, { $pull: { students: req.params.id } });
@@ -90,6 +89,25 @@ export const deleteStudent = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Student has been deleted successfully!"
+  });
+});
+
+export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
+  const { ids } = req.body; // Expecting an array of student IDs in the request body
+
+  const students = await Student.find({ _id: { $in: ids } });
+
+  for (const student of students) {
+    if (student.cloud_id) {
+      await cloudinary.uploader.destroy(student.cloud_id);
+    }
+    await Class.findByIdAndUpdate(student.class, { $pull: { students: student._id } });
+    await student.remove();
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: "Selected students have been deleted successfully!"
   });
 });
 

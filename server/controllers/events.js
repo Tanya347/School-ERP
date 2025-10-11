@@ -7,7 +7,6 @@ import cloudinary from "../utils/cloudinary.js";
 // Create a new event
 export const createEvent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
-  console.log(req.body)
   const activeSession = await getActiveSession(req.user);
   req.body.sessionID = activeSession._id;
   let poster = null;

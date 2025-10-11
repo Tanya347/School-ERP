@@ -43,6 +43,12 @@ const NewTest = ({ inputs, title }) => {
         setLoading(false);
       }
     } 
+
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    window.location.reload(false);
+  }
  
   return (
 
@@ -94,6 +100,7 @@ const NewTest = ({ inputs, title }) => {
                 <ClipLoader color="black" size={30} />
                 editing update...
               </div>}
+              <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Test</button>
             </div>
           </div>

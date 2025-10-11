@@ -56,10 +56,6 @@ function toTitleCase(str) {
 return (
     <div className='navbar-container'>
         <div className="navbar-content">
-
-            <h2 className='page-title'>
-                {toTitleCase(user?.role)} Dashboard
-            </h2>
             <div className="left-container">
                 <div className="logo">
                     <img src={schoolInfo.logo} alt="" />

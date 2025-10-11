@@ -136,6 +136,24 @@ export const deleteMaterial = catchAsync(async (req, res, next) => {
     });
 });
 
+export const bulkDeleteMaterial = catchAsync(async (req, res, next) => {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ message: "No IDs provided for deletion" });
+    }
+    const materials = await Material.find({ _id: { $in: ids } });
+    for (const material of materials) {
+        if (material.cloud_id) {
+            await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
+        }
+        await material.remove();
+    }
+    res.status(200).json({
+        status: "success",
+        message: `${ids.length} materials deleted successfully!`,
+    });
+});
+
 export const getMaterial = catchAsync(async (req, res, next) => {
     const material = await Material.findById(req.params.id)
         .populate('classId', 'name');

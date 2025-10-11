@@ -24,7 +24,20 @@ const EventsList = ({type}) => {
         setOpenModal(true)
     }
 
+    const getEventStatus = (startDate, endDate) => {
+      const now = new Date();
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      if (now < start) return "Upcoming";
+      if (now > end) return "Past";
+      return "Ongoing";
+    };
+
     return (
+      <div className="events-list">
+
+        <div className="events-title">Events List</div>
         <div className="event-container">{loading ? (
           <div className="page-loader">
             <ClipLoader color="black" size={50} />
@@ -34,8 +47,11 @@ const EventsList = ({type}) => {
           {list?.map((item, i) => (
             <div className="card" key={item._id}>
               <div class="content">
-                {item.poster ? <img id="post-image" src={item.poster} alt="" /> : "no image"}
+                {<img id="post-image" src={item.poster? item.poster : "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"} alt="" />}
                 <h4>{item.name}</h4>
+                <span className={`event-tag ${getEventStatus(item.startDate, item.endDate).toLowerCase()}`}>
+                  {getEventStatus(item.startDate, item.endDate)}
+                </span>
                 <p>{item.desc.slice(0, 60)}...</p>
                 <button onClick={() => handleEventPopup(item._id)}>View</button>
               </div>
@@ -44,6 +60,7 @@ const EventsList = ({type}) => {
         </div>)}
         {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} type={type} />}
         </div>
+      </div>
     )
 }
 

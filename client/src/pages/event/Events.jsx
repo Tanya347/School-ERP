@@ -75,11 +75,11 @@ const Events = () => {
     const eventPropGetter = (event) => {
         let backgroundColor
         if(event.type === 'tasks')
-            backgroundColor = '#C21292'
+            backgroundColor = '#006A71'
         else if(event.type === 'tests')
-            backgroundColor = '#7451F8'
+            backgroundColor = '#62d0bcff'
         else
-            backgroundColor = '#F87451'
+            backgroundColor = '#48A6A7'
         return { style: { backgroundColor, textAlign: 'center' } };
     };
 

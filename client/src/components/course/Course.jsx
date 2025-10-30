@@ -16,7 +16,7 @@ const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
 
   return (
     <div className='courseComponent'>
-        <div className="course" key={index} style={{ backgroundColor: colors[index % colors.length]}}>
+        <div className="course" key={index}>
             <h3>{name}</h3>
             <p>{subjectCode}</p>
             {teacher && <p><span style={{"fontWeight":"bold"}}>Taught by: </span>{teacher}</p>}

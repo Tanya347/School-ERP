@@ -11,6 +11,13 @@
         width: 100%;
         margin-top: 40px;
 
+        h1 {
+            font-size: 30px;
+            color: #424242;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
         .classesContainer {
             display: flex;
             width: 90%;
@@ -24,51 +31,66 @@
             .classContainer {
                 height: fit-content;
                 width: 300px;
-                background-color: var(--light-blue);
-                padding: 10px;
+                background-color: #F5F5F5;
+                padding: 20px;
                 border-radius: 10px;
                 display: flex;
                 gap: 10px;
                 flex-direction: column;
                 align-items: center;
 
+                &:hover {
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    transform: translateY(-5px);
+                    transition: all ease-in-out 0.3s;
+                }
+
                 button {
                     border: none;
                     outline: none;
                     cursor: pointer;
                     padding: 5px;
-                    width: 150px;
+                    font-weight: 500;
+                    width: 180px;
                 }
 
                 .viewButton {
-                    background-color: var(--light-green);
+                    background-color: #dbeef0;
+                    padding: 8px 20px;
+                    font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: #9cb39c;
+                        background-color: #c6d6d8;
                     }
                 }
 
                 .attButton {
-                    background-color: var(--light-pink);
+                    background-color: #cfe4ee;
+                    padding: 8px 20px;
+                    font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: pink;
+                        background-color: #b9ccd5;
                     }
                 }
 
                 .marksButton {
-                    background-color: var(--light-yellow);
+                    background-color: #c7e5e1;
+                    padding: 8px 20px;
+                    font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: rgb(242, 242, 149);
+                        background-color: #b5d0cd;
                     }
                 }
 
                  .ttButton {
-                    background-color: #F3E8FF;
+                    background-color: #eae8e8;
+                    padding: 8px 20px;
+                    font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: var(--light-purple);
+                        background-color: #d7d6d6;
                     }
                 }
             }

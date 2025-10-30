@@ -14,7 +14,7 @@
       display: flex;
 
       h1 {
-        color: lightgray;
+        color: rgb(178, 177, 177);
         font-size: 20px;
       }
 
@@ -73,6 +73,13 @@
           .formInput {
             width: 40%;
 
+            .error-message {
+              color: #DC2525;
+              font-size: 15px;
+              font-weight: 500;
+              margin-top: 3px;
+            }
+
             @media screen and (max-width: 600px) {
               width: 80%;
             }
@@ -97,6 +104,8 @@
               padding: 10px;
               border: none;
               border-bottom: 1px solid gray;
+              transition: all 0.2s ease;
+
             }
           }
         }

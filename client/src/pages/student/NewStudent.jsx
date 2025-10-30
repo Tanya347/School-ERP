@@ -8,16 +8,24 @@ import { ClipLoader } from "react-spinners";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import Dropdown from "../../components/dropdown/Dropdown";
+import {validateStudent} from "../../config/validators/student";
+import validator from "validator";
 
 const NewUser = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    const { id, value } = e.target;
+    setInfo((prev) => ({ ...prev, [id]: value }));
+
+    // validate field as user types
+    const error = validateStudent(id, value);
+    setErrors((prev) => ({ ...prev, [id]: error }));
   }
   
   const handleClick = async (e) => {
@@ -40,8 +48,8 @@ const NewUser = ({ inputs, title }) => {
   const handleClear = (e) => {
     e.preventDefault();
     setInfo({});
+    setErrors({});
     setFile("");
-    window.location.reload(false);
   }
   
   return (
@@ -98,7 +106,10 @@ const NewUser = ({ inputs, title }) => {
                     type={input.type}
                     placeholder={input.placeholder}
                     id={input.id}
+                    value={info[input.id] || ""}
+                    className={errors[input.id] ? "error" : ""}
                   />
+                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
               ))}
 

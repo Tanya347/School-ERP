@@ -20,12 +20,12 @@
                 border: none;
                 outline: none;
                 padding: 10px 20px;
-                background-color: var(--light-yellow);
+                background-color: #dbeef0;
                 transition: all 0.3s ease-in-out;
                 cursor: pointer;
 
                 &:hover {
-                    background-color: var(--yellow);
+                    background-color: #c6d6d8;
                 }
             }
         }

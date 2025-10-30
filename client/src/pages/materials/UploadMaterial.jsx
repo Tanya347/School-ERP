@@ -38,6 +38,12 @@ const UploadMaterial = ({title, inputs}) => {
     }
   };
 
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    setFile("");
+  }
+
   return (
     <div className='new'>
       <div className="newContainer">
@@ -88,6 +94,7 @@ const UploadMaterial = ({title, inputs}) => {
                 <ClipLoader color="black" size={30} />
                 uploading material...
               </div>}
+              <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleSubmit} disabled={loading} className="form-btn">Upload Material</button>
             </div>
           </div>

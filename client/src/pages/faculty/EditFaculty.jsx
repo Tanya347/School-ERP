@@ -12,15 +12,15 @@ import { facultyInputs } from "../../config/formsource/facultyInputs";
 import { useAuth } from "../../config/context/AuthContext";
 
 
-const EditFaculty = ({ title, type }) => {
+const EditFaculty = ({ title }) => {
 
   const location = useLocation();
   let id;
-  if (type === "Admin")
+  const { user } = useAuth();
+  if (user.role === "admin")
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
-  const { user } = useAuth();
 
   const { data } = useFetch(getSingleData(id, "faculties"))
   const [info, setInfo] = useState({});
@@ -72,7 +72,7 @@ const EditFaculty = ({ title, type }) => {
 
             <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Profile Picture: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"

@@ -1,0 +1,21 @@
+.course-skeleton {
+  padding: 12px;
+  border-radius: 10px;
+  background: white;
+
+  .image {
+    height: 80px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .text {
+    height: 14px;
+    width: 100%;
+    margin-bottom: 6px;
+
+    &.small {
+      width: 60%;
+    }
+  }
+}

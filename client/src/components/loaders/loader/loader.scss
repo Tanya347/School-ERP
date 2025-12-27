@@ -1,0 +1,18 @@
+.page-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 500;
+}
+
+.create-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}

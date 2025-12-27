@@ -1,4 +1,3 @@
-// import React from 'react'
 import './facultyHome.scss'
 import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
 import { useAuth } from '../../config/context/AuthContext';

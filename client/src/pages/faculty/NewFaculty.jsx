@@ -56,7 +56,7 @@ const NewFaculty = ({ inputs, title }) => {
 
               <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Profile Picture: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"

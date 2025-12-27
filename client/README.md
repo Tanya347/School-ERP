@@ -44,10 +44,6 @@ It is the navbar at Student Side
 
 It is the sidebar at Student Side
 
-#### `Query`
-
-This is used to post queries by users from client side to admin side
-
 #### `Table`
 
 This is used to show the upcoming/latest events on main landing page. Only shows a few select details

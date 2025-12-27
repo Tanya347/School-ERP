@@ -3,7 +3,7 @@ import "./class.scss"
 import { Link } from 'react-router-dom';
 import useFetch from '../../config/service/useFetch';
 import { getClasses } from '../../config/endpoints/get';
-import { ClipLoader } from 'react-spinners';
+import Loader from '../../components/loaders/loader/Loader';
 
 const Class = () => {
 
@@ -13,10 +13,7 @@ const Class = () => {
   return (
     <div className='classes'>
         {loading ? (
-            <div className="page-loader">
-            <ClipLoader color="black" size={50} />
-            <h3>Loading data...</h3>
-          </div>
+            <Loader />
         ) : (<div className="wholeContainer">
             <h1>Classes</h1>
             <div className="classesContainer">

@@ -2,9 +2,9 @@ import { getDatatableURL } from "../../config/endpoints/get"
 import EventModal from "../../components/popUps/EventModal";
 import { useState } from "react";
 import useFetch from "../../config/service/useFetch";
-import { ClipLoader } from "react-spinners";
 import { useEffect } from "react";
 import './eventsList.scss'
+import Loader from "../../components/loaders/loader/Loader";
 
 const EventsList = ({type}) => {
     const [list, setList] = useState([]);
@@ -39,10 +39,7 @@ const EventsList = ({type}) => {
 
         <div className="events-title">Events List</div>
         <div className="event-container">{loading ? (
-          <div className="page-loader">
-            <ClipLoader color="black" size={50} />
-            <h3>Loading data...</h3>
-          </div>
+          <Loader />
         ) : (<div className="cardsContainer">
           {list?.map((item, i) => (
             <div className="card" key={item._id}>

@@ -125,7 +125,6 @@ const AttendanceInfo = () => {
                 <>
                     <h1>Class: {className}</h1>
                     <h1>Total No. of Lectures: {lectures}</h1>
-
                     <div className="attendance-dates-calender">
                         <Calendar
                             localizer={localizer}

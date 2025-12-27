@@ -71,7 +71,7 @@ const FacultyRoutes = () => {
           {/* edit profile page for faculty */}
           <Route
             path="edit/:id"
-            element={<EditFaculty title="Edit Profile" type="Main" />}
+            element={<EditFaculty title="Edit Profile" />}
           />
           
 
@@ -80,7 +80,7 @@ const FacultyRoutes = () => {
           {/* list of tasks */}
           <Route
             path="tasks"
-            element={<List column={taskColumns} name="Task" type="Creator" />}
+            element={<List column={taskColumns} name="Task" />}
             />
 
           {/* add new tasks */}
@@ -109,7 +109,7 @@ const FacultyRoutes = () => {
 
           <Route
             path="updates"
-            element={<List column={updateColumns} name="Update" type="Creator" />}
+            element={<List column={updateColumns} name="Update" />}
           />
 
           {/* edit page for tasks */}
@@ -129,13 +129,13 @@ const FacultyRoutes = () => {
           {/* list of materials */}
           <Route
             path="materials"
-            element={ <List column={materialColumns} name="Material" type="Creator"/>}
+            element={ <List column={materialColumns} name="Material"/>}
           />
 
           {/* edit materials */}
           <Route
             path="materials/edit/:materialId"
-            element={ <List title="Edit Material" type="Creator"/>}
+            element={ <List title="Edit Material"/>}
           />
 
           {/* ROUTES FOR TESTS */}
@@ -143,7 +143,7 @@ const FacultyRoutes = () => {
           {/* list of tests */}
           <Route 
             path="tests" 
-            element={ <List column={testColumns} name="Test" type="Creator" />} 
+            element={ <List column={testColumns} name="Test" />} 
             />
 
           {/* edit page for tests */}
@@ -173,7 +173,7 @@ const FacultyRoutes = () => {
           {/* query page faculty side*/}
           <Route
             path="queries"
-            element={<List column={queryColumns} type="Faculty" name="Query" />}
+            element={<List column={queryColumns} name="Query" />}
             />
 
           {/* mark attendance page */}

@@ -10,11 +10,12 @@ import StudentProfile from "../../components/profile/StudentProfile"
 import Course from "../../components/course/Course"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { ClipLoader } from "react-spinners";
 
 const StudentHome = () => {
   const {user} = useAuth();
   const [attendance, setAttendance] = useState({})
-  const { data } = useFetch(getSingleData(user._id, "students"))
+  const { data, loading } = useFetch(getSingleData(user._id, "students"))
  
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -41,17 +42,27 @@ const StudentHome = () => {
             <EventCalender />
             <div className="student-courses-container">
               <h2 className="courseTitle">Courses</h2>
-          <div className="coursesContainer">
-            {data?.classInfo?.subjects?.map((item, index) => (
-              <Course
-                name={item?.name}
-                index={index}
-                subjectCode={item?.subjectCode}
-                syllabusPicture={item?.syllabusPicture} 
-                teacher={item?.teacher?.teachername}
-              />
-            ))}
-            </div>
+              {
+                loading ? (
+                  <div className="create-loader">
+                    <ClipLoader color="black" size={30} />
+                    fetching courses...
+                  </div>
+                ) : (
+                  <div className="coursesContainer">
+                    {data?.classInfo?.subjects?.map((item, index) => (
+                      <Course
+                        name={item?.name}
+                        index={index}
+                        subjectCode={item?.subjectCode}
+                        syllabusPicture={item?.syllabusPicture} 
+                        teacher={item?.teacher?.teachername}
+                      />
+                    ))}
+                  </div>
+                )
+              }
+          
             </div>
             <div className="attendance-container">
               {Object.keys(attendance).length > 0  && <div className="attendance">

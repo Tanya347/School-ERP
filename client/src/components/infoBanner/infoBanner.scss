@@ -1,0 +1,35 @@
+.infobanner-container {
+
+    width: 90%;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+
+    svg {
+        font-size: 2.5rem;
+    }
+    
+}
+.info {
+    background-color: #FFE2AF;
+    .icon {
+        color: #c08b07;
+    }
+}
+
+.error {
+    background-color: #f2cdcd;
+    .icon {
+        color: #b50707;
+    }
+    
+}
+
+.success {
+    background-color: #B3FFCC;
+    .icon {
+        color: #078b3a;
+    }
+}

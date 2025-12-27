@@ -52,7 +52,7 @@ const RegisterSchool = () => {
 
               <div className="logo-input">
                   <label htmlFor="file">
-                    Image: <DriveFolderUploadIcon className="icon" />
+                    Logo: <DriveFolderUploadIcon className="icon" />
                   </label>
                   <input
                     type="file"

@@ -63,7 +63,7 @@ const EditSchool = ({title}) => {
               />
               <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Logo: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"

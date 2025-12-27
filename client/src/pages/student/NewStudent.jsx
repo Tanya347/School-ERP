@@ -9,7 +9,6 @@ import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import Dropdown from "../../components/dropdown/Dropdown";
 import {validateStudent} from "../../config/validators/student";
-import validator from "validator";
 
 const NewUser = ({ inputs, title }) => {
   
@@ -74,7 +73,7 @@ const NewUser = ({ inputs, title }) => {
 
               <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Profile Picture: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"

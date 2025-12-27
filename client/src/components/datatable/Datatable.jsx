@@ -9,13 +9,13 @@ import Modal from "../popUps/Modal.jsx";
 import { getDatatableURL } from "../../config/endpoints/get.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
 import { toast } from "react-toastify";
-import { ClipLoader } from "react-spinners";
 import AddClass from "../../pages/class/AddClass.jsx";
 import ExportButton from "../excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../popUps/ConfirmatinPopup.jsx";
 import Tooltip from "../../components/tooltip/Tooltip.jsx";
+import Loader from "../loaders/loader/Loader.jsx";
 
-const Datatable = ({ column, name, type }) => {
+const Datatable = ({ column, name }) => {
   const location = useLocation();
   const path = location.pathname.split("/")[2];
   const { user } = useAuth();
@@ -131,25 +131,25 @@ const Datatable = ({ column, name, type }) => {
             </div>
           )}
 
-          {(type === "Admin" || type === "Creator") && (
+          {(user.role === "admin" || user.role === "faculty") && (
             <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="editButton">Edit</div>
             </Link>
           )}
 
-          {(type === "Admin" || type === "Creator") && (
+          {(user.role === "admin" || user.role === "faculty") && (
             <div className="deleteButton" onClick={() => handleDelete(params.row._id)}>
               Delete
             </div>
           )}
 
-          {type === "Admin" && path === "faculties" && (
+          {user.role === "admin" && path === "faculties" && (
             <div className="viewButton" onClick={() => handleClick(params.row._id, "course")}>
               Add Course
             </div>
           )}
 
-          {type === "Creator" && path === "tests" && (
+          {user.role === "faculty" && path === "tests" && (
             <>
               <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
                 <div className="viewButton">Add Marks</div>
@@ -170,10 +170,7 @@ const Datatable = ({ column, name, type }) => {
   return (
     <div className="datatable-container">
       {loading ? (
-        <div className="page-loader">
-          <ClipLoader color="black" size={50} />
-          <h3>Loading data...</h3>
-        </div>
+       <Loader />
       ) : (
         <div className="datatable">
           <div className="datatableHeader">
@@ -190,7 +187,7 @@ const Datatable = ({ column, name, type }) => {
                 title={name}
               />
             </Tooltip>
-            {(type === "Admin" || type === "Creator") && (
+            {(user.role === "admin" || user.role === "faculty") && (
               <div style={{ display: "flex", gap: "10px" }}>
                 <Link to={`new`} style={{ textDecoration: "none" }}>
                   <div className="link">Create</div>

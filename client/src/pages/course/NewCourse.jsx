@@ -68,7 +68,7 @@ const NewCourse = ({ inputs, title }) => {
 
             <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Syllabus: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"

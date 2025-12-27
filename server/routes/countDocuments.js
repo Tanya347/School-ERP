@@ -11,7 +11,6 @@ const router = express.Router();
       const count = await model.countDocuments({ schoolID: schoolId });
       return count;
     } catch (error) {
-      console.error(error);
       throw error;
     }
   }
@@ -35,7 +34,6 @@ const router = express.Router();
         },
       });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Failed to fetch counts" });
     }
   };

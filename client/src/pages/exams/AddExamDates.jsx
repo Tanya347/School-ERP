@@ -27,10 +27,10 @@ const AddExamDates = () => {
             { withCredentials: true }
           );
           if (examRes.data.status === "success") {
-            setCourses(examRes.data.data);
+            setCourses(examRes.data.examDates);
             // Populate examDates state if examDate exists for any course
             const initialExamDates = {};
-            examRes.data.data.forEach(course => {
+            examRes.data.examDates.forEach(course => {
               if (course.examDate) {
                 initialExamDates[course._id] = new Date(course.examDate);
               }
@@ -117,7 +117,7 @@ const AddExamDates = () => {
             </tr>
           </thead>
           <tbody>
-            {courses.map(course => (
+            {courses?.map(course => (
               <tr key={course._id}>
                 <td>{course.name}</td>
                 <td>

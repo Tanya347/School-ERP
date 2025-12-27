@@ -5,7 +5,7 @@ import Course from "../../components/course/Course";
 
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loaders/loader/Loader";
 
 const Single = ({ type }) => {
 
@@ -32,10 +32,7 @@ const Single = ({ type }) => {
     <div className="facultyProfile">
         
         {loading ? (
-          <div className="page-loader">
-            <ClipLoader color="black" size={50} />
-            <h3>Loading data...</h3>
-          </div>
+          <Loader />
         ) : (<>
           <div className="top">
             <div className="left">

@@ -32,17 +32,17 @@ const StudentRoutes = () => {
     <RequireStudent>
        <Layout>
         <Routes>
-            <Route index element={<StudentHome type="Main" />} />
+            <Route index element={<StudentHome />} />
             <Route path="single/:id" element={<SingleStudent type="Main" />} />
-            <Route path="edit/:id" element={<EditStudent title="Edit Profile" type="Main" />} />
-            <Route path="tasks" element={<List column={taskColumns} type="Main" name="Task" />} />
-            <Route path="tests" element={<List column={testColumns} name="Test" type="Main" />} />
+            <Route path="edit/:id" element={<EditStudent title="Edit Profile" />} />
+            <Route path="tasks" element={<List column={taskColumns} name="Task" />} />
+            <Route path="tests" element={<List column={testColumns} name="Test" />} />
             <Route path="calender" element={<Events />} />
             <Route path="events" element={<EventsList type="Student"/>} />
-            <Route path="materials" element={ <List column={materialColumns} name="Material" type="Main"/>}/>
+            <Route path="materials" element={ <List column={materialColumns} name="Material"/>}/>
             <Route path="exams" element={<ViewExamDates />} />
             <Route path="marks" element={<Marksheet />}/>
-            <Route path="updates" element={<List column={updateColumns} name="Update" type="Creator" />}/>
+            <Route path="updates" element={<List column={updateColumns} name="Update" />}/>
         </Routes>
        </Layout>
     </RequireStudent>

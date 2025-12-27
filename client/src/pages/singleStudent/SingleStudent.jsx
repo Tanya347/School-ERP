@@ -5,7 +5,7 @@ import useFetch from "../../config/service/useFetch";
 import Course from "../../components/course/Course";
 import { getSingleData } from "../../config/endpoints/get";
 import 'react-circular-progressbar/dist/styles.css';
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loaders/loader/Loader";
 
 
 const Single = ({ type }) => {
@@ -25,10 +25,7 @@ const Single = ({ type }) => {
   return (
     <div className="studentProfile">
       {loading ? (
-        <div className="page-loader">
-          <ClipLoader color="black" size={50} />
-          <h3>Loading data...</h3>
-        </div>
+        <Loader />
       ) : (<>
         
       <div className="top">

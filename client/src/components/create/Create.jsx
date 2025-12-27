@@ -83,12 +83,7 @@ const Create = ({
                             }
                         </form>
                         <div className="submitButton">
-                            {loading && (
-                                <div className="create-loader">
-                                    <ClipLoader color="black" size={30} />
-                                    Processing...
-                                </div>
-                            )}
+                            {loading && <Loader text="Processing..." />}
                             <button type="submit" className="form-btn" onClick={handleSubmit}>
                                 Submit
                             </button>

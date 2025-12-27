@@ -11,18 +11,18 @@ import { editElementWithPicture } from "../../config/service/usePut";
 import { studentInputs } from "../../config/formsource/studentInputs";
 import { useAuth } from "../../config/context/AuthContext";
 
-const EditUser = ({ title, type }) => {
+const EditUser = ({ title }) => {
 
   const location = useLocation();
   let id;
-  if (type === "Admin")
+ 
+  const classes = useFetch(getClasses).data
+  const {user} = useAuth();
+  if(user.role === "admin") 
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
- 
   const { data } = useFetch(getSingleData(id, "single-student"))
-  const classes = useFetch(getClasses).data
-  const {user} = useAuth();
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false)
@@ -72,7 +72,7 @@ const EditUser = ({ title, type }) => {
 
             <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Profile Picture: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"
@@ -111,7 +111,7 @@ const EditUser = ({ title, type }) => {
                 </select>
               </div>
 
-              {type==="Admin" && <div className="formInput">
+              {user.role==="admin" && <div className="formInput">
                 <label>Class</label>
                 <select
                   id="class"

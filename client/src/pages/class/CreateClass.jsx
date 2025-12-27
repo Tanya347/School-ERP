@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "../../config/style/form.scss"
-import { ClipLoader } from "react-spinners";
 import { createElement } from "../../config/service/usePost";
 
 import React, { useState } from 'react'
 import { postURLs } from "../../config/endpoints/post";
+import Loader from "../../components/loaders/loader/Loader";
 
 const CreateClass = ({ inputs, title}) => {
     const [info, setInfo] = useState({});
@@ -53,10 +53,7 @@ const CreateClass = ({ inputs, title}) => {
                             ))}
                         </form>
                         <div className="submitButton">
-                            {loading && <div className="create-loader">
-                                <ClipLoader color="black" size={30} />
-                                    creating class...
-                                </div>}
+                            {loading && <Loader text="Creating Class..." />}
                             <button onClick={handleClick} className="form-btn">Create Class</button>
                         </div>
                     </div>

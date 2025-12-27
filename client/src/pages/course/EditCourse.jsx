@@ -7,9 +7,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
-import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { courseInputs } from "../../config/formsource/courseInputs"
+import Loader from "../../components/loaders/loader/Loader";
 
 const EditCourse = ({ title }) => {
   
@@ -76,7 +76,7 @@ const EditCourse = ({ title }) => {
 
             <div className="formInput">
                 <label htmlFor="file">
-                  Image: <DriveFolderUploadIcon className="icon" />
+                  Syllabus: <DriveFolderUploadIcon className="icon" />
                 </label>
                 <input
                   type="file"
@@ -105,10 +105,7 @@ const EditCourse = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submitButton">
-              {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                editing course...
-              </div>}
+              {loading && <Loader text="Editing Course..." />}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Course</button>
             </div>
           </div>

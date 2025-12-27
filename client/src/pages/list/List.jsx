@@ -5,13 +5,13 @@ import Datatable from "../../components/datatable/Datatable"
 // name is the name of the datatable
 // type tells admin side or student side
 
-const List = ({ column, name, type }) => {
+const List = ({ column, name }) => {
   return (
     <div className="list">
       <div className="AdminListContainer">
 
         {/* Call datatable by passing the required props */}
-        <Datatable column={column} name={name} type={type} />
+        <Datatable column={column} name={name} />
       </div>
     </div>
   )

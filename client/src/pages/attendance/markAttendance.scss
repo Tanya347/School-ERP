@@ -1,13 +1,13 @@
 .mark-attendance {
-    text-align: center;
-
+    // text-align: center;
+    margin-left: 30px;
     h1 {
-        margin: 30px;
+        margin-top: 20px;
     }
     .mark-attendance-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
         width: 100%;
 
@@ -15,22 +15,34 @@
             display: flex;
             padding: 20px;
             gap: 20px;
+            margin-top: 20px;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             flex-direction: row;
             width: 100%;
+            -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+            box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+            border-radius: 10px;
 
             button {
-                border: none;
+                border: 1px solid var(--turquoise);
                 outline: none;
-                padding: 10px 20px;
-                background-color: #dbeef0;
+                padding: 15px 20px;
+                border-radius: 10px;
+                background-color: white;
                 transition: all 0.3s ease-in-out;
                 cursor: pointer;
+                font-size: 1rem;
 
+                
                 &:hover {
-                    background-color: #c6d6d8;
+                    background-color: var(--light-blue);
+                    color: black;
                 }
+            }
+            .selected-class {
+                background-color: var(--turquoise);
+                color: white;
             }
         }
 
@@ -38,24 +50,28 @@
             font-size: 1.3rem;
         }
 
-        .attendance-date-picker {
-            margin: 20px 0;
-            padding: 20px 20px;
-            background-color: var(--light-blue);
+        .attendance-header {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%;
+            gap: 50px;
+            
+            .attendance-date-picker {
+                margin: 20px 0;
+                padding: 20px 20px;
+                background-color: #dbeef0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
 
-            label {
-                font-size: 1.1rem;
-                font-weight: 600;
-            }
-
-            input {
-                text-align: center;
-                font-size: 1rem;
+                input {
+                    text-align: center;
+                    font-size: 1rem;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                }
             }
         }
 

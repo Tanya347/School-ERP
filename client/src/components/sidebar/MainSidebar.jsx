@@ -9,6 +9,7 @@ import Query from '../popUps/Query';
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { sidebarConsts } from "./sidebarConsts";
 import Tooltip from "../tooltip/Tooltip";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 
 const MainSidebar = () => {
@@ -136,11 +137,11 @@ const MainSidebar = () => {
                     }
                     
                     {/* Toggle Theme */}
-                    {/* {collapsed ? (
+                    {collapsed ? (
                             <>
                             <p className={`title ${collapsed ? 'add-border' : ''}`}></p>
                             <li>
-                                <DarkModeOutlinedIcon
+                                <DarkModeIcon
                                     className="icon"
                                     onClick={() => Dispatch({ type: "TOGGLE" })}
                                 />
@@ -161,7 +162,7 @@ const MainSidebar = () => {
                                 </div>
                             </>
                         )
-                    } */}
+                    }
                 </ul>
             </motion.div >
 

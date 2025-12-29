@@ -1,6 +1,6 @@
-import React from 'react'
 import './navbar.scss'
 import { useState } from 'react';
+import { useContext } from 'react'
 import { useAuth } from '../../config/context/AuthContext';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -9,8 +9,11 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import useFetch from '../../config/service/useFetch'
 import NotificationsDropdown from './NotificationsDropdown';
+import { DarkModeContext } from "../../config/context/darkModeContext";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 const Navbar = () => {
+    const { Dispatch } = useContext(DarkModeContext);
     const [schoolInfo, setSchoolInfo] = useState({});
     const [showNotifications, setShowNotifications] = useState(false);
     const { user, logout } = useAuth();
@@ -73,6 +76,9 @@ return (
                     <NotificationsIcon className="icon" onClick={()=> setShowNotifications(!showNotifications)}/>
                     {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
                     {showNotifications && <NotificationsDropdown notifs={notifications} user={user}/>}
+                </div>
+                <div className="dark-mode-toggle" onClick={() => Dispatch({ type: "TOGGLE" })}>
+                    <DarkModeIcon className="icon" />
                 </div>
                 <div className="" onClick={handleLogout}>
                     <ExitToAppIcon className="icon" />

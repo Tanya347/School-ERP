@@ -70,3 +70,8 @@
 .cancel-btn:hover {
   background: #ccc;
 }
+
+.app.dark .confirm-popup {
+  color: white;
+  background-color: var(--light-black);
+}

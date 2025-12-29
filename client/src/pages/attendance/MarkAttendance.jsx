@@ -9,6 +9,7 @@ import { postURLs } from '../../config/endpoints/post'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 import { createElement } from '../../config/service/usePost'
+import InforBanner from '../../components/infoBanner/InforBanner'
 
 const MarkAttendance = () => {
 
@@ -101,12 +102,17 @@ const MarkAttendance = () => {
 
     return (
         <div className='mark-attendance'>
-        <h1>Mark / Edit Attendance</h1>
+        <h1>Mark Attendance</h1>
+        <p>Manage and track student attendance records</p>
             <div className="mark-attendance-container">
             <div className="classes-button">
               {
                   classes?.map((cl, index) => (
-                      <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
+                    <button  
+                      className={sclass && sclass._id === cl._id ? 'selected-class' : ''}
+                      key={index} onClick={() => handleClick(cl)}>
+                        Class {cl.name}
+                    </button>
                   ))
               }
             </div>
@@ -114,26 +120,35 @@ const MarkAttendance = () => {
                 (
                     <>
                     <h1>Class: {sclass.name}</h1>
-                    {editMode && isClassTeacher && (
-                      <div className="edit-mode-banner">
-                        <p>Attendance for this date already exists. You are now editing it.</p>
-                      </div>
-                    )}
-                    {!isClassTeacher && (
-                      <div className="not-authorized-banner">
-                        <p>You are not authorized to mark attendance for this class.</p>
-                      </div>
-                    )}
-                    {isClassTeacher && <div className="attendance-date-picker">
-                        <label>Select a Date</label>
-                        <DatePicker
-                          class="date-picker"
-                          placeholderText="Choose Date"
-                          style={{ marginRight: "10px" }}
-                          selected={sdate}
-                          onChange={(sdate) => setSdate(sdate)}
-                        />
-                    </div>}
+                    <div className="attendance-header">
+                      {editMode && isClassTeacher && (
+                        <div className="edit-mode-banner">
+                          <InforBanner
+                            type="info"
+                            header="Edit Mode Activated"
+                            description="Attendance for the selected date has already been marked. You can update the existing records."
+                          ></InforBanner>
+                        </div>
+                      )}
+                      {!isClassTeacher && (
+                        <div className="not-authorized-banner">
+                          <InforBanner
+                            type="error"
+                            header="Access Denied"
+                            description="You are not authorized to mark attendance for this class."
+                          ></InforBanner>
+                        </div>
+                      )}
+                      {isClassTeacher && <div className="attendance-date-picker">
+                          <DatePicker
+                            class="date-picker"
+                            placeholderText="Choose Date"
+                            style={{ marginRight: "10px" }}
+                            selected={sdate}
+                            onChange={(sdate) => setSdate(sdate)}
+                          />
+                      </div>}
+                    </div>
         
         
                     {isClassTeacher && <div className="attendance-marking-table">

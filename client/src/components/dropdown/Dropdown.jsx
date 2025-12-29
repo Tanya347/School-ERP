@@ -7,6 +7,7 @@ const Dropdown = ({
     title,
     id = '',
     onChange,
+    value = ""
 }) => {
 
     const { data: dynamicOptions = [], loading } = useFetch(url || '');
@@ -16,7 +17,12 @@ const Dropdown = ({
     return (
         <div className="formInput">
             <label>{title}</label>
-            <select id={id} onChange={onChange} disabled={loading}>
+            <select 
+                id={id}
+                onChange={onChange}
+                disabled={loading}
+                value={value}
+            >
                 <option value="">
                     {loading ? 'Loading...' : '-'}
                 </option>

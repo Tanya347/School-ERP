@@ -4,7 +4,7 @@ import { useState } from "react";
 import useFetch from "../../config/service/useFetch";
 import { useEffect } from "react";
 import './eventsList.scss'
-import Loader from "../../components/loaders/loader/Loader";
+import Loader from "../../components/loader/Loader";
 
 const EventsList = ({type}) => {
     const [list, setList] = useState([]);
@@ -39,7 +39,7 @@ const EventsList = ({type}) => {
 
         <div className="events-title">Events List</div>
         <div className="event-container">{loading ? (
-          <Loader />
+          <Loader text="Loading events..." />
         ) : (<div className="cardsContainer">
           {list?.map((item, i) => (
             <div className="card" key={item._id}>

@@ -3,7 +3,7 @@ export const facultyInputs = [
         id: "teachername",
         label: "Name",
         type: "text",
-        placeholder: "Enter student's name",
+        placeholder: "Enter faculty's name",
         editAccess: "both"
     },
     {
@@ -24,7 +24,7 @@ export const facultyInputs = [
         id: "email",
         label: "Email",
         type: "email",
-        placeholder: "Enter student's email",
+        placeholder: "Enter faculty's email",
         editAccess: "both"
     },
     {

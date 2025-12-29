@@ -2,11 +2,11 @@ import React from 'react'
 import { ClipLoader } from "react-spinners";
 import './loader.scss'
 
-const Loader = ({text}) => {
+const Loader = ({text, type}) => {
   return (
-    <div className={text ? "create-loader" : "page-loader"}>
+    <div className={type === "global" ? "page-loader" : "create-loader"}>
         <ClipLoader color="black" size={50} />
-        {text || "Loading data..."}
+        {text}
     </div>
   )
 }

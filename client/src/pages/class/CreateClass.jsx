@@ -1,19 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import "../../config/style/form.scss"
 import { createElement } from "../../config/service/usePost";
-
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { postURLs } from "../../config/endpoints/post";
-import Loader from "../../components/loaders/loader/Loader";
+import Loader from "../../components/loader/Loader";
+import { validateClass } from "../../config/validators/class";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const CreateClass = ({ inputs, title}) => {
     const [info, setInfo] = useState({});
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        commonHandleChange(e, setInfo, setErrors, validateClass);
+    }
+
+    const handleClear = (e) => {
+        e.preventDefault();
+        setInfo({});
+        setErrors({});
     }
 
     const handleClick = async (e) => {
@@ -48,12 +56,15 @@ const CreateClass = ({ inputs, title}) => {
                                     onChange={handleChange}
                                     type={input.type}
                                     placeholder={input.placeholder}
+                                    className={errors[input.id] ? "error-input" : ""}
                                 />
+                                {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                                 </div>
                             ))}
                         </form>
                         <div className="submitButton">
                             {loading && <Loader text="Creating Class..." />}
+                            <button className="clear-btn" onClick={handleClear}>Clear</button>
                             <button onClick={handleClick} className="form-btn">Create Class</button>
                         </div>
                     </div>

@@ -8,15 +8,20 @@ import { postURLs } from '../../config/endpoints/post';
 import { useNavigate } from 'react-router-dom';
 import { ClipLoader } from "react-spinners";
 import { useAuth } from '../../config/context/AuthContext';
+import { handleChange as commonHandleChange } from "../../config/commons";
+import { validateMaterial } from '../../config/validators/material';
 
 const UploadMaterial = ({title, inputs}) => {
   const [file, setFile] = useState(null);
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [sclass, setSclass] = useState("");
 
   const { user } = useAuth();
+
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateMaterial);
   }
 
   const navigate = useNavigate();
@@ -42,6 +47,8 @@ const UploadMaterial = ({title, inputs}) => {
     e.preventDefault();
     setInfo({});
     setFile("");
+    setErrors({});
+    setSclass("");
   }
 
   return (
@@ -75,7 +82,11 @@ const UploadMaterial = ({title, inputs}) => {
                 id="classId"
                 title="Choose Class"
                 url={user.role === "faculty" ? getFacultyData(user._id, "classes") : getClasses}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setSclass(e.target.value);
+                }}
+                value={sclass}
               />
               {inputs?.map((input) => (
                 <div className="formInput" key={input.id}>
@@ -85,7 +96,10 @@ const UploadMaterial = ({title, inputs}) => {
                     type={input.type}
                     placeholder={input.placeholder}
                     id={input.id}
+                    value={info[input.id] || ""}
+                    className={errors[input.id] ? "error-input" : ""}
                   />
+                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
               ))}
             </form>

@@ -3,24 +3,28 @@ import "../../config/style/form.scss";
 import { useState } from "react";
 import { createElement } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
 import { useAuth } from "../../config/context/AuthContext";
 import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import Dropdown from "../../components/dropdown/Dropdown";
 import DatePickerComponent from "../../components/datepicker/Datepicker";
+import Loader from "../../components/loader/Loader";
+import { validateTask } from "../../config/validators/task";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const NewTask = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(new Date());
   const { user } = useAuth();
+  const [errors, setErrors] = useState({});
+  const [studentClass, setStudentClass] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateTask);
   }
 
   const handleClick = async (e) => {
@@ -46,7 +50,9 @@ const NewTask = ({ inputs, title }) => {
   const handleClear = (e) => {
     e.preventDefault();
     setInfo({});
-    window.location.reload(false);
+    setErrors({});
+    setStudentClass("");
+    setDeadline(new Date());
   }
 
   return (
@@ -70,7 +76,10 @@ const NewTask = ({ inputs, title }) => {
                     onChange={handleChange}
                     type={input.type}
                     placeholder={input.placeholder}
+                    value={info[input.id] || ""}
+                    className={errors[input.id] ? "error-input" : ""}
                   />
+                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
               ))}
 
@@ -78,7 +87,11 @@ const NewTask = ({ inputs, title }) => {
                 id="sclass"
                 title="Choose Class"
                 url={getFacultyData(user._id, "classes")}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setStudentClass(e.target.value);
+                }}
+                value={studentClass}
               />
                 
               <div className="formInput">
@@ -94,10 +107,7 @@ const NewTask = ({ inputs, title }) => {
 
             </form>
             <div className="submitButton">
-            {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                creating task...
-              </div>}
+              {loading && <Loader text="Creating Task..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Task</button>
             </div>

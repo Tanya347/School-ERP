@@ -11,8 +11,9 @@ import axios from 'axios'
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { postURLs } from "../../config/endpoints/post";
 import { toast } from "react-toastify";
-import { ClipLoader } from "react-spinners";
 import EventCalender from "../../components/calender/Calender";
+import Loader from "../../components/loader/Loader.jsx";
+import ConfirmPopup from "../../components/popUps/ConfirmatinPopup.jsx";
 
 // type specifies the admin side or user side 
 const AdminHome = () => {
@@ -20,6 +21,9 @@ const AdminHome = () => {
   const {user} = useAuth();
   const [sessionName, setSessionName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -28,36 +32,54 @@ const AdminHome = () => {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}${getSession(user.schoolID)}`)
           setSessionName(response.data.data.name)
         } catch (err) {
+          toast.error(
+            <div>
+              <strong>Session Fetch Failed</strong>
+              <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
+            </div>
+          );
           console.error("Error fetching session data:", err)
         }
       }
     }
     fetchSession()
   }, [user, user.schoolID]);
-  const genderCount = useFetch(schoolGenderCount).data
+  const { data: genderCount, error: genderCountError } = useFetch(schoolGenderCount);
+
+  if (genderCountError) {
+    toast.error(
+      <div>
+        <strong>Gender Count Fetch Failed</strong>
+        <div>{genderCountError.response?.data?.message || genderCountError.message || 'Unknown error'}</div>
+      </div>
+    );
+  }
 
   const handleClick = async (e) => {
-    setLoading(true)
-    try {
-      const res = await axios.post(postURLs("sessions", "normal"), {}, {withCredentials: true});
-      if(res.data.status === 'success') {
-        toast.success(`session started successfully!`);
+    setConfirmMessage(`Are you sure you want to start a new session?`);
+    setConfirmAction(() => async () => {
+      try {
+        setLoading(true);
+        const res = await axios.post(postURLs("sessions", "normal"), {}, {withCredentials: true});
+        if(res.data.status === 'success') {
+          toast.success(`session started successfully!`);
+        }
+      } catch (err) {
+        const errorMessage = err.response?.data?.message || `Failed to start the session. Please try again.`;
+        toast.error(errorMessage);
+        console.error(err);
+        return err;
+      } finally {
+        setLoading(false);
+        setShowConfirm(false);
       }
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || `Failed to start the session. Please try again.`;
-      toast.error(errorMessage);
-      console.error(err);
-      return err;
-    } finally {
-      setLoading(false);
-    }
+    })
+    setShowConfirm(true);
   }
 
   return (
     <div className="home">
-      {/* <Navbar /> */}
       <div className="AdminHomeContainer">
-        {/* Navbar according to the type of user */}
 
         <div className="mainContainer">
             <SchoolInfo schoolID={user.schoolID} />
@@ -74,16 +96,20 @@ const AdminHome = () => {
               <AccessAlarmIcon className="icon"/>
               <h2>Session</h2>
               <h3>{sessionName}</h3>
-              {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                  creating class...
-                </div>}
+              {loading && <Loader text="Starting new session.."/>}
               <button className="start-new-session" onClick={handleClick}>Start New Session</button>
             </div>
           </div>
         </div> 
 
       </div>
+      {showConfirm && (
+        <ConfirmPopup
+          message={confirmMessage}
+          onConfirm={confirmAction}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   );
 };

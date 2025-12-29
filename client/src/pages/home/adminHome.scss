@@ -1,21 +1,21 @@
 .home {
-  background-color: var(--light-gray);
   display: flex;
   height: 100vh;
-
+  
   .AdminHomeContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    
     .charts {
       padding: 5px 20px;
     }
-
+    
     .mainContainer {
-
+      
+      background-color: var(--light-gray);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -88,4 +88,22 @@
       }
     }
   }
+}
+
+.app.dark .home {
+  color: white;
+  
+  .mainContainer {
+
+    background-color: var(--black);
+
+    .session-container {
+      background-color: var(--light-black);
+    }
+
+    .pie-chart-container {
+      background-color: var(--light-black);
+    }
+  }
+
 }

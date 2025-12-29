@@ -9,3 +9,8 @@
         padding: 5px;
     }
 }
+
+.app.dark select {
+    background-color: var(--light-black);
+    color: var(--white);
+}

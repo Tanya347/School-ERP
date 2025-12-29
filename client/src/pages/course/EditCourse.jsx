@@ -9,7 +9,7 @@ import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { courseInputs } from "../../config/formsource/courseInputs"
-import Loader from "../../components/loaders/loader/Loader";
+import Loader from "../../components/loader/Loader";
 
 const EditCourse = ({ title }) => {
   

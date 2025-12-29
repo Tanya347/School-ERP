@@ -5,7 +5,7 @@ import Course from "../../components/course/Course";
 
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
-import Loader from "../../components/loaders/loader/Loader";
+import Loader from "../../components/loader/Loader";
 
 const Single = ({ type }) => {
 
@@ -32,7 +32,7 @@ const Single = ({ type }) => {
     <div className="facultyProfile">
         
         {loading ? (
-          <Loader />
+          <Loader text="Loading data..." />
         ) : (<>
           <div className="top">
             <div className="left">

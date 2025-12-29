@@ -8,25 +8,40 @@ body {
 }
 
 :root {
-    --very-light-purple: #F5EFFF;
+    --white: white;
+    --off-white: #FBFBFB;
+    --light-gray: #F2F4F5;
     --light-purple: #DBC4F0;
-    --light-red: #FFCACC;
+    --light-red: #f2cdcd;
     --light-green: #D4E2D4;
-    --cream: #FAF3F0;
     --light-yellow: #FEFAE0;
     --light-pink: #F8E8EE;
     --light-blue: #CDF5FD;
-    --gray: #7D7C7C;
-    --light-gray: #F2F4F5;
+    
     --turquoise: #1AACAC;
-    --yellow: #F2F7A1;
-    --red: #EF4040;
-    --pink: #C21292;
+    --mild-turquoise: #48A6A7;
+    --light-turquoise: #DDEFF0;
+    --light-turquoise-two: #e8f7f9;
+    
+    --tree-green: #077A7D;
+    --dark-tree-green: #023333;
+    --light-tree-green: #C8EBEE;
+    
     --green: #527853;
-    --orange: #EE7214;
     --blue: #3876BF;
     --purple: #7E60BF;
+    --pink: #C21292;
+    --gray: #7D7C7C;
+    --red: #EF4040;
+    --mild-red: rgb(232, 136, 136);
+    --golden: goldenrod;
+    --crimson: rgba(220, 20, 60, 0.6);
+    --deep-red: #A0153E;
     --black: #000000;
-    --white: white;
-    --dark-blue: #1F003F;
+    --light-black: #1E201E;
+
+    --dark-purple: #522258;
+    --dark-blue: #03346E;
+    --heading-gray: rgb(178, 177, 177);
+    --brown: #481E14;
 }

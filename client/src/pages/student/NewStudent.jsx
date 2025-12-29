@@ -4,11 +4,12 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { createElementWithPicture } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader/Loader";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import Dropdown from "../../components/dropdown/Dropdown";
-import {validateStudent} from "../../config/validators/student";
+import { validateStudent } from "../../config/validators/student";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const NewUser = ({ inputs, title }) => {
   
@@ -16,15 +17,12 @@ const NewUser = ({ inputs, title }) => {
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [gender, setGender] = useState("");
+  const [studentClass, setStudentClass] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setInfo((prev) => ({ ...prev, [id]: value }));
-
-    // validate field as user types
-    const error = validateStudent(id, value);
-    setErrors((prev) => ({ ...prev, [id]: error }));
+    commonHandleChange(e, setInfo, setErrors, validateStudent);
   }
   
   const handleClick = async (e) => {
@@ -32,10 +30,12 @@ const NewUser = ({ inputs, title }) => {
     setLoading(true);
     
     try {
-      const res = await createElementWithPicture(file, info, "student", postURLs("student", "register"));
-      if(res.data.status === 'success') {
-        navigate(`/admin/students/single/${res.data.data.user._id}`);
-      }
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      // const res = await createElementWithPicture(file, info, "student", postURLs("student", "register"));
+      // if(res.data.status === 'success') {
+      //   navigate(`/admin/students/single/${res.data.data.user._id}`);
+      // }
     }
     catch(err) {
       console.log(err);
@@ -49,6 +49,8 @@ const NewUser = ({ inputs, title }) => {
     setInfo({});
     setErrors({});
     setFile("");
+    setGender("");
+    setStudentClass("");
   }
   
   return (
@@ -94,7 +96,11 @@ const NewUser = ({ inputs, title }) => {
                 { _id: 'Male', name: 'Male' },
                 { _id: 'Female', name: 'Female' },
               ]}
-              onChange={handleChange}
+              value={gender}
+              onChange={(e) => {
+                handleChange(e);
+                setGender(e.target.value);
+              }}
             />
 
               {inputs?.map((input) => (
@@ -106,7 +112,7 @@ const NewUser = ({ inputs, title }) => {
                     placeholder={input.placeholder}
                     id={input.id}
                     value={info[input.id] || ""}
-                    className={errors[input.id] ? "error" : ""}
+                    className={errors[input.id] ? "error-input" : ""}
                   />
                   {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
@@ -116,15 +122,16 @@ const NewUser = ({ inputs, title }) => {
                 id="class"
                 title="Choose Class"
                 url={getClasses}
-                onChange={handleChange}
+                value={studentClass}
+                onChange={(e) => {
+                  handleChange(e);
+                  setStudentClass(e.target.value);
+                }}
               />
 
             </form>
             <div className="submitButton">
-            { loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                creating student...
-              </div>}
+              {loading && <Loader text="Creating student..."/>}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} disabled={loading} className="form-btn">Create Student</button>
             </div>

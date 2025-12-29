@@ -1,145 +1,211 @@
-.datatable {
-  height: 600px;
-  padding: 20px;
+.datatable-container {
 
-  .datagrid {
-    font-size: 16px;
-  }
+  .datatable {
+    height: 600px;
+    padding: 20px;
 
-  .search {
-    display: flex;
-    align-items: center;
-    border: 0.5px solid lightgray;
-    padding: 3px;
-
-    input {
-      border: none;
-      outline: none;
-      background: transparent;
-
-      &::placeholder {
-        font-size: 12px;
-      }
+    .datagrid {
+      font-size: 16px;
     }
-  }
 
-  .datatableHeader {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-
-    .datatableTitle {
-      width: 100%;
-      font-size: 24px;
-      color: gray;
-      margin-bottom: 10px;
+    .search {
       display: flex;
       align-items: center;
-      font-weight: bold;
-      justify-content: space-between;
-  
+      border: 0.5px solid var(--light-gray);
+      padding: 3px;
+
+      input {
+        border: none;
+        outline: none;
+        background: transparent;
+
+        &::placeholder {
+          font-size: 12px;
+        }
+      }
     }
+
+    .datatableHeader {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      .datatableTitle {
+        width: 100%;
+        font-size: 24px;
+        color: var(--gray);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        justify-content: space-between;
     
-    .link {
-      text-decoration: none;
-      color: #077A7D;
-      height: 22px;
-      width: fit-content;
-      font-size: 16px;
-      font-weight: 400;
-      border: 1px solid #077A7D;
+      }
+      
+      .link {
+        text-decoration: none;
+        color: var(--tree-green);
+        height: 22px;
+        width: fit-content;
+        font-size: 16px;
+        font-weight: 400;
+        border: 1px solid var(--tree-green);
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all ease-in-out 0.3s;
+
+        &:hover {
+          background-color: var(--light-tree-green);
+        }
+      }
+
+      .delete {
+        border: 1px solid var(--red);
+        color: var(--red);
+
+        &:hover {
+          background-color: var(--light-red);
+        }
+      }
+    }
+
+    .cellWithImg {
+      display: flex;
+      align-items: center;
+
+      .cellImg {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+      }
+    }
+
+    .cellWithStatus {
       padding: 5px;
       border-radius: 5px;
-      cursor: pointer;
-      transition: all ease-in-out 0.3s;
 
-      &:hover {
-        background-color: #c8ebee;
+      &.active {
+        background-color: rgba(0, 128, 0, 0.05);
+        color: var(--green);
+      }
+
+      &.pending {
+        background-color: rgba(255, 217, 0, 0.05);
+        color: var(--golden);
+      }
+
+      &.passive {
+        background-color: rgba(255, 0, 0, 0.05);
+        color: var(--red);
       }
     }
 
-    .delete {
-      border: 1px solid crimson;
-      color: crimson;
+    .cellAction {
+      display: flex;
+      align-items: center;
+      gap: 15px;
 
-      &:hover {
-        background-color: #f5c6cb;
+      .viewButton {
+        padding: 2px 5px;
+        border-radius: 5px;
+        color: var(--turquoise);
+        border: 1px dotted var(--turquoise);
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--light-turquoise);
+        }
+      }
+
+      .editButton {
+        padding: 2px 5px;
+        border-radius: 5px;
+        color: var(--tree-green);
+        border: 1px dotted var(--tree-green);
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--light-tree-green);
+        }
+      }
+
+      .deleteButton {
+        padding: 2px 5px;
+        border-radius: 5px;
+        color: var(--red);
+        border: 1px dotted var(--crimson);
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--light-red);
+        }
       }
     }
   }
+}
 
-  .cellWithImg {
-    display: flex;
-    align-items: center;
+.app.dark .datatable-container {
+  .datatable {
 
-    .cellImg {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 20px;
+    .datatableTitle {
+      color: var(--light-gray);
     }
-  }
+    .datagrid {
+      border: 1px solid var(--light-gray);
 
-  .cellWithStatus {
-    padding: 5px;
-    border-radius: 5px;
-
-    &.active {
-      background-color: rgba(0, 128, 0, 0.05);
-      color: green;
+      .MuiTablePagination-root {
+        color: var(--white);
+      }
+      .MuiButtonBase-root {
+        color: var(--light-gray);
+      }
+      .MuiDataGrid-cellCheckbox {
+        input {
+          color: var(--light-gray);
+          &:checked {
+            color: var(--mild-turquoise);
+          }
+        }
+      }
     }
-
-    &.pending {
-      background-color: rgba(255, 217, 0, 0.05);
-      color: goldenrod;
-    }
-
-    &.passive {
-      background-color: rgba(255, 0, 0, 0.05);
-      color: crimson;
-    }
-  }
-
-  .cellAction {
-    display: flex;
-    align-items: center;
-    gap: 15px;
 
     .viewButton {
-      padding: 2px 5px;
-      border-radius: 5px;
-      color: #229799;
-      border: 1px dotted #229799;
-      cursor: pointer;
+      background: var(--mild-turquoise);
+      color: var(--white);
 
       &:hover {
-        background-color: #daecee;
+        background-color: var(--turquoise);
+      }
+    }
+
+    .link {
+      background: var(--dark-tree-green);
+      color: var(--white);
+      &:hover {
+        background-color: var(--tree-green);
+      }
+    }
+    
+    .deleteButton, .delete {
+      background: var(--crimson);
+      color: var(--white);
+
+      &:hover {
+        background-color: var(--red);
       }
     }
 
     .editButton {
-      padding: 2px 5px;
-      border-radius: 5px;
-      color: #006A71;
-      border: 1px dotted #006A71;
-      cursor: pointer;
+      background: var(--dark-tree-green);
+      color: var(--white);
 
       &:hover {
-        background-color: #c5e6ea;
+        background-color: var(--tree-green);
       }
     }
 
-    .deleteButton {
-      padding: 2px 5px;
-      border-radius: 5px;
-      color: crimson;
-      border: 1px dotted rgba(220, 20, 60, 0.6);
-      cursor: pointer;
-
-      &:hover {
-        background-color: var(--light-red);
-      }
-    }
   }
 }

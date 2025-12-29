@@ -5,7 +5,7 @@ import useFetch from "../../config/service/useFetch";
 import Course from "../../components/course/Course";
 import { getSingleData } from "../../config/endpoints/get";
 import 'react-circular-progressbar/dist/styles.css';
-import Loader from "../../components/loaders/loader/Loader";
+import Loader from "../../components/loader/Loader";
 
 
 const Single = ({ type }) => {
@@ -25,7 +25,7 @@ const Single = ({ type }) => {
   return (
     <div className="studentProfile">
       {loading ? (
-        <Loader />
+        <Loader text="Loading data..." />
       ) : (<>
         
       <div className="top">

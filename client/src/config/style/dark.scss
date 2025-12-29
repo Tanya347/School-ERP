@@ -2,15 +2,38 @@
 // all specifications for dark mode 
 
 .app.dark {
-  background-color: #111;
+  background-color: var(--black);
   color: white;
+
+  .create-loader, .page-loader {
+    span {
+        border-color: white white transparent !important;
+    }
+  }
+
+  .react-datepicker {
+
+    .react-datepicker__header, .react-datepicker__month-container, .react-datepicker__time-list {
+      background-color: var(--black);
+    }
+    .react-datepicker__day-name, .react-datepicker__current-month, .react-datepicker__day, .react-datepicker__time-name, .react-datepicker__time-list-item, .react-datepicker-time__header  {
+      color: white;
+
+      &:hover {
+        background-color: var(--dark-tree-green) !important;
+        color: white;
+      }
+    }
+
+    .react-datepicker__time-list-item--selected, .react-datepicker__day--selected {
+      background-color: var(--tree-green) !important;
+      color: white !important;
+      font-weight: bold;
+    }
+  }
 
   .home {
     background-color: #111;
-  }
-  
-  .landing-container, .list, .single, .new {
-    height: 100vh;
   }
 
   .list {
@@ -43,27 +66,7 @@
   }
 
   .sidebar {
-    border-color: rgb(84, 82, 82);
-    background-color: #5353AF;
 
-    #menu {
-      .icon {
-
-        &:hover {
-          color: #5353AF;
-        }
-      }
-    }
-
-    .top {
-      .logo {
-        color: white;
-      }
-    }
-
-    hr {
-      border-color: #333;
-    }
 
     ul {
       li {
@@ -82,18 +85,7 @@
   .datatable {
     .datagrid {
       color: white;
-      border: none;
-
-      .viewButton,
-      .deleteButton,
-      .cellWithStatus {
-        color: white;
-        border: none;
-      }
     }
   }
-
-  input {
-    background-color: transparent;
-  }
+ 
 }

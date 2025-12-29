@@ -3,18 +3,23 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { createElementWithPicture } from "../../config/service/usePost";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader/Loader";
 import { postURLs } from "../../config/endpoints/post";
 import Dropdown from "../../components/dropdown/Dropdown";
+import { validateFaculty } from "../../config/validators/faculty";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const NewFaculty = ({ inputs, title }) => {
   
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [gender, setGender] = useState("");
   const navigate = useNavigate();
+
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateFaculty);
   }
 
   const handleClick = async (e) => {
@@ -33,6 +38,13 @@ const NewFaculty = ({ inputs, title }) => {
     }
   }
 
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    setFile("");
+    setErrors({});
+    setGender("");
+  }
 
   return (
     <div className="new">
@@ -77,7 +89,11 @@ const NewFaculty = ({ inputs, title }) => {
                 { _id: 'Male', name: 'Male' },
                 { _id: 'Female', name: 'Female' },
               ]}
-              onChange={handleChange}
+              value={gender}
+              onChange={(e) => {
+                setGender(e.target.value);
+                handleChange(e);
+              }}
             />
 
               {inputs.map((input) => (
@@ -88,17 +104,18 @@ const NewFaculty = ({ inputs, title }) => {
                     type={input.type}
                     placeholder={input.placeholder}
                     id={input.id}
+                    value={info[input.id] || ""}
+                    className={errors[input.id] ? "input-error" : ""}
                   />
+                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
               ))}
 
 
             </form>
             <div className="submitButton">
-              {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                creating faculty...
-              </div>}
+              {loading && <Loader text="Creating Faculty..." />}
+              <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Faculty</button>
             </div>
           </div>

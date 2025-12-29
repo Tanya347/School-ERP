@@ -3,10 +3,12 @@ import "../../config/style/form.scss";
 import { useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { postURLs } from "../../config/endpoints/post";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader/Loader";
 import { createElementWithPicture } from "../../config/service/usePost";
 import DatePickerComponent from "../../components/datepicker/Datepicker";
 import { useNavigate } from "react-router-dom";
+import { validateEvent } from "../../config/validators/event";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const NewEvent = ({ inputs, title }) => {
   
@@ -14,13 +16,13 @@ const NewEvent = ({ inputs, title }) => {
   const [info, setInfo] = useState({});
   const [submitLoading, setSubmitLoading] = useState(false);
   const navigate = useNavigate();
-  // dates
   const [start, setStart] = useState("")
+  const [errors, setErrors] = useState({});
   const [end, setEnd] = useState("")
   
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateEvent);
   }
 
   const handleClick = async (e) => {
@@ -52,7 +54,6 @@ const NewEvent = ({ inputs, title }) => {
     setFile("");
     setStart("");
     setEnd("");
-    window.location.reload(false);
   }
 
   return (
@@ -96,6 +97,7 @@ const NewEvent = ({ inputs, title }) => {
                     selectedDate={start}
                     onChange={(start) => setStart(start)}
                     label="Select Start Date and Time"
+                    className="date-picker"
                   />
                   
                   <DatePickerComponent 
@@ -103,21 +105,27 @@ const NewEvent = ({ inputs, title }) => {
                     selectedDate={end}
                     onChange={(end) => setEnd(end)}
                     label="Select End Date and Time"
+                    className="date-picker"
                   />
 
                   {inputs?.map((input) => (
                     <div className="formInput" key={input.id}>
                       <label>{input.label}</label>
-                      <input onChange={handleChange} type={input.type} placeholder={input.placeholder} id={input.id} />
+                      <input
+                        onChange={handleChange}
+                        type={input.type}
+                        placeholder={input.placeholder}
+                        id={input.id}
+                        className={errors[input.id] ? "error-input" : ""}
+                        value={info[input.id] || ""}
+                      />
+                      {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                     </div>
                   ))}
 
                 </form>
                 <div className="submitButton">
-                { submitLoading && <div className="create-loader">
-                    <ClipLoader color="black" size={30} />
-                    creating event...
-                  </div>}
+                { submitLoading && <Loader text="Creating Event..." /> }
                   <button className="clear-btn" onClick={handleClear}>Clear</button>
                   <button onClick={handleClick} className="form-btn">Create Event</button>
                 </div>

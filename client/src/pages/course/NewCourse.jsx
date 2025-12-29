@@ -5,19 +5,23 @@ import { useNavigate } from "react-router-dom";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElementWithPicture } from "../../config/service/usePost";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader/Loader";
 import Dropdown from "../../components/dropdown/Dropdown";
+import { validateCourse } from "../../config/validators/course";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const NewCourse = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
+  const [studentClass, setStudentClass] = useState("");
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
   
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateCourse);
   }
 
   const handleClick = async (e) => {
@@ -41,8 +45,11 @@ const NewCourse = ({ inputs, title }) => {
     e.preventDefault();
     setInfo({});
     setFile("");
-    window.location.reload(false);
+    setStudentClass("");
+    setErrors({});
   }
+
+  console.log(info)
 
   return (
     <div className="new">
@@ -87,7 +94,10 @@ const NewCourse = ({ inputs, title }) => {
                     onChange={handleChange}
                     type={input.type}
                     placeholder={input.placeholder}
+                    className={errors[input.id] ? "error-input" : ""}
+                    value={info[input.id] || ""}
                   />
+                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
               ))}
 
@@ -95,15 +105,16 @@ const NewCourse = ({ inputs, title }) => {
                 id="class"
                 title="Choose Class"
                 url={getClasses}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setStudentClass(e.target.value);
+                  handleChange(e);
+                }}
+                value={studentClass}
               />
 
             </form>
             <div className="submitButton">
-              {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                creating course...
-              </div>}
+              {loading && <Loader text="Creating Course..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Course</button>
             </div>

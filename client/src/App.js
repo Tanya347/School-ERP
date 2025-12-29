@@ -1,7 +1,6 @@
 // CSS
 import "./config/style/dark.scss";
 import "./config/style/base.scss";
-import "./config/style/skeleton.scss";
 
 // React Stuff
 import { useContext } from "react";

@@ -108,3 +108,41 @@
         }
     }
 }
+
+.app.dark .navSidebarContainer {
+    .sidebar {
+        background-color: var(--dark-tree-green);
+        color: var(--white);
+    }
+
+    .title {
+        color: var(--white);
+    }
+
+    ul {
+        #menu {
+            color: var(--white);
+
+            &:hover {
+                background-color: var(--tree-green);
+                color: var(--white);
+            }
+
+            .icon {
+                color: var(--white);
+            }
+        }
+
+        li {
+            color: gainsboro;
+
+            &:hover {
+                background-color: var(--tree-green);
+            }
+
+            .icon {
+                color: var(--white);
+            }
+        }
+    }
+}

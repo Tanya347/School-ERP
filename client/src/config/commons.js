@@ -13,33 +13,40 @@ export const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sa
 export const periods = Array.from({ length: 8 }, (_, i) => i + 1);
 
 export const formatTime = (date) => {
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const period = hours >= 12 ? 'PM' : 'AM';
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const period = hours >= 12 ? 'PM' : 'AM';
   
-    // Convert 24-hour time to 12-hour time
-    hours = hours % 12;
-    // If hours is 0, set it to 12 (midnight or noon)
-    hours = hours === 0 ? 12 : hours;
+  // Convert 24-hour time to 12-hour time
+  hours = hours % 12;
+  // If hours is 0, set it to 12 (midnight or noon)
+  hours = hours === 0 ? 12 : hours;
   
-    // Pad minutes with leading zero if necessary
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  // Pad minutes with leading zero if necessary
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
   
-    return `${hours}:${formattedMinutes} ${period}`;
-  };
+  return `${hours}:${formattedMinutes} ${period}`;
+};
 
-  export const formatDate = (dateInput) => {
+export const formatDate = (dateInput) => {
 
-    const date = new Date(dateInput);
+  const date = new Date(dateInput);
 
-    // Check if date is invalid
-    if (isNaN(date.getTime())) {
-        return ''; // Return an empty string or handle the invalid date as needed
-    }
-        const formattedDate = date.toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    return formattedDate;
+  // Check if date is invalid
+  if (isNaN(date.getTime())) {
+    return ''; // Return an empty string or handle the invalid date as needed
   }
+  const formattedDate = date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  return formattedDate;
+}
+
+export const handleChange = (e, setInfo, setErrors, validator) => {
+  const { id, value } = e.target;
+  setInfo((prev) => ({ ...prev, [id]: value }));
+  const error = validator(id, value);
+  setErrors((prev) => ({ ...prev, [id]: error }));
+};

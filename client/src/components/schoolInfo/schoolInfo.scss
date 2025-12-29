@@ -33,3 +33,12 @@
         margin-top: 10px;
     }
 }
+
+.app.dark .school-info-container {
+    background-color: #1E201E;
+    color: white;
+    
+    img {
+        border: 2px solid white;
+    }
+}

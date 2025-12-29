@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import GenericTable from '../../components/table/Table'
 import { studentColumns } from '../../config/tableSource/studentsColumns'
 import AddClassTeacher from '../../components/popUps/AddClassTeacher'
-import Loader from '../../components/loaders/loader/Loader'
+import Loader from '../../components/loader/Loader'
 
 const ViewClass = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -20,7 +20,7 @@ const ViewClass = () => {
   return (
     <div className='viewClass'>
         {loading ? (
-          <Loader />
+          <Loader text="Loading class data..." />
         ) : (<div className="viewClassContainer">
                 <h2>{data?.name} Standard</h2>
                 {

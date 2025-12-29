@@ -5,25 +5,27 @@ import { useNavigate } from "react-router-dom";
 import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { useAuth } from "../../config/context/AuthContext";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader/Loader";
 import { createElement } from "../../config/service/usePost";
 import Dropdown from "../../components/dropdown/Dropdown";
 import DatePickerComponent from "../../components/datepicker/Datepicker";
-
+import { handleChange as commonHandleChange } from "../../config/commons";
+import { validateTest } from "../../config/validators/test";
 
 const NewTest = ({ inputs, title }) => {
   
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
-
-  // dates
   const [start, setStart] = useState("")
+  const [errors, setErrors] = useState({});
+  const [studentClass, setStudentClass] = useState("");
+  const [subject, setSubject] = useState("");
   
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateTest);
   }
 
   const handleClick = async (e) => {
@@ -33,9 +35,9 @@ const NewTest = ({ inputs, title }) => {
         const newtest = {
           ...info, date: start, author: user._id
         }
-        const res = createElement(newtest, postURLs("tests", "normals"), "Test");
+        const res = await createElement(newtest, postURLs("tests", "normals"), "Test");
         if(res.data.status === 'success') {
-          navigate("/faculty/tests")
+          navigate("/faculty/tests");
         }
       } catch (error) {
         console.log(error)
@@ -47,7 +49,10 @@ const NewTest = ({ inputs, title }) => {
   const handleClear = (e) => {
     e.preventDefault();
     setInfo({});
-    window.location.reload(false);
+    setErrors({});
+    setSubject("");
+    setStudentClass("");
+    setStart("");
   }
  
   return (
@@ -69,7 +74,10 @@ const NewTest = ({ inputs, title }) => {
                     type={input.type}
                     placeholder={input.placeholder}
                     id={input.id}
+                    value={info[input.id] || ""}
+                    className={errors[input.id] ? "error-input" : ""}
                   />
+                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
               ))}
 
@@ -77,14 +85,22 @@ const NewTest = ({ inputs, title }) => {
                 id="subject"
                 title="Select Course"
                 url={getFacultyData(user._id, "courses")}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setSubject(e.target.value);
+                }}
+                value={subject}
               />
 
               <Dropdown
                 id="sclass"
                 title="Select Class"
                 url={getFacultyData(user._id, "classes")}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setStudentClass(e.target.value);
+                }}
+                value={studentClass}
               />
 
               <DatePickerComponent
@@ -96,10 +112,7 @@ const NewTest = ({ inputs, title }) => {
             
             </form>
             <div className="submitButton">
-            {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                editing update...
-              </div>}
+            {loading && <Loader text="Creating Test..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Test</button>
             </div>

@@ -11,6 +11,8 @@ const useFetch = (url) => {
         const fetchData = async () => {
             setLoading(true);
             try {
+                // Add a 5 minute (300000 ms) delay for debugging
+                // await new Promise(resolve => setTimeout(resolve, 300000));
                 const res = await axios.get(`${process.env.REACT_APP_API_URL}${url}`);
                 setData(res.data.data);
             } catch (err) {

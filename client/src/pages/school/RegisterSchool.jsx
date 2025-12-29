@@ -1,10 +1,10 @@
 import './registerSchool.scss'
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useState } from 'react';
-import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
+import Loader from '../../components/loader/Loader';
 
 const RegisterSchool = () => {
   const navigate = useNavigate();
@@ -31,6 +31,13 @@ const RegisterSchool = () => {
     } finally {
       setLoading(false);
     }
+  }
+
+  const handleClear = (e) => {
+    e.preventDefault();
+    setInfo({});
+    setFile("");
+    window.location.reload(false);
   }
 
   return (
@@ -128,10 +135,8 @@ const RegisterSchool = () => {
 
         
           <div className="submitButton">
-            {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                registering school...
-              </div>}
+            {loading && <Loader text="Registering School..." />}
+            <button className="clear-btn" onClick={handleClear}>Clear</button>
             <button onClick={handleClick} className="lButton">
               Register School
             </button>

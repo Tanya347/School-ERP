@@ -5,7 +5,7 @@
     width: 300px;
     color: black;
     max-height: fit-content;
-    background: #fff;
+    background: var(--white);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 100;
@@ -26,7 +26,7 @@
 
     .notification-item {
       padding: 10px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 2px solid var(--turquoise);
       margin-bottom: 5px;
 
       h4 {
@@ -38,18 +38,18 @@
       p {
         margin: 0;
         font-size: 13px;
-        color: #555;
+        color: var(--gray);
       }
 
       &.unread {
-        background-color: #e8f7f9;
+        background-color: var(--light-turquoise-two);
       }
     }
 
     .no-notifications {
       text-align: center;
-      font-size: 13px;
-      color: #888;
+      font-size: 15px;
+      color: var(--gray);
       padding: 20px 0;
     }
 
@@ -58,7 +58,7 @@
         button {
             width: 100%;
             padding: 8px;
-            background-color: #48A6A7;
+            background-color: var(--mild-turquoise);
             margin-bottom: 5px;
             border: none;
             font-weight: 700;
@@ -67,8 +67,30 @@
             outline: none;
 
             &:hover {
-                background-color: #006A71;
+                background-color: var(--tree-green);
             }
         }
     }
   }
+
+.app.dark .notifications-dropdown {
+    background-color: var(--light-black);
+    border: 1px solid var(--light-gray);
+    color: var(--white);
+    .unread {
+      background-color: var(--dark-tree-green);
+    }
+    .notifications-button {
+      button {
+        background-color: var(--tree-green);
+
+        &:hover {
+            background-color: var(--mild-turquoise);
+        }
+      }
+    }
+
+    .no-notifications {
+      color: var(--light-gray);
+    }
+}

@@ -4,11 +4,23 @@ import 'react-calendar/dist/Calendar.css';
 import './calender.scss'; // Custom styles for highlighting and popup
 import useFetch from '../../config/service/useFetch';
 import { getDatatableURL } from '../../config/endpoints/get';
+import { toast } from "react-toastify";
 
 const EventCalender = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState(null);
-  const eventData = useFetch(getDatatableURL("events")).data
+  const { data: eventData, error: eventError } = useFetch(getDatatableURL("events"));
+
+  if (eventError) {
+    toast.error(
+      <div>
+        <strong>Events Fetch Failed</strong>
+        <div>{eventError.response?.data?.message || eventError.message || 'Unknown error'}</div>
+      </div>
+    );
+  }
+
+  console.log(eventData)
 
   useEffect(() => {
     if (!eventData) return;

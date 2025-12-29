@@ -13,13 +13,13 @@ import AddClass from "../../pages/class/AddClass.jsx";
 import ExportButton from "../excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../popUps/ConfirmatinPopup.jsx";
 import Tooltip from "../../components/tooltip/Tooltip.jsx";
-import Loader from "../loaders/loader/Loader.jsx";
+import Loader from "../loader/Loader.jsx";
 
 const Datatable = ({ column, name }) => {
   const location = useLocation();
   const path = location.pathname.split("/")[2];
   const { user } = useAuth();
-  const { data, loading } = useFetch(getDatatableURL(path, user));
+  const { data, loading, error } = useFetch(getDatatableURL(path, user));
   const [list, setList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [popupName, setPopupName] = useState("");
@@ -28,6 +28,15 @@ const Datatable = ({ column, name }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
+
+   if (error) {
+    toast.error(
+      <div>
+        <strong>Data Fetch Failed</strong>
+        <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (path === "queries") {
@@ -170,7 +179,7 @@ const Datatable = ({ column, name }) => {
   return (
     <div className="datatable-container">
       {loading ? (
-       <Loader />
+       <Loader text="Loading data..." type="global"/>
       ) : (
         <div className="datatable">
           <div className="datatableHeader">

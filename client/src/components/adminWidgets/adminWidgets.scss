@@ -15,6 +15,7 @@
             border-radius: 10px;
             padding: 10px;
             display: flex;
+            position: relative;
             gap: 10px;
             height: 80px;
             background-color: var(--white);
@@ -28,6 +29,12 @@
 
             @media screen and (max-width: 450px){
                 width: 80%;
+            }
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.05);
+                transition: all 0.3s ease-in-out;
             }
 
             .leftContainer {
@@ -55,5 +62,19 @@
             }
         }
 
+    }
+}
+
+.app.dark .widgets {
+    .AdminWidgets {
+        .widget {
+            background-color: #1E201E;
+
+            .rightContainer {
+                h4 {
+                    color: white;
+                }
+            }
+        }
     }
 }

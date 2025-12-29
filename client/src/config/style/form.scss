@@ -1,6 +1,8 @@
 .new {
   width: 100%;
   display: flex;
+  height: 100%;
+  min-height: 100vh;
 
   .newContainer {
     width: 100%;
@@ -13,15 +15,30 @@
       margin: 20px;
       display: flex;
 
+      .react-datepicker {
+
+        .react-datepicker__time-list-item, .react-datepicker__day {
+          &:hover {
+            background-color: var(--light-turquoise) !important;
+
+          }
+        }
+
+        .react-datepicker__time-list-item--selected, .react-datepicker__day--selected {
+          background-color: var(--tree-green) !important;
+          color: white !important;
+          font-weight: bold;
+        }
+      }
+
       h1 {
-        color: rgb(178, 177, 177);
+        color: var(--heading-gray);
         font-size: 20px;
       }
 
       .right {
         flex: 2;
         padding: 0px 20px;
-
 
         .left {
           width: 100%;
@@ -74,10 +91,15 @@
             width: 40%;
 
             .error-message {
-              color: #DC2525;
+              color: var(--red);
               font-size: 15px;
               font-weight: 500;
               margin-top: 3px;
+            }
+
+            .error-input {
+              background-color: var(--light-red);
+              color: var(--deep-red);
             }
 
             @media screen and (max-width: 600px) {
@@ -103,9 +125,13 @@
               width: 100%;
               padding: 10px;
               border: none;
-              border-bottom: 1px solid gray;
+              border-bottom: 1px solid var(--gray);
               transition: all 0.2s ease;
 
+              &:focus {
+                outline: none;
+                box-shadow: none;
+              }
             }
           }
         }
@@ -124,16 +150,20 @@
             padding: 5px 10px;
             cursor: pointer;
             font-weight: bold;
-            color: white;
-            background-color: rgb(232, 136, 136);
+            color: var(--white);
+            background-color: var(--mild-red);
+
+            &:hover {
+              background-color: var(--red);
+            }
           }
           
           .form-btn {
             width: 150px;
             padding: 10px;
             border: none;
-            background-color: #077A7D;
-            color: white;
+            background-color: var(--tree-green);
+            color: var(--white);
             font-weight: bold;
             cursor: pointer;
             margin-top: 20px;
@@ -149,4 +179,44 @@
       }
     }
   }
+}
+
+.app.dark .new {
+  .top, .bottom {
+    border: 0.5px solid var(--gray);
+  }
+
+  .clear-btn {
+    background-color: var(--red) !important;
+  }
+
+  .date-picker {
+    background-color: var(--light-black);
+    color: var(--white);
+  }
+  .formInput {
+    input {
+      background: var(--light-black);
+      border-bottom: 1px solid var(--white) !important;
+      color: var(--white);
+      outline: none;
+      box-shadow: none;
+
+      &:focus {
+        background: var(--light-black);
+        border-bottom: 1px solid var(--light-gray);
+        color: var(--white);
+      }
+    }
+
+
+    .error-message {
+      color: var(--mild-red) !important;
+    }
+    .error-input {
+      background-color: var(--brown) !important;
+      color: var(--light-red) !important;
+    }
+  }
+
 }

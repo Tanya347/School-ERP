@@ -6,16 +6,7 @@ import { toast } from "react-toastify";
 
 const SchoolInfo = ({schoolID}) => {
 
-    const { data, loading, error } = useFetch(getSingleData(schoolID, "schools"))
-
-    if (error) {
-      toast.error(
-        <div>
-          <strong>School Information Fetch Failed</strong>
-          <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
-        </div>
-      );
-    }
+  const { data, loading } = useFetch(getSingleData(schoolID, "schools"))
 
   return (
     <div className="school-info-container">

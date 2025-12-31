@@ -59,7 +59,7 @@ function toTitleCase(str) {
 return (
     <div className='navbar-container'>
         <div className="navbar-content">
-            <div className="left-container">
+            <div className="left-navbar-container">
                 <div className="logo">
                     <img src={schoolInfo.logo} alt="" />
                 </div>
@@ -67,7 +67,7 @@ return (
                     <h2>{toTitleCase(schoolInfo.name)}</h2>
                 </div>
             </div>
-            <div className="right-container">
+            <div className="right-navbar-container">
                 <div className="profile">
                     {user.role === "admin" ? ( <img src="https://i.ibb.co/MBtjqXQ/no-avatar.gif" alt="" /> ) : ( <img src={user.profilePicture} alt="" />)}
                 </div>

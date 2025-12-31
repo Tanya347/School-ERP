@@ -1,0 +1,153 @@
+.eventModal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.418);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 1000;
+
+  .mContainer {
+    background-color: white;
+    height: fit-content;
+    position: relative;
+    width: 70%;
+  }
+
+  .mEvents {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    p {
+      padding-top: 10px;
+
+      span {
+        font-weight: bold;
+        color: #48A6A7;
+      }
+    }
+  }
+
+  .mLeft {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      height: 300px;
+    }
+  }
+
+  .mRight {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mClose {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.699);
+    }
+  }
+
+  .mIcon {
+    margin-top: 10px;
+    color: #48A6A7;
+  }
+
+  .mTitle {
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    padding: 10px 0;
+  }
+
+  .mDesc {
+    color: rgba(0, 0, 0, 0.699);
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+
+  .mButton {
+    border: none;
+    padding: 10px 20px;
+    background-color: #006A71;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 80%;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #48A6A7;
+    }
+
+    &:last-child {
+      margin-bottom: 50px;
+    }
+  }
+
+  .crudButton {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    button {
+      padding: 5px 20px;
+      margin: 10px;
+      background-color: black;
+      color: white;
+      cursor: pointer;
+      border-radius: 20px;
+      font-weight: bolder;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        transform: translateY(-2px);
+        background-color: #424242;
+      }
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .mContainer {
+      width: 80%;
+    }
+
+    .mLeft,
+    .mRight {
+      width: 80%;
+    }
+
+    .mLeft img {
+      height: 300px;
+    }
+  }
+}
+
+.app.dark .eventModal {
+  .mContainer {
+    background-color: var(--light-black);
+    color: white;
+  }
+}

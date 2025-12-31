@@ -11,6 +11,6 @@
 }
 
 .app.dark select {
-    background-color: var(--light-black);
+    background-color: var(--light-black) !important;
     color: var(--white);
 }

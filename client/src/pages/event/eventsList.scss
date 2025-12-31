@@ -9,7 +9,7 @@
 
     .events-title {
       font-size: 30px;
-      color: #424242;
+      color: var(--gray);
       margin: 20px 0;
       font-weight: bold;
     }
@@ -31,7 +31,7 @@
             height: 450px;
             margin: 20px;
             box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.3);
-            background: white;
+            background: var(--white);
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -62,18 +62,18 @@
               h4 {
                 padding: 10px 0;
                 font-size: 1.3em;
-                color: #48A6A7;
+                color: var(--mild-turquoise);
                 z-index: 1;
               }
 
               h6 {
                 font-size: 0.8em;
-                color: black;
+                color: var(--black);
                 font-weight: bold;
                 padding: 5px 0;
 
                 span {
-                  color: #48A6A7;
+                  color: var(--mild-turquoise);
                   font-weight: bold;
                 }
               }
@@ -89,15 +89,15 @@
               }
 
               .upcoming {
-                background-color: #FFF0DD;
+                background-color: var(--light-yellow);
               }
 
               .ongoing {
-                background-color: #dbeef0;
+                background-color: var(--light-blue);
               }
 
               .past {
-                background-color: #e5e2e2;
+                background-color: var(--light-gray);
               }
 
               p {
@@ -113,7 +113,7 @@
                 padding: 8px 20px;
                 margin: 20px 0;
                 background: black;
-                color: white;
+                color: var(--white);
                 border: none;
                 border-radius: 20px;
                 outline: none;
@@ -124,7 +124,7 @@
 
                 &:hover {
                   transform: translateY(-2px);
-                  background-color: #424242;
+                  background-color: var(--gray);
                 }
               }
             }
@@ -136,4 +136,43 @@
         }
 
       }
+  }
+
+  .app.dark .events-list {
+    .events-title {
+      color: var(--light-gray);
+    }
+    .card {
+      background-color: var(--light-black);
+
+      .content {
+
+        p {
+          background-color: transparent;
+          color: white;
+        }
+
+        button {
+          background-color: var(--tree-green);
+          &:hover {
+            background-color: var(--turquoise);
+          }
+        }
+
+        .upcoming {
+          background-color: var(--dark-yellow);
+          color: var(--white);
+        }
+
+        .past {
+          background-color: var(--dark-gray);
+          color: var(--white);
+        }
+
+        .ongoing {
+          background-color: var(--dark-blue);
+          color: var(--white);
+        }
+      }
+    }
   }

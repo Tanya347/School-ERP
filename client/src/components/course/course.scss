@@ -7,7 +7,7 @@
     font-size: 20px;
     gap: 15px;
     text-align: center;
-    background-color: #dbeef0;
+    background-color: var(--light-turquoise);
     
     img{
       height: 100px;
@@ -16,10 +16,10 @@
     button {
       cursor: pointer;
       padding: 5px 10px;
-      background-color: #48A6A7;
+      background-color:var(--mild-turquoise);
       border: none;
       outline: none;
-      color: white;
+      color: var(--white);
       transition: ease-in-out all 0.3s;
 
       &:hover {
@@ -27,4 +27,8 @@
     }
     }
 
+  }
+
+  .app.dark .course {
+    background-color: var(--dark-tree-green);
   }

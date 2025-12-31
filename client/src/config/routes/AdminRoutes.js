@@ -13,8 +13,8 @@ import EditUpdate from "../../pages/update/EditUpdate";
 import EditCourse from "../../pages/course/EditCourse";
 import EditStudent from "../../pages/student/EditStudent";
 import EditFaculty from "../../pages/faculty/EditFaculty";
-import SingleFaculty from "../../pages/singleFaculty/SingleFaculty";
-import SingleStudent from '../../pages/singleStudent/SingleStudent';
+import FacultyProfile from "../../pages/profile/FacultyProfile";
+import StudentProfile from '../../pages/profile/StudentProfile';
 import Class from "../../pages/class/Class";
 import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
@@ -83,7 +83,7 @@ const AdminRoutes = () => {
           {/* single page for student */}
           <Route 
             path="students/single/:studentId" 
-            element={<SingleStudent type="Admin" />} 
+            element={<StudentProfile type="Admin" />} 
           />
           
           {/* edit page for student */}
@@ -110,7 +110,7 @@ const AdminRoutes = () => {
           {/* single page for faculty */}
           <Route 
             path="faculties/single/:facultyId" 
-            element={<SingleFaculty type="Admin" />} 
+            element={<FacultyProfile type="Admin" />} 
             />
 
           {/* edit page for faculty */}

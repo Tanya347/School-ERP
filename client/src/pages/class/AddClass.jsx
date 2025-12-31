@@ -45,13 +45,15 @@ const AddClass = ({ setOpen, facId }) => {
                         url={getCourseClasses}
                         onChange={(e) => {
                             setSclass(e.target.value);
-                            setClassIndex(e.target.selectedIndex - 1); // Subtract 1 to account for the placeholder option
+                            setClassIndex(e.target.selectedIndex - 1);
                         }}
+                        value={sclass}
                     />
                     {sclass && <Dropdown
                             title="Select Course"
                             options={classes[classIndex]?.subjects}
                             onChange={(e) => setCourse(e.target.value)}
+                            value={course}
                         />
                     }
                 </form>

@@ -9,13 +9,16 @@ import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
 import { useAuth } from "../../config/context/AuthContext";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader/Loader";
+import { handleChange as commonHandleChange } from "../../config/commons";
+import { validateUpdate} from "../../config/validators/update"
 
 const EditUpdate = ({ title }) => {
 
   const [noticeType, setNoticeType] = useState("general");
   const location = useLocation();
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const id = location.pathname.split("/")[4];
   const {user} = useAuth();
   const { data } = useFetch(getSingleData(id, "updates"))
@@ -38,7 +41,7 @@ const EditUpdate = ({ title }) => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateUpdate)
     if(e.target.id === 'updateType') {
       setNoticeType(e.target.value)
     }
@@ -65,62 +68,66 @@ const EditUpdate = ({ title }) => {
 
   return (
     <div className="new">
-      <div className="newContainer">
+      {loading ? (
+        <Loader text="Loading data..." type="global" />
+      ) : (
+        <>
+          <div className="newContainer">
+            <div className="top">
+              <h1>{title}</h1>
+            </div>
+            <div className="bottom">
+              <div className="right">
+                <form>
 
-        <div className="top">
-          <h1>{title}</h1>
-        </div>
-        <div className="bottom">
-          <div className="right">
-            <form>
+                  {updateInputs.map((field) => (
+                    <div className="formInput" key={field.id}>
+                      <label>{field.label}</label>
+                      <input
+                        id={field.id}
+                        type={field.type}
+                        placeholder={field.placeholder}
+                        onChange={handleChange}
+                        value={info[field.id] || ""}
+                        className={errors[field.id] ? "error-input" : ""}
+                      />
+                      {errors[field.id] && <span className="error-message">{errors[field.id]}</span>}
+                    </div>
+                  ))}
 
-              {updateInputs.map((field) => (
-                <div className="formInput" key={field.id}>
-                  <label>{field.label}</label>
-                  <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    onChange={handleChange}
-                    value={info[field.id] || ""}
-                  />
+                  <div className="formInput">
+                      <label>Choose Notice Type</label>
+                      <select
+                        onChange={handleChange}
+                        id="updateType">
+                          <option key={1} value="general" selected={info?.updateType === "general"}>General</option>
+                          <option key={2} value="specific" selected={info?.updateType === "specific"}>Specific</option>
+                      </select>
+                  </div>
+
+                  {noticeType && noticeType === "specific" && <div className="formInput">
+                    <label>Class</label>
+                    <select
+                      id="class"
+                      onChange={handleChange}
+                    >
+                      {
+                        classes?.map((d, index) => (
+                          <option value={d._id} key={index} selected={info?.class?._id === d._id}>{d.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>}
+                </form>
+                <div className="submitButton">
+                  {loading && <Loader text="editing update..."/>}
+                  <button onClick={handleClick} id="submit" className="form-btn">Edit Update</button>
                 </div>
-              ))}
-
-              <div className="formInput">
-                  <label>Choose Notice Type</label>
-                  <select
-                    onChange={handleChange}
-                    id="updateType">
-                      <option key={1} value="general" selected={info?.updateType === "general"}>General</option>
-                      <option key={2} value="specific" selected={info?.updateType === "specific"}>Specific</option>
-                  </select>
               </div>
-
-              {noticeType && noticeType === "specific" && <div className="formInput">
-                <label>Class</label>
-                <select
-                  id="class"
-                  onChange={handleChange}
-                >
-                  {
-                    classes?.map((d, index) => (
-                      <option value={d._id} key={index} selected={info?.class?._id === d._id}>{d.name}</option>
-                    ))
-                  }
-                </select>
-              </div>}
-            </form>
-            <div className="submitButton">
-              {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                editing update...
-              </div>}
-              <button onClick={handleClick} id="submit" className="form-btn">Edit Update</button>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

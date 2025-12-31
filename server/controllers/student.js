@@ -39,45 +39,73 @@ export const registerStudent = catchAsync(async (req, res, next) => {
 })
 
 export const updateStudent = catchAsync(async (req, res, next) => {
-  let profilePicture = null;
-  let cloud_id = null;
-  
-   const student = await Student.findById(req.params.id);
-  
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
+  const student = await Student.findById(req.params.id);
+
+  if (!student) {
+    return res.status(404).json({ message: "Student not found" });
+  }
+
+  let profilePicture = student.profilePicture;
+  let cloud_id = student.cloud_id;
+
+  if (req.file) {
+    if (student.cloud_id) {
+      await cloudinary.uploader.destroy(student.cloud_id);
     }
-    if (req.file) {
-      if (student.cloud_id) {
-        await cloudinary.uploader.destroy(student.cloud_id);
-      }
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "erp_portal",
-      });
-      profilePicture = result.secure_url;
-      cloud_id = result.public_id;
-  
-      fs.unlinkSync(req.file.path);
-    } else {
-      profilePicture = student.profilePicture;
-      cloud_id = student.cloud_id;
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "erp_portal",
+    });
+
+    profilePicture = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+  }
+
+  const allowedFields = [
+    "name",
+    "email",
+    "username",
+    "studentPhone",
+    "studentAddress",
+    "dob",
+    "gender",
+    "passedOut",
+    "class"
+  ];
+
+  const updates = {};
+
+  allowedFields.forEach((field) => {
+    if (req.body[field] !== undefined) {
+      updates[field] = req.body[field];
     }
-  
-    const updatedStudent = await Student.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...req.body,
-        profilePicture,
-        cloud_id,
-      },
-      { new: true }
-    );
+  });
+
+  if (updates.class && typeof updates.class === "object") {
+    updates.class = updates.class._id;
+  }
+
+  updates.profilePicture = profilePicture;
+  updates.cloud_id = cloud_id;
+
+  const updatedStudent = await Student.findByIdAndUpdate(
+    req.params.id,
+    updates,
+    {
+      new: true,
+      runValidators: true
+    }
+  );
+
   res.status(200).json({
     status: "success",
     data: updatedStudent,
     message: "Student has been updated successfully!"
   });
 });
+
 export const deleteStudent = catchAsync(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) return res.status(404).json({ message: "Student not found" });

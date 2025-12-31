@@ -32,28 +32,13 @@ const AdminHome = () => {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}${getSession(user.schoolID)}`)
           setSessionName(response.data.data.name)
         } catch (err) {
-          toast.error(
-            <div>
-              <strong>Session Fetch Failed</strong>
-              <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
-            </div>
-          );
           console.error("Error fetching session data:", err)
         }
       }
     }
     fetchSession()
   }, [user, user.schoolID]);
-  const { data: genderCount, error: genderCountError } = useFetch(schoolGenderCount);
-
-  if (genderCountError) {
-    toast.error(
-      <div>
-        <strong>Gender Count Fetch Failed</strong>
-        <div>{genderCountError.response?.data?.message || genderCountError.message || 'Unknown error'}</div>
-      </div>
-    );
-  }
+  const { data: genderCount } = useFetch(schoolGenderCount);
 
   const handleClick = async (e) => {
     setConfirmMessage(`Are you sure you want to start a new session?`);

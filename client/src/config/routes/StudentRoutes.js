@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import EditStudent from '../../pages/student/EditStudent';
-import SingleStudent from '../../pages/singleStudent/SingleStudent';
+import StudentProfile from '../../pages/profile/StudentProfile';
 import List from '../../pages/list/List';
 import Events from '../../pages/event/Events';
 import StudentHome from '../../pages/home/StudentHome';
@@ -33,7 +33,7 @@ const StudentRoutes = () => {
        <Layout>
         <Routes>
             <Route index element={<StudentHome />} />
-            <Route path="single/:id" element={<SingleStudent type="Main" />} />
+            <Route path="single/:id" element={<StudentProfile type="Main" />} />
             <Route path="edit/:id" element={<EditStudent title="Edit Profile" />} />
             <Route path="tasks" element={<List column={taskColumns} name="Task" />} />
             <Route path="tests" element={<List column={testColumns} name="Test" />} />

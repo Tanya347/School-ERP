@@ -6,21 +6,11 @@ import PeopleIcon from '@mui/icons-material/People';
 import useFetch from '../../config/service/useFetch';
 import { getAllCount } from '../../config/endpoints/get';
 import { Link } from 'react-router-dom';
-import { toast } from "react-toastify";
 import Loader from '../loader/Loader';
 
 const AdminWidgets = () => {
 
-    const {data, loading, error} = useFetch(getAllCount)
-
-    if (error) {
-      toast.error(
-        <div>
-          <strong>School Information Fetch Failed</strong>
-          <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
-        </div>
-      );
-    }
+    const {data, loading } = useFetch(getAllCount)
 
 return (
     <div className="AdminWidgets">

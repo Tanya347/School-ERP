@@ -19,7 +19,7 @@ const Datatable = ({ column, name }) => {
   const location = useLocation();
   const path = location.pathname.split("/")[2];
   const { user } = useAuth();
-  const { data, loading, error } = useFetch(getDatatableURL(path, user));
+  const { data, loading } = useFetch(getDatatableURL(path, user));
   const [list, setList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [popupName, setPopupName] = useState("");
@@ -28,15 +28,6 @@ const Datatable = ({ column, name }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
-
-   if (error) {
-    toast.error(
-      <div>
-        <strong>Data Fetch Failed</strong>
-        <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
-      </div>
-    );
-  }
 
   useEffect(() => {
     if (path === "queries") {

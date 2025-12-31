@@ -1,0 +1,106 @@
+.modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.418);
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  .mContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--white);
+    padding: 20px;
+    width: 400px;
+    height: fit-content;
+    position: relative;
+
+    .mClose {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        color: rgba(0, 0, 0, 0.699);
+      }
+    }
+
+    .mTasks {
+      p {
+        padding-top: 10px;
+
+        span {
+          font-weight: bold;
+          color: var(--turquoise);
+        }
+      }
+
+      .syll {
+        height: 500px;
+
+        @media screen and (max-width: 600px) {
+          height: 300px;
+        }
+      }
+    }
+
+    .mTitle {
+      font-weight: 500;
+      text-transform: capitalize;
+      font-size: 1.5rem;
+      padding: 10px 0;
+    }
+
+    .mDesc {
+      color: rgba(0, 0, 0, 0.699);
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+
+    .mButton {
+      width: 100%;
+      margin-top: 20px;
+
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+
+      background-color: var(--tree-green);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--turquoise);
+      }
+    }
+  }
+}
+
+.app.dark .modal {
+    .mContainer {
+        border: 1px solid var(--gray);
+        background-color: var(--light-black);
+        .mDesc {
+            color: rgba(255, 255, 255, 0.699);
+        }
+        .mClose {
+            &:hover {
+                color: rgba(255, 255, 255, 0.699);
+            }
+        }
+    }
+}

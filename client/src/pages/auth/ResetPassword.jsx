@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from "../../config/context/AuthContext";
 import axios from 'axios';
 import { resetPasswordURL } from '../../config/endpoints/post';
+import Loader from '../../components/loader/Loader';
 
 const ResetPassword = ({type}) => {
     const location = useLocation();
@@ -15,6 +16,7 @@ const ResetPassword = ({type}) => {
         password: undefined,
         passwordConfirm: undefined
     })
+    const [loading, setLoading] = useState(false);
     const {logout} = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -25,6 +27,7 @@ const ResetPassword = ({type}) => {
 
     const handleClick = async(e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const res = await axios.patch(resetPasswordURL(type, token), passwordCreds, {withCredentials: true})
             if(res.data.status === "success") {
@@ -39,6 +42,8 @@ const ResetPassword = ({type}) => {
             toast.error(errorMessage);
             console.error(err);
             return err;
+        } finally {
+            setLoading(false);
         }
     }
     
@@ -81,6 +86,7 @@ const ResetPassword = ({type}) => {
                     </span>
                 </div>
 
+                {loading && <Loader text="changing password"/>}
                 <button onClick={handleClick} className="lButton">
                     Reset Password
                 </button>

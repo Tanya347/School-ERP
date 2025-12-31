@@ -100,3 +100,17 @@
         background-color: #424242;
     }
 }
+
+.app.dark .popupModal {
+
+    .popupContainer {
+        background-color: var(--light-black);
+        color: var(--white);
+    }
+    .popupButton {
+        background-color: var(--tree-green);
+        &:hover {
+            background-color: var(--turquoise);
+        }
+    }
+}

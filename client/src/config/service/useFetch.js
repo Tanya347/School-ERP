@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 axios.defaults.withCredentials = true;
 
@@ -17,6 +18,12 @@ const useFetch = (url) => {
                 setData(res.data.data);
             } catch (err) {
                 setError(err);
+                toast.error(
+                    <div>
+                        <strong>Fetch Failed</strong>
+                        <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
+                    </div>
+                );
             }
             setLoading(false);
         };

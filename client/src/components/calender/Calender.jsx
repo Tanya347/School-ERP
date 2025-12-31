@@ -20,8 +20,6 @@ const EventCalender = () => {
     );
   }
 
-  console.log(eventData)
-
   useEffect(() => {
     if (!eventData) return;
     const rawevents = eventData.map((event) => ({

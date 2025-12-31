@@ -1,4 +1,4 @@
-import "./modal.css"
+import "./modal.scss"
 
 import CancelIcon from '@mui/icons-material/Cancel';
 import useFetch from "../../config/service/useFetch"

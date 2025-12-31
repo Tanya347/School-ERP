@@ -6,10 +6,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
 import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
-import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { studentInputs } from "../../config/formsource/studentInputs";
 import { useAuth } from "../../config/context/AuthContext";
+import Loader from "../../components/loader/Loader";
+import { validateStudent } from "../../config/validators/student";
+import { handleChange as commonHandleChange } from "../../config/commons";
 
 const EditUser = ({ title }) => {
 
@@ -22,10 +24,12 @@ const EditUser = ({ title }) => {
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
-  const { data } = useFetch(getSingleData(id, "single-student"))
+
+  const { data, loading } = useFetch(getSingleData(id, "single-student"))
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
-  const [sending, setSending] = useState(false)
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setInfo(data)
@@ -34,7 +38,7 @@ const EditUser = ({ title }) => {
 
   const navigate = useNavigate();
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateStudent);
   }
 
   const handleClick = async (e) => {
@@ -54,91 +58,96 @@ const EditUser = ({ title }) => {
 
   return (
     <div className="new">
-      <div className="newContainer">
-        <div className="top">
-          <h1>{title}</h1>
-        </div>
-        <div className="bottom">
-          <div className="right">
-          <div className="left">
-            <img
-              src={
-                (file)
-                  ? URL.createObjectURL(file)
-                  : (info?.profilePicture) ? info.profilePicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-              }
-              alt=""
-            />
-
-            <div className="formInput">
-                <label htmlFor="file">
-                  Profile Picture: <DriveFolderUploadIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
+      {loading ? (
+        <Loader text="Loading data..." type="global" />
+      ) : (
+        <>
+          <div className="newContainer">
+            <div className="top">
+              <h1>{title}</h1>
+            </div>
+            <div className="bottom">
+              <div className="right">
+              <div className="left">
+                <img
+                  src={
+                    (file)
+                      ? URL.createObjectURL(file)
+                      : (info?.profilePicture) ? info.profilePicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                  }
+                  alt=""
                 />
-              </div>
-          </div>
 
-            <form>
-
-              {studentInputs.map((field) => (
-                (field.editAccess === user.role || field.editAccess === "both") && <div className="formInput" key={field.id}>
-                  <label>{field.label}</label>
-                    <input 
-                      id={field.id}
-                      type={field.type}
-                      value={info[field.id] || ''}
-                      onChange={handleChange}
-                      placeholder={field.placeholder}
+                <div className="formInput">
+                    <label htmlFor="file">
+                      Profile Picture: <DriveFolderUploadIcon className="icon" />
+                    </label>
+                    <input
+                      type="file"
+                      id="file"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      style={{ display: "none" }}
                     />
                   </div>
-              ))}
-
-              <div className="formInput">
-                <label>Gender</label>
-                <select
-                  id="gender"
-                  onChange={handleChange}
-                  value={info.gender}
-                >
-                  <option value={0}>-</option>
-                  <option value={"Female"}>Female</option>
-                  <option value={"Male"}>Male</option>
-                </select>
               </div>
 
-              {user.role==="admin" && <div className="formInput">
-                <label>Class</label>
-                <select
-                  id="class"
-                  onChange={handleChange}
-                  value={info.class?.name}
-                >
-                  {
-                    classes?.map((d, index) => (
-                      <option value={d._id} key={index}>{d.name}</option>
-                    ))
-                  }
-                </select>
-              </div>}
+                <form>
 
-            </form>
+                  {studentInputs.map((field) => (
+                    (field.editAccess === user.role || field.editAccess === "both") && <div className="formInput" key={field.id}>
+                      <label>{field.label}</label>
+                        <input 
+                          id={field.id}
+                          type={field.type}
+                          value={info[field.id] || ''}
+                          onChange={handleChange}
+                          placeholder={field.placeholder}
+                          className={errors[field.id] ? "error-input" : ""}
+                        />
+                        {errors[field.id] && <span className="error-message">{errors[field.id]}</span>}
+                      </div>
+                  ))}
 
-            <div className="submitButton">
-              {sending && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                updating student data...
-              </div>}
-              <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit Student</button>
+                  <div className="formInput">
+                    <label>Gender</label>
+                    <select
+                      id="gender"
+                      onChange={handleChange}
+                      value={info.gender}
+                    >
+                      <option value={0}>-</option>
+                      <option value={"Female"}>Female</option>
+                      <option value={"Male"}>Male</option>
+                    </select>
+                  </div>
+
+                  {user.role==="admin" && <div className="formInput">
+                    <label>Class</label>
+                    <select
+                      id="class"
+                      onChange={handleChange}
+                      value={info.class?.name}
+                    >
+                      {
+                        classes?.map((d, index) => (
+                          <option value={d._id} key={index}>{d.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>}
+
+                </form>
+
+                <div className="submitButton">
+                  {sending && <Loader text="editing student..."/>}
+                  <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit Student</button>
+                </div>
+              
+              </div>
             </div>
-          
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

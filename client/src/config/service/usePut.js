@@ -7,10 +7,16 @@ export const editElementWithPicture = async(file, info, element, url) => {
         formData.append("file", file);
     }
 
+    console.log(info)
+
      Object.entries(info).forEach(([key, value]) => {
         formData.append(key, value);
     });
 
+    for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
+    
     try {
         const res = await axios.put(url, formData, {
             headers: {

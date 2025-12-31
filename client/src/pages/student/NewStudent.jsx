@@ -31,11 +31,10 @@ const NewUser = ({ inputs, title }) => {
     
     try {
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 10000));
-      // const res = await createElementWithPicture(file, info, "student", postURLs("student", "register"));
-      // if(res.data.status === 'success') {
-      //   navigate(`/admin/students/single/${res.data.data.user._id}`);
-      // }
+      const res = await createElementWithPicture(file, info, "student", postURLs("student", "register"));
+      if(res.data.status === 'success') {
+        navigate(`/admin/students/single/${res.data.data.user._id}`);
+      }
     }
     catch(err) {
       console.log(err);

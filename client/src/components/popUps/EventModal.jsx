@@ -1,4 +1,4 @@
-import "./eventModal.css"
+import "./eventModal.scss"
 
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Link } from "react-router-dom"

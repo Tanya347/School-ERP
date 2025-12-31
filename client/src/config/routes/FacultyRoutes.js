@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import NewTask from '../../pages/task/NewTask';
 import List from '../../pages/list/List';
-import SingleFaculty from "../../pages/singleFaculty/SingleFaculty";
+import FacultyProfile from "../../pages/profile/FacultyProfile";
 import EditFaculty from '../../pages/faculty/EditFaculty';
 import EditTask from '../../pages/task/EditTask';
 import EditTest from '../../pages/test/EditTest';
@@ -65,7 +65,7 @@ const FacultyRoutes = () => {
           {/* profile page for faculty */}
           <Route
             path="single/:id"
-            element={<SingleFaculty type="Main" />}
+            element={<FacultyProfile type="Main" />}
             />
 
           {/* edit profile page for faculty */}

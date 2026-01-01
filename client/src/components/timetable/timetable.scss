@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    min-height: 100vh;
+    height: fit-content;
 
     h1 {
         text-align: center;
@@ -12,34 +14,79 @@
     .table-container {
         margin: 30px 0;
         padding: 20px;
-        border: 5px solid #E5D9F2;
+        border: 2px dashed var(--heading-gray);
+        border-radius: 20px;
+        position: relative;
+        min-width: 80%;
+        width: fit-content;
+        min-height: 500px;
+        height: fit-content;
         
         th {
-            padding: 10px;
-            background-color: #474E93;
-            color: white;
+            background: var(--table-heading);
+            color: var(--light-black);
+            font-weight: 600;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
         }
 
         td {
             padding: 10px;
-            background-color: #F5EFFF;
+            text-align: center;
         }
+
+        .period-slot {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 10px 12px;
+            min-height: 60px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .period-slot:hover {
+            border-color: var(--table-border-gray);
+        }
+
+        .existing {
+            border-radius: 12px;
+            padding: 10px 12px;
+            min-height: 60px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            background: var(--table-cell-gray);
+        }
+
+        .period-day {
+            padding: 10px;
+            background-color: var(--light-turquoise);
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .free {
+            color: var(--heading-gray);
+            font-size: 0.9rem;
+        }
+
 
         .existing-slot {
 
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+            text-align: center;
+            gap: 4px;
             
             p {
-                font-weight: bold;
-                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 18px;
+                color: var(--light-black);
             }
 
             span {
-                font-weight: lighter;
+                font-size: 15px;
+                color: var(--gray);
             }
         }
         
@@ -51,6 +98,35 @@
             .period-time {
                 font-weight: lighter;
             }
+        }
+    }
+}
+
+.app.dark .timetable-container {
+
+    th {
+        background-color: var(--light-black);
+        color: var(--light-gray);
+    }
+
+    .period-day {
+        background-color: var(--dark-tree-green);
+    }
+
+    td {
+        background-color: var(--black);
+    }
+
+    .existing {
+        background-color: var(--light-black);
+    }
+
+    .existing-slot {
+        p {
+            color: var(--white);
+        }
+        span {
+            color: var(--light-gray);
         }
     }
 }

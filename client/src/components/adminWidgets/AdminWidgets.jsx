@@ -6,7 +6,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import useFetch from '../../config/service/useFetch';
 import { getAllCount } from '../../config/endpoints/get';
 import { Link } from 'react-router-dom';
-import Loader from '../loader/Loader';
+import Loader from '../shared/loader/Loader';
 
 const AdminWidgets = () => {
 

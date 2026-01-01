@@ -5,7 +5,7 @@ import { useAuth } from '../../config/context/AuthContext';
 import axios from 'axios';
 import useFetch from '../../config/service/useFetch';
 import { getFacultyData } from '../../config/endpoints/get';
-import GenericTable from '../../components/table/Table';
+import GenericTable from '../../components/shared/table/Table';
 import { studentColumns } from '../../config/tableSource/studentsColumns';
 
 
@@ -37,18 +37,22 @@ const ViewStudents = () => {
   
   return (
     <div className='view-students'>
+      <h1 className='student-title'>Students</h1>
       <div className="view-students-container">
         <div className="classes-button">
           {
             classes?.map((cl, index) => (
-              <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
+              <button
+                key={index}
+                onClick={() => handleClick(cl)}
+                className={sclass === cl._id ? "selected-class" : ""}
+              >{cl.name}</button>
             ))
           }
         </div>
         {sclass ? 
           (
             <>
-              <h1>Students</h1>
               <h1>Class: {className}</h1>
             </>
           ) : (
@@ -57,7 +61,9 @@ const ViewStudents = () => {
             </>
           )
         }
-        {sclass && stuData && stuData?.students && <GenericTable columns={studentColumns} rows={stuData.students} rowKey='id' />}
+        <div className="studentlist-container">
+          {sclass && stuData && stuData?.students && <GenericTable columns={studentColumns} rows={stuData.students} rowKey='id' />}
+        </div>
       </div>
     </div>
   )

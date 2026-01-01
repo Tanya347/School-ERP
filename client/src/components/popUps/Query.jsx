@@ -5,7 +5,7 @@ import useFetch from '../../config/service/useFetch';
 import { getClassDetails } from '../../config/endpoints/get';
 import { postURLs } from '../../config/endpoints/post';
 import { toast } from "react-toastify"
-import Popup from './Popup';
+import Popup from '../shared/popup/Popup';
 
 const Query = ({ setOpen, user }) => {
 

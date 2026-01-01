@@ -4,26 +4,28 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
+import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElementWithPicture } from "../../config/service/usePut";
-import { facultyInputs } from "../../config/formsource/facultyInputs";
+import { studentInputs } from "../../config/formsource/studentInputs";
 import { useAuth } from "../../config/context/AuthContext";
-import { validateFaculty } from "../../config/validators/faculty"
+import Loader from "../../components/shared/loader/Loader";
+import { validateStudent } from "../../config/validators/student";
 import { handleChange as commonHandleChange } from "../../config/commons";
-import Loader from "../../components/loader/Loader";
 
-const EditFaculty = ({ title }) => {
+const EditUser = ({ title }) => {
 
   const location = useLocation();
   let id;
-  const { user } = useAuth();
-  if (user.role === "admin")
+ 
+  const classes = useFetch(getClasses).data
+  const {user} = useAuth();
+  if(user.role === "admin") 
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
 
-  const { data, loading } = useFetch(getSingleData(id, "faculties"))
+  const { data, loading } = useFetch(getSingleData(id, "single-student"))
   const [info, setInfo] = useState({});
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false);
@@ -36,16 +38,16 @@ const EditFaculty = ({ title }) => {
 
   const navigate = useNavigate();
   const handleChange = (e) => {
-    commonHandleChange(e, setInfo, setErrors, validateFaculty);
+    commonHandleChange(e, setInfo, setErrors, validateStudent);
   }
 
   const handleClick = async (e) => {
     e.preventDefault();
     setSending(true)
     try {
-      const res = await editElementWithPicture(file, info, "faculty", putURLs("faculties", id));
+      const res = await editElementWithPicture(file, info, "student", putURLs("students", id));
       if(res.data.status === 'success') {
-        navigate(`/admin/faculties/single/${id}`)
+        navigate(`/admin/students/single/${id}`);
       }
     } catch(err) {
       console.error(err);
@@ -71,7 +73,7 @@ const EditFaculty = ({ title }) => {
                   src={
                     (file)
                       ? URL.createObjectURL(file)
-                      : (info.profilePicture) ? info.profilePicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                      : (info?.profilePicture) ? info.profilePicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                   }
                   alt=""
                 />
@@ -91,9 +93,9 @@ const EditFaculty = ({ title }) => {
 
                 <form>
 
-                  {facultyInputs.map((field) => (
-                      (field.editAccess === user.role || field.editAccess === "both") && <div className="formInput" key={field.id}>
-                        <label>{field.label}</label>
+                  {studentInputs.map((field) => (
+                    (field.editAccess === user.role || field.editAccess === "both") && <div className="formInput" key={field.id}>
+                      <label>{field.label}</label>
                         <input 
                           id={field.id}
                           type={field.type}
@@ -119,12 +121,27 @@ const EditFaculty = ({ title }) => {
                     </select>
                   </div>
 
-                </form>
-                <div className="submitButton">
-                  {sending && <Loader text="editing faculty..." />}
-                  <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit User</button>
-                </div>
+                  {user.role==="admin" && <div className="formInput">
+                    <label>Class</label>
+                    <select
+                      id="class"
+                      onChange={handleChange}
+                      value={info.class?.name}
+                    >
+                      {
+                        classes?.map((d, index) => (
+                          <option value={d._id} key={index}>{d.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>}
 
+                </form>
+
+                <div className="submitButton">
+                  {sending && <Loader text="editing student..."/>}
+                  <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit Student</button>
+                </div>
               
               </div>
             </div>
@@ -135,4 +152,4 @@ const EditFaculty = ({ title }) => {
   );
 };
 
-export default EditFaculty;
+export default EditUser;

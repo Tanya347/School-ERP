@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElement } from "../../config/service/usePost";
-import Dropdown from "../../components/dropdown/Dropdown";
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 import { useAuth } from "../../config/context/AuthContext";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateUpdate } from "../../config/validators/update";
 

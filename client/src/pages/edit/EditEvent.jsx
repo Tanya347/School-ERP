@@ -6,7 +6,7 @@ import useFetch from "../../config/service/useFetch";
 import { putURLs } from "../../config/endpoints/put";
 import { getSingleData } from "../../config/endpoints/get";
 import { formatTime } from "../../config/commons";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 import { editElementWithPicture } from "../../config/service/usePut";
 import DatePicker from "react-datepicker";
 

@@ -1,4 +1,4 @@
-import "../../pages/table/tableWithoutAction.scss"
+import "../../components/table/tableWithoutAction.scss"
 
 export const attendanceColumns = () => {
     const columns = [

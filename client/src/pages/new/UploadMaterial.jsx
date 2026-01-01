@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import "../../config/style/form.scss";
-import Dropdown from '../../components/dropdown/Dropdown';
+import Dropdown from '../../components/shared/dropdown/Dropdown';
 import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';

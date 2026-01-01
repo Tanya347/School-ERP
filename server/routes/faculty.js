@@ -11,8 +11,8 @@ import {
   bulkDeleteFaculty
 } from "../controllers/faculty.js";
 import upload from "../utils/multer.js";
-import { restrictTo, protect } from "../controllers/auth.js";
-
+import { restrictTo, protect, updatePassword } from "../controllers/auth.js";
+import Faculty from "../models/Faculty.js";
 
 const router = express.Router();
 
@@ -25,6 +25,7 @@ router.get("/classes/:id", protect(), getFacultyClasses);
 router.get("/courses/:id", protect(), getFacultyCourses);
 router.patch('/addCourse/:facId/:classId/:courseId', protect(), restrictTo("admin"), AddNewCourse);
 router.post("/bulk/delete", protect(), restrictTo("admin"), bulkDeleteFaculty);
+router.patch("/updatePassword/:id", protect(), restrictTo("faculty"), updatePassword(Faculty));
 
 export default router;
 

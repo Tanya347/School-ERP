@@ -3,12 +3,11 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import "../../config/style/form.scss";
 import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ClipLoader } from "react-spinners";
 import { materialInputs } from '../../config/formsource/materialInputs';
 import useFetch from '../../config/service/useFetch';
 import { editElementWithPicture } from '../../config/service/usePut';
 import { putURLs } from '../../config/endpoints/put';
-import Loader from '../../components/loader/Loader';
+import Loader from '../../components/shared/loader/Loader';
 import { validateMaterial }from "../../config/validators/material"
 import { handleChange as commonHandleChange } from '../../config/commons';
 

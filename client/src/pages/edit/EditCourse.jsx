@@ -11,7 +11,7 @@ import { editElementWithPicture } from "../../config/service/usePut";
 import { courseInputs } from "../../config/formsource/courseInputs"
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateCourse } from "../../config/validators/course"
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 
 const EditCourse = ({ title }) => {
   

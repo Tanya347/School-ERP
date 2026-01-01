@@ -3,7 +3,7 @@ import "./class.scss"
 import { Link } from 'react-router-dom';
 import useFetch from '../../config/service/useFetch';
 import { getClasses } from '../../config/endpoints/get';
-import Loader from '../../components/loader/Loader';
+import Loader from '../../components/shared/loader/Loader';
 
 const Class = () => {
 

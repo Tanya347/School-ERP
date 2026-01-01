@@ -1,4 +1,12 @@
 .attendance-info {
+    height: fit-content;
+    min-height: 100vh;
+    margin-left: 30px;
+    text-align: center;
+
+    .attendance-title {
+        margin-top: 30px;
+    }
 
     .attendance-info-container {
         display: flex;
@@ -11,31 +19,48 @@
             display: flex;
             padding: 20px;
             gap: 20px;
+            margin-top: 20px;
             align-items: center;
             justify-content: center;
             flex-direction: row;
-            width: 100%;
+            width: 50%;
+            -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+            box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+            border-radius: 10px;
 
             button {
-                border: none;
+                border: 1px solid var(--turquoise);
                 outline: none;
-                padding: 10px 20px;
-                background-color: #dbeef0;
+                padding: 15px 20px;
+                border-radius: 10px;
+                background-color: var(--white);
                 transition: all 0.3s ease-in-out;
                 cursor: pointer;
+                font-size: 1rem;
 
                 &:hover {
-                    background-color: #c6d6d8;
+                    background-color: var(--light-blue);
+                    color: var(--black);
                 }
+            }
+
+            .selected-class {
+                background-color: var(--turquoise);
+                color: var(--white);
             }
         }
 
         h1 {
             font-size: 1.1rem;
+            margin-top: 20px;
         }
 
         .attendance-dates-calender {
             width: 90%;
+
+            .rbc-event-content {
+                background-color: var(--tree-green);
+            }
 
             @media screen and (max-width: 600px) {
                 width: 100%;
@@ -68,8 +93,8 @@
                     cursor: pointer;
     
                     &:hover {
-                        background-color: red;
-                        color: white;
+                        background-color: var(--red);
+                        color: var(--white);
                     }
                 }
             }
@@ -79,13 +104,13 @@
                     border: none;
                     outline: none;
                     padding: 10px 20px;
-                    background-color: var(--light-green);
+                    background-color: var(--light-tree-green);
                     transition: all 0.3s ease-in-out;
                     cursor: pointer;
     
                     &:hover {
-                        background-color: green;
-                        color: white;
+                        background-color: var(--tree-green);
+                        color: var(--white);
                     }
                 }
             }

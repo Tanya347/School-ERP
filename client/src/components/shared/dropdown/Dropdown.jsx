@@ -1,4 +1,4 @@
-import useFetch from '../../config/service/useFetch';
+import useFetch from '../../../config/service/useFetch';
 import "./dropdown.scss"
 
 const Dropdown = ({
@@ -16,7 +16,7 @@ const Dropdown = ({
 
     return (
         <div className="formInput">
-            <label>{title}</label>
+            <label className='dropdown-label'>{title}</label>
             <select 
                 id={id}
                 onChange={onChange}

@@ -3,7 +3,8 @@ import { useAuth } from '../../config/context/AuthContext';
 import { getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
 import DownloadableCard from '../../components/downloadableCard/DownloadableCard';
-import GenericTable from '../../components/table/Table';
+import GenericTable from '../../components/shared/table/Table';
+import InforBanner from '../../components/shared/infoBanner/InforBanner';
 
 const Marksheet = () => {
 
@@ -41,9 +42,11 @@ const Marksheet = () => {
   return (
     <div className="marksheet-container">
       <h1 className="listTitle">Marks Obtained</h1>
-      <GenericTable columns={columns} rows={rows} rowKey="_id" />
-      {marks.allMarksPresent && 
-        <div>
+      <div className="marks-table-container">
+        <GenericTable columns={columns} rows={rows} rowKey="_id" />
+      </div>
+      {marks.allMarksPresent ?
+        (<div>
           <h1>Marksheet</h1>
           <DownloadableCard
             subtitle="Final Examination Marksheet"
@@ -53,7 +56,15 @@ const Marksheet = () => {
             tableData={marks}
             onDownloadName={`${user.name}_Marksheet.pdf`}
           />
-        </div>
+        </div>) : (
+          <div className="info-container">
+            <InforBanner
+              type="info"
+              header="Marksheet Not Generated"
+              description="Marksheet is not generated yet as all marks have not been released."
+            ></InforBanner>
+          </div>
+        )
       }
     </div>
   )

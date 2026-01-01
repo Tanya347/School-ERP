@@ -9,7 +9,7 @@ import { postURLs } from '../../config/endpoints/post'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 import { createElement } from '../../config/service/usePost'
-import InforBanner from '../../components/infoBanner/InforBanner'
+import InforBanner from '../../components/shared/infoBanner/InforBanner'
 
 const MarkAttendance = () => {
 

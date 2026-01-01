@@ -152,12 +152,11 @@ const DownloadableCard = ({
           </div>
         </div>
       </div>
-
-      {tableData?.length > 0 && (
+      
         <button className="download-btn" onClick={handleDownloadPDF}>
           Download PDF
         </button>
-      )}
+      
     </div>
   );
 };

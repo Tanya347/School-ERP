@@ -5,7 +5,7 @@ import Course from "../../components/course/Course";
 
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 
 const FacultyProfile = ({ type }) => {
 
@@ -18,21 +18,6 @@ const FacultyProfile = ({ type }) => {
     id = location.pathname.split("/")[4];
   const { data, loading } = useFetch(getSingleData(id, "faculties"))
 
-  const lightColors = [
-    'var(--light-blue)',
-    'var(--light-pink)',
-    'var(--light-yellow)',
-    'var(--light-green)',
-    'var(--light-red)'
-  ];
-
-  const darkColors = [
-    'var(--dark-blue)',
-    'var(--dark-purple)',
-    'var(--golden)',
-    'var(--tree-green)',
-    'var(--deep-red)'
-  ];
   // used to navigate to a certain link
   const navigate = useNavigate();
 

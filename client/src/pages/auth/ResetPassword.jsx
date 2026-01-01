@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from "../../config/context/AuthContext";
 import axios from 'axios';
 import { resetPasswordURL } from '../../config/endpoints/post';
-import Loader from '../../components/loader/Loader';
+import Loader from '../../components/shared/loader/Loader';
 
 const ResetPassword = ({type}) => {
     const location = useLocation();
@@ -17,7 +17,7 @@ const ResetPassword = ({type}) => {
         passwordConfirm: undefined
     })
     const [loading, setLoading] = useState(false);
-    const {logout} = useAuth();
+    const {logout, user} = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
 
@@ -29,7 +29,7 @@ const ResetPassword = ({type}) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.patch(resetPasswordURL(type, token), passwordCreds, {withCredentials: true})
+            const res = await axios.patch(resetPasswordURL(type, token, user.role), passwordCreds, {withCredentials: true})
             if(res.data.status === "success") {
                 toast.success("Password changed successfully!");
                 if(type === 'admin') {
@@ -51,7 +51,7 @@ const ResetPassword = ({type}) => {
         <div className='reset-password-container'>
             <div className="reset-input-container">
                 <h1>Reset Password</h1>
-                <label htmlFor="password">Enter {type==='admin' && 'Old'} Password</label>
+                <label htmlFor="password">{type==='change' && 'Old'} Password</label>
                 <div className="password-input">
                     <input
                         type={showPassword ? "text" : "password"}
@@ -68,7 +68,7 @@ const ResetPassword = ({type}) => {
                         {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                     </span>
                 </div>
-                <label htmlFor="passwordConfirm">{type !== 'admin' && 'Confirm '}Password</label>
+                <label htmlFor="passwordConfirm">{type !== 'change' && 'Confirm '}New Password</label>
                 <div className="password-input">
                     <input
                         type={showPassword ? "text" : "password"}

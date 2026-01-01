@@ -10,10 +10,10 @@ import { getDatatableURL } from "../../config/endpoints/get.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
 import { toast } from "react-toastify";
 import AddClass from "../../pages/class/AddClass.jsx";
-import ExportButton from "../excelButton/ExcelButton.jsx";
-import ConfirmPopup from "../popUps/ConfirmatinPopup.jsx";
-import Tooltip from "../../components/tooltip/Tooltip.jsx";
-import Loader from "../loader/Loader.jsx";
+import ExportButton from "../shared/excelButton/ExcelButton.jsx";
+import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
+import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
+import Loader from "../shared/loader/Loader.jsx";
 
 const Datatable = ({ column, name }) => {
   const location = useLocation();

@@ -3,7 +3,7 @@ import "../../config/style/form.scss"
 import { createElement } from "../../config/service/usePost";
 import { useState } from 'react'
 import { postURLs } from "../../config/endpoints/post";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 import { validateClass } from "../../config/validators/class";
 import { handleChange as commonHandleChange } from "../../config/commons";
 

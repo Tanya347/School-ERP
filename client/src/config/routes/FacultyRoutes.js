@@ -2,25 +2,25 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 
-import NewTask from '../../pages/task/NewTask';
-import List from '../../pages/list/List';
+import NewTask from '../../pages/new/NewTask';
+import List from '../../components/list/List';
 import FacultyProfile from "../../pages/profile/FacultyProfile";
-import EditFaculty from '../../pages/faculty/EditFaculty';
-import EditTask from '../../pages/task/EditTask';
-import EditTest from '../../pages/test/EditTest';
-import NewTest from '../../pages/test/NewTest';
+import EditFaculty from '../../pages/edit/EditFaculty';
+import EditTask from '../../pages/edit/EditTask';
+import EditTest from '../../pages/edit/EditTest';
+import NewTest from '../../pages/new/NewTest';
 import Events from '../../pages/event/Events';
 import ViewStudents from '../../pages/viewStudents/ViewStudents';
 import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
 import AddMarks from '../../pages/marks/AddMarks';
 import ViewMarks from '../../pages/marks/ViewMarks';
-import TableWithoutAction from "../../pages/table/TableWithoutAction"
+import TableWithoutAction from "../../components/table/TableWithoutAction"
 import ViewTestMarks from '../../pages/test/ViewTestMarks';
 import Layout from '../../components/sidebar/Layout';
-import NewUpdate from '../../pages/update/NewUpdate';
-import EditUpdate from '../../pages/update/EditUpdate';
-import UploadMaterial from '../../pages/materials/UploadMaterial';
+import NewUpdate from '../../pages/new/NewUpdate';
+import EditUpdate from '../../pages/edit/EditUpdate';
+import UploadMaterial from '../../pages/new/UploadMaterial';
 
 import { taskInputs } from '../formsource/taskInputs';
 import { testInputs } from '../formsource/testInputs';
@@ -37,6 +37,7 @@ import { materialColumns } from '../datatablesource/materialColumns';
 import { useAuth } from '../../config/context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
 import FacultyHome from '../../pages/home/FacultyHome';
+import ResetPassword from '../../pages/auth/ResetPassword';
 
 const FacultyRoutes = () => {
 
@@ -217,6 +218,12 @@ const FacultyRoutes = () => {
             path="events"
             element={<EventsList type="Faculty"/>}
             />
+
+          {/* edit password */}
+          <Route
+            path="updatePassword/:facultyId"
+            element={<ResetPassword type="change"/>}
+          />
         </Routes>
         </Layout>
       </RequireFaculty>

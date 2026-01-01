@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElementWithPicture } from "../../config/service/usePost";
-import Loader from "../../components/loader/Loader";
-import Dropdown from "../../components/dropdown/Dropdown";
+import Loader from "../../components/shared/loader/Loader";
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 import { validateCourse } from "../../config/validators/course";
 import { handleChange as commonHandleChange } from "../../config/commons";
 

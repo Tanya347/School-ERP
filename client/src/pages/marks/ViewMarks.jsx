@@ -52,7 +52,11 @@ const ViewMarks = () => {
         <div className="classes-button">
           {
             courses?.map((cl, index) => (
-              <button key={index} onClick={() => handleClick(cl)}>{cl.subjectCode}</button>
+              <button
+                key={index}
+                onClick={() => handleClick(cl)}
+                className={course === cl._id ? "selected-class" : ""}
+              >{cl.subjectCode}</button>
             ))
           }
         </div>

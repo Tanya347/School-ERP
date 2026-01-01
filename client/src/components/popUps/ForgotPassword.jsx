@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import CancelIcon from '@mui/icons-material/Cancel';
-import './popup.scss'
+import '../shared/popup/popup.scss'
 import { forgotPaswordURL } from '../../config/endpoints/post';
 import axios from 'axios';
 import { toast } from 'react-toastify';

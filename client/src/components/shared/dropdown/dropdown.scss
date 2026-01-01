@@ -1,0 +1,28 @@
+.formInput {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .dropdown-label {
+        color: var(--dark-gray);
+    }
+    
+    select {
+        background-color: #F5F5F5;
+        max-width: 300px;
+        padding: 12px 15px;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+}
+
+.app.dark .formInput {
+    select {
+        background-color: var(--light-black) !important;
+        color: var(--white);
+    }
+
+    .dropdown-label {
+        color: var(--light-gray);
+    }
+}

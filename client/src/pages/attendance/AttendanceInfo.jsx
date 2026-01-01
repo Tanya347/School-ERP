@@ -113,11 +113,17 @@ const AttendanceInfo = () => {
 
   return (
     <div className="attendance-info">
+        <h1 className="attendance-title">Attendance</h1>
         <div className="attendance-info-container">
             <div className="classes-button">
                 {
                     classes?.map((cl, index) => (
-                        <button key={index} onClick={() => handleClick(cl)}>{cl.name}</button>
+                        <button
+                            key={index}
+                            onClick={() => handleClick(cl)}
+                            className={sclass && sclass === cl._id ? 'selected-class' : ''}
+
+                        >{cl.name}</button>
                     ))
                 }
             </div>

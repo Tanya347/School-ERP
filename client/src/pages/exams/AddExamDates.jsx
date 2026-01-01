@@ -1,49 +1,62 @@
 import { useEffect, useState } from 'react';
-import Dropdown from '../../components/dropdown/Dropdown';
+import Dropdown from '../../components/shared/dropdown/Dropdown';
 import { getClasses } from '../../config/endpoints/get';
-import DatePickerComponent from "../../components/datepicker/Datepicker";
+import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import './addExamDates.scss';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
+import EventBusyIcon from '@mui/icons-material/EventBusy';
+import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
 
 const AddExamDates = () => {
   const [selectedClass, setSelectedClass] = useState('');
   const [courses, setCourses] = useState([]);
   const [examDates, setExamDates] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const handleClassSelection = (e) => {
     setSelectedClass(e.target.value);
     setExamDates({});
+    setCourses([]);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      if (selectedClass) {
-        try {
-          const examRes = await axios.get(
-            process.env.REACT_APP_API_URL + `/courses/exam/${selectedClass}`,
-            { withCredentials: true }
-          );
-          if (examRes.data.status === "success") {
-            setCourses(examRes.data.examDates);
-            // Populate examDates state if examDate exists for any course
-            const initialExamDates = {};
-            examRes.data.examDates.forEach(course => {
-              if (course.examDate) {
-                initialExamDates[course._id] = new Date(course.examDate);
-              }
-            });
-            setExamDates(initialExamDates);
-          }
-        } catch (err) {
-          console.error(err);
+      if (!selectedClass) return;
+
+      try {
+        const examRes = await axios.get(
+          process.env.REACT_APP_API_URL + `/courses/exam/${selectedClass}`,
+          { withCredentials: true }
+        );
+
+        if (examRes.data.status === "success") {
+          const examList = examRes.data.data.examDates || [];
+
+          setCourses(examList);
+
+          const initialExamDates = {};
+          examList.forEach(course => {
+            if (course.examDate) {
+              initialExamDates[course._id] = new Date(course.examDate);
+            }
+          });
+
+          setExamDates(initialExamDates);
         }
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to fetch exam dates");
       }
     };
+
     fetchData();
-  }, [selectedClass, examDates]);
+  }, [selectedClass]);
+
 
   const handleDateChange = (courseId, date) => {
     setExamDates((prev) => ({ ...prev, [courseId]: date }));
@@ -77,22 +90,27 @@ const AddExamDates = () => {
 
   const clearExamDates = async () => {
     if(!selectedClass) return;
-    setLoading(true);
-    try {
-      const res = await axios.delete(process.env.REACT_APP_API_URL + `/courses/exam/clear/${selectedClass}`, { withCredentials: true });
-      if(res.data.status === 'success') {
-        setExamDates({});
-        toast.success("Exam dates cleared successfully");
+    setConfirmMessage(`Are you sure you want to clear all timetable records for this class?`);
+    setConfirmAction(() => async () => {
+      setLoading(true);
+      try {
+        const res = await axios.delete(process.env.REACT_APP_API_URL + `/courses/exam/clear/${selectedClass}`, { withCredentials: true });
+        if(res.data.status === 'success') {
+          setExamDates({});
+          toast.success("Exam dates cleared successfully");
+        }
       }
-    }
-    catch (err) {
-      const errorMessage = err.response?.data?.message || `Failed to clear exam dates`;
-      toast.error(errorMessage);
-      console.error(err);
-      return err;
-    } finally {
-      setLoading(false);
-    }
+      catch (err) {
+        const errorMessage = err.response?.data?.message || `Failed to clear exam dates`;
+        toast.error(errorMessage);
+        console.error(err);
+        return err;
+      } finally {
+        setLoading(false);
+        setShowConfirm(false);
+      }
+    })
+    setShowConfirm(true);
   }
 
   return (
@@ -104,9 +122,10 @@ const AddExamDates = () => {
           title="Choose Class"
           url={getClasses}
           onChange={handleClassSelection}
+          value={selectedClass}
         />
       </div>
-      {selectedClass && (
+      {selectedClass && courses.length > 0 ? (
         <>
         <table className='exam-dates-table' cellSpacing={10}>
           <thead>
@@ -137,18 +156,38 @@ const AddExamDates = () => {
             ))}
           </tbody>
         </table>
-        { loading && <div className="create-loader">
-                    <ClipLoader color="black" size={30} />
-                    adding dates...
-                  </div>}
-                  <button onClick={submitExamDates} className="form-btn">Create Exam Plan</button>
-        
-        {loading && <div className="create-loader">
-                    <ClipLoader color="black" size={30} />
-                    clearing dates...
-                  </div>}
-                  <button onClick={clearExamDates} className='form-btn danger-btn'>Clear Exam Dates</button>
+
+        <div className="buttons-container">
+          { loading && <div className="create-loader">
+                      <ClipLoader color="black" size={30} />
+                      adding dates...
+                    </div>}
+                    <button onClick={submitExamDates} className="form-btn">Create Exam Plan</button>
+          
+          {loading && <div className="create-loader">
+                      <ClipLoader color="black" size={30} />
+                      clearing dates...
+                    </div>}
+                    <button onClick={clearExamDates} className='form-btn danger-btn'>Clear Exam Dates</button>
+        </div>
         </>
+      ) : (
+              <>
+                <div className="exam-dates-table">
+                  <div className="no-selection">
+                    <EventBusyIcon className='no-class-icon'/>
+                    {selectedClass ? (<><p>no courses available for this class</p></>) : (<><p>please select a class to view it's timetable</p></>)}
+                  </div>
+                </div>
+              </>
+            )}
+      
+      {showConfirm && (
+        <ConfirmPopup
+          message={confirmMessage}
+          onConfirm={confirmAction}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
     </div>
   )

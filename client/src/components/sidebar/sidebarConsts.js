@@ -33,103 +33,103 @@ export const sidebarConsts = {
             title: "Students",
             path: "/admin/students",
             icon: GroupIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Faculties",
             path: "/admin/faculties",
             icon: PersonOutlineIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Updates",
             path: "/admin/updates",
             icon: NotificationsIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Updates",
             path: "/faculty/updates",
             icon: NotificationsIcon,
-            user: "faculty",
+            roles: ["faculty"],
         },
         {
             title: "Updates",
             path: "/student/updates",
             icon: NotificationsIcon,
-            user: "student",
+            roles: ["student"],
         },
         {
             title: "Courses",
             path: "/admin/courses",
             icon: CollectionsBookmarkIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Classes",
             path: "/admin/classes",
             icon: SchoolIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: 'Calender',
             getPath: (user) => `/${user.role}/calender`,
             icon: CalendarMonthIcon,
-            user: 'both'
+            roles: ['student', 'faculty']
         },
         {
             title: "Attendance",
             path: "/faculty/attendance",
             icon: CoPresentIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
         {
             title: "Students",
             path: '/faculty/class/students',
             icon: GroupsIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
         {
             title: "Marks",
             path: '/faculty/marks',
             icon: AssessmentIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
         {
             title: "Tasks",
             getPath: (user) => `/${user.role}/tasks`,
             icon: TaskIcon,
-            user: 'both'
+            roles: ['student', 'faculty']
         },
         {
             title: "Tests",
             getPath: (user) => `/${user.role}/tests`,
             icon: NoteAddIcon,
-            user: 'both'
+            roles: ['student', 'faculty']
         },
         {
             title: "Admit Card",
             path: "/student/exams",
             icon: PendingActionsIcon,
-            user: 'student'
+            roles: ['student']
         },
         {
             title: "Marksheet",
             path: "/student/marks",
             icon: CollectionsBookmarkIcon,
-            user: 'student'
+            roles: ['student']
         },
         {
             title: "Materials",
             getPath: (user) => `/${user.role}/materials`,
             icon: FolderCopyIcon,
-            user: 'all'
+            roles: ['student','faculty','admin']
         },
         {
             title: "Events",
             getPath: (user) => `/${user.role}/events`,
             icon: EmojiEventsIcon,
-            user: 'all'
+            roles: ['student','faculty','admin']
         },
     ],
     create: [
@@ -137,91 +137,91 @@ export const sidebarConsts = {
             title: "Create Student",
             path: "/admin/students/new",
             icon: GroupAddIcon,
-            user: "admin",
+            roles:[ "admin"],
         },
         {
             title: "Create Faculty",
             path: "/admin/faculties/new",
             icon: PersonAddIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Create Update",
             path: "/admin/updates/new",
             icon: NotificationAddIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Create Update",
             path: "/faculty/updates/new",
             icon: NotificationAddIcon,
-            user: "faculty",
+            roles: ["faculty"],
         },
         {
             title: "Create Course",
             path: "/admin/courses/new",
             icon: BookIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Create Timetable",
             path: "/admin/timetables/new",
             icon: ViewTimelineIcon,
-            user: "admin",
+            roles: ["admin"],
         },
         {
             title: "Add Exam Dates",
             path: "/admin/exams/dates",
             icon: PendingActionsIcon,
-            user: "admin"
+            roles: ["admin"]
         },
         {
             title: "Add Material",
             path: "/admin/materials/new",
             icon: CreateNewFolderIcon,
-            user: "admin"
+            roles: ["admin"]
         },
         {
             title: "Add Material",
             path: "/faculty/materials/new",
             icon: CreateNewFolderIcon,
-            user: "faculty"
+            roles: ["faculty"]
         },
         {
             title: "Classes",
             path: "/admin/classes/new",
             icon: AddModeratorIcon,
-            user: "admin"
+            roles: ["admin"]
         },
         {
             title: "Create Event",
             path: "/admin/events/new",
             icon: AlarmAddIcon,
-            user: "admin"
+            roles: ["admin"]
         },
         {
             title: "Tasks",
             path: '/faculty/tasks/new',
             icon: AddTaskIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
         {
             title: "Tests",
             path: '/faculty/tests/new',
             icon: PostAddIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
         {
             title: "Attendance",
             path: '/faculty/attendance/new',
             icon: PlaylistAddIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
         {
             title: "Marks",
             path: '/faculty/marks/new',
             icon: AddchartIcon,
-            user: 'faculty'
+            roles: ['faculty']
         },
     ],
     user: [
@@ -229,13 +229,13 @@ export const sidebarConsts = {
             title: 'Change Password',
             getPath: (user) => `/${user.role}/updatePassword/${user._id}`,
             icon: LockResetIcon,
-            user: 'admin'
+            roles: ['admin', 'faculty', 'student']
         },
         {
             title: 'Edit School Info',
             getPath: (user) => `/${user.role}/school/edit/${user.schoolID}`,
             icon: EditIcon,
-            user: 'admin'
+            roles: ['admin']
         },
     ]
 }

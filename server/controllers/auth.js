@@ -178,27 +178,25 @@ export const resetPassword = (model) => catchAsync(async(req, res, next) => {
 })
 
 export const updatePassword = (model) => catchAsync(async (req, res, next) => {
-    // Find admin by id from params (token in URL)
-    const user = await model.findById(req.params.id).select('+password');
-    if (!user) {
-      return next(new AppError('No admin found with that ID.', 404));
-    }
 
-    // Check if current password matches (optional, depending on your flow)
-    // If you want to check old password, uncomment below:
-    if (!(await user.correctPassword(req.body.passwordConfirm, user.password))) {
-      return next(new AppError('The password provided is incorrect.', 401));
-    }
+  const user = await model.findById(req.params.id).select('+password');
+  if (!user) {
+    return next(new AppError('No admin found with that ID.', 404));
+  }
 
-    user.password = req.body.password;
-    await user.save();
+  if (!(await user.correctPassword(req.body.passwordConfirm, user.password))) {
+    return next(new AppError('The password provided is incorrect.', 401));
+  }
 
-    const token = signToken(user._id);
+  user.password = req.body.password;
+  await user.save();
 
-    res.status(200).json({
-      status: 'success',
-      user,
-      token
-    });
+  const token = signToken(user._id);
+
+  res.status(200).json({
+    status: 'success',
+    user,
+    token
   });
+});
 

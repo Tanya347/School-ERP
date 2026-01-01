@@ -5,15 +5,15 @@ import useFetch from "../../config/service/useFetch";
 import { getSession, schoolGenderCount } from "../../config/endpoints/get";
 import { useAuth } from "../../config/context/AuthContext";
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo";
-import { MyPieChart } from "../../components/graphs/PieChart";
+import { MyPieChart } from "../../components/shared/graphs/PieChart";
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import { postURLs } from "../../config/endpoints/post";
 import { toast } from "react-toastify";
 import EventCalender from "../../components/calender/Calender";
-import Loader from "../../components/loader/Loader.jsx";
-import ConfirmPopup from "../../components/popUps/ConfirmatinPopup.jsx";
+import Loader from "../../components/shared/loader/Loader.jsx";
+import ConfirmPopup from "../../components/shared/confirmationPopup/ConfirmatinPopup.jsx";
 
 // type specifies the admin side or user side 
 const AdminHome = () => {

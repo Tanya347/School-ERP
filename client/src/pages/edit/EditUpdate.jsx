@@ -9,7 +9,7 @@ import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
 import { useAuth } from "../../config/context/AuthContext";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateUpdate} from "../../config/validators/update"
 

@@ -5,10 +5,10 @@ import { useLocation } from 'react-router-dom'
 import Course from '../../components/course/Course'
 import { getClassDetails } from '../../config/endpoints/get'
 import EditIcon from '@mui/icons-material/Edit';
-import GenericTable from '../../components/table/Table'
+import GenericTable from '../../components/shared/table/Table'
 import { studentColumns } from '../../config/tableSource/studentsColumns'
 import AddClassTeacher from '../../components/popUps/AddClassTeacher'
-import Loader from '../../components/loader/Loader'
+import Loader from '../../components/shared/loader/Loader'
 
 const ViewClass = () => {
     const [openModal, setOpenModal] = useState(false);

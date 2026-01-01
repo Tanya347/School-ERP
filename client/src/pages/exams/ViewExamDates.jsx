@@ -5,7 +5,8 @@ import axios from 'axios';
 import { getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
 import DownloadableCard from '../../components/downloadableCard/DownloadableCard';
-import GenericTable from '../../components/table/Table';
+import GenericTable from '../../components/shared/table/Table';
+import InforBanner from "../../components/shared/infoBanner/InforBanner"
 
 const ViewExamDates = () => {
   const {user} = useAuth();
@@ -43,13 +44,15 @@ const ViewExamDates = () => {
   return (
     <div className='view-exam-dates-container'>
       <h1 className="listTitle">Exam Dates</h1>
-      <GenericTable
-        columns={columns}
-        rows={data?.examDates || []}
-        rowKey="_id"
-      />
+      <div className="exams-date-containers">
+        <GenericTable
+          columns={columns}
+          rows={data?.examDates || []}
+          rowKey="_id"
+        />
+      </div>
 
-      {data?.allExamsPlanned && (
+      {data?.allExamsPlanned ? (
         <div>
           <h1 className="listTitle">Admit Card</h1>
           <DownloadableCard
@@ -61,6 +64,14 @@ const ViewExamDates = () => {
             onDownloadName={`${user.name}_AdmitCard.pdf`}
           />
         </div>
+      ) : (
+          <div className="info-container">
+            <InforBanner
+              type="info"
+              header="Admit Card Not Generated"
+              description="Admin Card is not generated yet as all dates have not been released."
+            ></InforBanner>
+          </div>
       )}
     </div>
   )

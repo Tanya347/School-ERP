@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import './course.scss'
-import Popup from '../popUps/Popup'
+import Popup from '../shared/popup/Popup'
 
 const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
   const colors = ['var(--light-blue)', 'var(--light-pink)', 'var(--light-yellow)', 'var(--light-purple)', 'var(--light-red)']

@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import EditStudent from '../../pages/student/EditStudent';
+import EditStudent from '../../pages/edit/EditStudent';
 import StudentProfile from '../../pages/profile/StudentProfile';
-import List from '../../pages/list/List';
+import List from '../../components/list/List';
 import Events from '../../pages/event/Events';
 import StudentHome from '../../pages/home/StudentHome';
 import Layout from '../../components/sidebar/Layout';
@@ -16,6 +16,7 @@ import { useAuth } from '../context/AuthContext';
 import EventsList from '../../pages/event/EventsList';
 import ViewExamDates from '../../pages/exams/ViewExamDates';
 import Marksheet from '../../pages/marks/Marksheet';
+import ResetPassword from '../../pages/auth/ResetPassword';
 
 const StudentRoutes = () => {
     const { user } = useAuth();
@@ -43,6 +44,8 @@ const StudentRoutes = () => {
             <Route path="exams" element={<ViewExamDates />} />
             <Route path="marks" element={<Marksheet />}/>
             <Route path="updates" element={<List column={updateColumns} name="Update" />}/>
+            <Route path="updatePassword/:studentId" element={<ResetPassword type="change"/>}
+          />
         </Routes>
        </Layout>
     </RequireStudent>

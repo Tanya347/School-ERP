@@ -1,0 +1,17 @@
+.data-picker-component {
+    .react-datepicker-wrapper {
+
+        input {
+            padding: 12px 15px;
+            font-size: 1rem;
+        }
+    }
+}
+
+.app.dark .data-picker-component {
+    input {
+        background-color: var(--light-black);
+        color: var(--white);
+        border: none;
+    }
+}

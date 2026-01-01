@@ -5,8 +5,8 @@ import useFetch from '../../config/service/useFetch';
 import axios from 'axios';
 import { getCourseClasses } from '../../config/endpoints/get';
 import {toast} from "react-toastify"
-import Dropdown from '../../components/dropdown/Dropdown';
-import Popup from '../../components/popUps/Popup';
+import Dropdown from '../../components/shared/dropdown/Dropdown';
+import Popup from '../../components/shared/popup/Popup';
 
 const AddClass = ({ setOpen, facId }) => {
 

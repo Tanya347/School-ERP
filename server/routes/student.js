@@ -15,8 +15,9 @@ import {
   getGenderCount,
   bulkDeleteStudent
 } from "../controllers/student.js";
-import { restrictTo, protect } from "../controllers/auth.js";
+import { restrictTo, protect, updatePassword } from "../controllers/auth.js";
 import upload from "../utils/multer.js";
+import Student from "../models/Student.js"
 
 const router = express.Router();
 
@@ -34,6 +35,7 @@ router.delete('/marks/subject/:subjectid', protect(), clearMarksForSubject);
 router.delete('/marks/class/:classid', protect(), clearMarksForClass);
 router.get('/gender/count', protect(), restrictTo("admin"), getGenderCount);
 router.post("/bulk/delete", protect(), restrictTo("admin"), bulkDeleteStudent);
+router.patch("/updatePassword/:id", protect(), restrictTo("student"), updatePassword(Student));
 
 export default router;
 

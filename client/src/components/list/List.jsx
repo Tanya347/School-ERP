@@ -1,5 +1,5 @@
 import "./list.scss"
-import Datatable from "../../components/datatable/Datatable"
+import Datatable from "../datatable/Datatable"
 
 // column is specifications of the columns in the datatable that needs to be displayed, they are specified in source
 // name is the name of the datatable

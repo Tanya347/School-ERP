@@ -1,28 +1,28 @@
 // src/routes/adminRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import List from '../../pages/list/List';
-import NewStudent from "../../pages/student/NewStudent";
-import NewFaculty from "../../pages/faculty/NewFaculty";
-import NewCourse from "../../pages/course/NewCourse";
-import NewEvent from "../../pages/event/NewEvent"
-import NewClass from "../../pages/class/CreateClass";
-import NewUpdate from "../../pages/update/NewUpdate";
-import EditEvent from "../../pages/event/EditEvent"
-import EditUpdate from "../../pages/update/EditUpdate";
-import EditCourse from "../../pages/course/EditCourse";
-import EditStudent from "../../pages/student/EditStudent";
-import EditFaculty from "../../pages/faculty/EditFaculty";
+import List from '../../components/list/List';
+import NewStudent from "../../pages/new/NewStudent";
+import NewFaculty from "../../pages/new/NewFaculty";
+import NewCourse from "../../pages/new/NewCourse";
+import NewEvent from "../../pages/new/NewEvent"
+import NewClass from "../../pages/new/CreateClass";
+import NewUpdate from "../../pages/new/NewUpdate";
+import EditEvent from "../../pages/edit/EditEvent"
+import EditUpdate from "../../pages/edit/EditUpdate";
+import EditCourse from "../../pages/edit/EditCourse";
+import EditStudent from "../../pages/edit/EditStudent";
+import EditFaculty from "../../pages/edit/EditFaculty";
 import FacultyProfile from "../../pages/profile/FacultyProfile";
 import StudentProfile from '../../pages/profile/StudentProfile';
 import Class from "../../pages/class/Class";
 import AddClass from "../../pages/class/AddClass";
 import ViewClass from "../../pages/class/ViewClass";
-import TableWithoutAction from '../../pages/table/TableWithoutAction';
+import TableWithoutAction from '../../components/table/TableWithoutAction';
 import NewTimeTable from '../../pages/timetable/NewTimeTable';
-import UploadMaterial from '../../pages/materials/UploadMaterial';
+import UploadMaterial from '../../pages/new/UploadMaterial';
 import Layout from '../../components/sidebar/Layout';
-import EditMaterial from '../../pages/materials/EditMaterial';
+import EditMaterial from '../../pages/edit/EditMaterial';
 import Timetable from '../../components/timetable/Timetable';
 
 // Datatable Columns
@@ -282,7 +282,7 @@ const AdminRoutes = () => {
           {/* edit password */}
           <Route
             path="updatePassword/:adminId"
-            element={<ResetPassword type="admin"/>}
+            element={<ResetPassword type="change"/>}
           />
 
           <Route

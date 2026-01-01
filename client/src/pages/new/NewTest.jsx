@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { useAuth } from "../../config/context/AuthContext";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 import { createElement } from "../../config/service/usePost";
-import Dropdown from "../../components/dropdown/Dropdown";
-import DatePickerComponent from "../../components/datepicker/Datepicker";
+import Dropdown from "../../components/shared/dropdown/Dropdown";
+import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateTest } from "../../config/validators/test";
 

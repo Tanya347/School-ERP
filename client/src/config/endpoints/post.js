@@ -22,9 +22,9 @@ export const forgotPaswordURL = (type) => {
     return `${api_url}/auth/forgotPassword/${type}`
 }
 
-export const resetPasswordURL = (type, token) => {
-    if(type === 'admin')
-        return `${api_url}/${type}/updatePassword/${token}`
+export const resetPasswordURL = (type, token, role) => {
+    if(type === 'change')
+        return `${api_url}/${role}s/updatePassword/${token}`
     else
         return `${api_url}/auth/resetPassword/${type}/${token}`
 }

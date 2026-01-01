@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Dropdown from '../../components/dropdown/Dropdown';
+import Dropdown from '../../components/shared/dropdown/Dropdown';
 import { getClasses, getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
 import "./newTimeTable.scss";
 import { getClearTimetableForClass } from '../../config/endpoints/delete';
 import {toast} from "react-toastify"
 import { periodTimes, days, periods } from '../../config/commons';
+import EventBusyIcon from '@mui/icons-material/EventBusy';
+import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
+import Loader from '../../components/shared/loader/Loader';
 
 const NewTimeTable = () => {
 
@@ -14,6 +17,11 @@ const NewTimeTable = () => {
   const [slots, setSlots] = useState({});
   const [existingSlots, setExistingSlots] = useState({});
   const [clearedSlots, setClearedSlots] = useState({});
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [clearloading, setClearloading] = useState(false);
+  const [saveloading, setSaveloading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,49 +65,83 @@ const NewTimeTable = () => {
 
   const handleClassSelection = (e) => {
     setSelectedClass(e.target.value)
+    setCourses([]);
   }
 
   const handleClearAllSlots = async () => {
     if (!selectedClass) return;
-
-    try {
-      const res = await axios.delete(getClearTimetableForClass(selectedClass), { withCredentials: true });
-      
-      if(res.data.status === 'success') {
-        setClearedSlots({});
-        setSlots({});
-        setExistingSlots({});
-        toast.success(`Slots cleared successfully!`);
+    setConfirmMessage(`Are you sure you want to clear all timetable records for this class?`);
+    setConfirmAction(() => async () => {
+      setClearloading(true);
+      try {
+        const res = await axios.delete(getClearTimetableForClass(selectedClass), { withCredentials: true });
+        
+        if(res.data.status === 'success') {
+          setClearedSlots({});
+          setSlots({});
+          setExistingSlots({});
+          toast.success(`Slots cleared successfully!`);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Failed to clear slots.");
+      } finally {
+        setShowConfirm(false);
+        setClearloading(false);
       }
-    } catch (error) {
-      console.error(error);
-      alert("Failed to clear slots.");
-    }
+    });
+
+    setShowConfirm(true);
   };
 
   const handleSubmit = async () => {
     const slotData = [];
+    setSaveloading(true);
+    try {
+      for (const key in slots) {
+        const [day, period] = key.split("_");
+        const course = courses.find(c => c._id === slots[key]);
 
-    for (const key in slots) {
-      const [day, period] = key.split('_');
-      const course = courses.find(c => c._id === slots[key]);
+        if (!course) continue;
 
-      if (!course) continue;
+        const { start, end } = periodTimes[period];
 
-      const { start, end } = periodTimes[period];
+        slotData.push({
+          day,
+          period: Number(period),
+          startTime: start,
+          endTime: end,
+          sclass: selectedClass,
+          course: course._id,
+          faculty: course.teacher,
+        });
+      }
 
-      slotData.push({
-        day,
-        period: Number(period),
-        startTime: start,
-        endTime: end,
-        sclass: selectedClass,
-        course: course._id,
-        faculty: course.teacher
-      });
+      if (slotData.length === 0) {
+        toast.error("No timetable slots selected.");
+        return;
+      }
+
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/timetables/bulkCreate`,
+        { slots: slotData },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === "success") {
+        toast.success("Timetable created successfully!");
+        window.location.reload(); // Reload to reflect changes
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        "Failed to create timetable. Please try again.";
+
+      toast.error(errorMessage);
+      console.error(err);
+    } finally {
+      setSaveloading(false);
     }
-    await axios.post(process.env.REACT_APP_API_URL + '/timetables/bulkCreate', { slots: slotData });
-    window.location.reload(); // Reload to reflect changes
   };
 
   return (
@@ -112,10 +154,11 @@ const NewTimeTable = () => {
           title="Choose Class"
           url={getClasses}
           onChange={handleClassSelection}
+          value={selectedClass}
         />
       </div>
 
-      {selectedClass && (
+      {selectedClass && courses.length > 0 ? (
         <table className="timetable-table" cellSpacing={10} /* Add spacing between cells */>
           <thead>
             <tr>
@@ -128,7 +171,17 @@ const NewTimeTable = () => {
               <tr key={day}>
                 <td>{day}</td>
                 {periods.map(period => (
-                  <td key={period} style={{ padding: "8px 12px" }}>
+                  <td
+                    key={period}
+                    className={`slot-cell ${
+                      slots[`${day}_${period}`] ? "selected" : ""
+                    } ${
+                      existingSlots[`${day}_${period}`] &&
+                      !clearedSlots[`${day}_${period}`]
+                        ? "existing"
+                        : ""
+                    }`}
+                  >
                     {existingSlots[`${day}_${period}`] && !clearedSlots[`${day}_${period}`] && (
                       <div className="existing-slot">
                         <p>{existingSlots[`${day}_${period}`].courseName}</p>
@@ -144,7 +197,7 @@ const NewTimeTable = () => {
                       value={slots[`${day}_${period}`] || ''}
                       onChange={(e) => handleCourseChange(day, period, e.target.value)}
                     >
-                      <option value="">--</option>
+                      <option value="">-- Free --</option>
                       {courses.map(course => (
                         <option key={course._id} value={course._id}>
                           {course.name}
@@ -157,20 +210,43 @@ const NewTimeTable = () => {
             ))}
           </tbody>
         </table>
+      ) : (
+        <>
+          <div className="timetable-table">
+            <div className="no-selection">
+              <EventBusyIcon className='no-class-icon'/>
+              {selectedClass ? (<><p>no courses available for this class</p></>) : (<><p>please select a class to view it's timetable</p></>)}
+            </div>
+          </div>
+        </>
       )}
 
-      {selectedClass && (
-        <button
-          className="form-btn danger-btn"
-          onClick={handleClearAllSlots}
-          style={{ marginTop: "1rem", backgroundColor: "#dc3545", color: "white" }}
-        >
-          🧹 Clear All Slots for This Class
-        </button>
+      <div className="buttons-container">
+
+        {selectedClass && (
+          <>
+            {clearloading && <Loader text="clearing all slots..." />}
+            <button
+              className="form-btn danger-btn"
+              onClick={handleClearAllSlots}
+            >
+              Clear All Slots for this class
+            </button>
+          </>
+        )}
+        {selectedClass && (<>
+          {saveloading && <Loader text="saving slots..." />}
+          <button className='form-btn' onClick={handleSubmit}>Save Timetable</button>
+        </>)}
+      </div>
+
+      {showConfirm && (
+        <ConfirmPopup
+          message={confirmMessage}
+          onConfirm={confirmAction}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
-
-      {selectedClass && <button className='form-btn' onClick={handleSubmit}>Save Timetable</button>}
-
     </div>
   )
 }

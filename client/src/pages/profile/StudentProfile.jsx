@@ -5,12 +5,10 @@ import useFetch from "../../config/service/useFetch";
 import Course from "../../components/course/Course";
 import { getSingleData } from "../../config/endpoints/get";
 import 'react-circular-progressbar/dist/styles.css';
-import Loader from "../../components/loader/Loader";
-import { useState } from "react";
+import Loader from "../../components/shared/loader/Loader";
 
 const StudentProfile = ({ type }) => {
   const location = useLocation();
-  const [errors, setErrors] = useState({});
 
   let id;
   if (type === "Main")

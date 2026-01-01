@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import CancelIcon from '@mui/icons-material/Cancel';
-import './popup.scss'
+import '../shared/popup/popup.scss'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { addClassTeacher } from '../../config/endpoints/put';
-import Dropdown from '../dropdown/Dropdown';
+import Dropdown from '../shared/dropdown/Dropdown';
 
 const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
     const [teacher, setTeacher] = useState('');

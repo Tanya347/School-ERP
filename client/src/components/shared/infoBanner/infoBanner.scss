@@ -12,14 +12,14 @@
     }
     
 }
-.info {
+.infobanner-container.info {
     background-color: #FFE2AF;
     .icon {
         color: #c08b07;
     }
 }
 
-.error {
+.infobanner-container.error {
     background-color: #f2cdcd;
     .icon {
         color: #b50707;
@@ -27,9 +27,21 @@
     
 }
 
-.success {
+.infobanner-container.success {
     background-color: #B3FFCC;
     .icon {
         color: #078b3a;
+    }
+}
+
+.app.dark {
+    .infobanner-container.info {
+        background-color: var(--dark-yellow);
+    }
+    .infobanner-container.error {
+        background-color: var(--brown);
+    }
+    .infobanner-container.success {
+        background-color: var(--dark-tree-green);
     }
 }

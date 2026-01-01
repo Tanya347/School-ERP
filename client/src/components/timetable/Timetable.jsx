@@ -10,9 +10,10 @@ const Timetable = () => {
   const [existingSlots, setExistingSlots] = useState({});
   const [className, setClassName] = useState("");
   const classId = location.pathname.split("/")[3];
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios.get(process.env.REACT_APP_API_URL + getTimeTableURL(classId, 'class'))
       .then(res => {
         const timetableArray = res.data.data;
@@ -51,15 +52,22 @@ const Timetable = () => {
           <tbody>
             {days.map(day => (
               <tr key={day}>
-                <td>{day}</td>
+                <td className='period-day'>{day}</td>
                 {periods.map(period => (
-                  <td key={`${day}_${period}`} style={{ padding: "8px 12px" }}>
-                    <div className='period-slot'>
-                      {existingSlots[`${day}_${period}`] && (
+                  <td key={`${day}_${period}`} 
+                      className={`period-slot ${existingSlots[`${day}_${period}`]
+                        ? "existing"
+                        : ""}`}
+                    >
+                    <div>
+                      {existingSlots[`${day}_${period}`] ? (
                         <div className="existing-slot">
                           <p>{existingSlots[`${day}_${period}`].courseName}</p>
                           <span>({existingSlots[`${day}_${period}`].facultyName})</span>
                         </div>
+                      ) :(
+                        
+                        <div className='free'>-- free --</div>
                       )}
                     </div>
                   </td>

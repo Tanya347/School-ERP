@@ -9,7 +9,7 @@ import { DarkModeContext } from "./config/context/darkModeContext";
 
 // Common Pages
 import Login from "./pages/auth/Login";
-import Landing from "./pages/Landing/Landing";
+import Landing from "./pages/landing/Landing";
 import RegisterSchool from "./pages/school/RegisterSchool"
 import AdminRoutes from "./config/routes/AdminRoutes";
 import FacultyRoutes from "./config/routes/FacultyRoutes";

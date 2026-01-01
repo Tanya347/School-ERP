@@ -4,7 +4,7 @@ import { useState } from "react";
 import useFetch from "../../config/service/useFetch";
 import { useEffect } from "react";
 import './eventsList.scss'
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 
 const EventsList = ({type}) => {
     const [list, setList] = useState([]);

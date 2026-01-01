@@ -1,4 +1,11 @@
 .view-students {
+
+    text-align: center;
+
+    .student-title {
+        margin-top: 30px;
+    }
+
     .view-students-container {
         display: flex;
         flex-direction: column;
@@ -13,19 +20,31 @@
             align-items: center;
             justify-content: center;
             flex-direction: row;
-            width: 100%;
+            width: 50%;
+            margin: 20px 0;
+            -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+            box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+            border-radius: 10px;
 
             button {
-                border: none;
+                border: 1px solid var(--turquoise);
                 outline: none;
-                padding: 10px 20px;
-                background-color: #dbeef0;
+                padding: 15px 20px;
+                background-color: var(--white);
                 transition: all 0.3s ease-in-out;
                 cursor: pointer;
+                border-radius: 10px;
+                font-size: 1rem;
 
                 &:hover {
-                    background-color: #c6d6d8;
+                    background-color: var(--light-blue);
+                    color: black;
                 }
+            }
+
+            .selected-class {
+                background-color: var(--turquoise);
+                color: white;
             }
         }
 

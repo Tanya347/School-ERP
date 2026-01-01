@@ -1,20 +1,17 @@
 import "./mainSidebar.scss"
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useAuth } from "../../config/context/AuthContext";
-import { DarkModeContext } from "../../config/context/darkModeContext";
 import Query from '../popUps/Query';
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { sidebarConsts } from "./sidebarConsts";
-import Tooltip from "../tooltip/Tooltip";
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import Tooltip from "../shared/tooltip/Tooltip";
 
 
 const MainSidebar = () => {
 
-    const { Dispatch } = useContext(DarkModeContext);
     const { user } = useAuth();
     const [collapsed, setCollapsed] = useState(true);
     
@@ -24,6 +21,8 @@ const MainSidebar = () => {
     const handleToggle = () => {
         setCollapsed(!collapsed);
     }
+
+    const canAccess = (item, role) => item.roles?.includes(role);
 
     return (
         <div className={`navSidebarContainer ${collapsed ? 'collapsed' : ''}`}>
@@ -49,120 +48,63 @@ const MainSidebar = () => {
 
                     <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Information'}</p>
 
-                    {
-                        sidebarConsts?.information?.map((item) => (
-                            <> 
-                                {
-                                    (item.user === user.role || 
-                                    (item.user === 'both' && user.role !== 'admin')) && (
-                                        <Link
-                                            to={item.getPath ? item.getPath(user) : item.path}
-                                            style={{ textDecoration: "none" }}
-                                            key={item.title}
-                                        >
-                                            <li>
-                                                <Tooltip content={item.title} position="right">
-                                                    <item.icon className="icon" />
-                                                </Tooltip>
-                                                <span className="sidebar-item">{!collapsed && item.title}</span>
-                                            </li>
-                                        </Link>
-                                    )
-                                }
-                            </>
-                        ))
-                    }
-
-                    {
-                        sidebarConsts.information.map((item) => (
-                            <>
-                                {
-                                    (item.user === 'all') && (
-                                        <Link
-                                            to={item.getPath ? item.getPath(user) : item.path}
-                                            style={{ textDecoration: "none" }}
-                                            key={item.title}
-                                        >
-                                            <li>
-                                                <Tooltip content={item.title} position="right">
-                                                    <item.icon className="icon" />
-                                                </Tooltip>
-                                                <span className="sidebar-item">{!collapsed && item.title}</span>
-                                            </li>
-                                        </Link>
-                                    )
-                                }
-                            </>
-                        ))
-                    }
-
-                    {user.role !== 'student' && <p className={`title ${collapsed ? 'add-border' : ''}`}>{!collapsed && 'Create and Update'}</p>}
-
-                    {
-                        sidebarConsts?.create?.map((item) => (
-                            <>
-                                {user.role === item.user && <Link to={item.path} style={{textDecoration: "none"}}>
+                    {sidebarConsts.information
+                        .filter(item => canAccess(item, user.role))
+                            .map(item => (
+                                <Link
+                                    key={item.title}
+                                    to={item.getPath ? item.getPath(user) : item.path}
+                                    style={{ textDecoration: "none" }}
+                                >
                                     <li>
                                         <Tooltip content={item.title} position="right">
-                                            <item.icon className="icon" />
+                                        <item.icon className="icon" />
                                         </Tooltip>
                                         <span className="sidebar-item">{!collapsed && item.title}</span>
                                     </li>
-                                </Link>}
-                            </>
-                        ))
-                    }
-                    
+                                </Link>
+                    ))}
 
-                    {
-                        sidebarConsts?.user?.map((item) => (
-                            <>
-                                {
-                                    (item.user === 'admin' && user.role === 'admin') && (
-                                        <Link
-                                            to={item.getPath ? item.getPath(user) : item.path}
-                                            style={{textDecoration: "none"}}
-                                        >
-                                            <li>
-                                                <Tooltip content={item.title} position="right">
-                                                    <item.icon className="icon" />
-                                                </Tooltip>
-                                                <span className="sidebar-item">{!collapsed && item.title}</span>
-                                            </li>
-                                        </Link>
-                                    )
-                                }
-                            </>
-                        ))
-                    }
+                    {user.role !== 'student' && (
+                        <p className={`title ${collapsed ? 'add-border' : ''}`}>
+                            {!collapsed && 'Create and Update'}
+                        </p>
+                    )}
                     
-                    {/* Toggle Theme */}
-                    {collapsed ? (
-                            <>
-                            <p className={`title ${collapsed ? 'add-border' : ''}`}></p>
+                    {sidebarConsts.create
+                        .filter(item => canAccess(item, user.role))
+                        .map(item => (
+                            <Link key={item.title} to={item.path} style={{ textDecoration: "none" }}>
+                                <li>
+                                    <Tooltip content={item.title} position="right">
+                                    <item.icon className="icon" />
+                                    </Tooltip>
+                                    <span className="sidebar-item">{!collapsed && item.title}</span>
+                                </li>
+                            </Link>
+                    ))}
+
+                    <p className={`title ${collapsed ? 'add-border' : ''}`}>
+                        {!collapsed && 'Account'}
+                    </p>
+                    
+                    {sidebarConsts.user
+                        .filter(item => canAccess(item, user.role))
+                        .map(item => (
+                            <Link
+                            key={item.title}
+                            to={item.getPath(user)}
+                            style={{ textDecoration: "none" }}
+                            >
                             <li>
-                                <DarkModeIcon
-                                    className="icon"
-                                    onClick={() => Dispatch({ type: "TOGGLE" })}
-                                />
+                                <Tooltip content={item.title} position="right">
+                                <item.icon className="icon" />
+                                </Tooltip>
+                                <span className="sidebar-item">{!collapsed && item.title}</span>
                             </li>
-                            </>
-                        ) : (
-                            <>
-                                <p className={`title ${collapsed ? 'add-border' : ''}`}>Theme</p>
-                                <div className="theme">
-                                    <div
-                                        className="colorOption"
-                                        onClick={() => Dispatch({ type: "LIGHT" })}
-                                        ></div>
-                                    <div
-                                        className="colorOption"
-                                        onClick={() => Dispatch({ type: "DARK" })}
-                                        ></div>
-                                </div>
-                            </>
-                        )
-                    }
+                        </Link>
+                    ))}
+                                 
                 </ul>
             </motion.div >
 

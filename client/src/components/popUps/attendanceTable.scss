@@ -16,7 +16,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: white;
+        background-color: var(--white);
         padding: 20px;
         height: fit-content;
         position: relative;
@@ -47,13 +47,13 @@
                 border-radius: 5px;
             
                 &.present {
-                  color: green;
-                  background-color: rgba(0, 128, 0, 0.151);
+                  color: var(--dark-tree-green);
+                  background-color: var(--light-tree-green);
                 }
             
                 &.absent {
-                  color: goldenrod;
-                  background-color: rgba(189, 189, 3, 0.103);
+                  color: var(--golden);
+                  background-color: var(--light-yellow);
                 }
             }
         }
@@ -69,8 +69,8 @@
               cursor: pointer;
         
               &:hover {
-                  background-color: red;
-                  color: white;
+                  background-color: var(--red);
+                  color: var(--white);
               }
           }
           }

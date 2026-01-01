@@ -4,10 +4,10 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { createElementWithPicture } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/shared/loader/Loader";
 import { getClasses } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
-import Dropdown from "../../components/dropdown/Dropdown";
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 import { validateStudent } from "../../config/validators/student";
 import { handleChange as commonHandleChange } from "../../config/commons";
 

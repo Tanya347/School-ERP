@@ -11,7 +11,7 @@ const Lecture = ({id, type}) => {
 
   const today = new Date();
   const todayDay = today.toLocaleDateString('en-US', { weekday: 'long' });
-  // Filter slots for today and map to lectures format
+
   const lectures = Array.isArray(slots)
     ? slots
         .filter(slot => slot.day === todayDay)

@@ -40,7 +40,7 @@
             background-color: var(--light-purple);
             transition: all ease-in-out 0.2s;
             &:hover {
-                background-color: #caa8ea;
+                background-color: var(--light-purple);
             }
         }
 
@@ -48,15 +48,15 @@
             background-color: rgb(245, 245, 219);
             transition: all ease-in-out 0.2s;
             &:hover {
-                background-color: rgb(234, 234, 160);
+                background-color: var(--light-yellow);
             }
         }
 
         .facultyButton {
-            background-color: lightblue;
+            background-color: var(--light-blue);
             transition: all ease-in-out 0.2s;
             &:hover {
-                background-color: rgb(60, 207, 199);
+                background-color: var(--mild-turquoise);
             }
         }
 

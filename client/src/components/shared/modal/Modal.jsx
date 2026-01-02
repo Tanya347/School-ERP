@@ -15,18 +15,14 @@ import { putURLs } from "../../../config/endpoints/put";
 
 const Modal = ({ setOpen, id, type }) => {
 
-    // fetch the required data
-    const { data } = useFetch(getModalURL(type, id));
-
     const [info, setInfo] = useState({});
 
-    // set the usestate to the data user passed 
+    const { data } = useFetch(getModalURL(type, id));
+
     const handleChange = (e) => {
         setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     }
 
-
-    // post the usestate to database
     const handleClick = async (e) => {
         e.preventDefault();
         
@@ -42,7 +38,6 @@ const Modal = ({ setOpen, id, type }) => {
         catch (err) {
             const errorMessage = err.response?.data?.message || "Failed to create user. Please try again.";
             toast.error(errorMessage);
-            console.error(err);
             return err;
         }
     }

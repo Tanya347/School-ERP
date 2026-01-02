@@ -53,8 +53,6 @@ const NewCourse = ({ inputs, title }) => {
     setErrors({});
   }
 
-  console.log(info)
-
   return (
     <div className="new">
 

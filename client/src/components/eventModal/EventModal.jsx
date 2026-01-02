@@ -28,7 +28,6 @@ const EventModal = ({ setOpen, event, type }) => {
         } catch (err) {
             const errorMessage = err.response?.data?.message || "Failed to create user. Please try again.";
             toast.error(errorMessage);
-            console.error(err);
             return err;
         }
     };

@@ -17,10 +17,12 @@ const NewUpdate = ({ inputs }) => {
   const [info, setInfo] = useState({});
   const [noticeType, setNoticeType] = useState("general");
   const [sclass, setSclass] = useState("");
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const {user} = useAuth();
   const [errors, setErrors] = useState({});
+  
+  const navigate = useNavigate();
+
+  const {user} = useAuth();
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateUpdate);
@@ -61,12 +63,6 @@ const NewUpdate = ({ inputs }) => {
     setErrors({});
     setSclass("");
   }
-
-  // Ensure noticeType is always reflected in info.updateType
-  // Sync noticeType and info.updateType whenever noticeType changes
-  // This effect will run when noticeType changes
-
-  console.log(info)
 
   useEffect(() => {
     setInfo((prev) => ({

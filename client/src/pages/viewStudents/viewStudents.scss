@@ -38,13 +38,13 @@
 
                 &:hover {
                     background-color: var(--light-blue);
-                    color: black;
+                    color: var(--black);
                 }
             }
 
             .selected-class {
                 background-color: var(--turquoise);
-                color: white;
+                color: var(--white);
             }
         }
 

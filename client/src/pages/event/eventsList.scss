@@ -85,7 +85,7 @@
                 border-radius: 5px;
                 font-size: 0.8em;
                 font-weight: 500;
-                color: black;
+                color: var(--black);
               }
 
               .upcoming {
@@ -103,7 +103,7 @@
               p {
                 margin: 0 10px;
                 padding: 5px 5px;
-                color: black;
+                color: var(--black);
                 background-color: rgba(255, 255, 255, 0.174);
               }
 
@@ -112,7 +112,7 @@
                 display: inline-block;
                 padding: 8px 20px;
                 margin: 20px 0;
-                background: black;
+                background: var(--black);
                 color: var(--white);
                 border: none;
                 border-radius: 20px;
@@ -149,7 +149,7 @@
 
         p {
           background-color: transparent;
-          color: white;
+          color: var(--white);
         }
 
         button {

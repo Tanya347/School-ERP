@@ -10,7 +10,9 @@ import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
 
 const StudentProfile = ({ type }) => {
+  
   const location = useLocation();
+  const navigate = useNavigate();
 
   let id;
   if (type === "Main")
@@ -19,7 +21,6 @@ const StudentProfile = ({ type }) => {
     id = location.pathname.split("/")[4];
 
   const { data, loading } = useFetch(getSingleData(id, "students"));
-  const navigate = useNavigate();
 
   return (
     <div className="single-profile-container student-profile">

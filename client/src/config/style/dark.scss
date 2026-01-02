@@ -3,7 +3,7 @@
 
 .app.dark {
   background-color: var(--black);
-  color: white;
+  color: var(--white);
 
   .create-loader, .page-loader {
     span {
@@ -17,11 +17,11 @@
       background-color: var(--black);
     }
     .react-datepicker__day-name, .react-datepicker__current-month, .react-datepicker__day, .react-datepicker__time-name, .react-datepicker__time-list-item, .react-datepicker-time__header  {
-      color: white;
+      color: var(--white);
 
       &:hover {
         background-color: var(--dark-tree-green) !important;
-        color: white;
+        color: var(--white);
       }
     }
 
@@ -48,19 +48,19 @@
     background-color: #111;
 
     .tableCell {
-      color: white;
+      color: var(--white);
     }
   }
 
   .navbar {
-    color: white;
+    color: var(--white);
     border-color: #333;
 
     .search {
       border-color: gray;
 
       input {
-        color: white;
+        color: var(--white);
       }
     }
   }
@@ -72,11 +72,11 @@
       li {
         &:hover {
           background-color: #333;
-        color: white;
+        color: var(--white);
         }
 
         .icon {
-          color: white;
+          color: var(--white);
         }
       }
     }
@@ -84,7 +84,7 @@
 
   .datatable {
     .datagrid {
-      color: white;
+      color: var(--white);
     }
   }
  

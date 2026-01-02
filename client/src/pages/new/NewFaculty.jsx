@@ -20,6 +20,7 @@ const NewFaculty = ({ inputs, title }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [gender, setGender] = useState("");
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {

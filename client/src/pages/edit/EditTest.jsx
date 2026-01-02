@@ -21,20 +21,18 @@ const EditTest = ({ title }) => {
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { user } = useAuth();
 
   // get location and extract id out of it
-  const location = useLocation();
   const id = location.pathname.split("/")[4];
   
   const classes = useFetch(getFacultyData(user._id, "classes")).data
   const courses = useFetch(getFacultyData(user._id, "courses")).data
   
   const { data } = useFetch(getSingleData(id, "tests"))
-
-
-  const navigate = useNavigate();
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
@@ -70,7 +68,6 @@ const EditTest = ({ title }) => {
       setLoading(false);
     }
   } 
-
 
   return (
     <div className="new">

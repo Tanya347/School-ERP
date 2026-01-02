@@ -11,20 +11,19 @@ import { getClassCourses, getTableWithoutActionURL } from "../../config/endpoint
 // column, name and type are props input at the place datatable is used
 const TableWithoutAction = ({ column, name }) => {
 
+  // array usestate that gets fed every time page loads
+  const [list, setList] = useState([]);
+  const [course, setCourses] = useState([]);
+
   // we use location url to extract the path 
   const location = useLocation();
 
   let path = location.pathname.split("/")[3];
   let id = location.pathname.split("/")[4];
 
-
   // fetching data using the path
   const { data } = useFetch(getTableWithoutActionURL(path, id))
   const courses = useFetch(getClassCourses(id)).data;
-
-  // array usestate that gets fed every time page loads
-  const [list, setList] = useState([]);
-  const [course, setCourses] = useState([]);
 
   // feeding the data when page rerenders or data changes
   useEffect(() => {

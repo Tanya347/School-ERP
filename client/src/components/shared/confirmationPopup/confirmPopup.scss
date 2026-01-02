@@ -12,7 +12,7 @@
 }
 
 .confirm-popup {
-  background: white;
+  background: var(--white);
   padding: 24px;
   border-radius: 12px;
   width: 350px;
@@ -46,8 +46,8 @@
 }
 
 .confirm-btn {
-  background: #48A6A7;
-  color: white;
+  background: var(--mild-turquoise);
+  color: var(--white);
   border: none;
   padding: 8px 16px;
   cursor: pointer;
@@ -55,12 +55,12 @@
 }
 
 .confirm-btn:hover {
-  background: #006A71;
+  background: var(--tree-green);
 }
 
 .cancel-btn {
-  background: #edecec;
-  color: #333;
+  background: var(--light-red);
+  color: var(--light-black);
   border: none;
   padding: 8px 16px;
   cursor: pointer;
@@ -68,10 +68,10 @@
 }
 
 .cancel-btn:hover {
-  background: #ccc;
+  background: var(--mild-red);
 }
 
 .app.dark .confirm-popup {
-  color: white;
+  color: var(--white);
   background-color: var(--light-black);
 }

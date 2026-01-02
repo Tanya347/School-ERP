@@ -18,11 +18,11 @@ const NewEvent = ({ inputs, title }) => {
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [submitLoading, setSubmitLoading] = useState(false);
-  const navigate = useNavigate();
   const [start, setStart] = useState("")
   const [errors, setErrors] = useState({});
   const [end, setEnd] = useState("")
   
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateEvent);

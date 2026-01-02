@@ -17,18 +17,18 @@ import Loader from "../../components/shared/loader/Loader";
 
 const EditCourse = ({ title }) => {
   
-  // get location and extract id out of it
-  const location = useLocation();
-  const id = location.pathname.split("/")[4];
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
   const [errors, setErrors] = useState({});
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const id = location.pathname.split("/")[4];
+
   // fetch data using id
   const { data, courseloading } = useFetch(getSingleData(id, "courses"))
-
-  const navigate = useNavigate();
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {

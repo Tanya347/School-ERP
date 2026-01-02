@@ -9,8 +9,10 @@ import useFetch from '../../config/service/useFetch';
 import { getDatatableURL } from '../../config/endpoints/get';
 
 const EventCalender = () => {
+  
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState(null);
+
   const { data: eventData, error: eventError } = useFetch(getDatatableURL("events"));
 
   if (eventError) {

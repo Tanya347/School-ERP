@@ -12,7 +12,7 @@
   z-index: 1000;
 
   .mContainer {
-    background-color: white;
+    background-color: var(--white);
     height: fit-content;
     position: relative;
     width: 70%;
@@ -30,7 +30,7 @@
 
       span {
         font-weight: bold;
-        color: #48A6A7;
+        color: var(--mild-turquoise);
       }
     }
   }
@@ -88,8 +88,8 @@
   .mButton {
     border: none;
     padding: 10px 20px;
-    background-color: #006A71;
-    color: white;
+    background-color: var(--tree-green);
+    color: var(--white);
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
@@ -99,7 +99,7 @@
     transition: all 0.2s ease-in-out;
 
     &:hover {
-      background-color: #48A6A7;
+      background-color: var(--mild-turquoise);
     }
 
     &:last-child {
@@ -115,8 +115,8 @@
     button {
       padding: 5px 20px;
       margin: 10px;
-      background-color: black;
-      color: white;
+      background-color: var(--black);
+      color: var(--white);
       cursor: pointer;
       border-radius: 20px;
       font-weight: bolder;
@@ -124,7 +124,7 @@
 
       &:hover {
         transform: translateY(-2px);
-        background-color: #424242;
+        background-color: var(--gray);
       }
     }
   }
@@ -148,6 +148,6 @@
 .app.dark .eventModal {
   .mContainer {
     background-color: var(--light-black);
-    color: white;
+    color: var(--white);
   }
 }

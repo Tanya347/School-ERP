@@ -13,24 +13,24 @@
     
 }
 .infobanner-container.info {
-    background-color: #FFE2AF;
+    background-color: var(--light-yellow);
     .icon {
-        color: #c08b07;
+        color: var(--golden);
     }
 }
 
 .infobanner-container.error {
-    background-color: #f2cdcd;
+    background-color: var(--light-red);
     .icon {
-        color: #b50707;
+        color: var(--crimson);
     }
     
 }
 
 .infobanner-container.success {
-    background-color: #B3FFCC;
+    background-color: var(--light-green);
     .icon {
-        color: #078b3a;
+        color: var(--green);
     }
 }
 

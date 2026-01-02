@@ -27,8 +27,10 @@ const getPosition = (position, rect) => {
 };
 
 function Tooltip({ content, position = 'top', children }) {
+    
     const [visible, setVisible] = useState(false);
     const [coords, setCoords] = useState({ left: 0, top: 0 });
+
     const wrapperRef = React.useRef();
 
     const showTooltip = () => {

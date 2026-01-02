@@ -33,7 +33,7 @@
             .classContainer {
                 height: fit-content;
                 width: 300px;
-                background-color: #F5F5F5;
+                background-color: var(--light-gray);
                 padding: 20px;
                 border-radius: 10px;
                 display: flex;
@@ -57,42 +57,42 @@
                 }
 
                 .viewButton {
-                    background-color: #dbeef0;
+                    background-color: var(--light-turquoise);
                     padding: 8px 20px;
                     font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: #c6d6d8;
+                        background-color: var(--mild-turquoise);
                     }
                 }
 
                 .attButton {
-                    background-color: #cfe4ee;
+                    background-color: var(--light-tree-green);
                     padding: 8px 20px;
                     font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: #b9ccd5;
+                        background-color: var(--mild-turquoise);
                     }
                 }
 
                 .marksButton {
-                    background-color: #c7e5e1;
+                    background-color: var(--light-green);
                     padding: 8px 20px;
                     font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: #b5d0cd;
+                        background-color: var(--light-turquoise-two);
                     }
                 }
 
                  .ttButton {
-                    background-color: #eae8e8;
+                    background-color: var(--light-red);
                     padding: 8px 20px;
                     font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: #d7d6d6;
+                        background-color: var(--mild-red);
                     }
                 }
             }

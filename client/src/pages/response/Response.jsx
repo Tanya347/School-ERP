@@ -8,14 +8,14 @@ import { getQueries } from '../../config/endpoints/get'
 
 const Response = () => {
 
+  const [query, setQuery] = useState([]);
+
   const {user} = useAuth();  
   const queries = useFetch(getQueries).data;
-  const [query, setQuery] = useState([]);
 
   useEffect(() => {
     setQuery(queries.filter(item => item.author === user.name))
   }, [queries, user.name])
-
 
   return (
     <div className="response">

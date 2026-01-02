@@ -19,10 +19,7 @@ import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
 import Loader from "../shared/loader/Loader.jsx";
 
 const Datatable = ({ column, name }) => {
-  const location = useLocation();
-  const path = location.pathname.split("/")[2];
-  const { user } = useAuth();
-  const { data, loading } = useFetch(getDatatableURL(path, user));
+  
   const [list, setList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [popupName, setPopupName] = useState("");
@@ -31,6 +28,12 @@ const Datatable = ({ column, name }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
+
+  const location = useLocation();
+
+  const path = location.pathname.split("/")[2];
+  const { user } = useAuth();
+  const { data, loading } = useFetch(getDatatableURL(path, user));
 
   useEffect(() => {
     if (path === "queries") {
@@ -52,7 +55,6 @@ const Datatable = ({ column, name }) => {
       } catch (err) {
         const errorMessage = err.response?.data?.message || "Failed to perform deletion. Please try again.";
         toast.error(errorMessage);
-        console.error(err);
       } finally {
         setShowConfirm(false);
       }
@@ -77,7 +79,6 @@ const Datatable = ({ column, name }) => {
       } catch (err) {
         const errorMessage = err.response?.data?.message || "Failed to delete items. Please try again.";
         toast.error(errorMessage);
-        console.error(err);
       } finally {
         setShowConfirm(false);
       }
@@ -102,7 +103,6 @@ const Datatable = ({ column, name }) => {
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Failed to perform action. Please try again.";
       toast.error(errorMessage);
-      console.error(err);
     }
   }
 

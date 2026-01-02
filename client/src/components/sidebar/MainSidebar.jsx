@@ -15,8 +15,9 @@ import Tooltip from "../shared/tooltip/Tooltip";
 
 const MainSidebar = () => {
 
-    const { user } = useAuth();
     const [collapsed, setCollapsed] = useState(true);
+    
+    const { user } = useAuth();
 
     const handleToggle = () => {
         setCollapsed(!collapsed);

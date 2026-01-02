@@ -11,7 +11,9 @@ import { formatDate } from '../../config/commons';
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});
   const [marksData, setMarksData] = useState({});
+
   const location = useLocation();
+  
   const id = location.pathname.split("/")[4];
   const { data } = useFetch(getSingleData(id, "tests"))
   

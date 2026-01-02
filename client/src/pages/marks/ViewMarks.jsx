@@ -7,11 +7,13 @@ import axios from 'axios'
 import { getClearMarksSubject } from '../../config/endpoints/delete'
 
 const ViewMarks = () => {
-  const { user } = useAuth();
-  const courses = useFetch(getFacultyData(user._id, "courses")).data
+
   const [course, setCourse ]= useState("");
   const [courseName, setCourseName] = useState("");
   const [stuData, setStuData] = useState({});
+
+  const { user } = useAuth();
+  const courses = useFetch(getFacultyData(user._id, "courses")).data
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -44,7 +46,6 @@ const ViewMarks = () => {
         console.log(err)
       }
   }
-
 
   return (
     <div className='add-marks'>

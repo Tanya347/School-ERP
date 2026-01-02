@@ -10,16 +10,19 @@ import { resetPasswordURL } from '../../config/endpoints/post';
 import Loader from '../../components/shared/loader/Loader';
 
 const ResetPassword = ({type}) => {
-    const location = useLocation();
-    const token = location.pathname.split("/")[3];
+    
     const [passwordCreds, setPasswordCreds] = useState({
         password: undefined,
         passwordConfirm: undefined
     })
     const [loading, setLoading] = useState(false);
-    const {logout, user} = useAuth();
-    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const token = location.pathname.split("/")[3];
+    const {logout, user} = useAuth();
 
     const handleChange = (e) => {
         setPasswordCreds((prev) => ({ ...prev, [e.target.id]: e.target.value }))
@@ -40,7 +43,6 @@ const ResetPassword = ({type}) => {
         } catch(err) {
             const errorMessage = err.response?.data?.message || "Something went wrong";
             toast.error(errorMessage);
-            console.error(err);
             return err;
         } finally {
             setLoading(false);

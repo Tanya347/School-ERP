@@ -11,6 +11,7 @@ import FacultyProfile from '../../components/profile/FacultyProfile';
 import Course from '../../components/course/Course';
 
 const FacultyHome = () => {
+  
   const {user} = useAuth();
   const { data } = useFetch(getSingleData(user._id, "faculties"))
 

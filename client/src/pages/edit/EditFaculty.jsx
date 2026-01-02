@@ -18,7 +18,14 @@ import Loader from "../../components/shared/loader/Loader";
 
 const EditFaculty = ({ title }) => {
 
+  const [info, setInfo] = useState({});
+  const [file, setFile] = useState("");
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
   const location = useLocation();
+
   let id;
   const { user } = useAuth();
   if (user.role === "admin")
@@ -27,17 +34,12 @@ const EditFaculty = ({ title }) => {
     id = location.pathname.split("/")[3];
 
   const { data, loading } = useFetch(getSingleData(id, "faculties"))
-  const [info, setInfo] = useState({});
-  const [file, setFile] = useState("");
-  const [sending, setSending] = useState(false);
-  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setInfo(data)
   }, [data])
 
 
-  const navigate = useNavigate();
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateFaculty);
   }

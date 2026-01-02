@@ -15,22 +15,21 @@ import { taskInputs } from "../../config/formsource/taskInputs";
 
 const EditTask = ({ title }) => {
   
-  // get location and extract id out of it
-  const { user } = useAuth();
-
-  const location = useLocation();
-  const id = location.pathname.split("/")[4];
-
-  const classes = useFetch(getFacultyData(user._id, "classes")).data
-  const { data } = useFetch(getSingleData(id, "tasks"))
-  
   const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(null);
   const [sclass, setSclass] = useState("");
   const [loading, setLoading] = useState(false);
 
-
+  const location = useLocation();
   const navigate = useNavigate();
+
+  // get location and extract id out of it
+  const { user } = useAuth();
+
+  const id = location.pathname.split("/")[4];
+
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
+  const { data } = useFetch(getSingleData(id, "tasks"));
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {

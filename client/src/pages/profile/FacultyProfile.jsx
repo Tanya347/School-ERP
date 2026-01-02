@@ -11,6 +11,7 @@ import Loader from "../../components/shared/loader/Loader";
 const FacultyProfile = ({ type }) => {
 
   const location = useLocation();
+  const navigate = useNavigate();
   
   let id
   if (type === "Main")
@@ -19,8 +20,6 @@ const FacultyProfile = ({ type }) => {
     id = location.pathname.split("/")[4];
   const { data, loading } = useFetch(getSingleData(id, "faculties"))
 
-  // used to navigate to a certain link
-  const navigate = useNavigate();
 
   // Find the class object where _id matches classTeacherTo
   const classTeacherClass = data?.classesTaught?.find(

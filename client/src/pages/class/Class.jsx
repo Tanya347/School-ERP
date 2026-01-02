@@ -11,7 +11,6 @@ const Class = () => {
 
     const {data, loading} = useFetch(getClasses);
 
-
   return (
     <div className='classes'>
         {loading ? (

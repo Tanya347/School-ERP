@@ -17,12 +17,19 @@ import Loader from "../../components/shared/loader/Loader";
 const EditUpdate = ({ title }) => {
 
   const [noticeType, setNoticeType] = useState("general");
-  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [info, setInfo] = useState({});
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const id = location.pathname.split("/")[4];
+
   const {user} = useAuth();
+
   const { data } = useFetch(getSingleData(id, "updates"))
+
   let path;
   if(user.role === 'faculty') {
     path = getFacultyData(user._id, "classes")
@@ -31,15 +38,11 @@ const EditUpdate = ({ title }) => {
   }
   const classes = useFetch(path).data
 
-
-  const [info, setInfo] = useState({});
-
   useEffect(() => {
     setInfo(data)
     setNoticeType(data.updateType)
   }, [data])
 
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateUpdate)

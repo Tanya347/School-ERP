@@ -11,9 +11,13 @@ import { useAuth } from '../../config/context/AuthContext';
 import Loader from "../../components/shared/loader/Loader"
 
 const Timetable = ({type}) => {
-  const location = useLocation();
+  
   const [existingSlots, setExistingSlots] = useState({});
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const location = useLocation();
+
   const { user } = useAuth();
 
   const id = useMemo(() => {
@@ -24,7 +28,6 @@ const Timetable = ({type}) => {
       : user.class;
   }, [type, user.role, user.class, location.pathname]);
 
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
 

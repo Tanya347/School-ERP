@@ -4,6 +4,7 @@ import "./datePickerComponent.scss"
 import DatePicker from "react-datepicker";
 
 const DatePickerComponent = ({ selectedDate, onChange, placeholder, showTimeSelect = true, className = "", label }) => {
+  
   return (
     <div className="data-picker-component">
         <label>{label}</label>

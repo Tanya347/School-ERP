@@ -19,7 +19,7 @@ import { getClearDayAttendance } from '../../config/endpoints/delete';
 
 const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
 
-    const {data} = useFetch(getAttendanceStatusByDate(classid, date));
+    const { data } = useFetch(getAttendanceStatusByDate(classid, date));
     
     const handleClear = async() => {
         // this deletes data from the database
@@ -33,7 +33,6 @@ const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
           } catch (err) {
             const errorMessage = err.response?.data?.message || "Failed to clear attendance. Please try again.";
             toast.error(errorMessage);
-            console.error(err);
             return err;
           }
       }

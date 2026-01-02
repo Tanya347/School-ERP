@@ -5,7 +5,7 @@
 
 }
 .react-calendar { 
-  border: 1px solid white !important;
+  border: 1px solid var(--white) !important;
   border-radius: 10px !important;
   padding: 10px !important;
 }
@@ -14,7 +14,7 @@
 .highlight {
   background: var(--light-blue) !important;
   border-radius: 50%;
-  color: black;
+  color: var(--black);
   position: relative;
 }
 
@@ -33,7 +33,7 @@
 
 .selected-event {
   background-color: var(--blue);
-  color: white;
+  color: var(--white);
   border-radius: 50%;
 }
 
@@ -41,8 +41,8 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  background: white;
-  border: 1px solid #ccc;
+  background: var(--white);
+  border: 1px solid var(--light-gray);
   padding: 10px;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -50,27 +50,27 @@
 
 .app.dark .calendar-container {
   .react-calendar {
-    background: #181818;
-    color: #fff;
+    background: var(--black);
+    color: var(--white);
     border: none;
   }
   .react-calendar__tile {
     background: transparent;
-    color: #fff;
+    color: var(--white);
     &:hover {
-      background: #222;
+      background: var(--black);
     }
   }
   .react-calendar__month-view__days__day--weekend {
-    color: #bbb;
+    color: var(--heading-gray);
   }
   .react-calendar__navigation button {
-    color: #fff;
-    background: #222;
+    color: var(--white);
+    background: var(--black);
   }
   .react-calendar__tile--active {
-    background: #333 !important;
-    color: #fff !important;
+    background: var(--light-black) !important;
+    color: var(--white) !important;
   }
 
   .react-calendar__tile--now {
@@ -87,12 +87,12 @@
 
   .highlight {
     background: var(--dark-blue) !important;
-    color: white;
+    color: var(--white);
   }
 
   .event-popup {
     background: #1E201E;
-    color: white;
-    border: 1px solid #444;
+    color: var(--white);
+    border: 1px solid var(--gray);
   }
 }

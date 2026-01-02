@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
 const StudentProfile = ({data}) => {
+
   const navigate = useNavigate();
+  
   return (
     <div className='profile-container'>
       <img

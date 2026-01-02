@@ -11,6 +11,7 @@ import { addClassTeacher } from '../../config/endpoints/put';
 import Dropdown from '../shared/dropdown/Dropdown';
 
 const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
+  
     const [teacher, setTeacher] = useState('');
 
     const handleClick = async(e) => {
@@ -26,7 +27,6 @@ const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
         } catch(err) {
             const errorMessage = err.response?.data?.message || "Something went wrong";
             toast.error(errorMessage);
-            console.error(err);
             return err;
         }
     }

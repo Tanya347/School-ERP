@@ -13,11 +13,13 @@ import Popup from '../shared/popup/Popup';
 
 const AddClass = ({ setOpen, facId }) => {
 
-    const classes = useFetch(getCourseClasses).data;
     const [sclass, setSclass] = useState("");
     const [classIndex, setClassIndex] = useState();
     const [course, setCourse] = useState("");
+
     const navigate = useNavigate();
+
+    const classes = useFetch(getCourseClasses).data;
 
     const handleClick = async(e) => {
         e.preventDefault();

@@ -9,6 +9,7 @@ import Loader from "../../components/shared/loader/Loader";
 import EventModal from "../../components/eventModal/EventModal";
 
 const EventsList = ({type}) => {
+  
     const [list, setList] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [clickedEvent, setClickedEvent] = useState({});

@@ -21,12 +21,13 @@ import ConfirmPopup from "../../components/shared/confirmationPopup/ConfirmatinP
 // type specifies the admin side or user side 
 const AdminHome = () => {
 
-  const {user} = useAuth();
   const [sessionName, setSessionName] = useState('');
   const [loading, setLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
+
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -41,6 +42,7 @@ const AdminHome = () => {
     }
     fetchSession()
   }, [user, user.schoolID]);
+  
   const { data: genderCount } = useFetch(schoolGenderCount);
 
   const handleClick = async (e) => {
@@ -55,7 +57,6 @@ const AdminHome = () => {
       } catch (err) {
         const errorMessage = err.response?.data?.message || `Failed to start the session. Please try again.`;
         toast.error(errorMessage);
-        console.error(err);
         return err;
       } finally {
         setLoading(false);

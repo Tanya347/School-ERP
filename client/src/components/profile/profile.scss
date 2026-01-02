@@ -21,7 +21,7 @@
     .details {
         .itemTitle {
             margin-bottom: 10px;
-            color: #555;
+            color: var(--gray);
         }
 
         .detailItem {
@@ -30,7 +30,7 @@
 
             .itemKey {
                 font-weight: bold;
-                color: gray;
+                color: var(--gray);
                 margin-right: 5px;
             }
 
@@ -42,10 +42,10 @@
 
     .editButton {
         padding: 10px 20px;
-        background-color: #48A6A7;
+        background-color: var(--mild-turquoise);
         border: none;
         outline: none;
-        color: white;
+        color: var(--white);
         cursor: pointer;
         transition: ease-in-out all 0.3s;
 

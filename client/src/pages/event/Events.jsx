@@ -1,4 +1,4 @@
-import './events.scss'
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -30,13 +30,14 @@ const localizer = dateFnsLocalizer({
 
 
 const Events = () => {
+    const [events, setEvents] = useState([]);
+    const [clickedEvent, setClickedEvent] = useState({});
+    const [openModal, setOpenModal] = useState(false);
+
     const { user } = useAuth();
     const tasks = useFetch(getTaskCalenderURL(user)).data
     const tests = useFetch(getTestCalenderURL(user)).data
     const eventsData = useFetch(getDatatableURL("events")).data
-    const [events, setEvents] = useState([]);
-    const [clickedEvent, setClickedEvent] = useState({});
-    const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
 

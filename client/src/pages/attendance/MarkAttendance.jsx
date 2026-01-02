@@ -16,8 +16,6 @@ import InforBanner from '../../components/shared/infoBanner/InforBanner'
 
 const MarkAttendance = () => {
 
-    const { user } = useAuth();
-    const classes = useFetch(getFacultyData(user._id, "classes")).data
     const [sclass, setSclass] = useState("");
     const [stuData, setStuData] = useState({});
     const [editMode, setEditMode] = useState(false);
@@ -25,6 +23,10 @@ const MarkAttendance = () => {
     const [presentStudents, setPresentStudents] = useState([]);
 
     const navigate = useNavigate();
+    
+    const { user } = useAuth();
+    const classes = useFetch(getFacultyData(user._id, "classes")).data
+
     let isClassTeacher = sclass?.classTeacher === user._id;;
 
     useEffect(() => {

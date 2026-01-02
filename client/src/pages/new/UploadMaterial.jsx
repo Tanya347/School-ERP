@@ -16,19 +16,20 @@ import { validateMaterial } from '../../config/validators/material';
 import Dropdown from '../../components/shared/dropdown/Dropdown';
 
 const UploadMaterial = ({title, inputs}) => {
+
   const [file, setFile] = useState(null);
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [sclass, setSclass] = useState("");
 
+  const navigate = useNavigate();
+
   const { user } = useAuth();
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateMaterial);
   }
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

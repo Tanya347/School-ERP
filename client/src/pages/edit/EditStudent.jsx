@@ -18,7 +18,14 @@ import Loader from "../../components/shared/loader/Loader";
 
 const EditUser = ({ title }) => {
 
+  const [info, setInfo] = useState({});
+  const [file, setFile] = useState("");
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState({});
+  
   const location = useLocation();
+  const navigate = useNavigate();
+  
   let id;
  
   const classes = useFetch(getClasses).data
@@ -29,17 +36,11 @@ const EditUser = ({ title }) => {
     id = location.pathname.split("/")[3];
 
   const { data, loading } = useFetch(getSingleData(id, "single-student"))
-  const [info, setInfo] = useState({});
-  const [file, setFile] = useState("");
-  const [sending, setSending] = useState(false);
-  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setInfo(data)
   }, [data])
 
-
-  const navigate = useNavigate();
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateStudent);
   }

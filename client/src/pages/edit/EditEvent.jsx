@@ -17,16 +17,19 @@ import { handleChange as commonHandleChange} from "../../config/commons"
 import Loader from "../../components/shared/loader/Loader";
 
 const EditEvent = ({ inputs, title }) => {
-    const location = useLocation();
-    const id = location.pathname.split("/")[4];
-    const { data, loading } = useFetch(getSingleData(id, "events"))
+
     const [info, setInfo] = useState({});
     const [file, setFile] = useState("");
     const [start, setStart] = useState(null)
     const [end, setEnd] = useState(null)
     const [sending, setSending] = useState(false);
     const [errors, setErrors] = useState({});
+
+    const location = useLocation();
     const navigate = useNavigate();
+
+    const id = location.pathname.split("/")[4];
+    const { data, loading } = useFetch(getSingleData(id, "events"))
 
     useEffect(() => {
         if (data) {
@@ -60,8 +63,6 @@ const EditEvent = ({ inputs, title }) => {
             setSending(false)
         }
     }
-
-    
 
     return (
         <div className="new">

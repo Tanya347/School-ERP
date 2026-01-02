@@ -48,19 +48,19 @@
 
 .lContainer h1 {
     margin-bottom: 20px;
-    color: #355964;
+    color: var(--tree-green);
 }
 
 .lContainer p {
     margin-bottom: 20px;
-    color: #355964d7;
+    color: var(--dark-tree-green);
 }
 
 .lInput {
     height: 30px;
     padding: 10px;
     width: 50%;
-    background-color: #ECECEC;
+    background-color: var(--light-gray);
     border: none;
     border-radius: 5px;
     outline: none;
@@ -69,8 +69,8 @@
 .lButton {
     border: none;
     padding: 10px 20px;
-    background-color: #355964;
-    color: white;
+    background-color: var(--tree-green);
+    color: var(--white);
     margin-top: 20px;
     margin-bottom: 30px;
     width: 250px;
@@ -80,11 +80,11 @@
 }
 
 .lButton:hover {
-    background-color: #355964d7;
+    background-color: var(--dark-tree-green);
 }
 
 .lButton:disabled {
-    background-color: #0071c28c;
+    background-color: var(--turquoise);
     cursor: not-allowed;
 }
 

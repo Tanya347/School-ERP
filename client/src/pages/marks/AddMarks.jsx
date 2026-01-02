@@ -14,8 +14,6 @@ import InforBanner from "../../components/shared/infoBanner/InforBanner";
 import Loader from "../../components/shared/loader/Loader"
 
 const AddMarks = () => {
-  const { user } = useAuth();
-  const courses = useFetch(getFacultyData(user._id, "courses")).data;
   const [sending, setSending] = useState(false);
   const [course, setCourse] = useState("");
   const [sclass, setSclass] = useState("");
@@ -24,6 +22,9 @@ const AddMarks = () => {
   const [marksData, setMarksData] = useState({});
 
   const navigate = useNavigate();
+
+  const { user } = useAuth();
+  const courses = useFetch(getFacultyData(user._id, "courses")).data;
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -101,7 +102,6 @@ const AddMarks = () => {
         err.response?.data?.message ||
         "Failed to add marks. Please try again.";
       toast.error(errorMessage);
-      console.error(err);
     } finally {
       setSending(false);
     }

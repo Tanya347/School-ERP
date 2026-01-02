@@ -15,8 +15,10 @@ import AddClassTeacher from '../../components/addClassTeacher/AddClassTeacher'
 import Loader from '../../components/shared/loader/Loader'
 
 const ViewClass = () => {
+  
     const [openModal, setOpenModal] = useState(false);
     const location = useLocation();
+
     const id = location.pathname.split("/")[3]
 
     const {data, loading} = useFetch(getClassDetails(id))

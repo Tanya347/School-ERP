@@ -14,15 +14,16 @@ import { putURLs } from "../../config/endpoints/put";
 
 const EditSchool = ({title}) => {
 
-  const location = useLocation();
-  const id = location.pathname.split("/")[4];
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
 
-  const {data} = useFetch(getSingleData(id, "schools"));
-
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const id = location.pathname.split("/")[4];
+
+  const {data} = useFetch(getSingleData(id, "schools"));
 
   useEffect(() => {
     setInfo(data)

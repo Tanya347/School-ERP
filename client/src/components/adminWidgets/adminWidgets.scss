@@ -45,7 +45,6 @@
                 .icon {
                     border-radius: 30px;
                     padding: 10px;
-                    // color: var(--white);
                     font-size: 2rem;
                 }
                 background-color: inherit;
@@ -68,11 +67,11 @@
 .app.dark .widgets {
     .AdminWidgets {
         .widget {
-            background-color: #1E201E;
+            background-color: var(--dark-green);
 
             .rightContainer {
                 h4 {
-                    color: white;
+                    color: var(--white);
                 }
             }
         }

@@ -44,13 +44,13 @@
 
                 &:hover {
                     background-color: var(--light-blue);
-                    color: black;
+                    color: var(--black);
                 }
             }
 
             .selected-course {
                 background-color: var(--turquoise);
-                color: white;
+                color: var(--white);
             }
         }
 
@@ -71,7 +71,7 @@
             }
 
             #title-row {
-                background-color: #dbeef0;
+                background-color: var(--light-turquoise);
                 font-weight: 600;
             }
 
@@ -81,7 +81,7 @@
                 .marks-col {
                     display: table-cell;
                     padding: 8px;
-                    border: 1px solid #ddd;
+                    border: 1px solid var(--light-gray);
                     text-align: left;
                   }
 
@@ -95,7 +95,7 @@
                 padding: 10px 20px;
                 font-size: 1.1rem;
                 margin-top: 30px;
-                color: white;
+                color: var(--white);
                 font-weight: 600;
                 background-color: var(--turquoise);
                 transition: all 0.2s ease-in-out;
@@ -113,7 +113,7 @@
                 outline: none;
                 padding: 10px 20px;
                 margin-top: 30px;
-                color: white;
+                color: var(--white);
                 font-weight: 600;
                 background-color: var(--red);
                 transition: all 0.2s ease-in-out;

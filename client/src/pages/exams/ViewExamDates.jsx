@@ -12,8 +12,10 @@ import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"
 
 const ViewExamDates = () => {
-  const {user} = useAuth();
+
   const [data, setData] = useState([]);
+  
+  const {user} = useAuth();
   const { data: schoolData } = useFetch(getSingleData(user.schoolID, "schools"));
 
   useEffect(() => {

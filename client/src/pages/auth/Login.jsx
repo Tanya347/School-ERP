@@ -15,16 +15,15 @@ import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
 
 // type will tell whether admin or student
 function Login({ type }) {
+  
   const [showPassword, setShowPassword] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  // function to navigate to a certain page once logged in
-  const navigate = useNavigate();
-
-  // sets the credentials entered by the user
   const [credentials, setCredentials] = useState({
     username: undefined,
     password: undefined
   })
+
+  const navigate = useNavigate();
 
   var url;
 
@@ -60,7 +59,6 @@ function Login({ type }) {
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Failed to log in. Please try again.";
       toast.error(errorMessage);
-      console.error(err);
       throw err;
     } finally {
       // setLoading(false);

@@ -10,10 +10,12 @@ import { postURLs } from '../../config/endpoints/post';
 import Loader from '../../components/shared/loader/Loader';
 
 const RegisterSchool = () => {
-  const navigate = useNavigate();
+
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));

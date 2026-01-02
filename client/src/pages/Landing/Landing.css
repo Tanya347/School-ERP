@@ -14,9 +14,9 @@
 
 .landing-container h1 {
     font-size: 3em;
-    color: #385A64;
+    color: var(--tree-green);
     margin-bottom: 20px;
-    border-bottom: 3px solid #FE725B;
+    border-bottom: 3px solid var(--orange);
 }
 
 .landing-container .button-container {
@@ -38,7 +38,7 @@
 }
 
 .landing-container .button-container .isAdmin button{
-    background-color: #FE725B;
+    background-color: var(--orange);
 }
 
 .landing-container .button-container .isAdmin button:hover{
@@ -48,8 +48,8 @@
 .landing-container .button-container button {
     border: none;
     padding: 10px 10px;
-    background-color: #355964;
-    color: white;
+    background-color: var(--tree-green);
+    color: var(--white);
     width: 200px;
     font-weight: bold;
     cursor: pointer;
@@ -57,7 +57,7 @@
 }
 
 .landing-container .button-container button:hover {
-    background-color: #355964be;
+    background-color: var(--dark-tree-green);
 }
 
 @media screen and (max-width: 600px) {

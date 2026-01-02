@@ -11,6 +11,7 @@ import { handleChange as commonHandleChange } from "../../config/commons";
 import Loader from "../../components/shared/loader/Loader";
 
 const CreateClass = ({ inputs, title}) => {
+    
     const [info, setInfo] = useState({});
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});

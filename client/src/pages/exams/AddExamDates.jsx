@@ -14,6 +14,7 @@ import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinP
 import Dropdown from '../../components/shared/dropdown/Dropdown';
 
 const AddExamDates = () => {
+  
   const [selectedClass, setSelectedClass] = useState('');
   const [courses, setCourses] = useState([]);
   const [examDates, setExamDates] = useState([]);
@@ -53,8 +54,8 @@ const AddExamDates = () => {
           setExamDates(initialExamDates);
         }
       } catch (err) {
-        console.error(err);
         toast.error("Failed to fetch exam dates");
+        throw(err)
       }
     };
 
@@ -85,7 +86,6 @@ const AddExamDates = () => {
     } catch (err) {
       const errorMessage = err.response?.data?.message || `Failed to add dates`;
       toast.error(errorMessage);
-      console.error(err);
       return err;
     } finally {
       setLoading(false);
@@ -107,7 +107,6 @@ const AddExamDates = () => {
       catch (err) {
         const errorMessage = err.response?.data?.message || `Failed to clear exam dates`;
         toast.error(errorMessage);
-        console.error(err);
         return err;
       } finally {
         setLoading(false);

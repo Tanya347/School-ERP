@@ -14,6 +14,7 @@ const DownloadableCard = ({
   tableData,
   onDownloadName,
 }) => {
+  
   const cardRef = useRef();
 
   const session = useFetch(`/sessions/${student?.schoolID}`).data;

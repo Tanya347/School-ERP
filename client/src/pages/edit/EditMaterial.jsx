@@ -24,7 +24,8 @@ const EditMaterial = ({title}) => {
 
   const navigate = useNavigate();
   const location = useLocation();
-    const id = location.pathname.split("/")[4];
+
+  const id = location.pathname.split("/")[4];
 
   const { data, dataloading } = useFetch(getSingleData(id, "materials"));
   const classes = useFetch(getClasses).data;

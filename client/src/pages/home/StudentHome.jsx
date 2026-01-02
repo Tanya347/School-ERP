@@ -16,8 +16,10 @@ import StudentProfile from "../../components/profile/StudentProfile"
 import Course from "../../components/course/Course"
 
 const StudentHome = () => {
-  const {user} = useAuth();
+
   const [attendance, setAttendance] = useState({})
+  
+  const {user} = useAuth();
   const { data, loading } = useFetch(getSingleData(user._id, "students"))
  
   useEffect(() => {

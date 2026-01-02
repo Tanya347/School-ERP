@@ -11,6 +11,7 @@ import InforBanner from '../../components/shared/infoBanner/InforBanner';
 const Marksheet = () => {
 
   const {user} = useAuth();
+  
   const { data: schoolData } = useFetch(getSingleData(user.schoolID, "schools"));
   const { data: marks} = useFetch(`/students/marks/single/${user._id}`);
   

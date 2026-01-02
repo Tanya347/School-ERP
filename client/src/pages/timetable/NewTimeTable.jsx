@@ -142,7 +142,6 @@ const NewTimeTable = () => {
         "Failed to create timetable. Please try again.";
 
       toast.error(errorMessage);
-      console.error(err);
     } finally {
       setSaveloading(false);
     }

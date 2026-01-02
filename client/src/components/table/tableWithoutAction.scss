@@ -10,7 +10,7 @@
         .datatableTitle {
           width: 100%;
           font-size: 24px;
-          color: gray;
+          color: var(--gray);
           margin-bottom: 10px;
           display: flex;
           align-items: center;
@@ -25,17 +25,17 @@
     
         &.high {
           background-color: rgba(0, 128, 0, 0.05);
-          color: green;
+          color: var(--green);
         }
     
         &.med {
           background-color: rgba(255, 217, 0, 0.05);
-          color: goldenrod;
+          color: var(--golden);
         }
     
         &.low {
           background-color: rgba(255, 0, 0, 0.05);
-          color: crimson;
+          color: var(--crimson);
         }
       }
     }

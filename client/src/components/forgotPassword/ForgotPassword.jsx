@@ -9,6 +9,7 @@ import axios from 'axios';
 import { forgotPaswordURL } from '../../config/endpoints/post';
 
 const ForgotPassword = ({setOpen, type}) => {
+  
   const [email, setEmail] = useState('');
 
   const handleClick = async (e) => {
@@ -24,7 +25,6 @@ const ForgotPassword = ({setOpen, type}) => {
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Something went wrong";
       toast.error(errorMessage);
-      console.error(err);
       return err;
     }
   }

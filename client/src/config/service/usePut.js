@@ -30,7 +30,6 @@ export const editElementWithPicture = async(file, info, element, url) => {
     catch(err) {
         const errorMessage = err.response?.data?.message || `Failed to update ${element}. Please try again.`;
         toast.error(errorMessage);
-        console.error(err);
         return err;
     }
 }
@@ -45,7 +44,6 @@ export const editElement = async(response, url, element) => {
     } catch(err) {
         const errorMessage = err.response?.data?.message || `Failed to update ${element}. Please try again.`;
         toast.error(errorMessage);
-        console.error(err);
         return err;
     }
 }

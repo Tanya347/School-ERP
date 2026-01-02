@@ -12,11 +12,13 @@ import GenericTable from '../../components/shared/table/Table';
 
 
 const ViewStudents = () => {
-  const { user } = useAuth()
-  const classes = useFetch(getFacultyData(user._id, "classes")).data
+  
   const [sclass, setSclass] = useState("");
   const [className, setClassName] = useState("");
   const [stuData, setStuData] = useState({});
+
+  const { user } = useAuth()
+  const classes = useFetch(getFacultyData(user._id, "classes")).data
 
   useEffect(() => {
     const fetchStudents = async () => {

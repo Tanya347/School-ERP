@@ -89,7 +89,6 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Failed to logout. Please try again.";
       toast.error(errorMessage);
-      console.error(err);
       dispatch({ type: actionTypes.SET_ERROR, payload: "Logout error" });
     }
   };

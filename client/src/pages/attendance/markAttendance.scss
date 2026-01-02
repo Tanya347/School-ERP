@@ -40,12 +40,12 @@
                 
                 &:hover {
                     background-color: var(--light-blue);
-                    color: black;
+                    color: var(--black);
                 }
             }
             .selected-class {
                 background-color: var(--turquoise);
-                color: white;
+                color: var(--white);
             }
         }
 
@@ -62,7 +62,7 @@
             .attendance-date-picker {
                 margin: 20px 0;
                 padding: 20px 20px;
-                background-color: #dbeef0;
+                background-color: var(--light-turquoise);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -91,7 +91,7 @@
             }
 
             #title-row {
-                background-color: #dbeef0;
+                background-color: var(--light-turquoise);
                 font-weight: 600;
             }
 
@@ -101,7 +101,7 @@
                 .attendance-col {
                     display: table-cell;
                     padding: 8px;
-                    border: 1px solid #ddd;
+                    border: 1px solid var(--light-gray);
                     text-align: left;
 
                     input {
@@ -119,7 +119,7 @@
                 padding: 10px 20px;
                 font-size: 1.1rem;
                 margin-top: 30px;
-                color: white;
+                color: var(--white);
                 font-weight: 600;
                 background-color: var(--turquoise);
                 transition: all 0.2s ease-in-out;
@@ -163,7 +163,7 @@
     .attendance-marking-table {
         #title-row {
             background-color: var(--dark-tree-green);
-            color: white;
+            color: var(--white);
         }
     }
     .mark-attendance-button {

@@ -15,10 +15,13 @@ import { DarkModeContext } from "../../config/context/darkModeContext";
 import NotificationsDropdown from './NotificationsDropdown';
 
 const Navbar = () => {
-    const { Dispatch } = useContext(DarkModeContext);
+
     const [schoolInfo, setSchoolInfo] = useState({});
     const [showNotifications, setShowNotifications] = useState(false);
+
     const dropdownRef = useRef(null);
+    
+    const { Dispatch } = useContext(DarkModeContext);
     const { user, logout } = useAuth();
     const { data = [] } = useFetch(getUpdateURL(user));
 

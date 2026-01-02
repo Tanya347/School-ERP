@@ -35,10 +35,10 @@
 }
 
 .app.dark .school-info-container {
-    background-color: #1E201E;
-    color: white;
+    background-color: var(--dark-green);
+    color: var(--white);
     
     img {
-        border: 2px solid white;
+        border: 2px solid var(--white);
     }
 }

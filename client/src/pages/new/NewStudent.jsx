@@ -22,6 +22,7 @@ const NewUser = ({ inputs, title }) => {
   const [errors, setErrors] = useState({});
   const [gender, setGender] = useState("");
   const [studentClass, setStudentClass] = useState("");
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {

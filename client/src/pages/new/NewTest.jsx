@@ -23,8 +23,9 @@ const NewTest = ({ inputs, title }) => {
   const [studentClass, setStudentClass] = useState("");
   const [subject, setSubject] = useState("");
   
-  const { user } = useAuth();
   const navigate = useNavigate();
+  
+  const { user } = useAuth();
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateTest);

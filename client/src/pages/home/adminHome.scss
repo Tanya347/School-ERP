@@ -42,7 +42,7 @@
             box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
             border-radius: 10px;
             text-align: center;
-            background-color: white;
+            background-color: var(--white);
 
             .icon {
               font-size: 3rem;
@@ -56,15 +56,15 @@
               width: 150px;
               padding: 10px;
               border: none;
-              background-color: #077A7D;
-              color: white;
+              background-color: var(--tree-green);
+              color: var(--white);
               font-weight: bold;
               cursor: pointer;
               margin-top: 20px;
               transition: all 0.3s ease-in-out;
 
               &:hover {
-                background-color: rgba(0, 128, 128, 0.847);
+                background-color: var(--dark-tree-green);
               }
             }
         }
@@ -72,7 +72,7 @@
         .pie-chart-container {
           display: flex;
           width: 20%;
-          background-color: white;
+          background-color: var(--white);
           height: 300px;
           flex-direction: column;
           align-items: center;
@@ -91,7 +91,7 @@
 }
 
 .app.dark .home {
-  color: white;
+  color: var(--white);
   
   .mainContainer {
 

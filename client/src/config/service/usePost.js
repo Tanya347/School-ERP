@@ -29,7 +29,6 @@ export const createElementWithPicture = async(file, info, element, url) => {
     } catch(err) {
         const errorMessage = err.response?.data?.message || `Failed to create ${element}. Please try again.`;
         toast.error(errorMessage);
-        console.error(err);
         return err;
     }
 }
@@ -44,7 +43,6 @@ export const createElement = async(response, url, element) => {
     } catch(err) {
         const errorMessage = err.response?.data?.message || `Failed to create ${element}. Please try again.`;
         toast.error(errorMessage);
-        console.error(err);
         return err;
     }
 }

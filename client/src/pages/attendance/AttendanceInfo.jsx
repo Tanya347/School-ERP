@@ -35,30 +35,32 @@ const localizer = dateFnsLocalizer({
 });
 
 const AttendanceInfo = () => {
-  const { user } = useAuth();
-  const [sclass, setSclass] = useState("");
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [dates, setDates] = useState([]);
-  const [lectures, setLectures ]= useState(0);
-  const [className, setClassName] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [viewDate, setViewDate] = useState('');
-  const [attId, setAttId] = useState('');
+    
+    const [sclass, setSclass] = useState("");
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [dates, setDates] = useState([]);
+    const [lectures, setLectures ]= useState(0);
+    const [className, setClassName] = useState("");
+    const [openModal, setOpenModal] = useState(false);
+    const [viewDate, setViewDate] = useState('');
+    const [attId, setAttId] = useState('');
 
-  const classes = useFetch(getFacultyData(user._id, "classes")).data
+    const { user } = useAuth();
+
+    const classes = useFetch(getFacultyData(user._id, "classes")).data
   
-  useEffect(() => {
+    useEffect(() => {
 
-      const fetchLectures = async() => {
-        if(sclass) {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}${getLectureCount}/${sclass}`)
-                setLectures(response.data.data);
-            } catch(error) {
-                console.log("Error fetching no. of lectures", error);
+        const fetchLectures = async() => {
+            if(sclass) {
+                try {
+                    const response = await axios.get(`${process.env.REACT_APP_API_URL}${getLectureCount}/${sclass}`)
+                    setLectures(response.data.data);
+                } catch(error) {
+                    console.log("Error fetching no. of lectures", error);
+                }
             }
-          }
-      }
+        }
 
       fetchLectures();
   }, [sclass, refreshTrigger])
@@ -94,24 +96,22 @@ const AttendanceInfo = () => {
     setOpenModal(true);
   }
 
-  const handleClear = async() => {
+    const handleClear = async() => {
     // this deletes data from the database
-    try {
-        const res = await axios.delete(getClearClassURL(sclass), { withCredentials: true });
-        if(res.data.status === 'success') {
-            toast.success("Attendance has been cleared!");
-            setRefreshTrigger(prev => prev + 1);
+        try {
+            const res = await axios.delete(getClearClassURL(sclass), { withCredentials: true });
+            if(res.data.status === 'success') {
+                toast.success("Attendance has been cleared!");
+                setRefreshTrigger(prev => prev + 1);
+            }
+            // this filters the array by filtering out the deleted element based on the id
+            setDates([]);
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || "Failed to clear attendance. Please try again.";
+            toast.error(errorMessage);
+            return err;
         }
-        // this filters the array by filtering out the deleted element based on the id
-        setDates([]);
-      } catch (err) {
-        const errorMessage = err.response?.data?.message || "Failed to clear attendance. Please try again.";
-        toast.error(errorMessage);
-        console.error(err);
-        return err;
-      }
-  }
-
+    }
 
   return (
     <div className="attendance-info">

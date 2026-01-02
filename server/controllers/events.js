@@ -1,7 +1,9 @@
 import Event from "../models/Event.js";
+
+import fs from "fs";
+
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
-import fs from "fs";
 import cloudinary from "../utils/cloudinary.js";
 
 // Create a new event
@@ -115,7 +117,7 @@ export const getEvent = catchAsync(async (req, res, next) => {
 export const getEvents = catchAsync(async (req, res, next) => {
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };
-  const events = await Event.find(filter);
+  const events = await Event.find(filter).sort({"startDate" : -1});
   res.status(200).json({
     data: events,
     status: 'success'

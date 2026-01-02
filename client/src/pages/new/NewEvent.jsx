@@ -1,14 +1,17 @@
 import "../../config/style/form.scss";
 
-import { useState } from "react";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import { postURLs } from "../../config/endpoints/post";
-import Loader from "../../components/shared/loader/Loader";
-import { createElementWithPicture } from "../../config/service/usePost";
-import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { postURLs } from "../../config/endpoints/post";
+import { createElementWithPicture } from "../../config/service/usePost";
 import { validateEvent } from "../../config/validators/event";
 import { handleChange as commonHandleChange } from "../../config/commons";
+
+import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
+import Loader from "../../components/shared/loader/Loader";
 
 const NewEvent = ({ inputs, title }) => {
   

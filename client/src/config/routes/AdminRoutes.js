@@ -1,29 +1,29 @@
 // src/routes/adminRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import List from '../../components/list/List';
+// New forms
 import NewStudent from "../../pages/new/NewStudent";
 import NewFaculty from "../../pages/new/NewFaculty";
 import NewCourse from "../../pages/new/NewCourse";
 import NewEvent from "../../pages/new/NewEvent"
 import NewClass from "../../pages/new/CreateClass";
 import NewUpdate from "../../pages/new/NewUpdate";
+import NewTimeTable from '../../pages/timetable/NewTimeTable';
+import UploadMaterial from '../../pages/new/UploadMaterial';
+
+// Edit Forms
 import EditEvent from "../../pages/edit/EditEvent"
 import EditUpdate from "../../pages/edit/EditUpdate";
 import EditCourse from "../../pages/edit/EditCourse";
 import EditStudent from "../../pages/edit/EditStudent";
 import EditFaculty from "../../pages/edit/EditFaculty";
-import FacultyProfile from "../../pages/profile/FacultyProfile";
-import StudentProfile from '../../pages/profile/StudentProfile';
-import Class from "../../pages/class/Class";
-import AddClass from "../../pages/class/AddClass";
-import ViewClass from "../../pages/class/ViewClass";
-import TableWithoutAction from '../../components/table/TableWithoutAction';
-import NewTimeTable from '../../pages/timetable/NewTimeTable';
-import UploadMaterial from '../../pages/new/UploadMaterial';
-import Layout from '../../components/sidebar/Layout';
 import EditMaterial from '../../pages/edit/EditMaterial';
-import Timetable from '../../components/timetable/Timetable';
+import EditSchool from '../../pages/school/EditSchool';
+
+// Components
+import Layout from '../../components/sidebar/Layout';
+import TableWithoutAction from '../../components/table/TableWithoutAction';
+import List from '../../components/shared/list/List';
 
 // Datatable Columns
 import { studentColumns } from "../datatablesource/studentColumns";
@@ -43,12 +43,18 @@ import { classInputs } from '../formsource/classInputs';
 import { eventInputs } from '../formsource/eventInputs';
 import { materialInputs } from '../formsource/materialInputs';
 
-import { useAuth } from '../../config/context/AuthContext';
+// Pages
+import FacultyProfile from "../../pages/profile/FacultyProfile";
+import StudentProfile from '../../pages/profile/StudentProfile';
+import Class from "../../pages/class/Class";
+import ViewClass from "../../pages/class/ViewClass";
+import Timetable from '../../pages/timetable/Timetable';
 import EventsList from '../../pages/event/EventsList';
 import ResetPassword from '../../pages/auth/ResetPassword';
-import EditSchool from '../../pages/school/EditSchool';
 import AdminHome from '../../pages/home/AdminHome';
 import AddExamDates from '../../pages/exams/AddExamDates';
+
+import { useAuth } from '../../config/context/AuthContext';
 
 const AdminRoutes = () => {
 
@@ -219,13 +225,6 @@ const AdminRoutes = () => {
             element={ <TableWithoutAction column={marksColumns} name="Marks" />}
             />
 
-          {/* edit classes */}
-
-          <Route
-            path="faculties/addCourse/:facId"
-            element={ <AddClass />} 
-          />
-
           {/* view class */}
           <Route
             path="classes/:classId"
@@ -263,7 +262,7 @@ const AdminRoutes = () => {
           {/* view timetables */}
           <Route
             path='timetables/:classId'
-            element={<Timetable />}
+            element={<Timetable type="class"/>}
             />
 
         {/* Add exam dates */}
@@ -288,8 +287,6 @@ const AdminRoutes = () => {
           <Route
             path="session"
           />
-
-
 
         </Routes>
         </Layout>

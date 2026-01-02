@@ -1,11 +1,13 @@
 import "./eventModal.scss"
 
 import CancelIcon from '@mui/icons-material/Cancel';
+
 import { Link } from "react-router-dom"
-import axios from 'axios';
-import { formatDate, formatTime } from "../../config/commons";
-import { getDeleteURL } from "../../config/endpoints/delete";
 import { toast } from "react-toastify"
+import axios from 'axios';
+
+import { formatDate, formatTime, normalizeUrl } from "../../config/commons";
+import { getDeleteURL } from "../../config/endpoints/delete";
 
 // setOpen prop, event is the event we need to display and isUser will only allow the user to delete/edit the event
 
@@ -76,7 +78,12 @@ const EventModal = ({ setOpen, event, type }) => {
                         {/* If meet link and resiter link exist display them */}
                         {
                             event.meetLink && <button className="mButton">
-                                <a style={{ textDecoration: "none", color: "white" }} href={event.meetLink}>
+                                <a
+                                    style={{ textDecoration: "none", color: "white" }}
+                                    href={normalizeUrl(event.meetLink)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     Event Link
                                 </a>
                             </button>
@@ -84,7 +91,12 @@ const EventModal = ({ setOpen, event, type }) => {
 
                         {
                         event.registerLink && <button className="mButton">
-                                <a href={event.registerLink} style={{ textDecoration: "none", color: "white" }}>
+                                <a
+                                    href={normalizeUrl(event.registerLink)}
+                                    style={{ textDecoration: "none", color: "white" }}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     Register for Event
                                 </a>
                             </button>

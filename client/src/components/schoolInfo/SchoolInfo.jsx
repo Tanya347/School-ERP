@@ -1,6 +1,8 @@
 import './schoolInfo.scss'
+
 import useFetch from '../../config/service/useFetch'
 import { getSingleData } from '../../config/endpoints/get'
+
 import Loader from '../shared/loader/Loader'
 
 const SchoolInfo = ({schoolID}) => {

@@ -1,3 +1,6 @@
+import "./attendanceTable.scss"
+
+import CancelIcon from '@mui/icons-material/Cancel';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,13 +9,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import CancelIcon from '@mui/icons-material/Cancel';
-import useFetch from "../../config/service/useFetch"
 import axios from "axios";
-import "./attendanceTable.scss"
+import { toast } from "react-toastify"
+
+import useFetch from "../../config/service/useFetch"
 import { getAttendanceStatusByDate } from '../../config/endpoints/get';
 import { getClearDayAttendance } from '../../config/endpoints/delete';
-import { toast } from "react-toastify"
 
 
 const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {

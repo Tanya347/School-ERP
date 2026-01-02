@@ -1,7 +1,9 @@
+import './downloadableCard.scss';
+
 import { useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './downloadableCard.scss';
+
 import useFetch from '../../config/service/useFetch';
 
 const DownloadableCard = ({

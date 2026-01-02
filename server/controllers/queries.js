@@ -1,5 +1,6 @@
 import Query from "../models/Query.js";
 import Faculty from "../models/Faculty.js";
+
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 

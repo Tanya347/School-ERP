@@ -1,9 +1,12 @@
-import { useState } from 'react'
-import CancelIcon from '@mui/icons-material/Cancel';
 import '../shared/popup/popup.scss'
-import { forgotPaswordURL } from '../../config/endpoints/post';
-import axios from 'axios';
+
+import CancelIcon from '@mui/icons-material/Cancel';
+
+import { useState } from 'react'
 import { toast } from 'react-toastify';
+import axios from 'axios';
+
+import { forgotPaswordURL } from '../../config/endpoints/post';
 
 const ForgotPassword = ({setOpen, type}) => {
   const [email, setEmail] = useState('');

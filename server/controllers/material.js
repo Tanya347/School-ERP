@@ -1,8 +1,10 @@
 import Material from "../models/Material.js";
-import {getActiveSession} from "./session.js";
+
+import fs from "fs";
+
+import { getActiveSession } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
-import fs from "fs";
 
 export const createMaterial = catchAsync(async (req, res, next) => {
 

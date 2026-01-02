@@ -1,6 +1,7 @@
-import React from 'react'
-import { useState } from 'react'
 import './course.scss'
+
+import { useState } from 'react'
+
 import Popup from '../shared/popup/Popup'
 
 const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {

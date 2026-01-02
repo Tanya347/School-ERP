@@ -1,5 +1,5 @@
-import React from 'react'
 import './infoBanner.scss'
+
 import InfoIcon from '@mui/icons-material/Info';
 import ErrorIcon from '@mui/icons-material/Error';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';

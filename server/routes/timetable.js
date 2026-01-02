@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
     createSlot,
     getSlots,
@@ -6,6 +7,7 @@ import {
     deleteSlotsForClass,
     bulkCreateSlots
 } from "../controllers/timetable.js"
+
 import { protect, restrictTo } from "../controllers/auth.js";
 
 const router = express.Router();

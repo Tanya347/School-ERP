@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
 import "./addMarks.scss";
+
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 import { useAuth } from "../../config/context/AuthContext";
 import useFetch from "../../config/service/useFetch";
 import { getFacultyData } from "../../config/endpoints/get";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { addMarks } from "../../config/endpoints/put";
-import { toast } from "react-toastify";
+
 import InforBanner from "../../components/shared/infoBanner/InforBanner";
 import Loader from "../../components/shared/loader/Loader"
 
@@ -46,7 +48,7 @@ const AddMarks = () => {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/students/marks/subject/${course}`
+          `${process.env.REACT_APP_API_URL}/marks/subject/${course}`
         );
 
         const prefilledMarks = {};

@@ -1,15 +1,19 @@
-import { useEffect, useState } from 'react';
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import "../../config/style/form.scss";
-import { getClasses, getSingleData } from "../../config/endpoints/get";
+
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { materialInputs } from '../../config/formsource/materialInputs';
 import useFetch from '../../config/service/useFetch';
 import { editElementWithPicture } from '../../config/service/usePut';
 import { putURLs } from '../../config/endpoints/put';
-import Loader from '../../components/shared/loader/Loader';
 import { validateMaterial }from "../../config/validators/material"
 import { handleChange as commonHandleChange } from '../../config/commons';
+
+import Loader from '../../components/shared/loader/Loader';
 
 const EditMaterial = ({title}) => {
   const [file, setFile] = useState(null);

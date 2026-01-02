@@ -1,14 +1,11 @@
 import "./tableWithoutAction.scss";
 
-// datagrid from library
 import { DataGrid } from "@mui/x-data-grid";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-// useFetch and axios for fetching data
-import useFetch from "../../config/service/useFetch.js"
 
-// Modal for showing the details about tasks and updates
+import useFetch from "../../config/service/useFetch.js"
 import { getClassCourses, getTableWithoutActionURL } from "../../config/endpoints/get.js";
 
 // column, name and type are props input at the place datatable is used

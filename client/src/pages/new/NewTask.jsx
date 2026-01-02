@@ -1,16 +1,18 @@
 import "../../config/style/form.scss";
 
 import { useState } from "react";
-import { createElement } from "../../config/service/usePost";
 import { useNavigate } from "react-router-dom";
+
+import { createElement } from "../../config/service/usePost";
 import { useAuth } from "../../config/context/AuthContext";
 import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
+import { validateTask } from "../../config/validators/task";
+import { handleChange as commonHandleChange } from "../../config/commons";
+
 import Dropdown from "../../components/shared/dropdown/Dropdown";
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import Loader from "../../components/shared/loader/Loader";
-import { validateTask } from "../../config/validators/task";
-import { handleChange as commonHandleChange } from "../../config/commons";
 
 const NewTask = ({ inputs, title }) => {
 

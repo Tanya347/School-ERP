@@ -4,11 +4,13 @@ import { toast } from "react-toastify";
 
 axios.defaults.withCredentials = true;
 
-const useFetch = (url) => {
+const useFetch = (url, options = {}) => {
+    const {enabled = true} = options;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     useEffect(() => {
+        if (!enabled || !url) return;
         const fetchData = async () => {
             setLoading(true);
             try {

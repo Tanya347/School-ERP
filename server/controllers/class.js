@@ -1,7 +1,7 @@
 import Class from "../models/Class.js";
 import Student from "../models/Student.js";
 import Faculty from "../models/Faculty.js";
-import Course from "../models/Course.js";
+
 import { catchAsync } from "../utils/catchAsync.js";
 
 // Create a new class

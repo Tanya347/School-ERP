@@ -1,12 +1,15 @@
 import "./mainSidebar.scss"
+
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+
 import { useAuth } from "../../config/context/AuthContext";
-import Query from '../popUps/Query';
-import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { sidebarConsts } from "./sidebarConsts";
+
 import Tooltip from "../shared/tooltip/Tooltip";
 
 
@@ -14,9 +17,6 @@ const MainSidebar = () => {
 
     const { user } = useAuth();
     const [collapsed, setCollapsed] = useState(true);
-    
-    // useState for opening query pop up
-    const [openQuery, setOpenQuery] = useState(false);
 
     const handleToggle = () => {
         setCollapsed(!collapsed);
@@ -107,9 +107,6 @@ const MainSidebar = () => {
                                  
                 </ul>
             </motion.div >
-
-            {/* When use state becomes true pop up will show up */}
-            {openQuery && <Query setOpen={setOpenQuery} user={user} />}
         </div >
     )
 }

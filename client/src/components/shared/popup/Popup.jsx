@@ -1,5 +1,6 @@
-import CancelIcon from '@mui/icons-material/Cancel';
 import './popup.scss'
+
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const Popup = ({
     title, 

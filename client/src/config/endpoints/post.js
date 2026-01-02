@@ -22,11 +22,19 @@ export const forgotPaswordURL = (type) => {
     return `${api_url}/auth/forgotPassword/${type}`
 }
 
+const ROLE_API_MAP = {
+  admin: "admins",
+  student: "students",
+  faculty: "faculties",
+};
+
 export const resetPasswordURL = (type, token, role) => {
-    if(type === 'change')
-        return `${api_url}/${role}s/updatePassword/${token}`
-    else
-        return `${api_url}/auth/resetPassword/${type}/${token}`
-}
+  if (type === "change") {
+    const rolePath = ROLE_API_MAP[role];
+    return `${api_url}/${rolePath}/updatePassword/${token}`;
+  }
+
+  return `${api_url}/auth/resetPassword/${type}/${token}`;
+};
 
 

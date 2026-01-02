@@ -1,8 +1,10 @@
 import Faculty from "../models/Faculty.js";
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
-import { catchAsync } from "../utils/catchAsync.js";
+
 import fs from "fs";
+
+import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
 
 export const registerFaculty = catchAsync(async (req, res, next) => {

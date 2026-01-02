@@ -1,12 +1,14 @@
-import React from 'react'
 import "./viewStudents.scss"
+
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../config/context/AuthContext';
 import axios from 'axios';
+
 import useFetch from '../../config/service/useFetch';
 import { getFacultyData } from '../../config/endpoints/get';
-import GenericTable from '../../components/shared/table/Table';
 import { studentColumns } from '../../config/tableSource/studentsColumns';
+import { useAuth } from '../../config/context/AuthContext';
+
+import GenericTable from '../../components/shared/table/Table';
 
 
 const ViewStudents = () => {

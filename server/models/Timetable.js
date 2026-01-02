@@ -1,4 +1,3 @@
-// models/TimetableSlot.js
 import mongoose from "mongoose";
 
 const timetableSlotSchema = new mongoose.Schema({

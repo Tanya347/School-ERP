@@ -1,9 +1,11 @@
 import express from "express"
+
+import { protect } from "../controllers/auth.js";
 import Class from "../models/Class.js"
 import Course from "../models/Course.js"
 import Faculty from "../models/Faculty.js";
 import Student from "../models/Student.js";
-import { protect } from "../controllers/auth.js";
+
 const router = express.Router();
 
   async function getDocumentCount(model, schoolId) {

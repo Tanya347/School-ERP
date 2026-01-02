@@ -32,10 +32,10 @@ const ResetPassword = ({type}) => {
             const res = await axios.patch(resetPasswordURL(type, token, user.role), passwordCreds, {withCredentials: true})
             if(res.data.status === "success") {
                 toast.success("Password changed successfully!");
-                if(type === 'admin') {
+                if(type === 'change') {
                     await logout("Logged Out Successfully!");
                 }
-                navigate(`/${type}Login`);
+                navigate(`/${user.role}Login`);
             }
         } catch(err) {
             const errorMessage = err.response?.data?.message || "Something went wrong";
@@ -56,7 +56,7 @@ const ResetPassword = ({type}) => {
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder='Enter password'
-                        id={type === 'admin' ? 'passwordConfirm' : 'password'}
+                        id={type === 'change' ? 'passwordConfirm' : 'password'}
                         onChange={handleChange}
                         className='reset-input'
                         style={{"width": "100%", "marginTop": "10px"}}
@@ -73,7 +73,7 @@ const ResetPassword = ({type}) => {
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder='Enter password'
-                        id={type === 'admin' ? 'password' : 'passwordConfirm'}
+                        id={type === 'change' ? 'password' : 'passwordConfirm'}
                         onChange={handleChange}
                         className='reset-input'
                         style={{"width": "100%", "marginTop": "10px"}}

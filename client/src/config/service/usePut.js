@@ -3,20 +3,17 @@ import {toast} from "react-toastify"
 
 export const editElementWithPicture = async(file, info, element, url) => {
     const formData = new FormData();
+    
+    Object.keys(info).forEach((key) => {
+        if (info[key] !== undefined && info[key] !== null) {
+            formData.append(key, info[key]);
+        }
+    });
+    
     if(file) {
         formData.append("file", file);
     }
 
-    console.log(info)
-
-     Object.entries(info).forEach(([key, value]) => {
-        formData.append(key, value);
-    });
-
-    for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
-    }
-    
     try {
         const res = await axios.put(url, formData, {
             headers: {

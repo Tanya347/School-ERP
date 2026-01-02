@@ -1,9 +1,6 @@
 import "./list.scss"
-import Datatable from "../datatable/Datatable"
 
-// column is specifications of the columns in the datatable that needs to be displayed, they are specified in source
-// name is the name of the datatable
-// type tells admin side or student side
+import Datatable from "../../datatable/Datatable"
 
 const List = ({ column, name }) => {
   return (

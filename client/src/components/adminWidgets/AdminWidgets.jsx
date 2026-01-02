@@ -1,11 +1,15 @@
 import './adminWidgets.scss'
+
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import SchoolIcon from '@mui/icons-material/School';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import PeopleIcon from '@mui/icons-material/People';
+
+import { Link } from 'react-router-dom';
+
 import useFetch from '../../config/service/useFetch';
 import { getAllCount } from '../../config/endpoints/get';
-import { Link } from 'react-router-dom';
+
 import Loader from '../shared/loader/Loader';
 
 const AdminWidgets = () => {

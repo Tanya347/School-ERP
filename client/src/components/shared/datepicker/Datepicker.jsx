@@ -1,8 +1,7 @@
-// components/DatePickerComponent.js
-import React from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datePickerComponent.scss"
+
+import DatePicker from "react-datepicker";
 
 const DatePickerComponent = ({ selectedDate, onChange, placeholder, showTimeSelect = true, className = "", label }) => {
   return (

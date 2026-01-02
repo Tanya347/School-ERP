@@ -1,9 +1,12 @@
 import './registerSchool.scss'
+
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
+
 import Loader from '../../components/shared/loader/Loader';
 
 const RegisterSchool = () => {

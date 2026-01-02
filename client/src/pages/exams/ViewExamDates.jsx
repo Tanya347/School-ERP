@@ -1,9 +1,12 @@
-  import { useEffect, useState } from 'react'
 import './viewExamDates.scss'
-import { useAuth } from '../../config/context/AuthContext';
+
+import { useEffect, useState } from 'react'
 import axios from 'axios';
+
+import { useAuth } from '../../config/context/AuthContext';
 import { getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
+
 import DownloadableCard from '../../components/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"

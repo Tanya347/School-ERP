@@ -1,4 +1,5 @@
 import express from "express"
+
 import {
     clearAllAttendanceRecords,
     clearAttendanceByClass,
@@ -12,6 +13,7 @@ import {
     getStudentAttendance,
     getStudentPresenceDates
 } from "../controllers/attendance.js";
+
 import { isOwner, restrictTo, protect } from "../controllers/auth.js";
 import Attendance from "../models/Attendance.js";
 

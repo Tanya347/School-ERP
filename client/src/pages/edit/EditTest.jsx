@@ -3,11 +3,12 @@ import "../../config/style/form.scss";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
+import { ClipLoader } from "react-spinners";
+
 import useFetch from "../../config/service/useFetch";
 import { getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { useAuth } from "../../config/context/AuthContext";
-import { ClipLoader } from "react-spinners";
 import { editElement } from "../../config/service/usePut";
 import { testInputs } from "../../config/formsource/testInputs";
 

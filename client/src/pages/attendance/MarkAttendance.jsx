@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react'
 import "./markAttendance.scss"
+
+import { useEffect, useState } from 'react'
+import axios from "axios";
+import DatePicker from 'react-datepicker'
+import { useNavigate } from 'react-router-dom'
+import moment from 'moment';
+
 import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
 import { getAttendanceStatusByDate, getFacultyData } from '../../config/endpoints/get'
-import axios from "axios";
-import DatePicker from 'react-datepicker'
 import { postURLs } from '../../config/endpoints/post'
-import { useNavigate } from 'react-router-dom'
-import moment from 'moment';
 import { createElement } from '../../config/service/usePost'
+
 import InforBanner from '../../components/shared/infoBanner/InforBanner'
 
 const MarkAttendance = () => {

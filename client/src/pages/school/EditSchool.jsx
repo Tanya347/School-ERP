@@ -1,11 +1,14 @@
 import "../../config/style/form.scss";
-import { schoolInputs } from "../../config/formsource/schoolInputs"
+
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ClipLoader } from "react-spinners";
+
+import { schoolInputs } from "../../config/formsource/schoolInputs"
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import { ClipLoader } from "react-spinners";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { putURLs } from "../../config/endpoints/put";
 

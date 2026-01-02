@@ -1,5 +1,5 @@
-import React from 'react'
 import './notifsdropdown.scss'
+
 import { Link } from 'react-router-dom'
 
 const NotificationsDropdown = ({notifs, user}) => {

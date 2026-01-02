@@ -135,20 +135,6 @@ const StudentSchema = new mongoose.Schema(
       type: String,
       default: 'student',
     },
-    marks: [
-      {
-        sub_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Course',
-        },
-        total: {
-          type: Number,
-          default: 0,
-          min: [0, 'Marks cannot be less than 0'],
-          max: [100, 'Marks cannot exceed 100'], // Adjust maximum as required
-        },
-      },
-    ],
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'

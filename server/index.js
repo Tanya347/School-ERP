@@ -8,10 +8,10 @@ import cors from "cors";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
 import hpp from "hpp";
+import { rateLimit } from "express-rate-limit";
 
 import { errorHandler } from "./utils/errorHandler.js";
 import { AppError } from "./utils/customError.js";
-import {rateLimit} from "express-rate-limit";
 
 //import route
 import adminRoute from "./routes/admin.js";
@@ -31,6 +31,7 @@ import schoolRoute from "./routes/school.js";
 import timetableRoute from "./routes/timetable.js";
 import sessionRoute from "./routes/session.js";
 import materialRoute from "./routes/material.js";
+import marksRoute from "./routes/marks.js"
 
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
@@ -107,7 +108,8 @@ app.use("/api", countAllRoute);
 app.use("/api/schools", schoolRoute);
 app.use("/api/timetables", timetableRoute);
 app.use("/api/sessions", sessionRoute);
-app.use("/api/materials", materialRoute)
+app.use("/api/materials", materialRoute);
+app.use("/api/marks", marksRoute);
 
 // unhandled routes
 app.all('*', (req, res, next) => {

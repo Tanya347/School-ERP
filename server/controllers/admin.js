@@ -1,6 +1,6 @@
 import Admin from "../models/Admin.js";
-import { catchAsync } from '../utils/catchAsync.js';
 
+import { catchAsync } from '../utils/catchAsync.js';
 
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};

@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
     logout,
     protect,
@@ -7,6 +8,7 @@ import {
     forgotPassword,
     resetPassword
 } from "../controllers/auth.js";
+
 import Student from "../models/Student.js";
 import Admin from "../models/Admin.js";
 import Faculty from "../models/Faculty.js";

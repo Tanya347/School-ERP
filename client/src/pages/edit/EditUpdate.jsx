@@ -1,17 +1,18 @@
 import "../../config/style/form.scss";
 
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import useFetch from "../../config/service/useFetch";
 import { getClasses, getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
 import { useAuth } from "../../config/context/AuthContext";
-import Loader from "../../components/shared/loader/Loader";
 import { handleChange as commonHandleChange } from "../../config/commons";
-import { validateUpdate} from "../../config/validators/update"
+import { validateUpdate} from "../../config/validators/update";
+
+import Loader from "../../components/shared/loader/Loader";
 
 const EditUpdate = ({ title }) => {
 

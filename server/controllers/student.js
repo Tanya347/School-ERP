@@ -1,9 +1,10 @@
 import Student from "../models/Student.js";
 import Class from "../models/Class.js";
-import Course from "../models/Course.js";
+
+import fs from "fs";
+
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
-import fs from "fs";
 import cloudinary from "../utils/cloudinary.js";
 
 export const registerStudent = catchAsync(async (req, res, next) => {
@@ -174,153 +175,6 @@ export const getStudents = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: students
-  });
-});
-
-export const enterMarksForSubject = catchAsync(async (req, res, next) => {
-  const { subjectId } = req.params;
-  const { marksData } = req.body;
-
-  for (let data of marksData) {
-    const { studentId, marks } = data;
-    const student = await Student.findById(studentId);
-
-    if (student) {
-      const subjectMarks = student.marks.find((m) => m.sub_id.toString() === subjectId);
-      if (subjectMarks) {
-        subjectMarks.total = marks;
-      } else {
-        student.marks.push({ sub_id: subjectId, total: marks });
-      }
-      await student.save();
-    }
-  }
-
-  await Course.findByIdAndUpdate(subjectId, { marksAdded: true });
-  res.status(200).json({ 
-    status: "success",
-    message: "Marks entered successfully for all students" 
-  });
-});
-
-export const getMarksOfStudent = catchAsync(async (req, res, next) => {
-  const { studentid } = req.params;
-  // Populate class and its subjects, and marks.sub_id
-  const student = await Student.findById(studentid)
-    .populate({
-      path: 'class',
-      select: 'subjects',
-      populate: { path: 'subjects', model: 'Course', select: 'name' }
-    })
-    .populate('marks.sub_id', 'name');
-
-  if (!student) return res.status(404).json({ message: "Student not found" });
-
-  // Get all subjects from class
-  const allSubjects = student.class?.subjects || [];
-  // Map subjectId to marks for quick lookup
-  const marksMap = {};
-  student.marks.forEach(mark => {
-    marksMap[mark.sub_id._id.toString()] = mark;
-  });
-
-  // Prepare marks array for all subjects
-  const marksData = allSubjects.map(subject => {
-    const mark = marksMap[subject._id.toString()];
-    return {
-      subjectId: subject._id,
-      subjectName: subject.name,
-      marks: mark ? mark.total : null
-    };
-  });
-
-  // Check if all subjects have marks
-  const allMarksPresent = marksData.every(m => m.marks !== null);
-
-  res.status(200).json({
-    status: "success",
-    data: {marksData, allMarksPresent}
-  });
-});
-
-export const getMarksOfSubject = catchAsync(async (req, res, next) => {
-  const { subjectid } = req.params;
-  const students = await Student.find({ 'marks.sub_id': subjectid })
-    .select('name enroll marks')
-    .populate({ path: 'marks.sub_id', select: 'name' });
-
-  const result = students.map((student) => {
-    const subjectMarks = student.marks.find((mark) => mark.sub_id._id.toString() === subjectid);
-    return {
-      _id: student._id,
-      studentName: student.name,
-      enrollment: student.enroll,
-      marks: subjectMarks ? subjectMarks.total : null,
-    };
-  });
-
-  res.status(200).json({
-    status: "success",
-    data: result
-  });
-});
-
-export const getMarksOfClass = catchAsync(async (req, res, next) => {
-  const { classid } = req.params;
-  const students = await Student.find({ class: classid })
-    .select('name enroll marks')
-    .populate({ path: 'marks.sub_id', select: 'name' });
-
-  const uniqueSubjects = new Set();
-  students.forEach((student) => {
-    student.marks.forEach((mark) => uniqueSubjects.add(mark.sub_id.name));
-  });
-
-  const transformedData = students.map((student) => {
-    const studentData = { _id: student._id, studentName: student.name, enrollment: student.enroll };
-    uniqueSubjects.forEach((subject) => {
-      studentData[subject] = 0;
-    });
-    student.marks.forEach((mark) => {
-      studentData[mark.sub_id.name] = mark.total;
-    });
-    return studentData;
-  });
-
-  res.status(200).json({
-    status: "success",
-    data: transformedData
-  });
-});
-
-export const clearMarksForSubject = catchAsync(async (req, res, next) => {
-  const { subjectid } = req.params;
-  const students = await Student.find({ 'marks.sub_id': subjectid });
-
-  for (let student of students) {
-    student.marks = student.marks.filter((mark) => mark.sub_id.toString() !== subjectid);
-    await student.save();
-  }
-
-  await Course.findByIdAndUpdate(subjectid, { marksAdded: false });
-  res.status(200).json({ 
-    status: "success",
-    message: "Marks cleared for the specified subject" 
-  });
-});
-
-export const clearMarksForClass = catchAsync(async (req, res, next) => {
-  const { classid } = req.params;
-  const students = await Student.find({ class: classid });
-
-  for (let student of students) {
-    student.marks = [];
-    await student.save();
-  }
-
-  res.status(200).json({ 
-    status: 'success',
-    message: "All marks cleared for the specified class" 
   });
 });
 

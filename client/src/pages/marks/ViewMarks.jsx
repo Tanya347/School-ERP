@@ -17,7 +17,7 @@ const ViewMarks = () => {
     const fetchStudents = async () => {
       if (course) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/students/marks/subject/${course}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/marks/subject/${course}`);
           setStuData(response.data.data);
         } catch (error) {
           console.error("Error fetching student data:", error);
@@ -55,7 +55,7 @@ const ViewMarks = () => {
               <button
                 key={index}
                 onClick={() => handleClick(cl)}
-                className={course === cl._id ? "selected-class" : ""}
+                className={course === cl._id ? "selected-course" : ""}
               >{cl.subjectCode}</button>
             ))
           }

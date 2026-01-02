@@ -1,4 +1,5 @@
 import Timetable from "../models/Timetable.js";
+
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 

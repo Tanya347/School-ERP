@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   createQuery,
   deleteQuery,
@@ -6,6 +7,7 @@ import {
   getQuerys,
   updateQuery,
 } from "../controllers/queries.js";
+
 import { protect } from "../controllers/auth.js";
 
 const router = express.Router();

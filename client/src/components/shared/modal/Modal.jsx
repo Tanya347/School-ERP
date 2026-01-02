@@ -1,13 +1,15 @@
 import "./modal.scss"
 
 import CancelIcon from '@mui/icons-material/Cancel';
-import useFetch from "../../config/service/useFetch"
+
 import { useState } from "react";
 import axios from "axios";
-import { getModalURL } from "../../config/endpoints/get";
-import { putURLs } from "../../config/endpoints/put";
-import { formatDate } from "../../config/commons";
 import { toast } from "react-toastify"
+
+import useFetch from "../../../config/service/useFetch"
+import { getModalURL } from "../../../config/endpoints/get";
+import { formatDate } from "../../../config/commons";
+import { putURLs } from "../../../config/endpoints/put";
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
 

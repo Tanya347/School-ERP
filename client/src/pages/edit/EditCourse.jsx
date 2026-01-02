@@ -4,6 +4,7 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
@@ -11,6 +12,7 @@ import { editElementWithPicture } from "../../config/service/usePut";
 import { courseInputs } from "../../config/formsource/courseInputs"
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateCourse } from "../../config/validators/course"
+
 import Loader from "../../components/shared/loader/Loader";
 
 const EditCourse = ({ title }) => {

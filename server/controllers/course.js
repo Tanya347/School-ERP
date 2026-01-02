@@ -1,7 +1,9 @@
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
-import { catchAsync } from "../utils/catchAsync.js";
+
 import fs from "fs";
+
+import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
 
 // Create a new course and add it to the class

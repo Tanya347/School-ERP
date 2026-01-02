@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react'
 import './response.css'
+
+import { useEffect, useState } from 'react'
+
 import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
 import { getQueries } from '../../config/endpoints/get'

@@ -1,5 +1,6 @@
-import * as XLSX from 'xlsx';
 import "./excelButton.scss"
+
+import * as XLSX from 'xlsx';
 import DownloadIcon from '@mui/icons-material/Download';
 
 const ExportButton = ({formatted, filename, title}) => {

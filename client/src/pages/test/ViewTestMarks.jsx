@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
 import "./viewTestMarks.scss"
+
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+
 import useFetch from '../../config/service/useFetch';
 import { getSingleData } from '../../config/endpoints/get';
-import axios from 'axios';
 import { formatDate } from '../../config/commons';
 
 const ViewTestMarks = () => {

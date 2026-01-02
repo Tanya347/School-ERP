@@ -1,23 +1,27 @@
 import './navbar.scss'
-import { useState } from 'react';
-import { useContext } from 'react'
-import { useAuth } from '../../config/context/AuthContext';
-import { useEffect } from 'react';
-import axios from 'axios';
-import { getSingleData, getUpdateURL } from '../../config/endpoints/get';
+
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import useFetch from '../../config/service/useFetch'
-import NotificationsDropdown from './NotificationsDropdown';
-import { DarkModeContext } from "../../config/context/darkModeContext";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+
+import { useState, useContext, useEffect, useRef } from 'react';
+import axios from 'axios';
+
+import { useAuth } from '../../config/context/AuthContext';
+import { getSingleData, getUpdateURL } from '../../config/endpoints/get';
+import useFetch from '../../config/service/useFetch'
+import { DarkModeContext } from "../../config/context/darkModeContext";
+
+import NotificationsDropdown from './NotificationsDropdown';
 
 const Navbar = () => {
     const { Dispatch } = useContext(DarkModeContext);
     const [schoolInfo, setSchoolInfo] = useState({});
     const [showNotifications, setShowNotifications] = useState(false);
+    const dropdownRef = useRef(null);
     const { user, logout } = useAuth();
     const { data = [] } = useFetch(getUpdateURL(user));
+
 
     // Get current date and date 7 days ago
     const now = new Date();
@@ -39,6 +43,26 @@ const Navbar = () => {
     const unreadCount = notifications.filter(n => !n.read).length;
 
     useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target)
+            ) {
+            setShowNotifications(false);
+            }
+        };
+
+        if (showNotifications) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showNotifications]);
+
+
+    useEffect(() => {
         async function fetchData() {
             const schoolData = await axios.get(process.env.REACT_APP_API_URL + getSingleData(user.schoolID, "schools"));
             setSchoolInfo(schoolData.data.data);
@@ -46,15 +70,15 @@ const Navbar = () => {
         fetchData();
     }, [user.schoolID]);
 
-// Helper function to convert string to Title Case
-function toTitleCase(str) {
-    if (!str) return '';
-    return str
-        .toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-}
+    // Helper function to convert string to Title Case
+    function toTitleCase(str) {
+        if (!str) return '';
+        return str
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
 
 return (
     <div className='navbar-container'>
@@ -72,7 +96,7 @@ return (
                     {user.role === "admin" ? ( <img src="https://i.ibb.co/MBtjqXQ/no-avatar.gif" alt="" /> ) : ( <img src={user.profilePicture} alt="" />)}
                 </div>
                 <h3 className="username">{user.username}</h3>
-                <div className="notifications-wrapper">
+                <div className="notifications-wrapper" ref={dropdownRef}>
                     <NotificationsIcon className="icon" onClick={()=> setShowNotifications(!showNotifications)}/>
                     {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
                     {showNotifications && <NotificationsDropdown notifs={notifications} user={user}/>}

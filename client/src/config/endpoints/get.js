@@ -39,7 +39,7 @@ export const getTableWithoutActionURL = (path, id) => {
     if(path === 'attendance')
         return `/attendances/classperc/${id}`
     else if(path === 'marks')
-        return `/students/marks/class/${id}`
+        return `/marks/class/${id}`
 }
 
 export const getUpdateURL = (user) => {
@@ -62,16 +62,16 @@ export const getModalURL = (path, id) => {
 
 export const getTaskCalenderURL = (user) => {
     if(user.role === 'faculty')
-        return `/tasks/faculty/${user._id}`
+        return `/tasks?facultyId=${user._id}`
     else if(user.role === 'student')
-        return `/tasks/student/${user.class}`
+        return `/tasks?studentId=${user.class}`
 }
 
 export const getTestCalenderURL = (user) => {
     if(user.role === 'faculty')
-        return `/tests/faculty/${user._id}`
+        return `/tests?facultyId=${user._id}`
     else if(user.role === 'student')
-        return `/tests/student/${user.class}`
+        return `/tests?classId=${user.class}`
 }
 
 export const getClassDetails = (cl) => {

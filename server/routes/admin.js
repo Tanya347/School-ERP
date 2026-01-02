@@ -1,8 +1,10 @@
 import express from "express";
+
 import {
   deleteAdmin,
   updateAdmin,
 } from "../controllers/admin.js";
+
 import Admin from "../models/Admin.js";
 import {protect, isOwner, restrictTo, updatePassword} from "../controllers/auth.js"
 

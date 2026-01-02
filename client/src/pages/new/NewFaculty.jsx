@@ -1,13 +1,17 @@
 import "../../config/style/form.scss";
+
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+
 import { createElementWithPicture } from "../../config/service/usePost";
-import Loader from "../../components/shared/loader/Loader";
 import { postURLs } from "../../config/endpoints/post";
-import Dropdown from "../../components/shared/dropdown/Dropdown";
 import { validateFaculty } from "../../config/validators/faculty";
 import { handleChange as commonHandleChange } from "../../config/commons";
+
+import Loader from "../../components/shared/loader/Loader";
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 
 const NewFaculty = ({ inputs, title }) => {
   

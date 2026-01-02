@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   createClass,
   deleteClass,
@@ -10,6 +11,7 @@ import {
   getClassSubjects,
   addClassTeacher
 } from "../controllers/class.js";
+
 import { protect, restrictTo } from "../controllers/auth.js";
 
 const router = express.Router();

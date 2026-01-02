@@ -1,43 +1,52 @@
 // src/routes/facultyRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-
+// New forms
 import NewTask from '../../pages/new/NewTask';
-import List from '../../components/list/List';
-import FacultyProfile from "../../pages/profile/FacultyProfile";
+import NewTest from '../../pages/new/NewTest';
+import NewUpdate from '../../pages/new/NewUpdate';
+import UploadMaterial from '../../pages/new/UploadMaterial';
+
+// Components
+import List from '../../components/shared/list/List';
+import TableWithoutAction from "../../components/table/TableWithoutAction"
+import Layout from '../../components/sidebar/Layout';
+import AddMarks from '../../pages/marks/AddMarks';
+
+// Edit forms
 import EditFaculty from '../../pages/edit/EditFaculty';
 import EditTask from '../../pages/edit/EditTask';
 import EditTest from '../../pages/edit/EditTest';
-import NewTest from '../../pages/new/NewTest';
+import EditUpdate from '../../pages/edit/EditUpdate';
+
+// Pages
+import FacultyProfile from "../../pages/profile/FacultyProfile";
 import Events from '../../pages/event/Events';
 import ViewStudents from '../../pages/viewStudents/ViewStudents';
 import MarkAttendance from '../../pages/attendance/MarkAttendance';
 import AttendanceInfo from '../../pages/attendance/AttendanceInfo';
-import AddMarks from '../../pages/marks/AddMarks';
 import ViewMarks from '../../pages/marks/ViewMarks';
-import TableWithoutAction from "../../components/table/TableWithoutAction"
 import ViewTestMarks from '../../pages/test/ViewTestMarks';
-import Layout from '../../components/sidebar/Layout';
-import NewUpdate from '../../pages/new/NewUpdate';
-import EditUpdate from '../../pages/edit/EditUpdate';
-import UploadMaterial from '../../pages/new/UploadMaterial';
+import EventsList from '../../pages/event/EventsList';
+import FacultyHome from '../../pages/home/FacultyHome';
+import ResetPassword from '../../pages/auth/ResetPassword';
+import Timetable from '../../pages/timetable/Timetable';
 
+// Form Inputs
 import { taskInputs } from '../formsource/taskInputs';
 import { testInputs } from '../formsource/testInputs';
 import { updateInputs } from '../formsource/updateInputs';
 import { materialInputs } from '../formsource/materialInputs';
 
+// Datatable Columns
 import { taskColumns } from '../datatablesource/taskColumns';
 import { queryColumns } from '../datatablesource/queryColumns';
 import { testColumns } from '../datatablesource/testColumns';
-import {attendanceColumns} from "../datatablesource/attendanceColumns"
+import { attendanceColumns } from "../datatablesource/attendanceColumns"
 import { updateColumns } from '../datatablesource/updateColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
 
 import { useAuth } from '../../config/context/AuthContext';
-import EventsList from '../../pages/event/EventsList';
-import FacultyHome from '../../pages/home/FacultyHome';
-import ResetPassword from '../../pages/auth/ResetPassword';
 
 const FacultyRoutes = () => {
 
@@ -218,6 +227,12 @@ const FacultyRoutes = () => {
             path="events"
             element={<EventsList type="Faculty"/>}
             />
+
+          {/* view timetables */}
+          <Route
+            path='timetable'
+            element={<Timetable type="faculty"/>}
+          />
 
           {/* edit password */}
           <Route

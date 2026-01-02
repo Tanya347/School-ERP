@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 import validator from "validator";
 
@@ -45,10 +44,6 @@ const CourseSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Faculty",
       default: null,
-    },
-    marksAdded: {
-      type: Boolean,
-      default: false,
     },
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,

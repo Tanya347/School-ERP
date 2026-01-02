@@ -1,17 +1,21 @@
 import './events.scss'
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
+
 import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-datepicker/dist/react-datepicker.css";
+
 import useFetch from '../../config/service/useFetch';
-import Modal from '../../components/popUps/Modal';
 import { useAuth } from '../../config/context/AuthContext';
 import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../config/endpoints/get';
-import EventModal from '../../components/popUps/EventModal';
+
+import Modal from '../../components/shared/modal/Modal';
+import EventModal from '../../components/eventModal/EventModal';
 
 const locales = {
     "en-US": require("date-fns/locale/en-US"),

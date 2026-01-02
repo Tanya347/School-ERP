@@ -26,6 +26,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import AlarmAddIcon from '@mui/icons-material/AlarmAdd';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 export const sidebarConsts = {
     information: [
@@ -75,6 +76,12 @@ export const sidebarConsts = {
             title: 'Calender',
             getPath: (user) => `/${user.role}/calender`,
             icon: CalendarMonthIcon,
+            roles: ['student', 'faculty']
+        },
+        {
+            title: "My Timetable",
+            getPath: (user) => `/${user.role}/timetable`,
+            icon: EventNoteIcon,
             roles: ['student', 'faculty']
         },
         {

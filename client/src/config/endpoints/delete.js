@@ -13,7 +13,7 @@ export const getClearDayAttendance = (id) => {
 }
 
 export const getClearMarksSubject = (id) => {
-    return `${api_url}/students/marks/subject/${id}`
+    return `${api_url}/marks/subject/${id}`
 }
 
 export const getClearTimetableForClass = (classid) => {

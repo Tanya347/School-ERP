@@ -1,5 +1,6 @@
 import Update from "../models/Update.js";
 import Faculty from "../models/Faculty.js";
+
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 

@@ -1,10 +1,12 @@
 import './facultyHome.scss'
-import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
+
 import { useAuth } from '../../config/context/AuthContext';
-import EventCalender from '../../components/calender/Calender';
-import Lecture from '../../components/lecture/Lecture';
 import useFetch from '../../config/service/useFetch';
 import { getSingleData } from '../../config/endpoints/get';
+
+import EventCalender from '../../components/calender/Calender';
+import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
+import Lecture from '../../components/lecture/Lecture';
 import FacultyProfile from '../../components/profile/FacultyProfile';
 import Course from '../../components/course/Course';
 

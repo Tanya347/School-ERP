@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Dropdown from '../../components/shared/dropdown/Dropdown';
-import { getClasses, getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
 import "./newTimeTable.scss";
-import { getClearTimetableForClass } from '../../config/endpoints/delete';
-import {toast} from "react-toastify"
-import { periodTimes, days, periods } from '../../config/commons';
+
 import EventBusyIcon from '@mui/icons-material/EventBusy';
+
+import { useState, useEffect } from 'react';
+import {toast} from "react-toastify"
+import axios from 'axios';
+
+import { getClasses, getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
+import { getClearTimetableForClass } from '../../config/endpoints/delete';
+import { periodTimes, days, periods } from '../../config/commons';
+
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
 import Loader from '../../components/shared/loader/Loader';
+import Dropdown from '../../components/shared/dropdown/Dropdown';
 
 const NewTimeTable = () => {
 

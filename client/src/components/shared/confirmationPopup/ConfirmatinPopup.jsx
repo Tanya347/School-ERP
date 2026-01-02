@@ -1,5 +1,4 @@
-import React from "react";
-import "./confirmPopup.scss"; // We'll style it next
+import "./confirmPopup.scss";
 
 const ConfirmPopup = ({ message, onConfirm, onCancel }) => {
   return (

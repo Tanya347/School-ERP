@@ -1,10 +1,12 @@
-import { getDatatableURL } from "../../config/endpoints/get"
-import EventModal from "../../components/popUps/EventModal";
-import { useState } from "react";
-import useFetch from "../../config/service/useFetch";
-import { useEffect } from "react";
 import './eventsList.scss'
+
+import { useEffect, useState } from "react";
+
+import { getDatatableURL } from "../../config/endpoints/get"
+import useFetch from "../../config/service/useFetch";
+
 import Loader from "../../components/shared/loader/Loader";
+import EventModal from "../../components/eventModal/EventModal";
 
 const EventsList = ({type}) => {
     const [list, setList] = useState([]);

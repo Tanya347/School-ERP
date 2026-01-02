@@ -1,9 +1,11 @@
 import express from "express";
+
 import {
     createSchool,
     getSchoolInfo,
     editSchoolInfo
 } from "../controllers/school.js"
+
 import upload from "../utils/multer.js";
 import { protect, restrictTo } from "../controllers/auth.js";
 

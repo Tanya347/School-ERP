@@ -4,29 +4,33 @@ import Faculty from "../models/Faculty.js";
 import Class from "../models/Class.js";
 import Course from "../models/Course.js";
 import Student from "../models/Student.js";
-
 import Event from "../models/Event.js";
 import Query from "../models/Query.js";
 import Timetable from "../models/Timetable.js";
 import Task from "../models/Task.js";
 import Test from "../models/Test.js";
 import Attendance from "../models/Attendance.js";
+
 import { catchAsync } from '../utils/catchAsync.js';
 
-const getSessionName = () => {
-  const currentYear = new Date().getFullYear();
-  return `${currentYear}-${currentYear + 1}`;
+const getSessionMeta = () => {
+  const startYear = new Date().getFullYear();
+  const endYear = startYear + 1;
+  return {
+    name: `${startYear}-${endYear}`,
+    startYear,
+    endYear,
+  };
 };
+
 
 export const getActiveSession = async (user) => {
   const schoolID = user.schoolID;
   if (!schoolID) {
     throw new Error('School ID is required');
   }
-  const activeSession = await Session.findOne({ schoolID, isActive: true })
-    .populate('name');
-  
-  return activeSession;
+  return await Session.findOne({ schoolID, isActive: true })
+    .select('name startYear endYear isActive');
 };
 
 const updateClass = async (schoolID) => {
@@ -114,9 +118,11 @@ export const createSession = catchAsync(async (req, res, next) => {
     const activeSession = await Session.findOne({ schoolID, isActive: true });
 
     // Prepare session name and new session instance
-    const sessionName = getSessionName();
+    const { name, startYear, endYear } = getSessionMeta();
     const newSession = new Session({
-      name: sessionName,
+      name,
+      startYear,
+      endYear,
       schoolID,
       isActive: true,
     });
@@ -166,9 +172,9 @@ export const createSession = catchAsync(async (req, res, next) => {
 
     // Update all students to point to the new session
     const studentUpdate = Student.updateMany(
-        { schoolID },
+        { schoolID, passedOut: false },
         {
-        $set: { sessionID: savedNewSession._id },
+          $set: { sessionID: savedNewSession._id },
         }
     );
 

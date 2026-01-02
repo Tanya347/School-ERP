@@ -1,15 +1,19 @@
-import { useState } from 'react';
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import "../../config/style/form.scss";
-import Dropdown from '../../components/shared/dropdown/Dropdown';
+
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from "react-spinners";
+
 import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
-import { useNavigate } from 'react-router-dom';
-import { ClipLoader } from "react-spinners";
 import { useAuth } from '../../config/context/AuthContext';
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateMaterial } from '../../config/validators/material';
+
+import Dropdown from '../../components/shared/dropdown/Dropdown';
 
 const UploadMaterial = ({title, inputs}) => {
   const [file, setFile] = useState(null);

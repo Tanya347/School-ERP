@@ -1,14 +1,17 @@
 import "./login.scss"
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { postURLs } from "../../config/endpoints/post"
 import { toast } from "react-toastify";
+
+import { postURLs } from "../../config/endpoints/post"
 import { useAuth } from "../../config/context/AuthContext"
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import ForgotPassword from "../../components/popUps/ForgotPassword"
+
+import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
 
 // type will tell whether admin or student
 function Login({ type }) {

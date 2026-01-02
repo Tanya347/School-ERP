@@ -1,10 +1,11 @@
 import "../../config/style/profile.scss";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import Course from "../../components/course/Course";
 
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
+
+import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
 
 const FacultyProfile = ({ type }) => {

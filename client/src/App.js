@@ -6,6 +6,8 @@ import "./config/style/base.scss";
 import { useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DarkModeContext } from "./config/context/darkModeContext";
+import { useAuth } from "./config/context/AuthContext";
+import { ToastContainer } from "react-toastify";
 
 // Common Pages
 import Login from "./pages/auth/Login";
@@ -14,8 +16,6 @@ import RegisterSchool from "./pages/school/RegisterSchool"
 import AdminRoutes from "./config/routes/AdminRoutes";
 import FacultyRoutes from "./config/routes/FacultyRoutes";
 import StudentRoutes from "./config/routes/StudentRoutes";
-import { useAuth } from "./config/context/AuthContext";
-import { ToastContainer } from "react-toastify";
 import ResetPassword from "./pages/auth/ResetPassword";
 
 function App() {
@@ -31,7 +31,9 @@ function App() {
   return (
     // darkmode context
     <>
-      <ToastContainer />
+      <ToastContainer 
+        theme = {darkMode ? "dark" : "light"}
+      />
       <div className={darkMode ? "app dark" : "app"}>
         <BrowserRouter>
           <Routes>

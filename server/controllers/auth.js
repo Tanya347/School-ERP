@@ -1,13 +1,16 @@
 import Admin from "../models/Admin.js";
 import Student from "../models/Student.js"
 import Faculty from "../models/Faculty.js"
-import jwt from "jsonwebtoken";
-import {promisify} from 'util';
-import { catchAsync } from "../utils/catchAsync.js";
+
 const USER_MODELS = [Admin, Student, Faculty];
+
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { promisify } from 'util';
+
+import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import { sendEmail } from "../utils/email.js";
-import crypto from "crypto"
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT, {

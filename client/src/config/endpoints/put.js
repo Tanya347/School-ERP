@@ -6,7 +6,7 @@ export const putURLs = (path, id) => {
 }
 
 export const addMarks = (course) => {
-    return `${api_url}/students/marks/${course}`
+    return `${api_url}/marks/${course}`
 }
 
 export const addClassTeacher = (sclass) => {

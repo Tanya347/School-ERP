@@ -1,13 +1,17 @@
-import { useState } from 'react'
 import './viewClass.scss'
-import useFetch from '../../config/service/useFetch'
-import { useLocation } from 'react-router-dom'
-import Course from '../../components/course/Course'
-import { getClassDetails } from '../../config/endpoints/get'
+
 import EditIcon from '@mui/icons-material/Edit';
-import GenericTable from '../../components/shared/table/Table'
+
+import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+
+import useFetch from '../../config/service/useFetch'
+import { getClassDetails } from '../../config/endpoints/get'
 import { studentColumns } from '../../config/tableSource/studentsColumns'
-import AddClassTeacher from '../../components/popUps/AddClassTeacher'
+
+import GenericTable from '../../components/shared/table/Table'
+import Course from '../../components/course/Course'
+import AddClassTeacher from '../../components/addClassTeacher/AddClassTeacher'
 import Loader from '../../components/shared/loader/Loader'
 
 const ViewClass = () => {

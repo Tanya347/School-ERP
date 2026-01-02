@@ -1,14 +1,20 @@
 import "../../config/style/form.scss";
-import { useEffect, useState } from "react";
+
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import { useLocation } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+
 import useFetch from "../../config/service/useFetch";
 import { putURLs } from "../../config/endpoints/put";
 import { getSingleData } from "../../config/endpoints/get";
 import { formatTime } from "../../config/commons";
-import Loader from "../../components/shared/loader/Loader";
 import { editElementWithPicture } from "../../config/service/usePut";
-import DatePicker from "react-datepicker";
+import { validateEvent } from "../../config/validators/event";
+import { handleChange as commonHandleChange} from "../../config/commons"
+
+import Loader from "../../components/shared/loader/Loader";
 
 const EditEvent = ({ inputs, title }) => {
     const location = useLocation();
@@ -20,6 +26,7 @@ const EditEvent = ({ inputs, title }) => {
     const [end, setEnd] = useState(null)
     const [sending, setSending] = useState(false);
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (data) {
@@ -30,7 +37,7 @@ const EditEvent = ({ inputs, title }) => {
     }, [data, data.startDate, data.endDate])
 
     const handleChange = (e) => {
-        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        commonHandleChange(e, setInfo, setErrors, validateEvent);
     }
 
     const handleClick = async (e) => {
@@ -45,7 +52,7 @@ const EditEvent = ({ inputs, title }) => {
             }
             const res = await editElementWithPicture(file, newInfo, "event", putURLs("events", id));
             if(res.data.status === 'success') {
-                window.location.reload();
+                navigate('/admin/events');
             }
         } catch(err) {
             console.log(err)

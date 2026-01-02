@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   createCourse,
   deleteCourse,
@@ -9,6 +10,7 @@ import {
   clearExamDatesForClass,
   getExamDatesForClass
 } from "../controllers/course.js";
+
 import upload from "../utils/multer.js";
 import { restrictTo, protect } from "../controllers/auth.js";
 

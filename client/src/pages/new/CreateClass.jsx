@@ -1,11 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import "../../config/style/form.scss"
-import { createElement } from "../../config/service/usePost";
+
+import { useNavigate } from "react-router-dom";
 import { useState } from 'react'
+
 import { postURLs } from "../../config/endpoints/post";
-import Loader from "../../components/shared/loader/Loader";
+import { createElement } from "../../config/service/usePost";
 import { validateClass } from "../../config/validators/class";
 import { handleChange as commonHandleChange } from "../../config/commons";
+
+import Loader from "../../components/shared/loader/Loader";
 
 const CreateClass = ({ inputs, title}) => {
     const [info, setInfo] = useState({});

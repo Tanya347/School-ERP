@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './calender.scss'; // Custom styles for highlighting and popup
+
+import { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
+import Calendar from 'react-calendar';
+
 import useFetch from '../../config/service/useFetch';
 import { getDatatableURL } from '../../config/endpoints/get';
-import { toast } from "react-toastify";
 
 const EventCalender = () => {
   const [selectedDate, setSelectedDate] = useState(null);

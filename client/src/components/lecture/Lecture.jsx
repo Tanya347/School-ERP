@@ -1,5 +1,7 @@
 import './lecture.scss'
+
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 import useFetch from '../../config/service/useFetch';
 import { getLectures } from '../../config/endpoints/get';
 

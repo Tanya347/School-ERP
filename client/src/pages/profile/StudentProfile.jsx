@@ -1,10 +1,12 @@
 import "../../config/style/profile.scss";
+import 'react-circular-progressbar/dist/styles.css';
 
 import { useLocation, useNavigate } from "react-router-dom";
+
 import useFetch from "../../config/service/useFetch";
-import Course from "../../components/course/Course";
 import { getSingleData } from "../../config/endpoints/get";
-import 'react-circular-progressbar/dist/styles.css';
+
+import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
 
 const StudentProfile = ({ type }) => {

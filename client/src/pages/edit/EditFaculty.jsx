@@ -1,8 +1,10 @@
 import "../../config/style/form.scss";
 
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
@@ -11,6 +13,7 @@ import { facultyInputs } from "../../config/formsource/facultyInputs";
 import { useAuth } from "../../config/context/AuthContext";
 import { validateFaculty } from "../../config/validators/faculty"
 import { handleChange as commonHandleChange } from "../../config/commons";
+
 import Loader from "../../components/shared/loader/Loader";
 
 const EditFaculty = ({ title }) => {

@@ -1,25 +1,27 @@
+import "./attendanceInfo.scss"
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
+
 import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
+
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-datepicker/dist/react-datepicker.css";
+import { useEffect, useState } from 'react'
 import moment from 'moment';
 import CustomToolbar from "../../components/utils/CustomToolbar"
-
-
 import axios from "axios"
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+
 import { useAuth } from "../../config/context/AuthContext"
 import useFetch from "../../config/service/useFetch"
 import { getAttendanceDates, getFacultyData, getLectureCount } from "../../config/endpoints/get"
-import "./attendanceInfo.scss"
-
-import { useEffect, useState } from 'react'
-import AttendanceTable from "../../components/popUps/AttendanceTable";
 import { getClearClassURL } from "../../config/endpoints/delete";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+
+import AttendanceTable from "../../components/attendanceTable/AttendanceTable";
 
 const locales = {
     "en-US": require("date-fns/locale/en-US"),

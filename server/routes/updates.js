@@ -1,4 +1,5 @@
 import express from "express"
+
 import {
     createUpdate,
     deleteUpdate,
@@ -7,6 +8,7 @@ import {
     updateUpdate,
     bulkDeleteUpdate
 } from "../controllers/updates.js";
+
 import { protect } from "../controllers/auth.js";
 
 // router variable

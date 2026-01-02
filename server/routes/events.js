@@ -1,4 +1,5 @@
 import express from "express"
+
 import {
     createEvent,
     deleteEvent,
@@ -6,9 +7,9 @@ import {
     getEvents,
     updateEvent,
 } from "../controllers/events.js";
+
 import { protect } from "../controllers/auth.js";
 import upload from "../utils/multer.js";
-// router variable
 
 const router = express.Router();
 

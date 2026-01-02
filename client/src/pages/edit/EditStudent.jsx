@@ -1,17 +1,20 @@
 import "../../config/style/form.scss";
 
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import useFetch from "../../config/service/useFetch";
 import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { studentInputs } from "../../config/formsource/studentInputs";
 import { useAuth } from "../../config/context/AuthContext";
-import Loader from "../../components/shared/loader/Loader";
 import { validateStudent } from "../../config/validators/student";
 import { handleChange as commonHandleChange } from "../../config/commons";
+
+import Loader from "../../components/shared/loader/Loader";
 
 const EditUser = ({ title }) => {
 

@@ -2,10 +2,15 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import EditStudent from '../../pages/edit/EditStudent';
 import StudentProfile from '../../pages/profile/StudentProfile';
-import List from '../../components/list/List';
+import List from '../../components/shared/list/List';
 import Events from '../../pages/event/Events';
 import StudentHome from '../../pages/home/StudentHome';
 import Layout from '../../components/sidebar/Layout';
+import EventsList from '../../pages/event/EventsList';
+import ViewExamDates from '../../pages/exams/ViewExamDates';
+import Marksheet from '../../pages/marks/Marksheet';
+import ResetPassword from '../../pages/auth/ResetPassword';
+import Timetable from '../../pages/timetable/Timetable';
 
 import { taskColumns } from '../datatablesource/taskColumns';
 import { testColumns } from '../datatablesource/testColumns';
@@ -13,10 +18,6 @@ import { materialColumns } from '../datatablesource/materialColumns';
 import { updateColumns } from '../datatablesource/updateColumns';
 
 import { useAuth } from '../context/AuthContext';
-import EventsList from '../../pages/event/EventsList';
-import ViewExamDates from '../../pages/exams/ViewExamDates';
-import Marksheet from '../../pages/marks/Marksheet';
-import ResetPassword from '../../pages/auth/ResetPassword';
 
 const StudentRoutes = () => {
     const { user } = useAuth();
@@ -44,8 +45,8 @@ const StudentRoutes = () => {
             <Route path="exams" element={<ViewExamDates />} />
             <Route path="marks" element={<Marksheet />}/>
             <Route path="updates" element={<List column={updateColumns} name="Update" />}/>
-            <Route path="updatePassword/:studentId" element={<ResetPassword type="change"/>}
-          />
+            <Route path="updatePassword/:studentId" element={<ResetPassword type="change"/>} />
+            <Route path="timetable" element={<Timetable type="class"/>} />
         </Routes>
        </Layout>
     </RequireStudent>

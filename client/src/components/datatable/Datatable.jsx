@@ -1,15 +1,18 @@
 import "./datatable.scss";
+
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../config/context/AuthContext.js";
 import axios from "axios";
+import { toast } from "react-toastify";
+
 import useFetch from "../../config/service/useFetch.js";
-import Modal from "../popUps/Modal.jsx";
 import { getDatatableURL } from "../../config/endpoints/get.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
-import { toast } from "react-toastify";
-import AddClass from "../../pages/class/AddClass.jsx";
+
+import Modal from "../shared/modal/Modal.jsx";
+import AddClass from "../addCourse/AddClass.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
 import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
@@ -209,7 +212,7 @@ const Datatable = ({ column, name }) => {
             className="datagrid"
             rows={list}
             columns={column.concat(actionColumn)}
-            checkboxSelection
+            checkboxSelection={user.role !== "student"}
             onSelectionModelChange={(ids) => setSelectedRows(ids)}
             selectionModel={selectedRows}
             pageSize={10}

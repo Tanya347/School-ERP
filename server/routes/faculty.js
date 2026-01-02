@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   updateFaculty,
   deleteFaculty,
@@ -10,6 +11,7 @@ import {
   AddNewCourse,
   bulkDeleteFaculty
 } from "../controllers/faculty.js";
+
 import upload from "../utils/multer.js";
 import { restrictTo, protect, updatePassword } from "../controllers/auth.js";
 import Faculty from "../models/Faculty.js";

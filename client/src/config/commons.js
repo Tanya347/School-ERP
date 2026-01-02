@@ -50,3 +50,11 @@ export const handleChange = (e, setInfo, setErrors, validator) => {
   const error = validator(id, value);
   setErrors((prev) => ({ ...prev, [id]: error }));
 };
+
+export const normalizeUrl = (url) => {
+  if (!url) return "#";
+
+  return url.startsWith("http://") || url.startsWith("https://")
+    ? url
+    : `https://${url}`;
+};

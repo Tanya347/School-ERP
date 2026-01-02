@@ -1,16 +1,19 @@
 import "./studentHome.scss"
+
+import axios from "axios"
+import { CircularProgressbar } from "react-circular-progressbar";
+import { useEffect, useState } from "react"
+import { ClipLoader } from "react-spinners";
+
+import { getSingleData } from "../../config/endpoints/get"
+import useFetch from "../../config/service/useFetch"
 import { useAuth } from '../../config/context/AuthContext'
+
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
 import EventCalender from "../../components/calender/Calender"
-import { CircularProgressbar } from "react-circular-progressbar";
 import Lecture from "../../components/lecture/Lecture"
-import useFetch from "../../config/service/useFetch"
-import { getSingleData } from "../../config/endpoints/get"
 import StudentProfile from "../../components/profile/StudentProfile"
 import Course from "../../components/course/Course"
-import { useEffect, useState } from "react"
-import axios from "axios"
-import { ClipLoader } from "react-spinners";
 
 const StudentHome = () => {
   const {user} = useAuth();

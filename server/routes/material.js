@@ -1,4 +1,5 @@
 import express from 'express';
+
 import {
     createMaterial,
     editMaterial,
@@ -7,9 +8,11 @@ import {
     getMaterial,
     bulkDeleteMaterial
 } from "../controllers/material.js"
+
 import { protect } from '../controllers/auth.js';
-const router = express.Router();
 import upload from '../utils/multer.js';
+
+const router = express.Router();
 
 router.post('/', protect(), upload.single('file'), createMaterial);
 router.put('/:id', protect(), upload.single('file'), editMaterial);

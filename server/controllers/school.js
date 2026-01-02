@@ -1,8 +1,10 @@
 import School from "../models/School.js";
 import Admin from "../models/Admin.js";
+
+import fs from "fs";
+
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
-import fs from "fs";
 import cloudinary from "../utils/cloudinary.js";
 import { sendEmail } from "../utils/email.js";
 

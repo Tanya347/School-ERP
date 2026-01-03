@@ -13,6 +13,7 @@ import { periodTimes, days, periods } from '../../config/commons';
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
 import Loader from '../../components/shared/loader/Loader';
 import Dropdown from '../../components/shared/dropdown/Dropdown';
+import { bulkCreateTimetable } from "../../config/endpoints/post";
 
 const NewTimeTable = () => {
 
@@ -127,7 +128,7 @@ const NewTimeTable = () => {
       }
 
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/timetables/bulkCreate`,
+        bulkCreateTimetable(),
         { slots: slotData },
         { withCredentials: true }
       );

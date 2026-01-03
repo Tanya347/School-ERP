@@ -18,7 +18,7 @@ import Student from "../models/Student.js"
 const router = express.Router();
 
 router.post("/registerStudent", protect(), restrictTo("admin"), upload.single('file'), registerStudent);
-router.put("/:id", protect(), restrictTo("admin", "student"), updateStudent);
+router.put("/:id", protect(), restrictTo("admin", "student"), upload.single('file'), updateStudent);
 router.delete("/:id", protect(), restrictTo("admin"), deleteStudent);
 router.get("/:id", protect(), getStudent);
 router.get("/single/:id", protect(), getSingleStudent);

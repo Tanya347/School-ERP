@@ -2,10 +2,10 @@ import "../../config/style/form.scss";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
-import { useAuth } from "../../config/context/AuthContext";
 import { createElement } from "../../config/service/usePost";
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateTest } from "../../config/validators/test";
@@ -25,7 +25,7 @@ const NewTest = ({ inputs, title }) => {
   
   const navigate = useNavigate();
   
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateTest);
@@ -61,7 +61,7 @@ const NewTest = ({ inputs, title }) => {
   return (
 
     <div className="new">
-      <div className="newContainer">
+      <div className="new-container">
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -70,7 +70,7 @@ const NewTest = ({ inputs, title }) => {
             <form>
 
               {inputs.map((input) => (
-                <div className="formInput" key={input.id}>
+                <div className="form-input" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     onChange={handleChange}
@@ -114,7 +114,7 @@ const NewTest = ({ inputs, title }) => {
               />
             
             </form>
-            <div className="submitButton">
+            <div className="submit-button">
             {loading && <Loader text="Creating Test..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Test</button>

@@ -20,7 +20,7 @@ import { updateColumns } from '../datatablesource/updateColumns';
 import { useAuth } from '../context/AuthContext';
 
 const StudentRoutes = () => {
-    const { user } = useAuth();
+    const { user } = useSelector(state => state.auth);
   
     const RequireStudent = ({ children }) => {
         if(user && user.role === 'student') {

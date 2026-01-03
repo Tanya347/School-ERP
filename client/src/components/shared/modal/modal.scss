@@ -11,7 +11,7 @@
   justify-content: center;
   text-align: center;
 
-  .mContainer {
+  .m-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,7 +23,7 @@
     height: fit-content;
     position: relative;
 
-    .mClose {
+    .m-close {
       position: absolute;
       top: 0;
       right: 0;
@@ -36,7 +36,7 @@
       }
     }
 
-    .mTasks {
+    .m-tasks {
       p {
         padding-top: 10px;
 
@@ -55,20 +55,20 @@
       }
     }
 
-    .mTitle {
+    .m-title {
       font-weight: 500;
       text-transform: capitalize;
       font-size: 1.5rem;
       padding: 10px 0;
     }
 
-    .mDesc {
+    .m-desc {
       color: rgba(0, 0, 0, 0.699);
       border-radius: 5px;
       padding: 5px 10px;
     }
 
-    .mButton {
+    .m-button {
       width: 100%;
       margin-top: 20px;
 
@@ -91,13 +91,13 @@
 }
 
 .app.dark .modal {
-    .mContainer {
+    .m-container {
         border: 1px solid var(--gray);
         background-color: var(--light-black);
-        .mDesc {
+        .m-desc {
             color: rgba(255, 255, 255, 0.699);
         }
-        .mClose {
+        .m-close {
             &:hover {
                 color: rgba(255, 255, 255, 0.699);
             }

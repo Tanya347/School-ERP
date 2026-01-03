@@ -38,12 +38,12 @@ const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
       }
 
   return (
-    <div className="attendanceModal">
-        <div className="attContainer">
+    <div className="attendance-modal">
+        <div className="att-container">
 
             {/* setOpen set to false so that pop up closes */}
             <CancelIcon
-                    className="attClose"
+                    className="att-close"
                     onClick={() => setOpen(false)}
                 />
 
@@ -54,9 +54,9 @@ const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
 
                     {/* Column Names */}
                     <TableRow>
-                        <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Name</TableCell>
-                        <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Enrollment Number</TableCell>
-                        <TableCell className="tableCell" style={{"fontWeight": "bold"}}>Status</TableCell>
+                        <TableCell className="table-cell" style={{"fontWeight": "bold"}}>Name</TableCell>
+                        <TableCell className="table-cell" style={{"fontWeight": "bold"}}>Enrollment Number</TableCell>
+                        <TableCell className="table-cell" style={{"fontWeight": "bold"}}>Status</TableCell>
                     </TableRow>
                     </TableHead>
 
@@ -69,9 +69,9 @@ const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
                         
 
                         {/* Other details */}
-                        <TableCell className="tableCell">{row.enroll}</TableCell>
-                        <TableCell className="tableCell">{row.name}</TableCell>
-                        <TableCell className="tableCell">
+                        <TableCell className="table-cell">{row.enroll}</TableCell>
+                        <TableCell className="table-cell">{row.name}</TableCell>
+                        <TableCell className="table-cell">
                             <span className={`status ${row.status}`}>{row.status}</span>
                         </TableCell>
                         </TableRow>

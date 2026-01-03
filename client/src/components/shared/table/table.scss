@@ -1,4 +1,4 @@
-.genericTable {
+.generic-table {
 
   max-height: 400px;
 
@@ -12,7 +12,7 @@
     }
   }
 
-  .tableCell {
+  .table-cell {
 
     .cellWrapper {
       display: flex;
@@ -30,7 +30,7 @@
   }
 }
 
-.app.dark .genericTable{
+.app.dark .generic-table{
 
   .MuiTableCell-root {
     color: var(--white) !important;

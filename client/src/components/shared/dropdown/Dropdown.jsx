@@ -18,7 +18,7 @@ const Dropdown = ({
   const renderedOptions = url ? dynamicOptions : options;
 
   return (
-    <div className="formInput">
+    <div className="form-input">
       <label className='dropdown-label'>{title}</label>
       <select
         id={id}

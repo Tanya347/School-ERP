@@ -10,26 +10,26 @@ const Popup = ({
     customClass
 }) => {
     return (
-        <div className={`popupModal ${customClass || ''}`}>
-            <div className="popupContainer">
+        <div className={`popup-modal ${customClass || ''}`}>
+            <div className="popup-container">
                 <CancelIcon
-                    className="popupClose"
+                    className="popup-close"
                     onClick={onClose}
                 />
-                {title && <div className="popupTitle">{title}</div>}
-                {content ? (<div className="popupContent">
+                {title && <div className="popup-title">{title}</div>}
+                {content ? (<div className="popup-content">
                     {typeof content === 'string' ? <p>{content}</p> : content}
                 </div>) : (
-                    <div className="popupContent">
-                        <div className="popupDesc"></div>
+                    <div className="popup-content">
+                        <div className="popup-desc"></div>
                     </div>
                 )}
                 {actions && (
-                <div className="popupActions">
+                <div className="popup-actions">
                     {actions.map((action, index) => (
                     <button
                         key={index}
-                        className="popupButton"
+                        className="popup-button"
                         onClick={action.onClick}
                     >
                         {action.label}

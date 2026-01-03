@@ -1,7 +1,7 @@
-.viewClass {
+.view-class {
     width: 100%;
 
-    .viewClassContainer {
+    .view-class-container {
         margin-top: 50px;
         display: flex;
         gap: 50px;
@@ -36,7 +36,7 @@
             gap: 20px;
         }
 
-        .studentButton {
+        .student-button {
             background-color: var(--light-purple);
             transition: all ease-in-out 0.2s;
             &:hover {
@@ -44,7 +44,7 @@
             }
         }
 
-        .courseButton {
+        .course-button {
             background-color: rgb(245, 245, 219);
             transition: all ease-in-out 0.2s;
             &:hover {
@@ -52,7 +52,7 @@
             }
         }
 
-        .facultyButton {
+        .faculty-button {
             background-color: var(--light-blue);
             transition: all ease-in-out 0.2s;
             &:hover {

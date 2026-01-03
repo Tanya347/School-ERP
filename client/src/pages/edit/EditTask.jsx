@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
-import { useAuth } from "../../config/context/AuthContext";
 import { getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
@@ -24,7 +24,7 @@ const EditTask = ({ title }) => {
   const navigate = useNavigate();
 
   // get location and extract id out of it
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const id = location.pathname.split("/")[4];
 
@@ -68,7 +68,7 @@ const EditTask = ({ title }) => {
   return (
     <div className="new">
 
-      <div className="newContainer">
+      <div className="new-container">
 
         {/* Title of form */}
         <div className="top">
@@ -81,7 +81,7 @@ const EditTask = ({ title }) => {
             
             <form>
               {taskInputs.map((field) => (
-                <div className="formInput" key={field.id}>
+                <div className="form-input" key={field.id}>
                   <label>{field.label}</label>
                   <input
                     id={field.id}
@@ -93,7 +93,7 @@ const EditTask = ({ title }) => {
                 </div>
               ))}
               
-            <div className="formInput">
+            <div className="form-input">
                 <label>Choose a Class</label>
                 <select
                   onChange={(e) => setSclass(e.target.value)}
@@ -107,7 +107,7 @@ const EditTask = ({ title }) => {
                 </select>
               </div>
 
-              <div className="formInput">
+              <div className="form-input">
 
                 <label>Set Deadline</label>
                 <DatePicker
@@ -115,7 +115,7 @@ const EditTask = ({ title }) => {
                   placeholderText="Choose Date and Time"
                   style={{ marginRight: "10px" }}
                   selected={deadline}
-                  className="formInput"
+                  className="form-input"
                   onChange={(selectedDate) => {
                     // Set only the date part to the state
                     const dateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
@@ -126,7 +126,7 @@ const EditTask = ({ title }) => {
                   </form>
 
             {/* Submit Button */}
-            <div className="submitButton">
+            <div className="submit-button">
             {loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
                 editing update...

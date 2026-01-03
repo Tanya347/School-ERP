@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
 import { getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
-import { useAuth } from "../../config/context/AuthContext";
 import { editElement } from "../../config/service/usePut";
 import { testInputs } from "../../config/formsource/testInputs";
 
@@ -24,7 +24,7 @@ const EditTest = ({ title }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   // get location and extract id out of it
   const id = location.pathname.split("/")[4];
@@ -72,7 +72,7 @@ const EditTest = ({ title }) => {
   return (
     <div className="new">
 
-      <div className="newContainer">
+      <div className="new-container">
 
         {/* Title of form */}
         <div className="top">
@@ -86,7 +86,7 @@ const EditTest = ({ title }) => {
             <form>
             
             {testInputs.map((field) => (
-                <div className="formInput" key={field.id}>
+                <div className="form-input" key={field.id}>
                   <label>{field.label}</label>
                   <input
                     id={field.id}
@@ -98,7 +98,7 @@ const EditTest = ({ title }) => {
                 </div>
             ))}
 
-            <div className="formInput">
+            <div className="form-input">
                 <label>Choose a Class</label>
                 <select
                   onChange={(e) => setSclass(e.target.value)}
@@ -112,7 +112,7 @@ const EditTest = ({ title }) => {
                 </select>
               </div>
 
-              <div className="formInput">
+              <div className="form-input">
                 <label>Choose a Course</label>
                 <select
                   onChange={(e) => setCourse(e.target.value)}
@@ -126,7 +126,7 @@ const EditTest = ({ title }) => {
                 </select>
               </div>
 
-              <div className="formInput">
+              <div className="form-input">
 
                 <label>Set Test Date</label>
                 <DatePicker
@@ -134,7 +134,7 @@ const EditTest = ({ title }) => {
                   placeholderText="Choose Date and Time"
                   style={{ marginRight: "10px" }}
                   selected={date}
-                  className="formInput"
+                  className="form-input"
                   onChange={(selectedDate) => {
                     // Set only the date part to the state
                     const dateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
@@ -145,7 +145,7 @@ const EditTest = ({ title }) => {
                   </form>
 
             {/* Submit Button */}
-            <div className="submitButton">
+            <div className="submit-button">
             {loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
                 editing update...

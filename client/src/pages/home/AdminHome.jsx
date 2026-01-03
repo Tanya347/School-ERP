@@ -4,11 +4,11 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 
 import { toast } from "react-toastify";
 import axios from 'axios'
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import useFetch from "../../config/service/useFetch";
 import { getSession, schoolGenderCount } from "../../config/endpoints/get";
-import { useAuth } from "../../config/context/AuthContext";
 import { postURLs } from "../../config/endpoints/post";
 
 import { MyPieChart } from "../../components/shared/graphs/PieChart";
@@ -27,7 +27,7 @@ const AdminHome = () => {
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
 
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -68,9 +68,9 @@ const AdminHome = () => {
 
   return (
     <div className="home">
-      <div className="AdminHomeContainer">
+      <div className="admin-home-container">
 
-        <div className="mainContainer">
+        <div className="main-container">
             <SchoolInfo schoolID={user.schoolID} />
             <div className="widgets">
               <AdminWidgets />

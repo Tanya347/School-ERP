@@ -14,9 +14,9 @@ import CustomToolbar from "../../components/utils/CustomToolbar"
 import axios from "axios"
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 
-import { useAuth } from "../../config/context/AuthContext"
 import useFetch from "../../config/service/useFetch"
 import { getAttendanceDates, getFacultyData, getLectureCount } from "../../config/endpoints/get"
 import { getClearClassURL } from "../../config/endpoints/delete";
@@ -45,7 +45,7 @@ const AttendanceInfo = () => {
     const [viewDate, setViewDate] = useState('');
     const [attId, setAttId] = useState('');
 
-    const { user } = useAuth();
+    const { user } = useSelector(state => state.auth);
 
     const classes = useFetch(getFacultyData(user._id, "classes")).data
   

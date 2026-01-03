@@ -1,16 +1,17 @@
 import './marksheet.scss'
 
-import { useAuth } from '../../config/context/AuthContext';
+import { useSelector } from "react-redux";
+
 import { getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
 
-import DownloadableCard from '../../components/downloadableCard/DownloadableCard';
+import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from '../../components/shared/infoBanner/InforBanner';
 
 const Marksheet = () => {
 
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
   
   const { data: schoolData } = useFetch(getSingleData(user.schoolID, "schools"));
   const { data: marks} = useFetch(`/students/marks/single/${user._id}`);
@@ -44,7 +45,7 @@ const Marksheet = () => {
 
   return (
     <div className="marksheet-container">
-      <h1 className="listTitle">Marks Obtained</h1>
+      <h1 className="list-title">Marks Obtained</h1>
       <div className="marks-table-container">
         <GenericTable columns={columns} rows={rows} rowKey="_id" />
       </div>

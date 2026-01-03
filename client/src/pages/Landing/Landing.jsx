@@ -12,7 +12,7 @@ const Landing = () => {
       <img src="/Assets/landing.jfif" alt="" />
       <div className="button-container">
         
-        <div className="notAdmin">
+        <div className="not-admin">
         <Link to="/studentLogin">
           <button>Login as Student</button>
         </Link>
@@ -21,12 +21,12 @@ const Landing = () => {
           <button>Login as Faculty</button>
         </Link>
         </div>
-        <div className="isAdmin">
+        <div className="is-admin">
           <Link to="/adminLogin">
             <button>Login as Admin</button>
           </Link>
         </div>
-        <div className="isAdmin">
+        <div className="is-admin">
           <Link to="/registerSchool">
             <button>Register School</button>
           </Link>

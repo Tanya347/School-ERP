@@ -53,7 +53,7 @@ const NewFaculty = ({ inputs, title }) => {
 
   return (
     <div className="new">
-      <div className="newContainer">
+      <div className="new-container">
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -71,7 +71,7 @@ const NewFaculty = ({ inputs, title }) => {
               alt=""
             />
 
-              <div className="formInput">
+              <div className="form-input">
                 <label htmlFor="file">
                   Profile Picture: <DriveFolderUploadIcon className="icon" />
                 </label>
@@ -102,7 +102,7 @@ const NewFaculty = ({ inputs, title }) => {
             />
 
               {inputs.map((input) => (
-                <div className="formInput" key={input.id}>
+                <div className="form-input" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     onChange={handleChange}
@@ -118,7 +118,7 @@ const NewFaculty = ({ inputs, title }) => {
 
 
             </form>
-            <div className="submitButton">
+            <div className="submit-button">
               {loading && <Loader text="Creating Faculty..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Faculty</button>

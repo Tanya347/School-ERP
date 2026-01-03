@@ -2,13 +2,13 @@ import "../../config/style/form.scss";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
 import { getClasses, getFacultyData, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
-import { useAuth } from "../../config/context/AuthContext";
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateUpdate} from "../../config/validators/update";
 
@@ -26,7 +26,7 @@ const EditUpdate = ({ title }) => {
 
   const id = location.pathname.split("/")[4];
 
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const { data } = useFetch(getSingleData(id, "updates"))
 
@@ -76,7 +76,7 @@ const EditUpdate = ({ title }) => {
         <Loader text="Loading data..." type="global" />
       ) : (
         <>
-          <div className="newContainer">
+          <div className="new-container">
             <div className="top">
               <h1>{title}</h1>
             </div>
@@ -85,7 +85,7 @@ const EditUpdate = ({ title }) => {
                 <form>
 
                   {updateInputs.map((field) => (
-                    <div className="formInput" key={field.id}>
+                    <div className="form-input" key={field.id}>
                       <label>{field.label}</label>
                       <input
                         id={field.id}
@@ -99,7 +99,7 @@ const EditUpdate = ({ title }) => {
                     </div>
                   ))}
 
-                  <div className="formInput">
+                  <div className="form-input">
                       <label>Choose Notice Type</label>
                       <select
                         onChange={handleChange}
@@ -109,7 +109,7 @@ const EditUpdate = ({ title }) => {
                       </select>
                   </div>
 
-                  {noticeType && noticeType === "specific" && <div className="formInput">
+                  {noticeType && noticeType === "specific" && <div className="form-input">
                     <label>Class</label>
                     <select
                       id="class"
@@ -123,7 +123,7 @@ const EditUpdate = ({ title }) => {
                     </select>
                   </div>}
                 </form>
-                <div className="submitButton">
+                <div className="submit-button">
                   {loading && <Loader text="editing update..."/>}
                   <button onClick={handleClick} id="submit" className="form-btn">Edit Update</button>
                 </div>

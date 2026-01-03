@@ -81,7 +81,7 @@ const RegisterSchool = () => {
             placeholder="School name"
             id="name"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
           <label htmlFor="principal">Enter Principal Name <span className='optional'>(optional)</span></label>
@@ -90,7 +90,7 @@ const RegisterSchool = () => {
             placeholder="Principal"
             id="principal"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
           <label htmlFor="viceprincipal">Enter Vice-Principal Name <span className='optional'>(optional)</span></label>
@@ -99,7 +99,7 @@ const RegisterSchool = () => {
             placeholder="Vice principal"
             id="viceprincipal"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
           <label htmlFor="address">Enter School Address</label>
@@ -108,7 +108,7 @@ const RegisterSchool = () => {
             placeholder="School address"
             id="address"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
           <label htmlFor="email">Enter School Email</label>
@@ -117,7 +117,7 @@ const RegisterSchool = () => {
             placeholder="School email"
             id="email"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
           <label htmlFor="phone">Enter Reception Phone Number</label>
@@ -126,7 +126,7 @@ const RegisterSchool = () => {
             placeholder="Phone number"
             id="phone"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
           <label htmlFor="phone">Enter School Moto</label>
@@ -135,14 +135,14 @@ const RegisterSchool = () => {
             placeholder="School Moto"
             id="moto"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
           />
 
         
-          <div className="submitButton">
+          <div className="submit-button">
             {loading && <Loader text="Registering School..." />}
             <button className="clear-btn" onClick={handleClear}>Clear</button>
-            <button onClick={handleClick} className="lButton">
+            <button onClick={handleClick} className="l-button">
               Register School
             </button>
           </div>

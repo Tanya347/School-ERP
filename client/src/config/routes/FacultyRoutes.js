@@ -46,11 +46,9 @@ import { attendanceColumns } from "../datatablesource/attendanceColumns"
 import { updateColumns } from '../datatablesource/updateColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
 
-import { useAuth } from '../../config/context/AuthContext';
-
 const FacultyRoutes = () => {
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const RequireFaculty = ({ children }) => {
     if (user && user.role === "faculty") {

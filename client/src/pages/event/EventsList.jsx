@@ -43,7 +43,7 @@ const EventsList = ({type}) => {
         <div className="events-title">Events List</div>
         <div className="event-container">{loading ? (
           <Loader text="Loading events..." type="global" />
-        ) : (<div className="cardsContainer">
+        ) : (<div className="cards-container">
           {list?.map((item, i) => (
             <div className="card" key={item._id}>
               <div class="content">

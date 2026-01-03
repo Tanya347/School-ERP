@@ -15,24 +15,24 @@ const Class = () => {
     <div className='classes'>
         {loading ? (
             <Loader text="Loading classes..." />
-        ) : (<div className="wholeContainer">
+        ) : (<div className="whole-container">
             <h1>Classes</h1>
-            <div className="classesContainer">
+            <div className="classes-container">
                 {
                     data?.map((cl, index) => (
-                        <div className="classContainer" key={index}>
+                        <div className="class-container" key={index}>
                             <h3>{cl.name} Standard</h3>
                             <Link to={`/admin/classes/${cl._id}`}>
-                                <button className='viewButton'>View</button>
+                                <button className='view-button'>View</button>
                             </Link>
                             <Link to={`/admin/classes/attendance/${cl._id}`}>
-                                <button className='attButton'>Attendance Status</button>
+                                <button className='att-button'>Attendance Status</button>
                             </Link>
                             <Link to={`/admin/classes/marks/${cl._id}`}>
-                                <button className='marksButton'>Marks Status</button>
+                                <button className='marks-button'>Marks Status</button>
                             </Link>
                             <Link to={`/admin/timetables/${cl._id}`}>
-                                <button className='ttButton'>Timetable</button>
+                                <button className='tt-button'>Timetable</button>
                             </Link>
                         </div>
                     ))

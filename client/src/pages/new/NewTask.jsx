@@ -2,9 +2,9 @@ import "../../config/style/form.scss";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { createElement } from "../../config/service/usePost";
-import { useAuth } from "../../config/context/AuthContext";
 import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { validateTask } from "../../config/validators/task";
@@ -18,7 +18,7 @@ const NewTask = ({ inputs, title }) => {
 
   const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(new Date());
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
   const [errors, setErrors] = useState({});
   const [studentClass, setStudentClass] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ const NewTask = ({ inputs, title }) => {
   return (
     <div className="new">
 
-      <div className="newContainer">
+      <div className="new-container">
         
         <div className="top">
           <h1>{title}</h1>
@@ -71,7 +71,7 @@ const NewTask = ({ inputs, title }) => {
             <form>
 
               {inputs?.map((input) => (
-                <div className="formInput" key={input.id}>
+                <div className="form-input" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     id={input.id}
@@ -96,7 +96,7 @@ const NewTask = ({ inputs, title }) => {
                 value={studentClass}
               />
                 
-              <div className="formInput">
+              <div className="form-input">
 
                 <DatePickerComponent
                   selectedDate={deadline}
@@ -108,7 +108,7 @@ const NewTask = ({ inputs, title }) => {
               </div>
 
             </form>
-            <div className="submitButton">
+            <div className="submit-button">
               {loading && <Loader text="Creating Task..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Task</button>

@@ -43,8 +43,14 @@ const EditCourse = ({ title }) => {
   const handleClick = async (e) => {
     e.preventDefault();
     setLoading(true)
+
+    const editInfo = {
+      name: info.name,
+      subjectCode: info.subjectCode
+    }
+
     try {
-      const res = await editElementWithPicture(file, info, "course", putURLs("courses", id));
+      const res = await editElementWithPicture(file, editInfo, "course", putURLs("courses", id));
       if(res.data.status === 'success') {
         navigate('/admin/courses');
       }
@@ -63,7 +69,7 @@ const EditCourse = ({ title }) => {
         <Loader text="Loading data..." type="global" />
       ) : (
         <>
-          <div className="newContainer">
+          <div className="new-container">
 
           {/* Title of form */}
           <div className="top">
@@ -78,12 +84,12 @@ const EditCourse = ({ title }) => {
                 src={
                   (file)
                     ? URL.createObjectURL(file)
-                    : (info.profilePicture) ? info.profilePicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                    : (info.syllabusPicture) ? info.syllabusPicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
                 }
                 alt=""
               />
 
-              <div className="formInput">
+              <div className="form-input">
                   <label htmlFor="file">
                     Syllabus: <DriveFolderUploadIcon className="icon" />
                   </label>
@@ -98,7 +104,7 @@ const EditCourse = ({ title }) => {
               <form>
                 
                 {courseInputs?.map((field) => (
-                  <div className="formInput">
+                  <div className="form-input">
                     <label>{field.label}</label>
                     <input
                       id={field.id}
@@ -115,7 +121,7 @@ const EditCourse = ({ title }) => {
               </form>
 
               {/* Submit Button */}
-              <div className="submitButton">
+              <div className="submit-button">
                 {loading && <Loader text="Editing Course..." />}
                 <button onClick={handleClick} id="submit" className="form-btn">Edit Course</button>
               </div>

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { getClasses } from '../../config/endpoints/get';
+import { getClasses, getClassExamDates } from '../../config/endpoints/get';
 
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
@@ -35,7 +35,7 @@ const AddExamDates = () => {
 
       try {
         const examRes = await axios.get(
-          process.env.REACT_APP_API_URL + `/courses/exam/${selectedClass}`,
+          getClassExamDates(selectedClass),
           { withCredentials: true }
         );
 
@@ -75,7 +75,7 @@ const AddExamDates = () => {
 
     try {
       setLoading(true);
-      const res = await axios.put(process.env.REACT_APP_API_URL + "/courses/exam/setdates", {
+      const res = await axios.put(setExamDates, {
         classId: selectedClass,
         exams,
       });
@@ -98,7 +98,7 @@ const AddExamDates = () => {
     setConfirmAction(() => async () => {
       setLoading(true);
       try {
-        const res = await axios.delete(process.env.REACT_APP_API_URL + `/courses/exam/clear/${selectedClass}`, { withCredentials: true });
+        const res = await axios.delete(clearExamDates(selectedClass), { withCredentials: true });
         if(res.data.status === 'success') {
           setExamDates({});
           toast.success("Exam dates cleared successfully");

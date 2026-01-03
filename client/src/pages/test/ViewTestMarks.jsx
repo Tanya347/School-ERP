@@ -5,8 +5,10 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import useFetch from '../../config/service/useFetch';
-import { getSingleData } from '../../config/endpoints/get';
+import { getSingleData, getStudentsOfClass } from '../../config/endpoints/get';
 import { formatDate } from '../../config/commons';
+import { clearTestMarks } from "../../config/endpoints/delete";
+import { addTestMarks } from "../../config/endpoints/put";
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});
@@ -20,7 +22,7 @@ const ViewTestMarks = () => {
   useEffect(() => {
     const fetchStudents = async() => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${data.sclass._id}`);
+        const response = await axios.get(getStudentsOfClass(data.sclass._id));
         setStuData(response.data.data);
       }
       catch(error) {
@@ -40,15 +42,6 @@ const ViewTestMarks = () => {
     }));
   };
 
-  // const handleEdit = () => {
-  //   setMarksData(
-  //     data.marks.reduce((acc, mark) => {
-  //       acc[mark.student_id._id] = { value: mark.value, present: mark.present };
-  //       return acc;
-  //     }, {})
-  //   );
-  // };
-
   const handleSubmit = async () => {
     try {
       const marksArray = Object.keys(marksData).map(studentId => ({
@@ -56,7 +49,7 @@ const ViewTestMarks = () => {
         value: marksData[studentId].value,
       }));
 
-      await axios.put(`${process.env.REACT_APP_API_URL}/tests/addMarks/${id}`, { marksData: marksArray });
+      await axios.put(addTestMarks, { marksData: marksArray });
       window.location.reload();
     } catch (error) {
       console.error("Error submitting marks:", error);
@@ -65,7 +58,7 @@ const ViewTestMarks = () => {
 
   const handleClearMarks = async () => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/tests/marks/${id}`);
+      await axios.delete(clearTestMarks(id));
       setMarksData({})
       window.location.reload();
     } catch (error) {

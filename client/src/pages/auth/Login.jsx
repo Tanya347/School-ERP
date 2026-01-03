@@ -7,9 +7,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
+import { loginSuccess } from "../../store/slices/authSlice";
 import { postURLs } from "../../config/endpoints/post"
-import { useAuth } from "../../config/context/AuthContext"
 
 import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
 
@@ -24,6 +25,7 @@ function Login({ type }) {
   })
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   var url;
 
@@ -36,8 +38,6 @@ function Login({ type }) {
   } else {
     url = "/Assets/admin.jfif"
   }
-
-  const {login} = useAuth();
 
   // set the use state to what the user entered
   const handleChange = (e) => {
@@ -53,7 +53,7 @@ function Login({ type }) {
       
       if(data.status === "success") {
         toast.success("You have logged in successfully!");
-        login(data.user)
+        dispatch(loginSuccess(data.user));
         navigate(`/${data.user.role}`);
       }
     } catch (err) {
@@ -66,13 +66,13 @@ function Login({ type }) {
   }
 
   return (
-    <div className="AdminLogin">
+    <div className="admin-login">
 
       <div className="img-container">
         <img src={url} alt="" />
       </div>
 
-      <div className="lContainer">
+      <div className="l-container">
 
         <h1>Welcome to {type} Portal!</h1>
         <p>Please enter your username and password to access your {type.toLowerCase()} account.</p>
@@ -83,7 +83,7 @@ function Login({ type }) {
           placeholder="username"
           id="username"
           onChange={handleChange}
-          className="lInput"
+          className="l-input"
         />
 
         <div className="password-input">
@@ -93,7 +93,7 @@ function Login({ type }) {
             placeholder="password"
             id="password"
             onChange={handleChange}
-            className="lInput"
+            className="l-input"
             style={{"width": "100%", "marginTop": "10px"}}
           />
           <span
@@ -111,7 +111,7 @@ function Login({ type }) {
           Forgot Password?
         </p>}
 
-        <button onClick={handleClick} className="lButton">
+        <button onClick={handleClick} className="l-button">
           Login
         </button>
       </div>

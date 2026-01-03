@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import './resetPassword.scss'
+
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import './resetPassword.scss'
+
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from "../../config/context/AuthContext";
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+
+import { logoutUser } from "../../store/slices/authSlice";
 import { resetPasswordURL } from '../../config/endpoints/post';
 import Loader from '../../components/shared/loader/Loader';
 
@@ -20,9 +24,10 @@ const ResetPassword = ({type}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
 
     const token = location.pathname.split("/")[3];
-    const {logout, user} = useAuth();
 
     const handleChange = (e) => {
         setPasswordCreds((prev) => ({ ...prev, [e.target.id]: e.target.value }))
@@ -36,12 +41,12 @@ const ResetPassword = ({type}) => {
             if(res.data.status === "success") {
                 toast.success("Password changed successfully!");
                 if(type === 'change') {
-                    await logout("Logged Out Successfully!");
+                    dispatch(logoutUser());
                 }
                 navigate(`/${user.role}Login`);
             }
         } catch(err) {
-            const errorMessage = err.response?.data?.message || "Something went wrong";
+            const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
             toast.error(errorMessage);
             return err;
         } finally {
@@ -89,7 +94,7 @@ const ResetPassword = ({type}) => {
                 </div>
 
                 {loading && <Loader text="changing password"/>}
-                <button onClick={handleClick} className="lButton">
+                <button onClick={handleClick} className="l-button">
                     Reset Password
                 </button>
             </div>

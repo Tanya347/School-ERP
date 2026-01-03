@@ -1,6 +1,6 @@
 .widgets {
     width: 100%;
-    .AdminWidgets {
+    .admin-widgets {
 
         margin: 30px 0;
         display: flex;
@@ -37,7 +37,7 @@
                 transition: all 0.3s ease-in-out;
             }
 
-            .leftContainer {
+            .left-container {
                 display: flex;
                 align-items: center;
                 padding: 10px;
@@ -50,7 +50,7 @@
                 background-color: inherit;
             }
 
-            .rightContainer {
+            .right-container {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
@@ -65,11 +65,11 @@
 }
 
 .app.dark .widgets {
-    .AdminWidgets {
+    .admin-widgets {
         .widget {
             background-color: var(--dark-green);
 
-            .rightContainer {
+            .right-container {
                 h4 {
                     color: var(--white);
                 }

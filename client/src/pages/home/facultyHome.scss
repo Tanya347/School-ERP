@@ -65,7 +65,7 @@
                         text-align: center;
                     }
                 
-                    .coursesContainer {
+                    .courses-container {
                         display: flex;
                         flex-wrap: wrap;
                         gap: 10px;
@@ -78,13 +78,13 @@
                         
                     }
 
-                    .classesContainer {
+                    .classes-container {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         gap: 20px;
 
-                        .classContainer {
+                        .class-container {
                         width: 150px;
                         padding: 10px;
                         border-radius: 10px;

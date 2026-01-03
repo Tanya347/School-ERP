@@ -1,5 +1,6 @@
 // src/routes/adminRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 // New forms
 import NewStudent from "../../pages/new/NewStudent";
@@ -54,11 +55,9 @@ import ResetPassword from '../../pages/auth/ResetPassword';
 import AdminHome from '../../pages/home/AdminHome';
 import AddExamDates from '../../pages/exams/AddExamDates';
 
-import { useAuth } from '../../config/context/AuthContext';
-
 const AdminRoutes = () => {
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
   
   const RequireAdmin = ({ children }) => {
     if (user && user.role === "admin") {

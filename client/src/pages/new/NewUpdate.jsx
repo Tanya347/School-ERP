@@ -2,11 +2,11 @@ import "../../config/style/form.scss";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElement } from "../../config/service/usePost";
-import { useAuth } from "../../config/context/AuthContext";
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateUpdate } from "../../config/validators/update";
 
@@ -22,7 +22,7 @@ const NewUpdate = ({ inputs }) => {
   
   const navigate = useNavigate();
 
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateUpdate);
@@ -81,7 +81,7 @@ const NewUpdate = ({ inputs }) => {
 
   return (
     <div className="new">
-      <div className="newContainer">
+      <div className="new-container">
         <div className="top">
           <h1>Add New Update</h1>
         </div>
@@ -89,7 +89,7 @@ const NewUpdate = ({ inputs }) => {
           <div className="right">
             <form>
               {inputs?.map((input) => (
-                <div className="formInput" key={input.id}>
+                <div className="form-input" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     id={input.id}
@@ -118,7 +118,7 @@ const NewUpdate = ({ inputs }) => {
             />
 
                 {noticeType && noticeType === "specific" && 
-                  <div className="formInput">
+                  <div className="form-input">
                     {user.role === 'admin' ? (
                       <Dropdown
                         id="class"
@@ -146,7 +146,7 @@ const NewUpdate = ({ inputs }) => {
                 }
 
             </form>
-            <div className="submitButton">
+            <div className="submit-button">
               {loading && <Loader text="Creating Update..." />}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} className="form-btn">Create Update</button>

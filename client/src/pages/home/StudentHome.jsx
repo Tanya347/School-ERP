@@ -4,10 +4,10 @@ import axios from "axios"
 import { CircularProgressbar } from "react-circular-progressbar";
 import { useEffect, useState } from "react"
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
-import { getSingleData } from "../../config/endpoints/get"
+import { getSingleData, getStudentAttendance } from "../../config/endpoints/get"
 import useFetch from "../../config/service/useFetch"
-import { useAuth } from '../../config/context/AuthContext'
 
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
 import EventCalender from "../../components/calender/Calender"
@@ -19,14 +19,14 @@ const StudentHome = () => {
 
   const [attendance, setAttendance] = useState({})
   
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
   const { data, loading } = useFetch(getSingleData(user._id, "students"))
  
   useEffect(() => {
     const fetchAttendance = async () => {
       if(data?.classInfo?._id) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/attendances/studentperc/${data?._id}/${data?.classInfo._id}`)
+          const response = await axios.get(process.env.REACT_APP_API_URL + getStudentAttendance(data?._id, data?.classInfo._id))
           setAttendance(response.data.data)
         }
         catch(err) {
@@ -46,7 +46,7 @@ const StudentHome = () => {
           <div className="bottom-container">
             <EventCalender />
             <div className="student-courses-container">
-              <h2 className="courseTitle">Courses</h2>
+              <h2 className="course-title">Courses</h2>
               {
                 loading ? (
                   <div className="create-loader">
@@ -54,7 +54,7 @@ const StudentHome = () => {
                     fetching courses...
                   </div>
                 ) : (
-                  <div className="coursesContainer">
+                  <div className="courses-container">
                     {data?.classInfo?.subjects?.map((item, index) => (
                       <Course
                         name={item?.name}

@@ -4,7 +4,7 @@
   height: 100%;
   min-height: 100vh;
 
-  .newContainer {
+  .new-container {
     width: 100%;
 
     .top,
@@ -56,7 +56,7 @@
                 object-fit: cover;
               }
           
-          .formInput {
+          .form-input {
             label {
               display: flex;
               justify-content: center;
@@ -78,7 +78,7 @@
             flex-direction: column;
           }
 
-          .selectRooms {
+          .select-rooms {
             width: 100%;
 
             select {
@@ -87,7 +87,7 @@
             }
           }
 
-          .formInput {
+          .form-input {
             width: 40%;
 
             .error-message {
@@ -136,7 +136,7 @@
           }
         }
 
-        .submitButton {
+        .submit-button {
           
           width: 100%;
           display: flex;
@@ -194,7 +194,7 @@
     background-color: var(--light-black);
     color: var(--white);
   }
-  .formInput {
+  .form-input {
     input {
       background: var(--light-black);
       border-bottom: 1px solid var(--white) !important;

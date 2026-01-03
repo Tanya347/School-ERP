@@ -4,13 +4,13 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
 import { getClasses, getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { studentInputs } from "../../config/formsource/studentInputs";
-import { useAuth } from "../../config/context/AuthContext";
 import { validateStudent } from "../../config/validators/student";
 import { handleChange as commonHandleChange } from "../../config/commons";
 
@@ -29,7 +29,7 @@ const EditUser = ({ title }) => {
   let id;
  
   const classes = useFetch(getClasses).data
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
   if(user.role === "admin") 
     id = location.pathname.split("/")[4];
   else
@@ -49,7 +49,18 @@ const EditUser = ({ title }) => {
     e.preventDefault();
     setSending(true)
     try {
-      const res = await editElementWithPicture(file, info, "student", putURLs("students", id));
+      const newInfo = {
+        name: info.name,
+        username: info.name,
+        email: info.email,
+        enroll: info.enroll,
+        studentPhone: info.studentPhone,
+        studentAddress: info.studentAddress,
+        dob: info.dob,
+        gender: info.gender,
+        class: info.class
+      }
+      const res = await editElementWithPicture(file, newInfo, "student", putURLs("students", id));
       if(res.data.status === 'success') {
         navigate(`/admin/students/single/${id}`);
       }
@@ -66,7 +77,7 @@ const EditUser = ({ title }) => {
         <Loader text="Loading data..." type="global" />
       ) : (
         <>
-          <div className="newContainer">
+          <div className="new-container">
             <div className="top">
               <h1>{title}</h1>
             </div>
@@ -82,7 +93,7 @@ const EditUser = ({ title }) => {
                   alt=""
                 />
 
-                <div className="formInput">
+                <div className="form-input">
                     <label htmlFor="file">
                       Profile Picture: <DriveFolderUploadIcon className="icon" />
                     </label>
@@ -98,7 +109,7 @@ const EditUser = ({ title }) => {
                 <form>
 
                   {studentInputs.map((field) => (
-                    (field.editAccess === user.role || field.editAccess === "both") && <div className="formInput" key={field.id}>
+                    (field.editAccess === user.role || field.editAccess === "both") && <div className="form-input" key={field.id}>
                       <label>{field.label}</label>
                         <input 
                           id={field.id}
@@ -112,7 +123,7 @@ const EditUser = ({ title }) => {
                       </div>
                   ))}
 
-                  <div className="formInput">
+                  <div className="form-input">
                     <label>Gender</label>
                     <select
                       id="gender"
@@ -125,7 +136,7 @@ const EditUser = ({ title }) => {
                     </select>
                   </div>
 
-                  {user.role==="admin" && <div className="formInput">
+                  {user.role==="admin" && <div className="form-input">
                     <label>Class</label>
                     <select
                       id="class"
@@ -142,7 +153,7 @@ const EditUser = ({ title }) => {
 
                 </form>
 
-                <div className="submitButton">
+                <div className="submit-button">
                   {sending && <Loader text="editing student..."/>}
                   <button className="form-btn" disabled={sending} id="submit" onClick={handleClick}>Edit Student</button>
                 </div>

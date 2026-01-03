@@ -4,6 +4,7 @@ import Class from "../models/Class.js";
 
 import fs from "fs";
 
+import { AppError } from "../utils/customError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
 
@@ -172,11 +173,20 @@ export const getFacultyCourses = catchAsync(async (req, res, next) => {
 
 // Add a new course to a faculty member
 export const AddNewCourse = catchAsync(async (req, res, next) => {
-  const facId = req.params.facId;
-  const classId = req.params.classId;
-  const courseId = req.params.courseId;
+  const { facId, classId, courseId } = req.params;
 
-  // Update Faculty model
+  const course = await Course.findById(courseId);
+
+  if (!course) {
+    return next(new AppError("Course not found", 404));
+  }
+
+  if (course.teacher) {
+    return next(
+      new AppError("This course is already assigned to a faculty", 400)
+    );
+  }
+
   await Faculty.updateOne(
     { _id: facId },
     {
@@ -187,28 +197,138 @@ export const AddNewCourse = catchAsync(async (req, res, next) => {
     }
   );
 
-  // Update Class model
   await Class.updateOne(
     { _id: classId },
     {
       $addToSet: {
         teachers: facId,
+        subjects: courseId,
       },
     }
   );
 
-  // Update Course model
   await Course.updateOne(
     { _id: courseId },
     {
-      $set: {
-        teacher: facId,
+      $set: { teacher: facId },
+    }
+  );
+
+  res.status(200).json({
+    status: "success",
+    message: "Course assigned successfully",
+  });
+});
+
+export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
+  const { facId, classId, courseId } = req.params;
+
+  const course = await Course.findById(courseId);
+
+  if (!course || course.teacher?.toString() !== facId) {
+    return next(new AppError("Course not assigned to this faculty", 400));
+  }
+
+  // Remove from Faculty
+  await Faculty.updateOne(
+    { _id: facId },
+    {
+      $pull: {
+        subjectsTaught: courseId,
+        classesTaught: classId,
       },
     }
   );
 
-  res.status(200).json({ 
+  // Remove from Class
+  await Class.updateOne(
+    { _id: classId },
+    {
+      $pull: {
+        teachers: facId,
+        subjects: courseId,
+      },
+    }
+  );
+
+  // Reset Course
+  await Course.updateOne(
+    { _id: courseId },
+    {
+      $set: { teacher: null },
+    }
+  );
+
+  res.status(200).json({
     status: "success",
-    message: "Course added successfully." 
+    message: "Course unassigned successfully",
   });
 });
+
+export const changeCourseFaculty = catchAsync(async (req, res, next) => {
+  const { courseId, newFacId, classId } = req.params;
+
+  const course = await Course.findById(courseId);
+
+  if (!course) {
+    return next(new AppError("Course not found", 404));
+  }
+
+  const oldFacId = course.teacher;
+
+  if (oldFacId?.toString() === newFacId) {
+    return next(new AppError("Course already assigned to this faculty", 400));
+  }
+
+  // Remove from old faculty
+  if (oldFacId) {
+    await Faculty.updateOne(
+      { _id: oldFacId },
+      {
+        $pull: {
+          subjectsTaught: courseId,
+          classesTaught: classId,
+        },
+      }
+    );
+
+    await Class.updateOne(
+      { _id: classId },
+      {
+        $pull: { teachers: oldFacId },
+      }
+    );
+  }
+
+  // Assign to new faculty
+  await Faculty.updateOne(
+    { _id: newFacId },
+    {
+      $addToSet: {
+        subjectsTaught: courseId,
+        classesTaught: classId,
+      },
+    }
+  );
+
+  await Class.updateOne(
+    { _id: classId },
+    {
+      $addToSet: { teachers: newFacId },
+    }
+  );
+
+  await Course.updateOne(
+    { _id: courseId },
+    {
+      $set: { teacher: newFacId },
+    }
+  );
+
+  res.status(200).json({
+    status: "success",
+    message: "Faculty changed successfully",
+  });
+});
+
+

@@ -17,13 +17,13 @@ const AdminWidgets = () => {
     const {data, loading } = useFetch(getAllCount)
 
 return (
-    <div className="AdminWidgets">
+    <div className="admin-widgets">
             <div className='widget'>
                 {loading ? (<Loader type="global"/>) : (<Link to={"/admin/students"} style={{textDecoration: 'none', color: 'inherit', display: 'flex', flex: 1}}>
-                    <div className="leftContainer">
+                    <div className="left-container">
                         <SchoolIcon className='icon' style={{"backgroundColor": "var(--light-green)", "color": "var(--green)"}}/>
                     </div>
-                    <div className="rightContainer">
+                    <div className="right-container">
                         <h2>{data.student}</h2>
                         <h4>Students</h4>
                     </div>
@@ -31,10 +31,10 @@ return (
             </div>
             <div className='widget'>
                 {loading ? (<Loader type="global" />) : (<Link to={"/admin/faculties"} style={{textDecoration: 'none', color: 'inherit', display: 'flex', flex: 1}}>
-                    <div className="leftContainer">
+                    <div className="left-container">
                         <EmojiPeopleIcon className='icon' style={{"backgroundColor": "var(--light-blue)", "color": "var(--blue)"}}/>
                     </div>
-                    <div className="rightContainer">
+                    <div className="right-container">
                         <h2>{data.teacher}</h2>
                         <h4>Teachers</h4>
                     </div>
@@ -42,10 +42,10 @@ return (
             </div>
             <div className='widget'>
                 {loading ? (<Loader type="global" />) : (<Link to={"/admin/courses"} style={{textDecoration: 'none', color: 'inherit', display: 'flex', flex: 1}}>
-                    <div className="leftContainer" >
+                    <div className="left-container" >
                             <LibraryBooksIcon className='icon' style={{"backgroundColor": "var(--light-purple)", "color": "var(--purple)"}}/>
                     </div>
-                    <div className="rightContainer">
+                    <div className="right-container">
                             <h2>{data.subject}</h2>
                             <h4>Subjects</h4>
                     </div>
@@ -53,10 +53,10 @@ return (
             </div>
             <div className='widget'>
                 {loading ? (<Loader type="global" />) : (<Link to={"/admin/classes"} style={{textDecoration: 'none', color: 'inherit', display: 'flex', flex: 1}}>
-                    <div className="leftContainer">
+                    <div className="left-container">
                             <PeopleIcon className='icon' style={{"backgroundColor": "var(--light-pink)", "color": "var(--pink)"}}/>
                     </div>
-                    <div className="rightContainer">
+                    <div className="right-container">
                             <h2>{data.class}</h2>
                             <h4>Classes</h4>
                     </div>

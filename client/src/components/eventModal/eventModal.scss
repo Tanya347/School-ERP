@@ -1,4 +1,4 @@
-.eventModal {
+.event-modal {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.418);
@@ -11,14 +11,14 @@
   text-align: center;
   z-index: 1000;
 
-  .mContainer {
+  .m-container {
     background-color: var(--white);
     height: fit-content;
     position: relative;
     width: 70%;
   }
 
-  .mEvents {
+  .m-events {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -35,7 +35,7 @@
     }
   }
 
-  .mLeft {
+  .m-left {
     width: 50%;
     display: flex;
     justify-content: center;
@@ -46,7 +46,7 @@
     }
   }
 
-  .mRight {
+  .m-right {
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -54,7 +54,7 @@
     align-items: center;
   }
 
-  .mClose {
+  .m-close {
     position: absolute;
     top: 0;
     right: 0;
@@ -67,25 +67,25 @@
     }
   }
 
-  .mIcon {
+  .m-icon {
     margin-top: 10px;
     color: #48A6A7;
   }
 
-  .mTitle {
+  .m-title {
     font-weight: 500;
     text-transform: capitalize;
     font-size: 1.5rem;
     padding: 10px 0;
   }
 
-  .mDesc {
+  .m-desc {
     color: rgba(0, 0, 0, 0.699);
     border-radius: 5px;
     padding: 5px 10px;
   }
 
-  .mButton {
+  .m-button {
     border: none;
     padding: 10px 20px;
     background-color: var(--tree-green);
@@ -107,7 +107,7 @@
     }
   }
 
-  .crudButton {
+  .crud-button {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -130,23 +130,23 @@
   }
 
   @media screen and (max-width: 600px) {
-    .mContainer {
+    .m-container {
       width: 80%;
     }
 
-    .mLeft,
-    .mRight {
+    .m-left,
+    .m-right {
       width: 80%;
     }
 
-    .mLeft img {
+    .m-left img {
       height: 300px;
     }
   }
 }
 
-.app.dark .eventModal {
-  .mContainer {
+.app.dark .event-modal {
+  .m-container {
     background-color: var(--light-black);
     color: var(--white);
   }

@@ -34,27 +34,27 @@ const EventModal = ({ setOpen, event, type }) => {
 
     return (
 
-        <div className="eventModal">
-            <div className="mContainer">
+        <div className="event-modal">
+            <div className="m-container">
                 
                 <CancelIcon
-                    className="mClose"
+                    className="m-close"
                     onClick={() => setOpen(false)}
                 />
 
-                <div className="mEvents">
+                <div className="m-events">
 
                     {/* Show the event poster if it exists */}
-                    {event.poster && <div className="mLeft">
+                    {event.poster && <div className="m-left">
                         <img src={event.poster} alt="" />
                     </div>}
 
 
-                    <div className="mRight">
+                    <div className="m-right">
 
                         {/* Details */}
-                        <div className="mTitle">{event.name}</div>
-                        <div className="mDesc">{event.desc}</div>
+                        <div className="m-title">{event.name}</div>
+                        <div className="m-desc">{event.desc}</div>
 
                         {/* Event details */}
                         {start.getDate() === end.getDate() ? 
@@ -76,7 +76,7 @@ const EventModal = ({ setOpen, event, type }) => {
 
                         {/* If meet link and resiter link exist display them */}
                         {
-                            event.meetLink && <button className="mButton">
+                            event.meetLink && <button className="m-button">
                                 <a
                                     style={{ textDecoration: "none", color: "white" }}
                                     href={normalizeUrl(event.meetLink)}
@@ -89,7 +89,7 @@ const EventModal = ({ setOpen, event, type }) => {
                         }
 
                         {
-                        event.registerLink && <button className="mButton">
+                        event.registerLink && <button className="m-button">
                                 <a
                                     href={normalizeUrl(event.registerLink)}
                                     style={{ textDecoration: "none", color: "white" }}
@@ -106,7 +106,7 @@ const EventModal = ({ setOpen, event, type }) => {
                         
                         {/* Allow only owner to edit/delete the event*/}
                         {
-                            type === "Admin" && <div className="crudButton">
+                            type === "Admin" && <div className="crud-button">
                                 <Link to={`/admin/events/edit/${event._id}`}>
                                     <button>Edit</button>
                                 </Link>

@@ -12,3 +12,15 @@ export const addMarks = (course) => {
 export const addClassTeacher = (sclass) => {
     return `${api_url}/classes/classTeacher/${sclass}`
 }
+
+export const setExamDates = () => {
+    return `${api_url}/courses/exam/setdates`;
+}
+
+export const testAction = (action, id) => {
+    return api_url + `/tests/${action}/${id}`
+}
+
+export const addTestMarks = (id) => {
+    return `${api_url}/tests/addMarks/${id}`
+}

@@ -52,7 +52,7 @@
             font-weight: 500;
         }
     
-        .lInput {
+        .l-input {
             height: 30px;
             padding: 10px;
             margin: 20px 0;
@@ -63,7 +63,7 @@
             outline: none;
         }
 
-        .lButton {
+        .l-button {
             background-color: var(--mild-red);
             font-size: 1rem;
         }
@@ -99,7 +99,7 @@
             }
         }
 
-        .submitButton {
+        .submit-button {
             .create-loader {
                 display: flex;
                 align-items: center;

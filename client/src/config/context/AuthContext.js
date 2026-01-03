@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { logoutEndpoint, validateEndpoint } from "../endpoints/post";
 
 const AuthContext = createContext();
 
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     const verifyToken = async() => {
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/auth/validate`, 
+          validateEndpoint(), 
           { withCredentials: true}
         );
         if(res.data.status === 'success' && res.data.user) {
@@ -76,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async (message) => {
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/logout`,
+        logoutEndpoint(),
         {},
         { withCredentials: true }
       );

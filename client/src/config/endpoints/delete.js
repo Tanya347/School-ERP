@@ -19,3 +19,11 @@ export const getClearMarksSubject = (id) => {
 export const getClearTimetableForClass = (classid) => {
     return `${api_url}/timetables/${classid}`
 }
+
+export const clearExamDates = (sclass) => {
+    return `${api_url}/courses/exam/clear/${sclass}`
+}
+
+export const clearTestMarks = (id) => {
+    return `${api_url}/tests/marks/${id}`
+}

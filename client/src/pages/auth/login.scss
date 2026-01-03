@@ -1,4 +1,4 @@
-.AdminLogin {
+.admin-login {
     height: 100vh;
     display: flex;
     flex-direction: row;
@@ -23,7 +23,7 @@
 }
 
 
-.lContainer {
+.l-container {
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -41,22 +41,22 @@
     }
 }
 
-.lContainer label {
+.l-container label {
     margin-bottom: 10px;
     margin-top: 10px;
 }
 
-.lContainer h1 {
+.l-container h1 {
     margin-bottom: 20px;
     color: var(--tree-green);
 }
 
-.lContainer p {
+.l-container p {
     margin-bottom: 20px;
     color: var(--dark-tree-green);
 }
 
-.lInput {
+.l-input {
     height: 30px;
     padding: 10px;
     width: 50%;
@@ -66,7 +66,7 @@
     outline: none;
 }
 
-.lButton {
+.l-button {
     border: none;
     padding: 10px 20px;
     background-color: var(--tree-green);
@@ -79,11 +79,11 @@
     border-radius: 5px;
 }
 
-.lButton:hover {
+.l-button:hover {
     background-color: var(--dark-tree-green);
 }
 
-.lButton:disabled {
+.l-button:disabled {
     background-color: var(--turquoise);
     cursor: not-allowed;
 }
@@ -104,11 +104,11 @@
 }
 
 @media screen and (max-width: 600px) {
-    .img-container, .lContainer {
+    .img-container, .l-container {
         width: 80%;
     }
 
-    .lInput {
+    .l-input {
         width: 80%;
     }
 }

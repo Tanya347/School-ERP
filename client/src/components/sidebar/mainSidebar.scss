@@ -1,4 +1,4 @@
-.navSidebarContainer {
+.nav-sidebar-container {
     .sidebar {
         background-color: var(--black);
         color: var(--white);
@@ -70,7 +70,7 @@
 
             .icon {
                 font-size: 30px;
-                color: var(--gray);
+                color: var(--light-gray);
             }
 
             .sidebar-item {
@@ -85,7 +85,7 @@
             align-items: center;
             margin: 10px;
 
-            .colorOption {
+            .color-option {
                 width: 20px;
                 height: 20px;
                 border-radius: 5px;
@@ -109,7 +109,7 @@
     }
 }
 
-.app.dark .navSidebarContainer {
+.app.dark .nav-sidebar-container {
     .sidebar {
         background-color: var(--dark-tree-green);
         color: var(--white);

@@ -5,7 +5,7 @@ import Datatable from "../../datatable/Datatable"
 const List = ({ column, name }) => {
   return (
     <div className="list">
-      <div className="AdminListContainer">
+      <div className="admin-list-container">
 
         {/* Call datatable by passing the required props */}
         <Datatable column={column} name={name} />

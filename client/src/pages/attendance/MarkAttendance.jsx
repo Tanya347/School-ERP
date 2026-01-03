@@ -5,10 +5,10 @@ import axios from "axios";
 import DatePicker from 'react-datepicker'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
+import { useSelector } from "react-redux";
 
-import { useAuth } from '../../config/context/AuthContext'
 import useFetch from '../../config/service/useFetch'
-import { getAttendanceStatusByDate, getFacultyData } from '../../config/endpoints/get'
+import { getAttendanceStatusByDate, getFacultyData, getStudentsOfClass } from '../../config/endpoints/get'
 import { postURLs } from '../../config/endpoints/post'
 import { createElement } from '../../config/service/usePost'
 
@@ -24,7 +24,7 @@ const MarkAttendance = () => {
 
     const navigate = useNavigate();
     
-    const { user } = useAuth();
+    const { user } = useSelector(state => state.auth);
     const classes = useFetch(getFacultyData(user._id, "classes")).data
 
     let isClassTeacher = sclass?.classTeacher === user._id;;
@@ -33,7 +33,7 @@ const MarkAttendance = () => {
         const fetchStudents = async () => {
           if (sclass) {
             try {
-              const response = await axios.get(`${process.env.REACT_APP_API_URL}/classes/students/${sclass._id}`);
+              const response = await axios.get(getStudentsOfClass(sclass._id));
               setStuData(response.data.data);
             } catch (error) {
               console.error("Error fetching student data:", error);

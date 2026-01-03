@@ -48,7 +48,14 @@ const EditMaterial = ({title}) => {
       } else {
         info.classId = info.classId?._id || info.classId;
       }
-      const res = await editElementWithPicture(file, info, "material", putURLs("materials", id));
+
+      const newInfo = {
+        classId: info.classId,
+        name: info.name,
+        description: info.description
+      }
+
+      const res = await editElementWithPicture(file, newInfo, "material", putURLs("materials", id));
 
       if(res.data.status === 'success') {
         navigate('/admin/materials');
@@ -66,14 +73,14 @@ const EditMaterial = ({title}) => {
         <Loader text="Loading data.." type="global"/>
       ) : (
         <>
-          <div className="newContainer">
+          <div className="new-container">
             <div className="top">
               {title}
             </div>
             <div className="bottom">
               <div className="right">
                 <div className="left">
-                  <div className="formInput">
+                  <div className="form-input">
                     <label htmlFor="file">
                       File: <DriveFolderUploadIcon className="icon" />
                     </label>
@@ -84,6 +91,7 @@ const EditMaterial = ({title}) => {
                       onChange={(e) => setFile(e.target.files[0])}
                       style={{ display: "none" }}
                     />
+                    {!file && info.fileUrl && <button><a href={ info.fileUrl } style={{ textDecoration : "none", color: "black" }} target="__blank">View File</a></button>}
                     {file && (
                       <span style={{ marginLeft: "10px", fontWeight: "bold" }}>{file.name}</span>
                     )}
@@ -91,7 +99,7 @@ const EditMaterial = ({title}) => {
                 </div>
 
                 <form>
-                  <div className="formInput">
+                  <div className="form-input">
                     <label>Choose a Class</label>
                     <select
                       onChange={(e) => setClassId(e.target.value)}
@@ -105,7 +113,7 @@ const EditMaterial = ({title}) => {
                     </select>
                   </div>
                   {materialInputs?.map((input) => (
-                    <div className="formInput" key={input.id}>
+                    <div className="form-input" key={input.id}>
                       <label>{input.label}</label>
                       <input
                         id={input.id}
@@ -119,7 +127,7 @@ const EditMaterial = ({title}) => {
                     </div>
                   ))}
                 </form>
-                <div className="submitButton">
+                <div className="submit-button">
                 { loading && <Loader text="editing material..."/>}
                   <button onClick={handleSubmit} disabled={loading} className="form-btn">Edit Material</button>
                 </div>

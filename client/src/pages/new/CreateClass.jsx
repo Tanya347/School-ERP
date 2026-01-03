@@ -45,7 +45,7 @@ const CreateClass = ({ inputs, title}) => {
 
     return (
         <div className="new">
-            <div className="newContainer">
+            <div className="new-container">
                 <div className="top">
                     <h1>{title}</h1>
                 </div>
@@ -53,7 +53,7 @@ const CreateClass = ({ inputs, title}) => {
                     <div className="right">
                         <form>
                             {inputs?.map((input) => (
-                                <div className="formInput" key={input.id}>
+                                <div className="form-input" key={input.id}>
                                 <label>{input.label}</label>
                                 <input
                                     id={input.id}
@@ -66,7 +66,7 @@ const CreateClass = ({ inputs, title}) => {
                                 </div>
                             ))}
                         </form>
-                        <div className="submitButton">
+                        <div className="submit-button">
                             {loading && <Loader text="Creating Class..." />}
                             <button className="clear-btn" onClick={handleClear}>Clear</button>
                             <button onClick={handleClick} className="form-btn">Create Class</button>

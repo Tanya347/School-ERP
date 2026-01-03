@@ -58,7 +58,7 @@ const NewUser = ({ inputs, title }) => {
   
   return (
     <div className="new">
-      <div className="newContainer">
+      <div className="new-container">
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -76,7 +76,7 @@ const NewUser = ({ inputs, title }) => {
               alt=""
             />
 
-              <div className="formInput">
+              <div className="form-input">
                 <label htmlFor="file">
                   Profile Picture: <DriveFolderUploadIcon className="icon" />
                 </label>
@@ -107,7 +107,7 @@ const NewUser = ({ inputs, title }) => {
             />
 
               {inputs?.map((input) => (
-                <div className="formInput" key={input.id}>
+                <div className="form-input" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     onChange={handleChange}
@@ -133,7 +133,7 @@ const NewUser = ({ inputs, title }) => {
               />
 
             </form>
-            <div className="submitButton">
+            <div className="submit-button">
               {loading && <Loader text="Creating student..."/>}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleClick} disabled={loading} className="form-btn">Create Student</button>

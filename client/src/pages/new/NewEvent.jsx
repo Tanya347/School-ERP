@@ -65,7 +65,7 @@ const NewEvent = ({ inputs, title }) => {
       {/* <Sidebar /> */}
       <div className="newEventContainer">
         <div className="new">
-          <div className="newContainer">
+          <div className="new-container">
 
           <div className="top">
             <h1>{title}</h1>
@@ -81,7 +81,7 @@ const NewEvent = ({ inputs, title }) => {
                   }
                   alt=""
                   />
-                  <div className="formInput">
+                  <div className="form-input">
                     <label htmlFor="file">
                       Image: <DriveFolderUploadOutlinedIcon className="icon" />
                     </label>
@@ -112,7 +112,7 @@ const NewEvent = ({ inputs, title }) => {
                   />
 
                   {inputs?.map((input) => (
-                    <div className="formInput" key={input.id}>
+                    <div className="form-input" key={input.id}>
                       <label>{input.label}</label>
                       <input
                         onChange={handleChange}
@@ -127,7 +127,7 @@ const NewEvent = ({ inputs, title }) => {
                   ))}
 
                 </form>
-                <div className="submitButton">
+                <div className="submit-button">
                 { submitLoading && <Loader text="Creating Event..." /> }
                   <button className="clear-btn" onClick={handleClear}>Clear</button>
                   <button onClick={handleClick} className="form-btn">Create Event</button>

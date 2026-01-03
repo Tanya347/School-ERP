@@ -44,20 +44,20 @@ const Modal = ({ setOpen, id, type }) => {
 
     return (
         <div className="modal">
-            <div className="mContainer">
+            <div className="m-container">
 
                 {/* setOpen set to false so that pop up closes */}
                 <CancelIcon
-                    className="mClose"
+                    className="m-close"
                     onClick={() => setOpen(false)}
                 />
                 
                 {/* if type is updates */}
                 {
                     type === "updates" &&
-                    <div className="mTasks">
-                        <div className="mTitle">{data.title}</div>
-                        <div className="mDesc">{data.desc}</div>
+                    <div className="m-tasks">
+                        <div className="m-title">{data.title}</div>
+                        <div className="m-desc">{data.desc}</div>
                         {data.updateType === "specific" && <p><span>For</span>: Class {data?.class?.name}</p>}
                     </div>
                 }
@@ -65,9 +65,9 @@ const Modal = ({ setOpen, id, type }) => {
                 {/* If type is tasks */}
                 {
                     (type === "facTasks" || type==="stuTasks" || type === 'tasks') &&
-                    <div className="mTasks">
-                        <div className="mTitle">{data.title}</div>
-                        <div className="mDesc">{data.desc}</div>
+                    <div className="m-tasks">
+                        <div className="m-title">{data.title}</div>
+                        <div className="m-desc">{data.desc}</div>
                         <p><span>Deadline</span> : {formatDate(data.deadline)}</p>
                         <p><span>Assigned To</span> : {data?.sclass?.name}</p>
                         <p><span>Assigned By</span>: {data?.author?.teachername}</p>
@@ -77,8 +77,8 @@ const Modal = ({ setOpen, id, type }) => {
                 {/* If type is tasks */}
                 {
                     (type === "facTests" || type==="stuTests" || type === 'tests') &&
-                    <div className="mTasks">
-                        <div className="mTitle">{data?.name}</div>
+                    <div className="m-tasks">
+                        <div className="m-title">{data?.name}</div>
                         <p><span>Syllabus</span> : {data?.syllabus}</p>
                         <p><span>Duration</span> : {data?.duration} min</p>
                         <p><span>Date</span> : {formatDate(data.date)}</p>
@@ -91,9 +91,9 @@ const Modal = ({ setOpen, id, type }) => {
                 {/* If type is query */}
                 {
                     type === "queries" &&
-                    <div className="mTasks">
-                        <div className="mTitle">{data.title}</div>
-                        <div className="mDesc">{data.description}</div>
+                    <div className="m-tasks">
+                        <div className="m-title">{data.title}</div>
+                        <div className="m-desc">{data.description}</div>
                         <textarea
                             name="response"
                             id="response"
@@ -103,7 +103,7 @@ const Modal = ({ setOpen, id, type }) => {
                             onChange={handleChange}
                             placeholder='Respond to the query'>
                         </textarea>
-                        <button className="mButton" onClick={handleClick}>
+                        <button className="m-button" onClick={handleClick}>
                             Done
                         </button>
                     </div>
@@ -112,8 +112,8 @@ const Modal = ({ setOpen, id, type }) => {
                 {/* If type is tasks */}
                 {
                     type === "courses" &&
-                    <div className="mTasks">
-                        <div className="mTitle">{data?.subjectCode} {data?.name}</div>
+                    <div className="m-tasks">
+                        <div className="m-title">{data?.subjectCode} {data?.name}</div>
                         {data.syllabusPicture && <img className="syll" src={data.syllabusPicture} alt="syllabus"/>}
                         {data.teacher && <p><span>Taught by</span> : {data?.teacher?.teachername}</p>}
                         <p><span>Class</span> : {data?.class?.name}</p>

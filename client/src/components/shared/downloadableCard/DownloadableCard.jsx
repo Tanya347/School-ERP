@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-import useFetch from '../../config/service/useFetch';
+import useFetch from '../../../config/service/useFetch';
 
 const DownloadableCard = ({
   subtitle,

@@ -24,10 +24,10 @@ const ViewClass = () => {
     const {data, loading} = useFetch(getClassDetails(id))
 
   return (
-    <div className='viewClass'>
+    <div className='view-class'>
         {loading ? (
           <Loader text="Loading class data..." />
-        ) : (<div className="viewClassContainer">
+        ) : (<div className="view-class-container">
                 <h2>{data?.name} Standard</h2>
                 {
                   data?.classTeacher ? (

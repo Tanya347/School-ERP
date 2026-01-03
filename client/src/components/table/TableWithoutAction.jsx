@@ -40,8 +40,8 @@ const TableWithoutAction = ({ column, name }) => {
       <div className="table-without-action-container">
 
         {/* Title will be shown based on which table is */}
-        <div className="datatableHeader">
-          <div className="datatableTitle">
+        <div className="datatable-header">
+          <div className="datatable-title">
           {name}
           </div>
         </div>

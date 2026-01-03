@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 
 import { periodTimes, days, periods } from '../../config/commons';
 import { getTimeTableURL } from '../../config/endpoints/get';
-import { useAuth } from '../../config/context/AuthContext';
+import { useSelector } from "react-redux";
 
 import Loader from "../../components/shared/loader/Loader"
 
@@ -18,7 +18,7 @@ const Timetable = ({type}) => {
 
   const location = useLocation();
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const id = useMemo(() => {
     if (type !== "class") return null;

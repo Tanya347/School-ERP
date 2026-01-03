@@ -25,12 +25,12 @@
       }
     }
 
-    .datatableHeader {
+    .datatable-header {
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
 
-      .datatableTitle {
+      .datatable-title {
         width: 100%;
         font-size: 24px;
         color: var(--gray);
@@ -70,11 +70,11 @@
       }
     }
 
-    .cellWithImg {
+    .cell-with-img {
       display: flex;
       align-items: center;
 
-      .cellImg {
+      .cell-img {
         width: 32px;
         height: 32px;
         border-radius: 50%;
@@ -83,7 +83,7 @@
       }
     }
 
-    .cellWithStatus {
+    .cell-with-status {
       padding: 5px;
       border-radius: 5px;
 
@@ -103,12 +103,12 @@
       }
     }
 
-    .cellAction {
+    .cell-action {
       display: flex;
       align-items: center;
       gap: 15px;
 
-      .viewButton {
+      .view-button {
         padding: 2px 5px;
         border-radius: 5px;
         color: var(--turquoise);
@@ -120,7 +120,7 @@
         }
       }
 
-      .editButton {
+      .edit-button {
         padding: 2px 5px;
         border-radius: 5px;
         color: var(--tree-green);
@@ -132,7 +132,7 @@
         }
       }
 
-      .deleteButton {
+      .delete-button {
         padding: 2px 5px;
         border-radius: 5px;
         color: var(--red);
@@ -150,7 +150,7 @@
 .app.dark .datatable-container {
   .datatable {
 
-    .datatableTitle {
+    .datatable-title {
       color: var(--light-gray);
     }
     .datagrid {
@@ -172,7 +172,7 @@
       }
     }
 
-    .viewButton {
+    .view-button {
       background: var(--mild-turquoise);
       color: var(--white);
 
@@ -189,7 +189,7 @@
       }
     }
     
-    .deleteButton, .delete {
+    .delete-button, .delete {
       background: var(--crimson);
       color: var(--white);
 
@@ -198,7 +198,7 @@
       }
     }
 
-    .editButton {
+    .edit-button {
       background: var(--dark-tree-green);
       color: var(--white);
 

@@ -9,9 +9,9 @@ import startOfWeek from "date-fns/startOfWeek";
 
 import { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import { useSelector } from "react-redux";
 
 import useFetch from '../../config/service/useFetch';
-import { useAuth } from '../../config/context/AuthContext';
 import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../config/endpoints/get';
 
 import Modal from '../../components/shared/modal/Modal';
@@ -34,7 +34,7 @@ const Events = () => {
     const [clickedEvent, setClickedEvent] = useState({});
     const [openModal, setOpenModal] = useState(false);
 
-    const { user } = useAuth();
+    const { user } = useSelector(state => state.auth);
     const tasks = useFetch(getTaskCalenderURL(user)).data
     const tests = useFetch(getTestCalenderURL(user)).data
     const eventsData = useFetch(getDatatableURL("events")).data

@@ -1,4 +1,4 @@
-.attendanceModal {
+.attendance-modal {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.418);
@@ -11,7 +11,7 @@
     justify-content: center;
     text-align: center;
 
-    .attContainer {
+    .att-container {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -26,7 +26,7 @@
             width: 80%;
         }
 
-        .attClose {
+        .att-close {
             position: absolute;
             top: 0;
             right: 0;

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { addClassTeacher } from '../../config/endpoints/put';
+import { success, somethingWentWrongMsg } from "../../config/constants"
 
 import Dropdown from '../shared/dropdown/Dropdown';
 
@@ -20,28 +21,28 @@ const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
             const res = await axios.put(addClassTeacher(sclass), {teacher}, {
                 withCredentials: true
             })
-            if(res.data.status === 'success') {
+            if(res.data.status === success) {
                 window.location.reload();
             }
             setOpen(false)
         } catch(err) {
-            const errorMessage = err.response?.data?.message || "Something went wrong";
+            const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
             toast.error(errorMessage);
             return err;
         }
     }
   return (
-    <div className='popupModal'>
-      <div className="popupContainer">
+    <div className='popup-modal'>
+      <div className="popup-container">
         <CancelIcon
-          className='popupClose'
+          className='popup-close'
           onClick={() => setOpen(false)}
         />
         <Dropdown
             title="Select Teacher"
             options={teacherList}
             onChange={(e) => setTeacher(e.target.value)} />
-        <button onClick={handleClick} className='popupButton'>Add Class Teacher</button>
+        <button onClick={handleClick} className='popup-button'>Add Class Teacher</button>
       </div>
     </div>
   )

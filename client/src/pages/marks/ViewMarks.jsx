@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
 import "./addMarks.scss"
-import { useAuth } from '../../config/context/AuthContext'
-import useFetch from '../../config/service/useFetch'
-import { getFacultyData } from '../../config/endpoints/get'
+
+import { useEffect, useState } from 'react'
+import { useSelector } from "react-redux";
 import axios from 'axios'
+
+import useFetch from '../../config/service/useFetch'
+import { getFacultyData, getMarksOfSubject } from '../../config/endpoints/get'
 import { getClearMarksSubject } from '../../config/endpoints/delete'
 
 const ViewMarks = () => {
@@ -12,14 +14,14 @@ const ViewMarks = () => {
   const [courseName, setCourseName] = useState("");
   const [stuData, setStuData] = useState({});
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
   const courses = useFetch(getFacultyData(user._id, "courses")).data
 
   useEffect(() => {
     const fetchStudents = async () => {
       if (course) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/marks/subject/${course}`);
+          const response = await axios.get(getMarksOfSubject);
           setStuData(response.data.data);
         } catch (error) {
           console.error("Error fetching student data:", error);

@@ -15,7 +15,7 @@ const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
   };
 
   return (
-    <div className='courseComponent'>
+    <div className='course-component'>
         <div className="course" key={index}>
             <h3>{name}</h3>
             <p>{subjectCode}</p>

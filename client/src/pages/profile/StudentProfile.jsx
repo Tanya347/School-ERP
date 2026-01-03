@@ -33,63 +33,63 @@ const StudentProfile = ({ type }) => {
               <img
                 src={data.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
                 alt=""
-                className="itemImg"
+                className="item-img"
               />
 
               <div className="details">
                 {/* Name */}
-                <h1 className="itemTitle">{data.name}</h1>
+                <h1 className="item-title">{data.name}</h1>
 
                 {/* ID */}
-                <div className="detailItem">
-                  <span className="itemKey">Enrollment Number:</span>
-                  <span className="itemValue">{data?.enroll}</span>
+                <div className="detail-item">
+                  <span className="item-key">Enrollment Number:</span>
+                  <span className="item-value">{data?.enroll}</span>
                 </div>
 
                 {/* Username */}
-                <div className="detailItem">
-                  <span className="itemKey">Username:</span>
-                  <span className="itemValue">{data?.username}</span>
+                <div className="detail-item">
+                  <span className="item-key">Username:</span>
+                  <span className="item-value">{data?.username}</span>
                 </div>
 
                 {/* Email */}
-                <div className="detailItem">
-                  <span className="itemKey">Email:</span>
-                  <span className="itemValue">{data?.email}</span>
+                <div className="detail-item">
+                  <span className="item-key">Email:</span>
+                  <span className="item-value">{data?.email}</span>
                 </div>
 
                 {/* Phone Number */}
-                <div className="detailItem">
-                  <span className="itemKey">Phone Number:</span>
-                  <span className="itemValue">{data?.studentPhone}</span>
+                <div className="detail-item">
+                  <span className="item-key">Phone Number:</span>
+                  <span className="item-value">{data?.studentPhone}</span>
                 </div>
 
                 {/* Address */}
-                <div className="detailItem">
-                  <span className="itemKey">Address:</span>
-                  <span className="itemValue">{data?.studentAddress}</span>
+                <div className="detail-item">
+                  <span className="item-key">Address:</span>
+                  <span className="item-value">{data?.studentAddress}</span>
                 </div>
 
                 {/* Department */}
-                <div className="detailItem">
-                  <span className="itemKey">Class:</span>
-                  <span className="itemValue">{data?.classname}</span>
+                <div className="detail-item">
+                  <span className="item-key">Class:</span>
+                  <span className="item-value">{data?.classname}</span>
                 </div>
 
                 {/* Gender */}
-                <div className="detailItem">
-                  <span className="itemKey">Gender:</span>
-                  <span className="itemValue">{data?.gender}</span>
+                <div className="detail-item">
+                  <span className="item-key">Gender:</span>
+                  <span className="item-value">{data?.gender}</span>
                 </div>
 
                 {/* Date of Birth */}
-                <div className="detailItem">
-                  <span className="itemKey">Date of Birth:</span>
-                  <span className="itemValue">{data?.dob}</span>
+                <div className="detail-item">
+                  <span className="item-key">Date of Birth:</span>
+                  <span className="item-value">{data?.dob}</span>
                 </div>
 
                 <button
-                  className="editButton"
+                  className="edit-button"
                   onClick={() =>
                     navigate(
                       `${type === "Admin" ? "/admin" : ""}/students/edit/${id}`
@@ -105,8 +105,8 @@ const StudentProfile = ({ type }) => {
             </div>
           </div>
           <div className="profile-bottom">
-            <h2 className="courseTitle">Courses</h2>
-            <div className="coursesContainer">
+            <h2 className="course-title">Courses</h2>
+            <div className="courses-container">
               {data?.classInfo == null || data?.classInfo?.subjects?.length === 0 ? (
                 <span>No courses assigned yet.</span>
               ) : (

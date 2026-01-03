@@ -29,7 +29,7 @@
     margin-top: 20px;
 }
 
-.landing-container .button-container .notAdmin {
+.landing-container .button-container .not-ddmin {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
@@ -37,11 +37,11 @@
     justify-content: center;
 }
 
-.landing-container .button-container .isAdmin button{
+.landing-container .button-container .is-admin button{
     background-color: var(--orange);
 }
 
-.landing-container .button-container .isAdmin button:hover{
+.landing-container .button-container .is-admin button:hover{
     background-color: #fe715bdd;
 }
 

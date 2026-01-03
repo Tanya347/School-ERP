@@ -50,7 +50,7 @@ const EditSchool = ({title}) => {
 
   return (
     <div className="new">
-      <div className="newContainer">
+      <div className="new-container">
         <div className="top">
           <h1>{title}</h1>
         </div>
@@ -65,7 +65,7 @@ const EditSchool = ({title}) => {
                 }
                 alt=""
               />
-              <div className="formInput">
+              <div className="form-input">
                 <label htmlFor="file">
                   Logo: <DriveFolderUploadIcon className="icon" />
                 </label>
@@ -80,7 +80,7 @@ const EditSchool = ({title}) => {
 
             <form>
                 {schoolInputs.map((field) => (
-                  <div className="formInput">
+                  <div className="form-input">
                     <label>{field.label}</label>
                     <input
                       id={field.id}
@@ -93,7 +93,7 @@ const EditSchool = ({title}) => {
                 ))}
             </form>
 
-            <div className="submitButton">
+            <div className="submit-button">
               {loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
                 editing school information...

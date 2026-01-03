@@ -3,11 +3,11 @@
         height: 600px;
     padding: 20px;
     
-    .datatableHeader {
+    .datatable-header {
         display: flex;
         justify-content: space-between;
     
-        .datatableTitle {
+        .datatable-title {
           width: 100%;
           font-size: 24px;
           color: var(--gray);
@@ -19,7 +19,7 @@
         }
       }
     
-      .cellWithStatus {
+      .cell-with-status {
         padding: 5px;
         border-radius: 5px;
     

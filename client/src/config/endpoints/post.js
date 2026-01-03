@@ -37,4 +37,20 @@ export const resetPasswordURL = (type, token, role) => {
   return `${api_url}/auth/resetPassword/${type}/${token}`;
 };
 
+export const  bulkCreateTimetable = () => {
+  return `${api_url}/timetables/bulkCreate`;
+}
+
+export const bulkDelete = (type) => {
+  return `${api_url}/${type}/bulk/delete`
+}
+
+export const validateEndpoint = () => {
+  return `${api_url}/auth/validate`
+}
+
+export const logoutEndpoint = () => {
+ return `${api_url}/auth/logout`
+}
+
 

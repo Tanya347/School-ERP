@@ -21,7 +21,7 @@ const GenericTable = ({
   return (
     <TableContainer
       component={Paper}
-      className={`genericTable ${isScrollable ? "scrollable" : ""}`}
+      className={`generic-table ${isScrollable ? "scrollable" : ""}`}
       style={customStyles?.container}
     >
       <Table sx={{ minWidth: 650 }} aria-label="generic table">
@@ -31,12 +31,12 @@ const GenericTable = ({
               <TableCell
                 key={index}
                 style={{ fontWeight: "bold", ...col.headerStyle }}
-                className="tableCell"
+                className="table-cell"
               >
                 {col.label}
               </TableCell>
             ))}
-            {actions && <TableCell className="tableCell">Actions</TableCell>}
+            {actions && <TableCell className="table-cell">Actions</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -46,16 +46,16 @@ const GenericTable = ({
                 <TableRow
                   key={row[rowKey]}
                   onClick={() => onRowClick && onRowClick(row)}
-                  className="tableRow"
+                  className="table-row"
                   style={customStyles?.row}
                 >
                   {columns.map((col, index) => (
-                    <TableCell key={index} className="tableCell">
+                    <TableCell key={index} className="table-cell">
                       {col.render ? col.render(row[col.field], row) : row[col.field]}
                     </TableCell>
                   ))}
                   {actions && (
-                    <TableCell className="tableCell">
+                    <TableCell className="table-cell">
                       {actions.map((ActionComponent, index) => (
                         <ActionComponent key={index} row={row} />
                       ))}
@@ -67,7 +67,7 @@ const GenericTable = ({
               <TableRow>
                 <TableCell
                   colSpan={columns.length + (actions ? 1 : 0)}
-                  className="tableCell"
+                  className="table-cell"
                   align="center"
                 >
                   No data available

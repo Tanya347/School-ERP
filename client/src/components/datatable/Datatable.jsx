@@ -3,7 +3,7 @@ import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../config/context/AuthContext.js";
+import { useSelector } from "react-redux"
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -12,11 +12,13 @@ import { getDatatableURL } from "../../config/endpoints/get.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
 
 import Modal from "../shared/modal/Modal.jsx";
-import AddClass from "../addCourse/AddClass.jsx";
+import AddClass from "../addCourse/AddCourse.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
 import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
 import Loader from "../shared/loader/Loader.jsx";
+import { bulkDelete } from "../../config/endpoints/post.js";
+import { testAction } from "../../config/endpoints/put.js";
 
 const Datatable = ({ column, name }) => {
   
@@ -32,7 +34,7 @@ const Datatable = ({ column, name }) => {
   const location = useLocation();
 
   const path = location.pathname.split("/")[2];
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
   const { data, loading } = useFetch(getDatatableURL(path, user));
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const Datatable = ({ column, name }) => {
     setConfirmAction(() => async () => {
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/${path}/bulk/delete`,
+          bulkDelete(path),
           { ids: selectedRows },
           { withCredentials: true }
         );
@@ -95,8 +97,7 @@ const Datatable = ({ column, name }) => {
 
   const handleActionOnTest = async (id, action) => {
     try {
-      const url = process.env.REACT_APP_API_URL + `/tests/${action}/${id}`;
-      const res = await axios.put(url, {}, { withCredentials: true });
+      const res = await axios.put(testAction(action, id), {}, { withCredentials: true });
       if (res.data.status === "success") {
         window.location.reload();
       }
@@ -112,10 +113,10 @@ const Datatable = ({ column, name }) => {
       headerName: "Action",
       width: 600,
       renderCell: (params) => (
-        <div className="cellAction">
+        <div className="cell-action">
           {path === "materials" ? (
             <div
-              className="viewButton"
+              className="view-button"
               onClick={() => {
                 if (params.row.fileUrl) {
                   window.open(params.row.fileUrl, "_blank", "noopener,noreferrer");
@@ -126,28 +127,28 @@ const Datatable = ({ column, name }) => {
             </div>
           ) : path === "students" || path === "faculties" ? (
             <Link to={`/admin/${path}/single/${params.row._id}`} style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
+              <div className="view-button">View</div>
             </Link>
           ) : (
-            <div className="viewButton" onClick={() => handleClick(params.row._id, "query")}>
+            <div className="view-button" onClick={() => handleClick(params.row._id, "query")}>
               {name === "Query" ? "Respond" : "View"}
             </div>
           )}
 
           {(user.role === "admin" || user.role === "faculty") && (
             <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
-              <div className="editButton">Edit</div>
+              <div className="edit-button">Edit</div>
             </Link>
           )}
 
           {(user.role === "admin" || user.role === "faculty") && (
-            <div className="deleteButton" onClick={() => handleDelete(params.row._id)}>
+            <div className="delete-button" onClick={() => handleDelete(params.row._id)}>
               Delete
             </div>
           )}
 
           {user.role === "admin" && path === "faculties" && (
-            <div className="viewButton" onClick={() => handleClick(params.row._id, "course")}>
+            <div className="view-button" onClick={() => handleClick(params.row._id, "course")}>
               Add Course
             </div>
           )}
@@ -155,12 +156,12 @@ const Datatable = ({ column, name }) => {
           {user.role === "faculty" && path === "tests" && (
             <>
               <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
-                <div className="viewButton">Add Marks</div>
+                <div className="view-button">Add Marks</div>
               </Link>
-              <div className="editButton" onClick={() => handleActionOnTest(params.row._id, "complete")}>
+              <div className="edit-button" onClick={() => handleActionOnTest(params.row._id, "complete")}>
                 Mark Complete
               </div>
-              <div className="deleteButton" onClick={() => handleActionOnTest(params.row._id, "cancel")}>
+              <div className="delete-button" onClick={() => handleActionOnTest(params.row._id, "cancel")}>
                 Mark Cancelled
               </div>
             </>
@@ -176,8 +177,8 @@ const Datatable = ({ column, name }) => {
        <Loader text="Loading data..." type="global"/>
       ) : (
         <div className="datatable">
-          <div className="datatableHeader">
-            <div className="datatableTitle">{name}</div>
+          <div className="datatable-header">
+            <div className="datatable-title">{name}</div>
             <Tooltip content={"Export to Excel"} position="top">
               <ExportButton
                 data={list}

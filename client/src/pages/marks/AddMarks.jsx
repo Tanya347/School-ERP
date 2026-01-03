@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-import { useAuth } from "../../config/context/AuthContext";
 import useFetch from "../../config/service/useFetch";
-import { getFacultyData } from "../../config/endpoints/get";
+import { getFacultyData, getMarksOfSubject, getStudentsOfClass } from "../../config/endpoints/get";
 import { addMarks } from "../../config/endpoints/put";
 
 import InforBanner from "../../components/shared/infoBanner/InforBanner";
@@ -23,7 +23,7 @@ const AddMarks = () => {
 
   const navigate = useNavigate();
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
   const courses = useFetch(getFacultyData(user._id, "courses")).data;
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const AddMarks = () => {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/classes/students/${sclass}`
+          getStudentsOfClass(sclass)
         );
         setStuData(response.data.data);
       } catch (error) {
@@ -49,7 +49,7 @@ const AddMarks = () => {
 
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/marks/subject/${course}`
+          getMarksOfSubject(course)
         );
 
         const prefilledMarks = {};

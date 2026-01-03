@@ -36,28 +36,28 @@
       }
 
       .details {
-        .itemTitle {
+        .item-title {
           margin-bottom: 10px;
           color: var(--gray);
         }
 
-        .detailItem {
+        .detail-item {
           margin-bottom: 10px;
           font-size: 14px;
 
-          .itemKey {
+          .item-key {
             font-weight: bold;
             color: var(--gray);
             margin-right: 5px;
           }
 
-          .itemValue {
+          .item-value {
             font-weight: 300;
           }
         }
       }
 
-      .editButton {
+      .edit-button {
         padding: 12px 15px;
         background-color: var(--tree-green);
         border: none;
@@ -91,13 +91,13 @@
     flex-direction: column;
     padding: 20px;
 
-    .courseTitle {
+    .course-title {
       margin: 20px 0;
       color: var(--gray);
       text-align: center;
     }
 
-    .coursesContainer {
+    .courses-container {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
@@ -190,14 +190,14 @@
             text-align: center;
           }
   
-          .fclassesContainer {
+          .fclasses-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 20px;
             width: 40%;
   
-            .classContainer {
+            .class-container {
               width: 150px;
               padding: 10px;
               border-radius: 10px;
@@ -213,7 +213,7 @@
             }
           }
 
-          .fcoursesContainer {
+          .fcourses-container {
             display: flex;
             width: 50%;
             flex-direction: column;
@@ -241,21 +241,21 @@
 
 /* ================= DARK MODE ================= */
 .app.dark .single-profile-container.student-profile {
-  .courseTitle,
-  .details .itemTitle,
-  .details .itemKey {
+  .course-title,
+  .details .item-title,
+  .details .item-key {
     color: var(--light-gray);
   }
 }
 
 .app.dark .single-profile-container.faculty-profile {
-    .fclassTitle, .fcourseTitle {
+    .f-class-title, .f-course-title {
         color: var(--white);
     }
     h3 span {
         background-color: var(--light-black);
     }
-    .classContainer {
+    .class-container {
       &:nth-child(odd) {
         background-color: var(--dark-blue) !important;
       }

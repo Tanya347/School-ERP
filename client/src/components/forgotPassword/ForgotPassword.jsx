@@ -23,26 +23,26 @@ const ForgotPassword = ({setOpen, type}) => {
       }
       setOpen(false)
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "Something went wrong";
+      const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
       toast.error(errorMessage);
       return err;
     }
   }
   return (
-    <div className='popupModal'>
-      <div className="popupContainer">
+    <div className='popup-modal'>
+      <div className="popup-container">
         <CancelIcon
-          className='popupClose'
+          className='popup-close'
           onClick={() => setOpen(false)}
         />
-        <div className="popupTitle">Please enter your email</div>
+        <div className="popup-title">Please enter your email</div>
         <input
-          className='popupInput'
+          className='popup-input'
           type="email"
           placeholder='Enter email'
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button onClick={handleClick} className='popupButton'>Generate Reset Link</button>
+        <button onClick={handleClick} className='popup-button'>Generate Reset Link</button>
       </div>
     </div>
   )

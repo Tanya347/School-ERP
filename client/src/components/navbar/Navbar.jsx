@@ -6,13 +6,14 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
 
-import { useAuth } from '../../config/context/AuthContext';
-import { getSingleData, getUpdateURL } from '../../config/endpoints/get';
-import useFetch from '../../config/service/useFetch'
+import { clearNotifications } from "../../store/slices/notificationSlice";
+import { logoutUser } from "../../store/slices/authSlice"
+import { getSingleData } from '../../config/endpoints/get';
 import { DarkModeContext } from "../../config/context/darkModeContext";
 
-import NotificationsDropdown from './NotificationsDropdown';
+import NotificationsDropdown from './notifications/NotificationsDropdown';
 
 const Navbar = () => {
 
@@ -22,9 +23,13 @@ const Navbar = () => {
     const dropdownRef = useRef(null);
     
     const { Dispatch } = useContext(DarkModeContext);
-    const { user, logout } = useAuth();
-    const { data = [] } = useFetch(getUpdateURL(user));
+    const { user } = useSelector(state => state.auth);
 
+    const dispatch = useDispatch();
+
+    const { list = [] } = useSelector(
+        state => state.notifications
+    );
 
     // Get current date and date 7 days ago
     const now = new Date();
@@ -32,15 +37,14 @@ const Navbar = () => {
     weekAgo.setDate(now.getDate() - 7);
 
     // Filter notifications from the past week
-    const notifications = (data || []).filter(n => {
-        // Ensure n.date is a valid date string or Date object
+     const notifications = list.filter(n => {
         const notifDate = new Date(n.updatedAt);
         return notifDate >= weekAgo && notifDate <= now;
     });
 
     const handleLogout = async (e) => {
-        e.preventDefault();
-        await logout("Logged Out Successfully!");
+        dispatch(logoutUser());
+        dispatch(clearNotifications());
     }
 
     const unreadCount = notifications.filter(n => !n.read).length;

@@ -30,7 +30,7 @@ const useFetch = (url, options = {}) => {
             setLoading(false);
         };
         fetchData();
-    }, [url]);
+    }, [url, enabled]);
 
     const reFetch = async () => {
         setLoading(true);

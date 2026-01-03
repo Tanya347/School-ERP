@@ -5,7 +5,7 @@
     height: fit-content;
     min-height: 100vh;
 
-    .wholeContainer {
+    .whole-container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -20,7 +20,7 @@
             font-weight: bold;
         }
 
-        .classesContainer {
+        .classes-container {
             display: flex;
             width: 90%;
         margin-top: 40px;
@@ -30,7 +30,7 @@
             justify-content: center;
             align-items: center;
 
-            .classContainer {
+            .class-container {
                 height: fit-content;
                 width: 300px;
                 background-color: var(--light-gray);
@@ -56,7 +56,7 @@
                     width: 180px;
                 }
 
-                .viewButton {
+                .view-button {
                     background-color: var(--light-turquoise);
                     padding: 8px 20px;
                     font-size: 15px;
@@ -66,7 +66,7 @@
                     }
                 }
 
-                .attButton {
+                .att-button {
                     background-color: var(--light-tree-green);
                     padding: 8px 20px;
                     font-size: 15px;
@@ -76,7 +76,7 @@
                     }
                 }
 
-                .marksButton {
+                .marks-button {
                     background-color: var(--light-green);
                     padding: 8px 20px;
                     font-size: 15px;
@@ -86,7 +86,7 @@
                     }
                 }
 
-                 .ttButton {
+                 .tt-button {
                     background-color: var(--light-red);
                     padding: 8px 20px;
                     font-size: 15px;

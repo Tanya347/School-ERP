@@ -2,12 +2,12 @@ import './viewExamDates.scss'
 
 import { useEffect, useState } from 'react'
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
-import { useAuth } from '../../config/context/AuthContext';
-import { getSingleData } from '../../config/endpoints/get';
+import { getClassExamDates, getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
 
-import DownloadableCard from '../../components/downloadableCard/DownloadableCard';
+import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"
 
@@ -15,14 +15,14 @@ const ViewExamDates = () => {
 
   const [data, setData] = useState([]);
   
-  const {user} = useAuth();
+  const { user } = useSelector(state => state.auth);
   const { data: schoolData } = useFetch(getSingleData(user.schoolID, "schools"));
 
   useEffect(() => {
     const fetchData = async () => {
       if(user) {
         try {
-          const response = await axios.get(process.env.REACT_APP_API_URL + `/courses/exam/${user?.class}`, {withCredentials: true});
+          const response = await axios.get(getClassExamDates(user?.class), {withCredentials: true});
           if(response.data.status === "success") {
             setData(response.data.data);
           }
@@ -48,7 +48,7 @@ const ViewExamDates = () => {
 
   return (
     <div className='view-exam-dates-container'>
-      <h1 className="listTitle">Exam Dates</h1>
+      <h1 className="list-title">Exam Dates</h1>
       <div className="exams-date-containers">
         <GenericTable
           columns={columns}
@@ -59,7 +59,7 @@ const ViewExamDates = () => {
 
       {data?.allExamsPlanned ? (
         <div>
-          <h1 className="listTitle">Admit Card</h1>
+          <h1 className="list-title">Admit Card</h1>
           <DownloadableCard
             subtitle="School Examination Admit Card"
             type="admitcard"

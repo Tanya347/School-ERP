@@ -5,11 +5,11 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
-import { useAuth } from '../../config/context/AuthContext';
 import { handleChange as commonHandleChange } from "../../config/commons";
 import { validateMaterial } from '../../config/validators/material';
 
@@ -25,7 +25,7 @@ const UploadMaterial = ({title, inputs}) => {
 
   const navigate = useNavigate();
 
-  const { user } = useAuth();
+  const { user } = useSelector(state => state.auth);
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateMaterial);
@@ -58,14 +58,14 @@ const UploadMaterial = ({title, inputs}) => {
 
   return (
     <div className='new'>
-      <div className="newContainer">
+      <div className="new-container">
         <div className="top">
           {title}
         </div>
         <div className="bottom">
           <div className="right">
             <div className="left">
-              <div className="formInput">
+              <div className="form-input">
                 <label htmlFor="file">
                   File: <DriveFolderUploadIcon className="icon" />
                 </label>
@@ -94,7 +94,7 @@ const UploadMaterial = ({title, inputs}) => {
                 value={sclass}
               />
               {inputs?.map((input) => (
-                <div className="formInput" key={input.id}>
+                <div className="form-input" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     onChange={handleChange}
@@ -108,7 +108,7 @@ const UploadMaterial = ({title, inputs}) => {
                 </div>
               ))}
             </form>
-            <div className="submitButton">
+            <div className="submit-button">
             { loading && <div className="create-loader">
                 <ClipLoader color="black" size={30} />
                 uploading material...

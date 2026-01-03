@@ -6,8 +6,8 @@ import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
-import { useAuth } from "../../config/context/AuthContext";
 import { sidebarConsts } from "./sidebarConsts";
 
 import Tooltip from "../shared/tooltip/Tooltip";
@@ -17,7 +17,7 @@ const MainSidebar = () => {
 
     const [collapsed, setCollapsed] = useState(true);
     
-    const { user } = useAuth();
+    const { user } = useSelector(state => state.auth);
 
     const handleToggle = () => {
         setCollapsed(!collapsed);
@@ -26,7 +26,7 @@ const MainSidebar = () => {
     const canAccess = (item, role) => item.roles?.includes(role);
 
     return (
-        <div className={`navSidebarContainer ${collapsed ? 'collapsed' : ''}`}>
+        <div className={`nav-sidebar-container ${collapsed ? 'collapsed' : ''}`}>
 
             <motion.div animate={{  width: collapsed ? "70px" : "250px" }} className="sidebar">
                 <ul>

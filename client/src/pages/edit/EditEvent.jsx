@@ -49,7 +49,11 @@ const EditEvent = ({ inputs, title }) => {
 
         try {
             const newInfo = {
-                ...info,
+                name: info.name,
+                desc: info.desc,
+                venue: info.venue,
+                contact: info.contact,
+                registerLink: info.registerLink,
                 startDate: start,
                 endDate: end
             }
@@ -70,7 +74,7 @@ const EditEvent = ({ inputs, title }) => {
                 <Loader text="Loading data..." type="global" />
            ) : (
             <>
-                 <div className="newContainer">
+                 <div className="new-container">
                     <div className="top">
                         <h1>{title}</h1>
                     </div>
@@ -85,7 +89,7 @@ const EditEvent = ({ inputs, title }) => {
                                 }
                                 alt=""
                             />
-                                <div className="formInput">
+                                <div className="form-input">
                                     <label htmlFor="file">
                                         Image: <DriveFolderUploadOutlinedIcon className="icon" />
                                     </label>
@@ -99,7 +103,7 @@ const EditEvent = ({ inputs, title }) => {
                         </div>
                             <form>
 
-                                <div className="formInput">
+                                <div className="form-input">
                                         <label>
                                             <span style={{ color: "#1AACAC", fontWeight: "bold" }}>Time : </span>
                                             {start ? formatTime(start) : "No start time selected"}
@@ -114,7 +118,7 @@ const EditEvent = ({ inputs, title }) => {
                                         )}
                                 </div>
 
-                                <div className="formInput">
+                                <div className="form-input">
                                     <label>
                                         <span style={{ color: "#1AACAC", fontWeight: "bold" }}>Time : </span>
                                         {end ? formatTime(end) : "No end time selected"}
@@ -131,7 +135,7 @@ const EditEvent = ({ inputs, title }) => {
 
 
                                 {inputs?.map((input) => (
-                                    <div className="formInput" key={input.id}>
+                                    <div className="form-input" key={input.id}>
                                         <label>{input.label}</label>
                                         <input onChange={handleChange}
                                             type={input.type}
@@ -144,7 +148,7 @@ const EditEvent = ({ inputs, title }) => {
                                     </div>
                                 ))}
                             </form>
-                                <div className="submitButton">
+                                <div className="submit-button">
                                 { sending && <Loader text="editing event..."/>}
                                     <button onClick={handleClick} className="form-btn">Edit Event</button>
                                 </div>

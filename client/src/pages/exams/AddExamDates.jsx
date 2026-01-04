@@ -5,9 +5,9 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import { ClipLoader } from 'react-spinners';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import { getClasses, getClassExamDates } from '../../config/endpoints/get';
+import axiosInterceptor from '../../config/axiosInterceptor';
 
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
@@ -34,9 +34,8 @@ const AddExamDates = () => {
       if (!selectedClass) return;
 
       try {
-        const examRes = await axios.get(
-          getClassExamDates(selectedClass),
-          { withCredentials: true }
+        const examRes = await axiosInterceptor.get(
+          getClassExamDates(selectedClass)
         );
 
         if (examRes.data.status === "success") {
@@ -75,7 +74,7 @@ const AddExamDates = () => {
 
     try {
       setLoading(true);
-      const res = await axios.put(setExamDates, {
+      const res = await axiosInterceptor.put(setExamDates, {
         classId: selectedClass,
         exams,
       });
@@ -98,7 +97,7 @@ const AddExamDates = () => {
     setConfirmAction(() => async () => {
       setLoading(true);
       try {
-        const res = await axios.delete(clearExamDates(selectedClass), { withCredentials: true });
+        const res = await axiosInterceptor.delete(clearExamDates(selectedClass));
         if(res.data.status === 'success') {
           setExamDates({});
           toast.success("Exam dates cleared successfully");

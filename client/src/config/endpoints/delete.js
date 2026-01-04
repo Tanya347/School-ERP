@@ -1,29 +1,27 @@
-const api_url = process.env.REACT_APP_API_URL
-
 export const getDeleteURL = (path, id) => {
-    return `${api_url}/${path}/${id}`;
+    return `/${path}/${id}`;
 }
 
 export const getClearClassURL = (classid) => {
-    return `${api_url}/attendances/class/${classid}`
+    return `/attendances/class/${classid}`
 }
 
 export const getClearDayAttendance = (id) => {
-    return `${api_url}/attendances/single/${id}`
+    return `/attendances/single/${id}`
 }
 
 export const getClearMarksSubject = (id) => {
-    return `${api_url}/marks/subject/${id}`
+    return `/marks/subject/${id}`
 }
 
 export const getClearTimetableForClass = (classid) => {
-    return `${api_url}/timetables/${classid}`
+    return `/timetables/${classid}`
 }
 
 export const clearExamDates = (sclass) => {
-    return `${api_url}/courses/exam/clear/${sclass}`
+    return `/courses/exam/clear/${sclass}`
 }
 
 export const clearTestMarks = (id) => {
-    return `${api_url}/tests/marks/${id}`
+    return `/tests/marks/${id}`
 }

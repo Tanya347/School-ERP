@@ -4,12 +4,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
-import axios from "axios";
 import { toast } from "react-toastify";
 
 import useFetch from "../../config/service/useFetch.js";
 import { getDatatableURL } from "../../config/endpoints/get.js";
+import axiosInterceptor from "../../config/axiosInterceptor.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
+import { bulkDelete } from "../../config/endpoints/post.js";
+import { testAction } from "../../config/endpoints/put.js";
 
 import Modal from "../shared/modal/Modal.jsx";
 import AddClass from "../addCourse/AddCourse.jsx";
@@ -17,8 +19,6 @@ import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
 import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
 import Loader from "../shared/loader/Loader.jsx";
-import { bulkDelete } from "../../config/endpoints/post.js";
-import { testAction } from "../../config/endpoints/put.js";
 
 const Datatable = ({ column, name }) => {
   
@@ -49,7 +49,7 @@ const Datatable = ({ column, name }) => {
     setConfirmMessage(`Are you sure you want to delete this ${name}?`);
     setConfirmAction(() => async () => {
       try {
-        const res = await axios.delete(getDeleteURL(path, id), { withCredentials: true });
+        const res = await axiosInterceptor.delete(getDeleteURL(path, id));
         if (res.data.status === "success") {
           toast.success(`${name} deleted successfully!`);
           setList((prevList) => prevList.filter((item) => item._id !== id));
@@ -68,10 +68,9 @@ const Datatable = ({ column, name }) => {
     setConfirmMessage(`Are you sure you want to delete ${selectedRows.length} ${name}(s)?`);
     setConfirmAction(() => async () => {
       try {
-        const res = await axios.post(
+        const res = await axiosInterceptor.post(
           bulkDelete(path),
-          { ids: selectedRows },
-          { withCredentials: true }
+          { ids: selectedRows }
         );
         if (res.data.status === "success") {
           toast.success(`${selectedRows.length} ${name}(s) deleted successfully!`);
@@ -97,7 +96,7 @@ const Datatable = ({ column, name }) => {
 
   const handleActionOnTest = async (id, action) => {
     try {
-      const res = await axios.put(testAction(action, id), {}, { withCredentials: true });
+      const res = await axiosInterceptor.put(testAction(action, id), {});
       if (res.data.status === "success") {
         window.location.reload();
       }

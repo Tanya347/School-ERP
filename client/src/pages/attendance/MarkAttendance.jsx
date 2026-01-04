@@ -1,7 +1,6 @@
 import "./markAttendance.scss"
 
 import { useEffect, useState } from 'react'
-import axios from "axios";
 import DatePicker from 'react-datepicker'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
@@ -11,6 +10,7 @@ import useFetch from '../../config/service/useFetch'
 import { getAttendanceStatusByDate, getFacultyData, getStudentsOfClass } from '../../config/endpoints/get'
 import { postURLs } from '../../config/endpoints/post'
 import { createElement } from '../../config/service/usePost'
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 import InforBanner from '../../components/shared/infoBanner/InforBanner'
 
@@ -33,7 +33,7 @@ const MarkAttendance = () => {
         const fetchStudents = async () => {
           if (sclass) {
             try {
-              const response = await axios.get(getStudentsOfClass(sclass._id));
+              const response = await axiosInterceptor.get(getStudentsOfClass(sclass._id));
               setStuData(response.data.data);
             } catch (error) {
               console.error("Error fetching student data:", error);
@@ -48,7 +48,7 @@ const MarkAttendance = () => {
         if(sclass && sdate) {
             try {
                 const formattedDate = moment(sdate).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}${getAttendanceStatusByDate(sclass._id, formattedDate)}`)
+                const response = await axiosInterceptor.get(`${getAttendanceStatusByDate(sclass._id, formattedDate)}`)
                 
                 const attData = response.data.data;
 

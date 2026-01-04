@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
-
-axios.defaults.withCredentials = true;
+import axiosInterceptor from "../axiosInterceptor"
 
 const useFetch = (url, options = {}) => {
     const {enabled = true} = options;
@@ -11,12 +9,13 @@ const useFetch = (url, options = {}) => {
     const [error, setError] = useState(false);
     useEffect(() => {
         if (!enabled || !url) return;
+
         const fetchData = async () => {
             setLoading(true);
             try {
                 // Add a 5 minute (300000 ms) delay for debugging
                 // await new Promise(resolve => setTimeout(resolve, 300000));
-                const res = await axios.get(`${process.env.REACT_APP_API_URL}${url}`);
+                const res = await axiosInterceptor.get(url);
                 setData(res.data.data);
             } catch (err) {
                 setError(err);
@@ -35,7 +34,7 @@ const useFetch = (url, options = {}) => {
     const reFetch = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}${url}`);
+            const res = await axiosInterceptor.get(url);
             setData(res.data);
         } catch (err) {
             setError(err);

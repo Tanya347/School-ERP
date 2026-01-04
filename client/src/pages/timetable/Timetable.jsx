@@ -1,12 +1,12 @@
 import "./timetable.scss"
 
 import { useState, useEffect, useMemo } from 'react'
-import axios from 'axios';
 import { useLocation } from "react-router-dom";
 
 import { periodTimes, days, periods } from '../../config/commons';
 import { getTimeTableURL } from '../../config/endpoints/get';
 import { useSelector } from "react-redux";
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 import Loader from "../../components/shared/loader/Loader"
 
@@ -41,10 +41,8 @@ const Timetable = ({type}) => {
         ? getTimeTableURL(user._id, "faculty")
         : getTimeTableURL(id, "class");
 
-    axios
-      .get(process.env.REACT_APP_API_URL + timetableURL, {
-        withCredentials: true,
-      })
+    axiosInterceptor
+      .get(timetableURL)
       .then((res) => {
         if (!isMounted) return;
         const slots = res.data.data;

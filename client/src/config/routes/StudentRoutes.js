@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import EditStudent from '../../pages/edit/EditStudent';
 import StudentProfile from '../../pages/profile/StudentProfile';
@@ -16,8 +17,6 @@ import { taskColumns } from '../datatablesource/taskColumns';
 import { testColumns } from '../datatablesource/testColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
 import { updateColumns } from '../datatablesource/updateColumns';
-
-import { useAuth } from '../context/AuthContext';
 
 const StudentRoutes = () => {
     const { user } = useSelector(state => state.auth);

@@ -1,5 +1,6 @@
 // src/routes/facultyRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // New forms
 import NewTask from '../../pages/new/NewTask';
@@ -192,9 +193,15 @@ const FacultyRoutes = () => {
 
           {/* view and edit attendance on faculty side */}
           <Route
-            path='attendance'
+            path="attendance"
             element={<AttendanceInfo />}
-            />
+          />
+
+          {/* view and edit attendance on faculty side */}
+          <Route
+            path="attendance/:classId"
+            element={<AttendanceInfo />}
+          />
 
           {/* student attendance percentage */}
           <Route

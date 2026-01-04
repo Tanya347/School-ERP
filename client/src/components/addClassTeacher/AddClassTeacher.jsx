@@ -3,11 +3,11 @@ import '../shared/popup/popup.scss'
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useState } from 'react'
-import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { addClassTeacher } from '../../config/endpoints/put';
-import { success, somethingWentWrongMsg } from "../../config/constants"
+import { successMsg, somethingWentWrongMsg } from "../../config/constants"
+import axiosInterceptor from '../../config/axiosInterceptor';
 
 import Dropdown from '../shared/dropdown/Dropdown';
 
@@ -18,10 +18,8 @@ const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
     const handleClick = async(e) => {
         e.preventDefault();
         try {
-            const res = await axios.put(addClassTeacher(sclass), {teacher}, {
-                withCredentials: true
-            })
-            if(res.data.status === success) {
+            const res = await axiosInterceptor.put(addClassTeacher(sclass), {teacher})
+            if(res.data.status === successMsg) {
                 window.location.reload();
             }
             setOpen(false)
@@ -40,6 +38,7 @@ const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
         />
         <Dropdown
             title="Select Teacher"
+            value={teacher}
             options={teacherList}
             onChange={(e) => setTeacher(e.target.value)} />
         <button onClick={handleClick} className='popup-button'>Add Class Teacher</button>

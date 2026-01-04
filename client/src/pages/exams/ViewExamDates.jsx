@@ -1,11 +1,11 @@
 import './viewExamDates.scss'
 
 import { useEffect, useState } from 'react'
-import axios from 'axios';
 import { useSelector } from "react-redux";
 
 import { getClassExamDates, getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
+import axiosInterceptor from '../../config/axiosInterceptor';
 
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
@@ -22,7 +22,7 @@ const ViewExamDates = () => {
     const fetchData = async () => {
       if(user) {
         try {
-          const response = await axios.get(getClassExamDates(user?.class), {withCredentials: true});
+          const response = await axiosInterceptor.get(getClassExamDates(user?.class));
           if(response.data.status === "success") {
             setData(response.data.data);
           }

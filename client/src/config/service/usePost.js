@@ -1,5 +1,5 @@
-import axios from "axios"
 import {toast} from "react-toastify"
+import axiosInterceptor from "../axiosInterceptor";
 
 export const createElementWithPicture = async(file, info, element, url) => {
     const formData = new FormData();
@@ -13,11 +13,10 @@ export const createElementWithPicture = async(file, info, element, url) => {
     });
 
     try {
-        const res = await axios.post(url, formData, {
+        const res = await axiosInterceptor.post(url, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
-            },
-            withCredentials: true
+            }
         });
 
         if(res.data.status === 'success') {
@@ -35,7 +34,7 @@ export const createElementWithPicture = async(file, info, element, url) => {
 
 export const createElement = async(response, url, element) => {
     try {
-        const res = await axios.post(url, response, {withCredentials: true});
+        const res = await axiosInterceptor.post(url, response);
         if(res.data.status === 'success') {
             toast.success(`${element} created successfully!`);
         }

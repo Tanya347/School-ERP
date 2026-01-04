@@ -3,8 +3,8 @@ import "./modal.scss"
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify"
+import axiosInterceptor from "../../../config/axiosInterceptor";
 
 import useFetch from "../../../config/service/useFetch"
 import { getModalURL } from "../../../config/endpoints/get";
@@ -27,9 +27,7 @@ const Modal = ({ setOpen, id, type }) => {
         e.preventDefault();
         
         try {
-            const res = await axios.put(putURLs("queries", id), info, {
-                withCredentials: true
-            })
+            const res = await axiosInterceptor.put(putURLs("queries", id), info)
             if(res.data.status === 'success') {
                 toast.success("Query updated successfully!");
             }

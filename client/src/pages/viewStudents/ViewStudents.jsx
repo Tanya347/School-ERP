@@ -1,12 +1,12 @@
 import "./viewStudents.scss"
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useSelector } from "react-redux";
 
 import useFetch from '../../config/service/useFetch';
 import { getClassDetails, getFacultyData } from '../../config/endpoints/get';
 import { studentColumns } from '../../config/tableSource/studentsColumns';
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 import GenericTable from '../../components/shared/table/Table';
 
@@ -24,7 +24,7 @@ const ViewStudents = () => {
     const fetchStudents = async () => {
       if (sclass) {
         try {
-          const response = await axios.get(process.env.REACT_APP_API_URL + getClassDetails(sclass));
+          const response = await axiosInterceptor.get(getClassDetails(sclass));
           setStuData(response.data.data);
         } catch (error) {
           console.error("Error fetching student data:", error);

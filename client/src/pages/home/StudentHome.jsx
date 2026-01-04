@@ -1,6 +1,5 @@
 import "./studentHome.scss"
 
-import axios from "axios"
 import { CircularProgressbar } from "react-circular-progressbar";
 import { useEffect, useState } from "react"
 import { ClipLoader } from "react-spinners";
@@ -8,6 +7,7 @@ import { useSelector } from "react-redux";
 
 import { getSingleData, getStudentAttendance } from "../../config/endpoints/get"
 import useFetch from "../../config/service/useFetch"
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
 import EventCalender from "../../components/calender/Calender"
@@ -26,7 +26,7 @@ const StudentHome = () => {
     const fetchAttendance = async () => {
       if(data?.classInfo?._id) {
         try {
-          const response = await axios.get(process.env.REACT_APP_API_URL + getStudentAttendance(data?._id, data?.classInfo._id))
+          const response = await axiosInterceptor.get(getStudentAttendance(data?._id, data?.classInfo._id))
           setAttendance(response.data.data)
         }
         catch(err) {

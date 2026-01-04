@@ -2,11 +2,11 @@ import "./addMarks.scss"
 
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
-import axios from 'axios'
 
 import useFetch from '../../config/service/useFetch'
 import { getFacultyData, getMarksOfSubject } from '../../config/endpoints/get'
 import { getClearMarksSubject } from '../../config/endpoints/delete'
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 const ViewMarks = () => {
 
@@ -21,7 +21,7 @@ const ViewMarks = () => {
     const fetchStudents = async () => {
       if (course) {
         try {
-          const response = await axios.get(getMarksOfSubject);
+          const response = await axiosInterceptor.get(getMarksOfSubject);
           setStuData(response.data.data);
         } catch (error) {
           console.error("Error fetching student data:", error);
@@ -39,7 +39,7 @@ const ViewMarks = () => {
   const handleClear = async() => {
     // this deletes data from the database
     try {
-        await axios.delete(getClearMarksSubject(course), { withCredentials: true }
+        await axiosInterceptor.delete(getClearMarksSubject(course), { withCredentials: true }
         );
   
         // this filters the array by filtering out the deleted element based on the id

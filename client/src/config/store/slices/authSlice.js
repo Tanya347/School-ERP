@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { toast } from "react-toastify"
+import axios from "axios"
+import { successMsg } from "../../constants"
 
-import { logoutEndpoint, validateEndpoint } from "../../config/endpoints/post";
+import { logoutEndpoint, validateEndpoint } from "../../endpoints/post";
 
 export const verifyUser = createAsyncThunk(
   "auth/verify",
   async (_, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        validateEndpoint,
+        validateEndpoint(),
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       return res.data.user;
     } catch (err) {
@@ -21,12 +23,20 @@ export const verifyUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "auth/logout",
-  async () => {
-    await axios.post(
-      logoutEndpoint(),
-      {},
-      { withCredentials: true }
-    );
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        logoutEndpoint(),
+        {},
+        { withCredentials: true },
+      );
+      if(res.data.success === successMsg) {
+        toast.success("Successfully logged out");
+      }
+    } catch (err) {
+      toast.error(`Error while logging out: ${err.response?.data?.message}`);
+      console.error();
+    }
   }
 );
 

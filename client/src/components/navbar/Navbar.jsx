@@ -5,11 +5,11 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { useState, useContext, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
+import axiosInterceptor from '../../config/axiosInterceptor';
 
-import { clearNotifications } from "../../store/slices/notificationSlice";
-import { logoutUser } from "../../store/slices/authSlice"
+import { clearNotifications } from "../../config/store/slices/notificationSlice";
+import { logoutUser } from "../../config/store/slices/authSlice"
 import { getSingleData } from '../../config/endpoints/get';
 import { DarkModeContext } from "../../config/context/darkModeContext";
 
@@ -71,7 +71,7 @@ const Navbar = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const schoolData = await axios.get(process.env.REACT_APP_API_URL + getSingleData(user.schoolID, "schools"));
+            const schoolData = await axiosInterceptor.get(getSingleData(user.schoolID, "schools"));
             setSchoolInfo(schoolData.data.data);
         }
         fetchData();

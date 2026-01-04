@@ -29,7 +29,7 @@
     margin-top: 20px;
 }
 
-.landing-container .button-container .not-ddmin {
+.landing-container .button-container .not-admin {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;

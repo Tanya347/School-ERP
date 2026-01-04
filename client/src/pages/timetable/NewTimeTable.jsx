@@ -4,16 +4,16 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 
 import { useState, useEffect } from 'react';
 import {toast} from "react-toastify"
-import axios from 'axios';
 
 import { getClasses, getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
 import { getClearTimetableForClass } from '../../config/endpoints/delete';
 import { periodTimes, days, periods } from '../../config/commons';
+import axiosInterceptor from "../../config/axiosInterceptor";
+import { bulkCreateTimetable } from "../../config/endpoints/post";
 
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
 import Loader from '../../components/shared/loader/Loader';
 import Dropdown from '../../components/shared/dropdown/Dropdown';
-import { bulkCreateTimetable } from "../../config/endpoints/post";
 
 const NewTimeTable = () => {
 
@@ -32,16 +32,10 @@ const NewTimeTable = () => {
     const fetchData = async () => {
       if (selectedClass) {
         try {
-          const coursesRes = await axios.get(
-            process.env.REACT_APP_API_URL + getClassCourses(selectedClass, "courses"),
-            { withCredentials: true }
-          );
+          const coursesRes = await axiosInterceptor.get(getClassCourses(selectedClass, "courses"));
           setCourses(coursesRes.data.data);
 
-          const timetableRes = await axios.get(
-            process.env.REACT_APP_API_URL + getTimeTableURL(selectedClass, 'class'),
-            { withCredentials: true }
-          );
+          const timetableRes = await axiosInterceptor.get(getTimeTableURL(selectedClass, 'class'));
           const timetableArray = timetableRes.data.data;
           const mapped = {};
           timetableArray.forEach(slot => {
@@ -79,7 +73,7 @@ const NewTimeTable = () => {
     setConfirmAction(() => async () => {
       setClearloading(true);
       try {
-        const res = await axios.delete(getClearTimetableForClass(selectedClass), { withCredentials: true });
+        const res = await axiosInterceptor.delete(getClearTimetableForClass(selectedClass));
         
         if(res.data.status === 'success') {
           setClearedSlots({});
@@ -127,10 +121,9 @@ const NewTimeTable = () => {
         return;
       }
 
-      const res = await axios.post(
+      const res = await axiosInterceptor.post(
         bulkCreateTimetable(),
-        { slots: slotData },
-        { withCredentials: true }
+        { slots: slotData }
       );
 
       if (res.data.status === "success") {

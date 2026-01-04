@@ -3,14 +3,14 @@ import "./login.scss"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 
-import { loginSuccess } from "../../store/slices/authSlice";
+import { loginSuccess } from "../../config/store/slices/authSlice";
 import { postURLs } from "../../config/endpoints/post"
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
 
@@ -49,7 +49,7 @@ function Login({ type }) {
     e.preventDefault();
     
     try {
-      const { data } = await axios.post(postURLs(type, "login"), credentials, { withCredentials: true })
+      const { data } = await axiosInterceptor.post(postURLs(type, "login"), credentials)
       
       if(data.status === "success") {
         toast.success("You have logged in successfully!");

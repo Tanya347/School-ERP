@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DarkModeContext } from "./config/context/darkModeContext";
 
 // Redux
-import { verifyUser } from "./store/slices/authSlice";
+import { verifyUser } from "./config/store/slices/authSlice";
 
 // UI
 import { ToastContainer } from "react-toastify";

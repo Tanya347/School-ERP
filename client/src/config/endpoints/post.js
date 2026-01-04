@@ -1,25 +1,21 @@
-
-
-const api_url = process.env.REACT_APP_API_URL
-
 export const postURLs = (path, type) => {
     if(type === "login") {
         if(path === "Student")
-            return `${api_url}/auth/loginStudent`
+            return `/auth/loginStudent`
         else if(path === "Faculty")
-            return `${api_url}/auth/loginFaculty`
+            return `/auth/loginFaculty`
         else
-            return `${api_url}/auth/loginAdmin`
+            return `/auth/loginAdmin`
     }
     else if(type === "register")
-        return path === "student" ? `${api_url}/students/registerStudent` : `${api_url}/faculties/registerFaculty`
+        return path === "student" ? `/students/registerStudent` : `/faculties/registerFaculty`
     
     else
-        return `${api_url}/${path}`
+        return `/${path}`
 }
 
 export const forgotPaswordURL = (type) => {
-    return `${api_url}/auth/forgotPassword/${type}`
+    return `/auth/forgotPassword/${type}`
 }
 
 const ROLE_API_MAP = {
@@ -31,26 +27,26 @@ const ROLE_API_MAP = {
 export const resetPasswordURL = (type, token, role) => {
   if (type === "change") {
     const rolePath = ROLE_API_MAP[role];
-    return `${api_url}/${rolePath}/updatePassword/${token}`;
+    return `/${rolePath}/updatePassword/${token}`;
   }
 
-  return `${api_url}/auth/resetPassword/${type}/${token}`;
+  return `/auth/resetPassword/${type}/${token}`;
 };
 
 export const  bulkCreateTimetable = () => {
-  return `${api_url}/timetables/bulkCreate`;
+  return `/timetables/bulkCreate`;
 }
 
 export const bulkDelete = (type) => {
-  return `${api_url}/${type}/bulk/delete`
+  return `/${type}/bulk/delete`
 }
 
 export const validateEndpoint = () => {
-  return `${api_url}/auth/validate`
+  return `${process.env.REACT_APP_API_URL}/auth/validate`
 }
 
 export const logoutEndpoint = () => {
- return `${api_url}/auth/logout`
+ return `${process.env.REACT_APP_API_URL}/auth/logout`
 }
 
 

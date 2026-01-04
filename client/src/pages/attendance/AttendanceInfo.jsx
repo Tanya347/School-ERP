@@ -10,17 +10,17 @@ import startOfWeek from "date-fns/startOfWeek";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { useEffect, useState } from 'react'
 import moment from 'moment';
-import CustomToolbar from "../../components/utils/CustomToolbar"
-import axios from "axios"
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-
+import { useParams, useNavigate } from "react-router-dom";
 
 import useFetch from "../../config/service/useFetch"
 import { getAttendanceDates, getFacultyData, getLectureCount } from "../../config/endpoints/get"
 import { getClearClassURL } from "../../config/endpoints/delete";
+import axiosInterceptor from "../../config/axiosInterceptor";
 
+import CustomToolbar from "../../components/utils/CustomToolbar"
 import AttendanceTable from "../../components/attendanceTable/AttendanceTable";
 
 const locales = {
@@ -45,16 +45,29 @@ const AttendanceInfo = () => {
     const [viewDate, setViewDate] = useState('');
     const [attId, setAttId] = useState('');
 
+    const { classId } = useParams();
+    const navigate = useNavigate();
+
     const { user } = useSelector(state => state.auth);
 
     const classes = useFetch(getFacultyData(user._id, "classes")).data
+
+    useEffect(() => {
+        if (classId) {
+            setSclass(classId);
+
+            const cl = classes?.find(c => c._id === classId);
+            if (cl) setClassName(cl.name);
+        }
+    }, [classId, classes]);
+
   
     useEffect(() => {
 
         const fetchLectures = async() => {
             if(sclass) {
                 try {
-                    const response = await axios.get(`${process.env.REACT_APP_API_URL}${getLectureCount}/${sclass}`)
+                    const response = await axiosInterceptor.get(`${getLectureCount}/${sclass}`)
                     setLectures(response.data.data);
                 } catch(error) {
                     console.log("Error fetching no. of lectures", error);
@@ -62,32 +75,31 @@ const AttendanceInfo = () => {
             }
         }
 
-      fetchLectures();
-  }, [sclass, refreshTrigger])
+        fetchLectures();
+    }, [sclass, refreshTrigger])
 
-  useEffect(() => {
-    const fetchDates = async() => {
-        if(sclass) {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}${getAttendanceDates}/${sclass}`)
-                const event = response?.data.data?.map((a) => {
-                    const d = new Date(a.date)
-                    return {id: a.id, title: `${a.presentCount} Pres. ${a.absentCount} Abs.`, start: d}
-                })
-                setDates(event)
-            } catch(error) {
-                console.log("Error fetching attendance dates", error);
+    useEffect(() => {
+        const fetchDates = async() => {
+            if(sclass) {
+                try {
+                    const response = await axiosInterceptor.get(`${getAttendanceDates}/${sclass}`)
+                    const event = response?.data.data?.map((a) => {
+                        const d = new Date(a.date)
+                        return {id: a.id, title: `${a.presentCount} Pres. ${a.absentCount} Abs.`, start: d}
+                    })
+                    setDates(event)
+                } catch(error) {
+                    console.log("Error fetching attendance dates", error);
+                }
             }
         }
-      }
 
-      fetchDates();
-  }, [sclass, refreshTrigger])
+        fetchDates();
+    }, [sclass, refreshTrigger])
 
-  const handleClick = (cl) => {
-    setSclass(cl._id);
-    setClassName(cl.name);
-  };
+    const handleClick = (cl) => {
+        navigate(`/faculty/attendance/${cl._id}`);
+    };
 
   const handleEventPopup = (e) => {
     setAttId(e.id)
@@ -99,7 +111,7 @@ const AttendanceInfo = () => {
     const handleClear = async() => {
     // this deletes data from the database
         try {
-            const res = await axios.delete(getClearClassURL(sclass), { withCredentials: true });
+            const res = await axiosInterceptor.delete(getClearClassURL(sclass));
             if(res.data.status === 'success') {
                 toast.success("Attendance has been cleared!");
                 setRefreshTrigger(prev => prev + 1);

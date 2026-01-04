@@ -3,15 +3,15 @@ import "./addMarks.scss";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
 import { getFacultyData, getMarksOfSubject, getStudentsOfClass } from "../../config/endpoints/get";
 import { addMarks } from "../../config/endpoints/put";
+import axiosInterceptor from "../../config/axiosInterceptor";
 
-import InforBanner from "../../components/shared/infoBanner/InforBanner";
 import Loader from "../../components/shared/loader/Loader"
+import InforBanner from "../../components/shared/infoBanner/InforBanner";
 
 const AddMarks = () => {
   const [sending, setSending] = useState(false);
@@ -31,9 +31,7 @@ const AddMarks = () => {
       if (!sclass) return;
 
       try {
-        const response = await axios.get(
-          getStudentsOfClass(sclass)
-        );
+        const response = await axiosInterceptor.get(getStudentsOfClass(sclass));
         setStuData(response.data.data);
       } catch (error) {
         console.error("Error fetching student data:", error);
@@ -48,9 +46,7 @@ const AddMarks = () => {
       if (!course) return;
 
       try {
-        const response = await axios.get(
-          getMarksOfSubject(course)
-        );
+        const response = await axiosInterceptor.get(getMarksOfSubject(course));
 
         const prefilledMarks = {};
         response.data.data.forEach((entry) => {
@@ -89,7 +85,7 @@ const AddMarks = () => {
         })
       );
 
-      const res = await axios.put(addMarks(course), {
+      const res = await axiosInterceptor.put(addMarks(course), {
         marksData: formattedMarksData,
       });
 

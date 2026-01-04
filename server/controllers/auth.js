@@ -88,7 +88,10 @@ export const protect = () => catchAsync(async(req, res, next) => {
     req.user = freshUser ;
     next();
   } catch (error) {
-    return next(new AppError('Token is invalid or has expired.', 401));
+    if (error.name === 'TokenExpiredError') {
+      return next(new AppError('Token expired', 401));
+    }
+    return next(new AppError('Invalid token', 401));
   }
 })
 
@@ -102,12 +105,18 @@ export const restrictTo = (...roles) => {
 }
 
 export const logout = catchAsync(async (req, res, next) => {
-  res.cookie('jwt', '', { expires: new Date(0), httpOnly: true });
+  res.cookie('jwt', '', {
+    expires: new Date(0),
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true
+  });
+
   res.status(200).json({
-    status: 'success', 
-    message: "Successfully logged out"
-  })
-})
+    status: 'success',
+    message: 'Successfully logged out'
+  });
+});
 
 export const isOwner = (model) => catchAsync(async (req, res, next) => {
   const resource = await model.findById(req.params.id);

@@ -5,8 +5,8 @@ export const studentColumns = [
         width: 150,
         renderCell: (params) => {
             return (
-                <div className="cellWithImg">
-                    <img className="cellImg" src={params.row.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"} alt="avatar" />
+                <div className="cell-with-img">
+                    <img className="cell-img" src={params.row.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"} alt="avatar" />
                     {params.row.username}
                 </div>
             );

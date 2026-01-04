@@ -6,10 +6,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
+import { somethingWentWrongMsg } from "../../config/constants"
+import axiosInterceptor from '../../config/axiosInterceptor';
 
-import { logoutUser } from "../../store/slices/authSlice";
+import { logoutUser } from "../../config/store/slices/authSlice";
 import { resetPasswordURL } from '../../config/endpoints/post';
 import Loader from '../../components/shared/loader/Loader';
 
@@ -37,7 +38,7 @@ const ResetPassword = ({type}) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.patch(resetPasswordURL(type, token, user.role), passwordCreds, {withCredentials: true})
+            const res = await axiosInterceptor.patch(resetPasswordURL(type, token, user.role), passwordCreds, {withCredentials: true})
             if(res.data.status === "success") {
                 toast.success("Password changed successfully!");
                 if(type === 'change') {

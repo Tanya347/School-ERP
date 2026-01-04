@@ -4,13 +4,13 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios';
 import {toast} from "react-toastify"
 
 import useFetch from '../../config/service/useFetch.js';
 import { getCourseClasses, getFacultyData } from '../../config/endpoints/get.js';
 import { editCourse } from '../../config/endpoints/patch.js';
-import { success } from "../../config/constants.js"
+import axiosInterceptor from '../../config/axiosInterceptor.js';
+import { successMsg, somethingWentWrongMsg } from "../../config/constants.js"
 
 import Dropdown from '../shared/dropdown/Dropdown.jsx';
 import Popup from '../shared/popup/Popup.jsx';
@@ -32,11 +32,9 @@ const AddCourse = ({ setOpen, facId }) => {
     const handleClick = async(e) => {
         e.preventDefault();
         try {
-            const res = await axios.patch(editCourse(facId, sclass, course, "addCourse"), {
-                withCredentials: true
-              })
+            const res = await axiosInterceptor.patch(editCourse(facId, sclass, course, "addCourse"))
 
-            if(res.data.status === success) {
+            if(res.data.status === successMsg) {
                 toast.success("Course assigned to faculty successfully!");
                 navigate(`/admin/faculties/single/${facId}`)
             }
@@ -52,10 +50,7 @@ const AddCourse = ({ setOpen, facId }) => {
     const fetchAssignedCourses = useCallback(async () => {
         try {
             setLoadingCourses(true);
-            const res = await axios.get(
-            getFacultyData(facId, "courses"),
-            { withCredentials: true }
-            );
+            const res = await axiosInterceptor.get(getFacultyData(facId, "courses"));
             setAssignedCourses(res.data.data);
         } catch (err) {
             toast.error("Failed to fetch assigned courses");
@@ -71,10 +66,7 @@ const AddCourse = ({ setOpen, facId }) => {
 
     const handleRemoveCourse = async (courseId, classId) => {
         try {
-            await axios.patch(
-            editCourse(facId, sclass, course, "removeCourse"),
-            { withCredentials: true }
-            );
+            await axiosInterceptor.patch(editCourse(facId, classId, courseId, "removeCourse"));
 
             toast.success("Course removed successfully");
             fetchAssignedCourses();

@@ -3,13 +3,13 @@ import "./adminHome.scss";
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 
 import { toast } from "react-toastify";
-import axios from 'axios'
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import useFetch from "../../config/service/useFetch";
 import { getSession, schoolGenderCount } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
+import axiosInterceptor from "../../config/axiosInterceptor.js";
 
 import { MyPieChart } from "../../components/shared/graphs/PieChart";
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo";
@@ -33,7 +33,7 @@ const AdminHome = () => {
     const fetchSession = async () => {
       if(user) {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}${getSession(user.schoolID)}`)
+          const response = await axiosInterceptor.get(getSession(user.schoolID));
           setSessionName(response.data.data.name)
         } catch (err) {
           console.error("Error fetching session data:", err)
@@ -50,7 +50,7 @@ const AdminHome = () => {
     setConfirmAction(() => async () => {
       try {
         setLoading(true);
-        const res = await axios.post(postURLs("sessions", "normal"), {}, {withCredentials: true});
+        const res = await axiosInterceptor.post(postURLs("sessions", "normal"), {});
         if(res.data.status === 'success') {
           toast.success(`session started successfully!`);
         }

@@ -1,5 +1,3 @@
-const api_url = process.env.REACT_APP_API_URL
-
 export const getAllCount = `/getAllCount`;
 export const getQueries = "/queries";
 export const getCourseClasses = '/classes/courses';
@@ -102,13 +100,13 @@ export const getLectures = (id, type) => {
         return `/timetables?classId=${id}`
 }
  export const getStudentsOfClass = (sclass) => {
-    return `${api_url}/classes/students/${sclass}`;
+    return `/classes/students/${sclass}`;
  }
 
  export const getClassExamDates = (sclass) => {
-    return `${api_url}/courses/exam/${sclass}`;
+    return `/courses/exam/${sclass}`;
  }
 
  export const getMarksOfSubject = (course) => {
-    return `${api_url}/marks/subject/${course}`;
+    return `/marks/subject/${course}`;
  }

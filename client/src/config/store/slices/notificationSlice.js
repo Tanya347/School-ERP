@@ -1,17 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { getUpdateURL } from "../../config/endpoints/get";
+import { getUpdateURL } from "../../endpoints/get";
+import axiosInterceptor from "../../axiosInterceptor";
 
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetch",
   async (user, { rejectWithValue }) => {
     try {
-      const url = getUpdateURL(user);
 
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}${url}`,
-        { withCredentials: true }
-      );
+      const res = await axiosInterceptor.get(getUpdateURL(user));
 
       return res.data.data;
     } catch (err) {

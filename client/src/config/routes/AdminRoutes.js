@@ -19,7 +19,7 @@ import EditCourse from "../../pages/edit/EditCourse";
 import EditStudent from "../../pages/edit/EditStudent";
 import EditFaculty from "../../pages/edit/EditFaculty";
 import EditMaterial from '../../pages/edit/EditMaterial';
-import EditSchool from '../../pages/school/EditSchool';
+import EditSchool from '../../pages/edit/EditSchool';
 
 // Components
 import Layout from '../../components/sidebar/Layout';

@@ -8,23 +8,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
-import axios from "axios";
 import { toast } from "react-toastify"
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 import useFetch from "../../config/service/useFetch"
 import { getAttendanceStatusByDate } from '../../config/endpoints/get';
 import { getClearDayAttendance } from '../../config/endpoints/delete';
-
 
 const AttendanceTable = ({classid, date, setOpen, id, refreshTrigger}) => {
 
     const { data } = useFetch(getAttendanceStatusByDate(classid, date));
     
     const handleClear = async() => {
-        // this deletes data from the database
         try {
-            const res = await axios.delete(getClearDayAttendance(id), { withCredentials: true });
+            const res = await axiosInterceptor.delete(getClearDayAttendance(id));
             if(res.data.status === 'success') {
                 toast.success("Attendance has been cleared!");
                 refreshTrigger(prev => prev + 1)

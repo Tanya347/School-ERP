@@ -2,13 +2,13 @@ import "./viewTestMarks.scss"
 
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
 
 import useFetch from '../../config/service/useFetch';
 import { getSingleData, getStudentsOfClass } from '../../config/endpoints/get';
 import { formatDate } from '../../config/commons';
 import { clearTestMarks } from "../../config/endpoints/delete";
 import { addTestMarks } from "../../config/endpoints/put";
+import axiosInterceptor from "../../config/axiosInterceptor";
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});
@@ -22,7 +22,7 @@ const ViewTestMarks = () => {
   useEffect(() => {
     const fetchStudents = async() => {
       try {
-        const response = await axios.get(getStudentsOfClass(data.sclass._id));
+        const response = await axiosInterceptor.get(getStudentsOfClass(data.sclass._id));
         setStuData(response.data.data);
       }
       catch(error) {
@@ -49,7 +49,7 @@ const ViewTestMarks = () => {
         value: marksData[studentId].value,
       }));
 
-      await axios.put(addTestMarks, { marksData: marksArray });
+      await axiosInterceptor.put(addTestMarks, { marksData: marksArray });
       window.location.reload();
     } catch (error) {
       console.error("Error submitting marks:", error);
@@ -58,7 +58,7 @@ const ViewTestMarks = () => {
 
   const handleClearMarks = async () => {
     try {
-      await axios.delete(clearTestMarks(id));
+      await axiosInterceptor.delete(clearTestMarks(id));
       setMarksData({})
       window.location.reload();
     } catch (error) {

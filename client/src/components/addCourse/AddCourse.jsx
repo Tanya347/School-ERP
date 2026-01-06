@@ -9,8 +9,8 @@ import {toast} from "react-toastify"
 import useFetch from '../../config/service/useFetch.js';
 import { getCourseClasses, getFacultyData } from '../../config/endpoints/get.js';
 import { editCourse } from '../../config/endpoints/patch.js';
-import axiosInterceptor from '../../config/axiosInterceptor.js';
-import { successMsg, somethingWentWrongMsg } from "../../config/constants.js"
+import axiosInterceptor from '../../config/utils/axiosInterceptor.js';
+import { successMsg, somethingWentWrongMsg, coursesConst } from "../../config/utils/constants.js"
 
 import Dropdown from '../shared/dropdown/Dropdown.jsx';
 import Popup from '../shared/popup/Popup.jsx';
@@ -23,7 +23,6 @@ const AddCourse = ({ setOpen, facId }) => {
     const [course, setCourse] = useState("");
     const [assignedCourses, setAssignedCourses] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(false);
-
 
     const navigate = useNavigate();
 
@@ -50,7 +49,7 @@ const AddCourse = ({ setOpen, facId }) => {
     const fetchAssignedCourses = useCallback(async () => {
         try {
             setLoadingCourses(true);
-            const res = await axiosInterceptor.get(getFacultyData(facId, "courses"));
+            const res = await axiosInterceptor.get(getFacultyData(facId, coursesConst));
             setAssignedCourses(res.data.data);
         } catch (err) {
             toast.error("Failed to fetch assigned courses");

@@ -43,6 +43,7 @@ import { courseInputs } from "../formsource/courseInputs";
 import { classInputs } from '../formsource/classInputs';
 import { eventInputs } from '../formsource/eventInputs';
 import { materialInputs } from '../formsource/materialInputs';
+import { roles } from '../utils/constants';
 
 // Pages
 import FacultyProfile from "../../pages/profile/FacultyProfile";
@@ -60,7 +61,7 @@ const AdminRoutes = () => {
   const { user } = useSelector(state => state.auth);
   
   const RequireAdmin = ({ children }) => {
-    if (user && user.role === "admin") {
+    if (user && user.role === roles.admin) {
       return children;
     } else {
       return <Navigate to="/" />;

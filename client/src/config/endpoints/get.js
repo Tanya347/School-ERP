@@ -1,3 +1,5 @@
+import { roles, tasksConst, testsConst, updatesConst } from "../utils/constants";
+
 export const getAllCount = `/getAllCount`;
 export const getQueries = "/queries";
 export const getCourseClasses = '/classes/courses';
@@ -5,6 +7,7 @@ export const getClasses = "/classes"
 export const getLectureCount = "/attendances/lecturecount"
 export const getAttendanceDates = "/attendances/dates"
 export const schoolGenderCount = '/students/gender/count';
+export const getSchoolInfo = `/schools`;
 
 export const getAttendanceStatusByDate = (classid, date) => {
     return `/attendances/date/${classid}/${date}`
@@ -18,11 +21,11 @@ export const getStudentAttendance = (studentid, classid) => {
     return `/attendances/studentperc/${studentid}/${classid}`
 }
 export const getDatatableURL = (path, user) => {
-    if(path === 'tests')
-        return user.role === 'student' ? `/tests?classId=${user.class}` : `/tests?facultyId=${user._id}`;
-    else if(path === 'tasks')
-        return user.role === 'student' ? `/tasks?classId=${user.class}` : `/tasks?facultyId=${user._id}`;
-    else if(path === 'updates')
+    if(path === testsConst)
+        return user.role === roles.student ? `/tests?classId=${user.class}` : `/tests?facultyId=${user._id}`;
+    else if(path === tasksConst)
+        return user.role === roles.student ? `/tasks?classId=${user.class}` : `/tasks?facultyId=${user._id}`;
+    else if(path === updatesConst)
         return getUpdateURL(user) ;
     else    
         return `/${path}/`
@@ -44,8 +47,8 @@ export const getTableWithoutActionURL = (path, id) => {
 
 export const getUpdateURL = (user) => {
     const base = `/updates`;
-    if (user.role === 'faculty') return `${base}?facultyId=${user._id}`;
-    if (user.role === 'student') return `${base}?classId=${user.class}`;
+    if (user.role === roles.faculty) return `${base}?facultyId=${user._id}`;
+    if (user.role === roles.student) return `${base}?classId=${user.class}`;
     return base;
 }
 
@@ -61,16 +64,16 @@ export const getModalURL = (path, id) => {
 }
 
 export const getTaskCalenderURL = (user) => {
-    if(user.role === 'faculty')
+    if(user.role === roles.faculty)
         return `/tasks?facultyId=${user._id}`
-    else if(user.role === 'student')
+    else if(user.role === roles.student)
         return `/tasks?studentId=${user.class}`
 }
 
 export const getTestCalenderURL = (user) => {
-    if(user.role === 'faculty')
+    if(user.role === roles.faculty)
         return `/tests?facultyId=${user._id}`
-    else if(user.role === 'student')
+    else if(user.role === roles.student)
         return `/tests?classId=${user.class}`
 }
 

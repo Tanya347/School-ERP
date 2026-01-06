@@ -7,8 +7,8 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
-import { somethingWentWrongMsg } from "../../config/constants"
-import axiosInterceptor from '../../config/axiosInterceptor';
+import { somethingWentWrongMsg, successMsg } from "../../config/utils/constants"
+import axiosInterceptor from '../../config/utils/axiosInterceptor';
 
 import { logoutUser } from "../../config/store/slices/authSlice";
 import { resetPasswordURL } from '../../config/endpoints/post';
@@ -39,7 +39,7 @@ const ResetPassword = ({type}) => {
         setLoading(true);
         try {
             const res = await axiosInterceptor.patch(resetPasswordURL(type, token, user.role), passwordCreds, {withCredentials: true})
-            if(res.data.status === "success") {
+            if(res.data.status === successMsg) {
                 toast.success("Password changed successfully!");
                 if(type === 'change') {
                     dispatch(logoutUser());

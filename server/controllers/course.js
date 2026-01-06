@@ -4,6 +4,7 @@ import Class from "../models/Class.js";
 import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
+import { folderName, successMsg } from "../utils/constants.js";
 import cloudinary from "../utils/cloudinary.js";
 
 // Create a new course and add it to the class
@@ -21,7 +22,7 @@ export const createCourse = catchAsync(async (req, res, next) => {
 
   if (req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "erp_portal",
+      folder: folderName,
     });
 
     syllabusPicture = result.secure_url;
@@ -36,7 +37,7 @@ export const createCourse = catchAsync(async (req, res, next) => {
     cloud_id
   });
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: savedCourse,
     message: "The course has been successfully created"
   });
@@ -50,7 +51,7 @@ export const updateCourse = catchAsync(async (req, res, next) => {
     { new: true }
   );
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: course,
     message: "The course has been successfully updated!"
   });
@@ -73,7 +74,7 @@ export const deleteCourse = catchAsync(async (req, res, next) => {
 
   await course.remove();
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     message: "The course has been deleted"
   });
 });
@@ -84,7 +85,7 @@ export const getCourse = catchAsync(async (req, res, next) => {
     .populate('class', 'name')
     .populate('teacher', 'teachername');
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: course
   });
 });
@@ -97,7 +98,7 @@ export const getCourses = catchAsync(async (req, res, next) => {
     .populate('class', 'name')
     .populate('teacher', 'teachername');
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: courses
   });
 });
@@ -126,7 +127,7 @@ export const setExamDatesForClass = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     message: 'Exam dates updated successfully',
-    status: "success",
+    status: successMsg,
     modifiedCount: result.modifiedCount,
   });
 });
@@ -154,7 +155,7 @@ export const clearExamDatesForClass = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     message: 'Exam dates cleared successfully for all courses in the class',
     modifiedCount: result.modifiedCount
   });
@@ -189,7 +190,7 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: {
       examDates,
       allExamsPlanned,

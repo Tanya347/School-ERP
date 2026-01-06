@@ -6,13 +6,15 @@ import Calendar from 'react-calendar';
 
 import useFetch from '../../config/service/useFetch';
 import { getDatatableURL } from '../../config/endpoints/get';
+import { isEventDate } from "../../config/utils/commons";
+import { eventsConst } from "../../config/utils/constants";
 
 const EventCalender = () => {
   
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState(null);
 
-  const { data: eventData } = useFetch(getDatatableURL("events"));
+  const { data: eventData } = useFetch(getDatatableURL(eventsConst));
 
   useEffect(() => {
     if (!eventData) return;
@@ -24,29 +26,23 @@ const EventCalender = () => {
     setEvents(rawevents);
   }, [eventData]);
 
-  const isEventDate = (date) =>
-    events?.find(
-      (event) =>
-        date >= new Date(event.startDate.toDateString()) &&
-        date <= new Date(event.endDate.toDateString())
-    );
-
   const handleDateClick = (date) => {
     const isSameDate =
       selectedDate && selectedDate.toDateString() === date.toDateString();
-    setSelectedDate(isSameDate ? null : date); // toggle behavior
+    setSelectedDate(isSameDate ? null : date);
   };
+
   return (
     <div className="calendar-container">
       <Calendar
         tileContent={({ date, view }) => {
-          const event = isEventDate(date);
+          const event = isEventDate(date, events);
           return view === 'month' && event ? (
             <div className="event-dot"></div>
           ) : null;
         }}
         tileClassName={({ date }) => {
-          const isEvent = isEventDate(date);
+          const isEvent = isEventDate(date, events);
           const isSelected =
             selectedDate && selectedDate.toDateString() === date.toDateString();
           if (isEvent && !isSelected) return 'highlight';

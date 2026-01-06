@@ -1,4 +1,4 @@
-import { formatDate } from "../commons";
+import { formatDate } from "../utils/commons";
 
 export const testColumns = [
     {

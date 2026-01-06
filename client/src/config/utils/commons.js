@@ -58,3 +58,10 @@ export const normalizeUrl = (url) => {
     ? url
     : `https://${url}`;
 };
+
+export const isEventDate = (date, events) =>
+  events?.find(
+    (event) =>
+      date >= new Date(event.startDate.toDateString()) &&
+      date <= new Date(event.endDate.toDateString())
+);

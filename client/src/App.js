@@ -12,10 +12,16 @@ import { DarkModeContext } from "./config/context/darkModeContext";
 
 // Redux
 import { verifyUser } from "./config/store/slices/authSlice";
+import { fetchAdminClasses } from "./config/store/slices/adminSlice";
+import { fetchFacultyClasses } from "./config/store/slices/facultySlice";
+import { fetchFacultyCourses } from "./config/store/slices/facultySlice";
+import { fetchStudentProfile } from "./config/store/slices/studentSlice";
 
 // UI
 import { ToastContainer } from "react-toastify";
 import NotificationsListener from "./components/navbar/notifications/NotificationsListener";
+import { fetchSchoolInfo } from "./config/store/slices/schoolSlice";
+import { roles } from "./config/utils/constants";
 
 // Pages
 import Login from "./pages/auth/Login";
@@ -31,11 +37,41 @@ function App() {
   const dispatch = useDispatch();
 
   const { user, initialized } = useSelector(state => state.auth);
+  const { fetched: schoolFetched } = useSelector(state => state.school);
 
   // 🔑 Verify auth ONCE
   useEffect(() => {
     dispatch(verifyUser());
   }, [dispatch]);
+
+  // 🔑 Fetch school + active session AFTER login
+  useEffect(() => {
+    if (initialized && user && !schoolFetched) {
+      dispatch(fetchSchoolInfo());
+    }
+  }, [initialized, user, schoolFetched, dispatch]);
+
+  useEffect(() => {
+    if (!initialized || !user) return;
+
+    switch (user.role) {
+      case roles.admin:
+        dispatch(fetchAdminClasses());
+        break;
+
+      case roles.faculty:
+        dispatch(fetchFacultyClasses(user._id));
+        dispatch(fetchFacultyCourses(user._id));
+        break;
+
+      case roles.student:
+        dispatch(fetchStudentProfile(user._id));
+        break;
+
+      default:
+        break;
+    }
+  }, [user, initialized, dispatch]);
 
   if (!initialized) return null; // or Loader
 

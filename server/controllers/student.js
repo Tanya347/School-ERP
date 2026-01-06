@@ -6,6 +6,7 @@ import fs from "fs";
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 import cloudinary from "../utils/cloudinary.js";
+import { folderName, successMsg } from "../utils/constants.js";
 
 export const registerStudent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
@@ -18,7 +19,7 @@ export const registerStudent = catchAsync(async (req, res, next) => {
 
   if(req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "erp_portal",
+      folder: folderName,
     });
 
     profilePicture = result.secure_url;
@@ -33,7 +34,7 @@ export const registerStudent = catchAsync(async (req, res, next) => {
     cloud_id,
   });
   res.status(201).json({
-    status: 'success',
+    status: successMsg,
     data: { user: newUser  },
     message: 'Student created successfully!'
   });
@@ -55,7 +56,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
     }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "erp_portal",
+      folder: folderName,
     });
 
     profilePicture = result.secure_url;
@@ -101,7 +102,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: updatedStudent,
     message: "Student has been updated successfully!"
   });
@@ -116,7 +117,7 @@ export const deleteStudent = catchAsync(async (req, res, next) => {
   await Class.findByIdAndUpdate(student.class, { $pull: { students: req.params.id } });
   await student.remove();
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Student has been deleted successfully!"
   });
 });
@@ -135,7 +136,7 @@ export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Selected students have been deleted successfully!"
   });
 });
@@ -155,7 +156,7 @@ export const getStudent = catchAsync(async (req, res, next) => {
   const transformedStudent = { ...rest, classname: name, classInfo };
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: transformedStudent,
   });
 });
@@ -164,7 +165,7 @@ export const getSingleStudent = catchAsync(async (req, res, next) => {
   const student = await Student.findById(req.params.id).populate('class', 'name');
   res.status(200).json({
     data: student,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -173,7 +174,7 @@ export const getStudents = catchAsync(async (req, res, next) => {
   let filter = { schoolID: schoolId };
   const students = await Student.find(filter).populate('class', 'name');
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: students
   });
 });
@@ -187,7 +188,7 @@ export const getGenderCount = catchAsync(async (req, res, next) => {
     if (student.gender && student.gender.toLowerCase() === 'female') girls++;
   });
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: { boys, girls }
   });
 });

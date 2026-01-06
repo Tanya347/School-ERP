@@ -2,6 +2,7 @@ import Task from "../models/Task.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
+import { successMsg } from "../utils/constants.js";
 
 export const createTask = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
@@ -10,7 +11,7 @@ export const createTask = catchAsync(async (req, res, next) => {
   const newTask = new Task(req.body);
   const savedTask = await newTask.save();
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: savedTask,
     message: "Student has been created successfully!"
   });
@@ -23,7 +24,7 @@ export const updateTask = catchAsync(async (req, res, next) => {
     { new: true }
   );
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: task,
     message: "Task has been updated successfully!"
   });
@@ -32,7 +33,7 @@ export const updateTask = catchAsync(async (req, res, next) => {
 export const deleteTask = catchAsync(async (req, res, next) => {
   await Task.findByIdAndDelete(req.params.id);
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Task has been deleted successfully!"
   });
 });
@@ -42,7 +43,7 @@ export const getTask = catchAsync(async (req, res, next) => {
     .populate('sclass', 'name')
     .populate('author', 'teachername');
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: task,
   });
 });
@@ -57,7 +58,7 @@ export const getTasks = catchAsync(async (req, res, next) => {
   const tasks = await Task.find(filter).populate("sclass", "name");
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: tasks,
   });
 })

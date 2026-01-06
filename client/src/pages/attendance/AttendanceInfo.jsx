@@ -15,17 +15,14 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
-import useFetch from "../../config/service/useFetch"
-import { getAttendanceDates, getFacultyData, getLectureCount } from "../../config/endpoints/get"
+import { getAttendanceDates, getLectureCount } from "../../config/endpoints/get"
 import { getClearClassURL } from "../../config/endpoints/delete";
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { successMsg, dateTimeFormat, locales } from "../../config/utils/constants";
 
-import CustomToolbar from "../../components/utils/CustomToolbar"
+import CustomToolbar from "../../config/utils/CustomToolbar"
 import AttendanceTable from "../../components/attendanceTable/AttendanceTable";
 
-const locales = {
-    "en-US": require("date-fns/locale/en-US"),
-};
 const localizer = dateFnsLocalizer({
     format,
     parse,
@@ -48,9 +45,7 @@ const AttendanceInfo = () => {
     const { classId } = useParams();
     const navigate = useNavigate();
 
-    const { user } = useSelector(state => state.auth);
-
-    const classes = useFetch(getFacultyData(user._id, "classes")).data
+    const classes = useSelector(state => state.faculty.classes);
 
     useEffect(() => {
         if (classId) {
@@ -97,13 +92,9 @@ const AttendanceInfo = () => {
         fetchDates();
     }, [sclass, refreshTrigger])
 
-    const handleClick = (cl) => {
-        navigate(`/faculty/attendance/${cl._id}`);
-    };
-
   const handleEventPopup = (e) => {
     setAttId(e.id)
-    const formattedDate = moment(e.start).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+    const formattedDate = moment(e.start).format(dateTimeFormat);
     setViewDate(formattedDate);
     setOpenModal(true);
   }
@@ -112,7 +103,7 @@ const AttendanceInfo = () => {
     // this deletes data from the database
         try {
             const res = await axiosInterceptor.delete(getClearClassURL(sclass));
-            if(res.data.status === 'success') {
+            if(res.data.status === successMsg) {
                 toast.success("Attendance has been cleared!");
                 setRefreshTrigger(prev => prev + 1);
             }
@@ -134,7 +125,7 @@ const AttendanceInfo = () => {
                     classes?.map((cl, index) => (
                         <button
                             key={index}
-                            onClick={() => handleClick(cl)}
+                            onClick={() => navigate(`/faculty/attendance/${cl._id}`)}
                             className={sclass && sclass === cl._id ? 'selected-class' : ''}
 
                         >{cl.name}</button>

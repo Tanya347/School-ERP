@@ -18,11 +18,13 @@ import { testColumns } from '../datatablesource/testColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
 import { updateColumns } from '../datatablesource/updateColumns';
 
+import { roles } from "../utils/constants"
+
 const StudentRoutes = () => {
     const { user } = useSelector(state => state.auth);
   
     const RequireStudent = ({ children }) => {
-        if(user && user.role === 'student') {
+        if(user && user.role === roles.student) {
           return children;
         } else
           return <Navigate to="/" />;

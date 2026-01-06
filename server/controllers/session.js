@@ -5,13 +5,13 @@ import Class from "../models/Class.js";
 import Course from "../models/Course.js";
 import Student from "../models/Student.js";
 import Event from "../models/Event.js";
-import Query from "../models/Query.js";
 import Timetable from "../models/Timetable.js";
 import Task from "../models/Task.js";
 import Test from "../models/Test.js";
 import Attendance from "../models/Attendance.js";
 
 import { catchAsync } from '../utils/catchAsync.js';
+import { successMsg } from "../utils/constants.js";
 
 const getSessionMeta = () => {
   const startYear = new Date().getFullYear();
@@ -67,6 +67,7 @@ const updateClass = async (schoolID) => {
       return; // Skip further processing for this student
     }
     const nextClassId = classMap.get(nextClassNumber);
+    if(!nextClassId) return;
 
     if (nextClassId) {
       // Prepare the student update
@@ -94,6 +95,11 @@ const updateClass = async (schoolID) => {
     await Student.bulkWrite(studentUpdates);
   }
 
+  await Class.updateMany(
+    { schoolID },
+    { $set: { students: [] } },
+  );
+
   // Clear existing class.student arrays and repopulate with promoted students
   const classUpdateOps = [];
   for (const [classId, studentIds] of classStudentMap.entries()) {
@@ -114,42 +120,48 @@ export const createSession = catchAsync(async (req, res, next) => {
         return next(new AppError('School ID is required', 400));
     }
 
-    // find the current active session
-    const activeSession = await Session.findOne({ schoolID, isActive: true });
+    const mongoSession = await mongoose.startSession();
+    mongoSession.startTransaction();
 
-    // Prepare session name and new session instance
-    const { name, startYear, endYear } = getSessionMeta();
-    const newSession = new Session({
-      name,
-      startYear,
-      endYear,
-      schoolID,
-      isActive: true,
-    });
+    try {
 
-    // if an active session exists, set it to inactive and save both sessions
-    const sessionOps = [];
+      // find the current active session
+      const activeSession = await Session.findOne({ schoolID, isActive: true }).session(mongoSession);
 
-    if (activeSession) {
-      activeSession.isActive = false;
-      sessionOps.push(activeSession.save());
-    }
+      // Deactivate old session FIRST
+      if (activeSession) {
+        await Session.updateOne(
+          { _id: activeSession._id },
+          { isActive: false },
+          { session: mongoSession }
+        );
+      }
 
-    sessionOps.push(newSession.save());
+      // Prepare session name and new session instance
+      const { name, startYear, endYear } = getSessionMeta();
+      const [newSession] = await Session.create(
+        [{
+          name,
+          startYear,
+          endYear,
+          schoolID,
+          isActive: true,
+        }],
+        { session: mongoSession }
+      );
 
-    // clear interconnections
-    const clearOps = [
-        // clear faculty associations
+      // Clear interconnections
+      await Promise.all([
         Faculty.updateMany(
-        { schoolID },
-        { $set: { subjectsTaught: [], classesTaught: [] } }
+          { schoolID },
+          { $set: { subjectsTaught: [], classesTaught: [], classTeacherTo: null } },
+          { session: mongoSession }
         ),
-        // clear class associations
         Class.updateMany(
-        { schoolID },
-        { $set: { teachers: [] } }
+          { schoolID },
+          { $set: { teachers: [], classTeacher: null } },
+          { session: mongoSession }
         ),
-        // clear course associations
         Course.updateMany(
           { schoolID },
           {
@@ -158,63 +170,61 @@ export const createSession = catchAsync(async (req, res, next) => {
               'examStatus.examDate': null,
               teacher: null,
             },
-          }
+          },
+          { session: mongoSession }
         ),
-      ];
+      ]);
 
-    // Run saves and clears in parallel
-    const [, savedNewSession] = await Promise.all([
-        ...sessionOps,
-        ...clearOps,
-    ]);
+      // Promote students & update classes
+      await updateClass(schoolID)
 
-    updateClass(schoolID)
-
-    // Update all students to point to the new session
-    const studentUpdate = Student.updateMany(
+      // Update students' session
+      await Student.updateMany(
         { schoolID, passedOut: false },
-        {
-          $set: { sessionID: savedNewSession._id },
-        }
-    );
+        { $set: { sessionID: newSession._id } },
+        { session: mongoSession }
+      );
 
-    // delete all documents related to the old session
-    const deleteOldSessionData = activeSession
-    ? Promise.all([
-        Event.deleteMany({ sessionID: activeSession._id }),
-        Query.deleteMany({ sessionID: activeSession._id }),
-        Timetable.deleteMany({ sessionID: activeSession._id }),
-        Task.deleteMany({ sessionID: activeSession._id }),
-        Test.deleteMany({ sessionID: activeSession._id }),
-        Attendance.deleteMany({ sessionID: activeSession._id }),
-      ])
-    : [];
+      // Delete old session data
+      if (activeSession) {
+          await Promise.all([
+          Event.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
+          Timetable.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
+          Task.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
+          Test.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
+          Attendance.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
+        ]);
+      }
 
-    // Push session to school
-    const updateSchoolSession = School.findByIdAndUpdate(schoolID, {
-        $push: { sessions: savedNewSession._id },
-    });
+      // Push session to school
+      await School.findByIdAndUpdate(
+        schoolID,
+        { $push: { sessions: newSession._id } },
+        { session: mongoSession }
+      );
 
-    // Execute all operations in parallel
-    await Promise.all([
-        studentUpdate,
-        deleteOldSessionData,
-        updateSchoolSession,
-    ]);
+      await mongoSession.commitTransaction();
+      mongoSession.endSession();
 
-    res.status(201).json({
-      message: "New session created successfully.",
-      status: "success",
-      session: savedNewSession,
-    });
+      res.status(201).json({
+        status: successMsg,
+        message: "New academic session created successfully",
+        session: newSession,
+      });
+
+    }
+    catch(error) {
+      await mongoSession.abortTransaction();
+      mongoSession.endSession();
+      throw err;
+    }
 });
 
 export const getSession = catchAsync(async (req, res, next) => {
   const schoolID = req.params.schoolId
   const session = await Session.find({schoolID: schoolID, isActive: true})
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: session[0]
   })
-
 })

@@ -2,18 +2,18 @@ import "./studentHome.scss"
 
 import { CircularProgressbar } from "react-circular-progressbar";
 import { useEffect, useState } from "react"
-import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 
 import { getSingleData, getStudentAttendance } from "../../config/endpoints/get"
 import useFetch from "../../config/service/useFetch"
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
 
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
 import EventCalender from "../../components/calender/Calender"
 import Lecture from "../../components/lecture/Lecture"
 import StudentProfile from "../../components/profile/StudentProfile"
 import Course from "../../components/course/Course"
+import Loader from "../../components/shared/loader/Loader"
 
 const StudentHome = () => {
 
@@ -49,10 +49,7 @@ const StudentHome = () => {
               <h2 className="course-title">Courses</h2>
               {
                 loading ? (
-                  <div className="create-loader">
-                    <ClipLoader color="black" size={30} />
-                    fetching courses...
-                  </div>
+                  <Loader text="fetching courses..."/>
                 ) : (
                   <div className="courses-container">
                     {data?.classInfo?.subjects?.map((item, index) => (

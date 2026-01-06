@@ -1,14 +1,6 @@
 import './infoBanner.scss'
 
-import InfoIcon from '@mui/icons-material/Info';
-import ErrorIcon from '@mui/icons-material/Error';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-const iconTypes = {
-    info: <InfoIcon className='icon' />,
-    error: <ErrorIcon className='icon' />,
-    success: <CheckCircleIcon className='icon' />
-};
+import { iconTypes } from "../../../config/utils/constants"
 
 const InforBanner = ({type, header, description}) => {
   return (

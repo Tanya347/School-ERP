@@ -1,3 +1,5 @@
+import { profile_url } from "../utils/constants";
+
 export const studentColumns = [
     {
         field: "user",
@@ -6,7 +8,7 @@ export const studentColumns = [
         renderCell: (params) => {
             return (
                 <div className="cell-with-img">
-                    <img className="cell-img" src={params.row.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"} alt="avatar" />
+                    <img className="cell-img" src={params.row.profilePicture || profile_url} alt="avatar" />
                     {params.row.username}
                 </div>
             );

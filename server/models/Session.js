@@ -36,11 +36,4 @@ SessionSchema.index(
   { unique: true }
 );
 
-// SessionSchema.pre("validate", function(next) {
-//   if (!this.name && this.startYear && this.endYear) {
-//     this.name = `${this.startYear}-${this.endYear}`;
-//   }
-//   next();
-// });
-
 export default mongoose.model("Session", SessionSchema);

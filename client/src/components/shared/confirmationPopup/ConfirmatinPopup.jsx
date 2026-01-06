@@ -1,6 +1,7 @@
 import "./confirmPopup.scss";
 
 const ConfirmPopup = ({ message, onConfirm, onCancel }) => {
+  
   return (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup">

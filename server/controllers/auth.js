@@ -2,6 +2,8 @@ import Admin from "../models/Admin.js";
 import Student from "../models/Student.js"
 import Faculty from "../models/Faculty.js"
 
+import { successMsg } from "../utils/constants.js";
+
 const USER_MODELS = [Admin, Student, Faculty];
 
 import jwt from "jsonwebtoken";
@@ -31,7 +33,7 @@ const createSendToken = (user, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
   res.status(statusCode).json({
-    status: 'success',
+    status: successMsg,
     token,
     user
   })
@@ -113,7 +115,7 @@ export const logout = catchAsync(async (req, res, next) => {
   });
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     message: 'Successfully logged out'
   });
 });
@@ -149,7 +151,7 @@ export const forgotPassword = (model, type) => catchAsync(async(req, res, next) 
       message
     })
     res.status(200).json({
-      status: 'success',
+      status: successMsg,
       message: 'Token sent to email'
     })
   } catch(err) {
@@ -184,7 +186,7 @@ export const resetPassword = (model) => catchAsync(async(req, res, next) => {
   const token = signToken(user._id);
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     token
   })
 })
@@ -206,7 +208,7 @@ export const updatePassword = (model) => catchAsync(async (req, res, next) => {
   const token = signToken(user._id);
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     user,
     token
   });

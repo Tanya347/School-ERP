@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { profile_url } from '../../config/utils/constants';
 
 const StudentProfile = ({data}) => {
 
@@ -7,7 +8,7 @@ const StudentProfile = ({data}) => {
   return (
     <div className='profile-container'>
       <img
-        src={data.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+        src={data.profilePicture || profile_url}
         alt=""
         className="item-img"
       />

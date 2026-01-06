@@ -5,14 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { createElement } from "../../config/service/usePost";
-import { getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { validateTask } from "../../config/validators/task";
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
+import { successMsg, tasksConst } from "../../config/utils/constants";
 
 import Dropdown from "../../components/shared/dropdown/Dropdown";
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs";
 
 const NewTask = ({ inputs, title }) => {
 
@@ -22,6 +23,8 @@ const NewTask = ({ inputs, title }) => {
   const [errors, setErrors] = useState({});
   const [studentClass, setStudentClass] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const classes = useSelector(state => state.faculty.classes);
 
   const navigate = useNavigate();
   
@@ -38,8 +41,8 @@ const NewTask = ({ inputs, title }) => {
       const newtask = {
         ...info, deadline: deadline, author: user._id, 
       }
-      const res = await createElement(newtask, postURLs("tasks", "normal"), "Task");
-      if(res.data.status === 'success') {
+      const res = await createElement(newtask, postURLs(tasksConst, "normal"), "Task");
+      if(res.data.status === successMsg) {
         navigate("/faculty/tasks")
       }
     } catch (err) {
@@ -70,25 +73,17 @@ const NewTask = ({ inputs, title }) => {
           <div className="right">
             <form>
 
-              {inputs?.map((input) => (
-                <div className="form-input" key={input.id}>
-                  <label>{input.label}</label>
-                  <input
-                    id={input.id}
-                    onChange={handleChange}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    value={info[input.id] || ""}
-                    className={errors[input.id] ? "error-input" : ""}
-                  />
-                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                </div>
-              ))}
+              <FormInputs
+                inputs={inputs}
+                values={info}
+                errors={errors}
+                onChange={handleChange}
+              />
 
               <Dropdown
                 id="sclass"
                 title="Choose Class"
-                url={getFacultyData(user._id, "classes")}
+                options={classes}
                 onChange={(e) => {
                   handleChange(e);
                   setStudentClass(e.target.value);

@@ -4,10 +4,11 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useState } from 'react'
 import { toast } from 'react-toastify';
+import { successMsg } from "../../config/utils/constants";
 
 import { forgotPaswordURL } from '../../config/endpoints/post';
-import { somethingWentWrongMsg } from "../../config/constants"
-import axiosInterceptor from '../../config/axiosInterceptor';
+import { somethingWentWrongMsg } from "../../config/utils/constants"
+import axiosInterceptor from '../../config/utils/axiosInterceptor';
 
 const ForgotPassword = ({setOpen, type}) => {
   
@@ -17,7 +18,7 @@ const ForgotPassword = ({setOpen, type}) => {
     e.preventDefault();
     try {
       const res = await axiosInterceptor.post(forgotPaswordURL(type), {email})
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         toast.success("Reset password link sent to your email!")
       }
       setOpen(false)

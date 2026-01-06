@@ -4,14 +4,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { postURLs } from "../../config/endpoints/post";
 import { createElement } from "../../config/service/usePost";
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
 import { validateUpdate } from "../../config/validators/update";
+import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
+import { noticeTypes, roles, successMsg, updatesConst } from "../../config/utils/constants";
 
 import Dropdown from "../../components/shared/dropdown/Dropdown";
 import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs";
 
 const NewUpdate = ({ inputs }) => {
   const [info, setInfo] = useState({});
@@ -23,6 +25,7 @@ const NewUpdate = ({ inputs }) => {
   const navigate = useNavigate();
 
   const { user } = useSelector(state => state.auth);
+  const classes = useSelector(selectAvailableClasses);
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateUpdate);
@@ -45,8 +48,8 @@ const NewUpdate = ({ inputs }) => {
     }
 
     try {
-      const res = await createElement(user.role === "admin" ? info : payload, postURLs("updates", "normal"), "Update");
-      if(res.data.status === 'success') {
+      const res = await createElement(user.role === roles.admin ? info : payload, postURLs(updatesConst, "normal"), "Update");
+      if(res.data.status === successMsg) {
         navigate(`/${user.role}/updates`)
       }
     } catch (err) {
@@ -88,28 +91,17 @@ const NewUpdate = ({ inputs }) => {
         <div className="bottom">
           <div className="right">
             <form>
-              {inputs?.map((input) => (
-                <div className="form-input" key={input.id}>
-                  <label>{input.label}</label>
-                  <input
-                    id={input.id}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    onChange={handleChange}
-                    value={info[input.id] || ""}
-                    className={errors[input.id] ? "error-input" : ""}
-                  />
-                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                </div>
-              ))}
+              <FormInputs
+                inputs={inputs}
+                values={info}
+                errors={errors}
+                onChange={handleChange}
+              />
 
             <Dropdown
               id="updateType"
               title="Choose Notice Type"
-              options={[
-                { _id: 'general', name: 'General' },
-                { _id: 'specific', name: 'Specific' },
-              ]}
+              options={noticeTypes}
               value={noticeType}
               onChange={(e) => {
                 handleChange(e);
@@ -117,33 +109,18 @@ const NewUpdate = ({ inputs }) => {
               }}
             />
 
-                {noticeType && noticeType === "specific" && 
-                  <div className="form-input">
-                    {user.role === 'admin' ? (
-                      <Dropdown
-                        id="class"
-                        title="Choose Class"
-                        url={getClasses}
-                        onChange={(e) => {
-                          handleChange(e);
-                          setSclass(e.target.value);
-                        }}
-                        value={sclass}
-                      />
-                    ) : (
-                      <Dropdown
-                        id="class"
-                        title="Choose Class"
-                        url={getFacultyData(user._id, "classes")}
-                        onChange={(e) => {
-                          handleChange(e);
-                          setSclass(e.target.value);
-                        }}
-                        value={sclass}
-                      />
-                    )}
-                  </div>
-                }
+            {noticeType && noticeType === "specific" && 
+              <Dropdown
+                id="class"
+                title="Choose Class"
+                options={classes}
+                value={sclass}
+                onChange={(e) => {
+                  setSclass(e.target.value);
+                  setInfo(prev => ({ ...prev, class: e.target.value }));
+                }}
+              />
+            }
 
             </form>
             <div className="submit-button">

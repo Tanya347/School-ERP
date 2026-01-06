@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 import { useSelector } from "react-redux";
 
-import useFetch from '../../config/service/useFetch'
-import { getAttendanceStatusByDate, getFacultyData, getStudentsOfClass } from '../../config/endpoints/get'
+import { getAttendanceStatusByDate, getStudentsOfClass } from '../../config/endpoints/get'
 import { postURLs } from '../../config/endpoints/post'
 import { createElement } from '../../config/service/usePost'
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { dateTimeFormat } from "../../config/utils/constants";
 
 import InforBanner from '../../components/shared/infoBanner/InforBanner'
 
@@ -25,7 +25,7 @@ const MarkAttendance = () => {
     const navigate = useNavigate();
     
     const { user } = useSelector(state => state.auth);
-    const classes = useFetch(getFacultyData(user._id, "classes")).data
+    const classes = useSelector(state => state.faculty.classes);
 
     let isClassTeacher = sclass?.classTeacher === user._id;;
 
@@ -47,7 +47,7 @@ const MarkAttendance = () => {
         const fetchDates = async() => {
         if(sclass && sdate) {
             try {
-                const formattedDate = moment(sdate).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+                const formattedDate = moment(sdate).format(dateTimeFormat);
                 const response = await axiosInterceptor.get(`${getAttendanceStatusByDate(sclass._id, formattedDate)}`)
                 
                 const attData = response.data.data;
@@ -72,10 +72,6 @@ const MarkAttendance = () => {
 
         fetchDates();
       }, [sclass, sdate])
-
-      const handleClick = (cl) => {
-        setSclass(cl);
-      };
 
       const handleCheckboxChange = (studentId) => {
         setPresentStudents((prev) => {
@@ -115,7 +111,7 @@ const MarkAttendance = () => {
                   classes?.map((cl, index) => (
                     <button  
                       className={sclass && sclass._id === cl._id ? 'selected-class' : ''}
-                      key={index} onClick={() => handleClick(cl)}>
+                      key={index} onClick={() => setSclass(cl)}>
                         Class {cl.name}
                     </button>
                   ))

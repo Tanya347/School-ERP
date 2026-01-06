@@ -8,6 +8,7 @@ import { getSingleData } from "../../config/endpoints/get";
 
 import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
+import { profile_url, studentsConst } from "../../config/utils/constants";
 
 const StudentProfile = ({ type }) => {
   
@@ -20,7 +21,7 @@ const StudentProfile = ({ type }) => {
   else
     id = location.pathname.split("/")[4];
 
-  const { data, loading } = useFetch(getSingleData(id, "students"));
+  const { data, loading } = useFetch(getSingleData(id, studentsConst));
 
   return (
     <div className="single-profile-container student-profile">
@@ -31,7 +32,7 @@ const StudentProfile = ({ type }) => {
           <div className="profile-top">
             <div className="profile-left">
               <img
-                src={data.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+                src={data.profilePicture || profile_url}
                 alt=""
                 className="item-img"
               />

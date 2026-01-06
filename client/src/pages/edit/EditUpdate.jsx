@@ -5,14 +5,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
-import { getClasses, getFacultyData, getSingleData } from "../../config/endpoints/get";
+import { getSingleData } from "../../config/endpoints/get";
+import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { updateInputs } from "../../config/formsource/updateInputs";
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
 import { validateUpdate} from "../../config/validators/update";
+import { noticeTypes, successMsg, updatesConst } from "../../config/utils/constants";
 
 import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs"
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 
 const EditUpdate = ({ title }) => {
 
@@ -20,6 +24,7 @@ const EditUpdate = ({ title }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [info, setInfo] = useState({});
+  const [selectedClass, setSelectedClass] = useState("");
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,20 +32,18 @@ const EditUpdate = ({ title }) => {
   const id = location.pathname.split("/")[4];
 
   const { user } = useSelector(state => state.auth);
-
-  const { data } = useFetch(getSingleData(id, "updates"))
-
-  let path;
-  if(user.role === 'faculty') {
-    path = getFacultyData(user._id, "classes")
-  } else {
-    path = getClasses
-  }
-  const classes = useFetch(path).data
+  const { data } = useFetch(getSingleData(id, updatesConst))
+  const classes = useSelector(selectAvailableClasses);
 
   useEffect(() => {
+    if(!data) return;
+
     setInfo(data)
     setNoticeType(data.updateType)
+
+    if (data.class) {
+      setSelectedClass(data.class._id || data.class);
+    }
   }, [data])
 
 
@@ -55,12 +58,15 @@ const EditUpdate = ({ title }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      if(noticeType === "general")
-        info.class = null
+      if (noticeType === "general") {
+        info.class = null;
+      } else {
+        info.class = selectedClass;
+      }
 
       const res = await editElement(info, putURLs("updates", id), "update");
 
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         navigate(`/${user.role}/updates`)
       }
     } catch (err) {
@@ -84,44 +90,38 @@ const EditUpdate = ({ title }) => {
               <div className="right">
                 <form>
 
-                  {updateInputs.map((field) => (
-                    <div className="form-input" key={field.id}>
-                      <label>{field.label}</label>
-                      <input
-                        id={field.id}
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        onChange={handleChange}
-                        value={info[field.id] || ""}
-                        className={errors[field.id] ? "error-input" : ""}
-                      />
-                      {errors[field.id] && <span className="error-message">{errors[field.id]}</span>}
-                    </div>
-                  ))}
+                  <FormInputs
+                    inputs={updateInputs}
+                    values={info}
+                    errors={errors}
+                    onChange={handleChange}
+                  />
 
-                  <div className="form-input">
-                      <label>Choose Notice Type</label>
-                      <select
-                        onChange={handleChange}
-                        id="updateType">
-                          <option key={1} value="general" selected={info?.updateType === "general"}>General</option>
-                          <option key={2} value="specific" selected={info?.updateType === "specific"}>Specific</option>
-                      </select>
-                  </div>
+                  <Dropdown
+                    id="updateType"
+                    title="Choose Notice Type"
+                    options={noticeTypes}
+                    value={noticeType}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setNoticeType(e.target.value);
+                    }}
+                  />
 
-                  {noticeType && noticeType === "specific" && <div className="form-input">
-                    <label>Class</label>
-                    <select
+
+                  {noticeType === "specific" && (
+                    <Dropdown
                       id="class"
-                      onChange={handleChange}
-                    >
-                      {
-                        classes?.map((d, index) => (
-                          <option value={d._id} key={index} selected={info?.class?._id === d._id}>{d.name}</option>
-                        ))
-                      }
-                    </select>
-                  </div>}
+                      title="Choose Class"
+                      options={classes}
+                      value={selectedClass}
+                      onChange={(e) => {
+                        setSelectedClass(e.target.value);
+                        setInfo(prev => ({ ...prev, class: e.target.value }));
+                      }}
+                    />
+                  )}
+
                 </form>
                 <div className="submit-button">
                   {loading && <Loader text="editing update..."/>}

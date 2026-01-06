@@ -7,6 +7,7 @@ import { getSingleData } from "../../config/endpoints/get";
 
 import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
+import { facultiesConst, profile_url } from "../../config/utils/constants";
 
 const FacultyProfile = ({ type }) => {
 
@@ -18,7 +19,7 @@ const FacultyProfile = ({ type }) => {
     id = location.pathname.split("/")[3];
   else
     id = location.pathname.split("/")[4];
-  const { data, loading } = useFetch(getSingleData(id, "faculties"))
+  const { data, loading } = useFetch(getSingleData(id, facultiesConst))
 
 
   // Find the class object where _id matches classTeacherTo
@@ -35,7 +36,7 @@ const FacultyProfile = ({ type }) => {
           <div className="profile-top">
             <div className="profile-left">
               <img
-                src={data.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+                src={data.profilePicture || profile_url}
                 alt=""
                 className="item-img"
               />

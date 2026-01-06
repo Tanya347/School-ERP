@@ -4,6 +4,7 @@ import Student from "../models/Student.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import { getActiveSession } from "./session.js";
+import { successMsg } from "../utils/constants.js";
 
 export const createTest = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
@@ -12,7 +13,7 @@ export const createTest = catchAsync(async (req, res, next) => {
   const newTest = new Test(req.body);
   const savedTest = await newTest.save();
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: savedTest,
     message: "Tests has been created successfully!"
   });
@@ -25,7 +26,7 @@ export const updateTest = catchAsync(async (req, res, next) => {
     { new: true }
   );
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: test,
     message: "Test has been updated successfully!"
   });
@@ -34,7 +35,7 @@ export const updateTest = catchAsync(async (req, res, next) => {
 export const deleteTest = catchAsync(async (req, res, next) => {
   await Test.findByIdAndDelete(req.params.id);
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Test has been deleted successfully!"
   });
 });
@@ -47,7 +48,7 @@ export const getTest = catchAsync(async (req, res, next) => {
     .populate("marks.student_id", "name enroll")
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: test,
   });
 });
@@ -55,7 +56,7 @@ export const getTest = catchAsync(async (req, res, next) => {
 export const getSingleTest = catchAsync(async (req, res, next) => {
   const test = await Test.findById(req.params.id);
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: test,
   });
 });
@@ -70,7 +71,7 @@ export const getTests = catchAsync(async (req, res, next) => {
   const tasks = await Test.find(filter);
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: tasks,
   });
 })
@@ -112,7 +113,7 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
   await test.save();
 
   res.status(200).json({ 
-    status: "success",
+    status: successMsg,
     message: 'Marks added/edited successfully' 
   });
 });
@@ -142,7 +143,7 @@ export const getMarksOfAllStudents = catchAsync(async (req, res, next) => {
   });
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: result,
   });
 });
@@ -174,7 +175,7 @@ export const getMarksOfOneStudent = catchAsync(async (req, res, next) => {
   };
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: result,
   });
 });
@@ -196,7 +197,7 @@ export const clearMarksOfTest = catchAsync(async (req, res, next) => {
   await test.save();
 
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     message: 'Marks cleared successfully'
   });
 });
@@ -216,7 +217,7 @@ export const completeTest = catchAsync(async (req, res, next) => {
   await test.save();
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: 'Test completed successfully',
     data: test
   });
@@ -237,7 +238,7 @@ export const cancelTest = catchAsync(async (req, res, next) => {
   await test.save();
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: 'Test canceled successfully',
     data: test
   });

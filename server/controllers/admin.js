@@ -1,6 +1,7 @@
 import Admin from "../models/Admin.js";
 
 import { catchAsync } from '../utils/catchAsync.js';
+import { successMsg } from "../utils/constants.js";
 
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
@@ -27,7 +28,7 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
       { new: true, runValidators: true }
     );
     res.status(200).json({
-      status: "success",
+      status: successMsg,
       data: {
         user: updatedUser
       },
@@ -41,7 +42,7 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     res.cookie('jwt', '', { expires: new Date(0), httpOnly: true });
     await Await.findByIdAndDelete(req.user.id);
     res.status(200).json({
-      status: "success", 
+      status: successMsg, 
       data: null,
       message: "Admin profile has been deleted!"
     });

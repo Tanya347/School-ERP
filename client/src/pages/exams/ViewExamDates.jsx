@@ -5,11 +5,12 @@ import { useSelector } from "react-redux";
 
 import { getClassExamDates, getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
-import axiosInterceptor from '../../config/axiosInterceptor';
+import axiosInterceptor from '../../config/utils/axiosInterceptor';
 
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"
+import { successMsg } from '../../config/utils/constants';
 
 const ViewExamDates = () => {
 
@@ -23,7 +24,7 @@ const ViewExamDates = () => {
       if(user) {
         try {
           const response = await axiosInterceptor.get(getClassExamDates(user?.class));
-          if(response.data.status === "success") {
+          if(response.data.status === successMsg) {
             setData(response.data.data);
           }
         } catch (err) {

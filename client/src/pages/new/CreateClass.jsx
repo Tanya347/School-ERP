@@ -6,9 +6,11 @@ import { useState } from 'react'
 import { postURLs } from "../../config/endpoints/post";
 import { createElement } from "../../config/service/usePost";
 import { validateClass } from "../../config/validators/class";
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
+import { classesConst, successMsg } from "../../config/utils/constants";
 
 import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs";
 
 const CreateClass = ({ inputs, title}) => {
     
@@ -32,8 +34,8 @@ const CreateClass = ({ inputs, title}) => {
         setLoading(true)
         e.preventDefault();
         try {
-            const res = await createElement(info, postURLs("classes", "normal"), "Class")
-            if(res.data.status === 'success') {
+            const res = await createElement(info, postURLs(classesConst, "normal"), "Class")
+            if(res.data.status === successMsg) {
                 navigate('/admin/classes');
             }
         } catch(err) {
@@ -52,19 +54,12 @@ const CreateClass = ({ inputs, title}) => {
                 <div className="bottom">
                     <div className="right">
                         <form>
-                            {inputs?.map((input) => (
-                                <div className="form-input" key={input.id}>
-                                <label>{input.label}</label>
-                                <input
-                                    id={input.id}
-                                    onChange={handleChange}
-                                    type={input.type}
-                                    placeholder={input.placeholder}
-                                    className={errors[input.id] ? "error-input" : ""}
-                                />
-                                {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                                </div>
-                            ))}
+                            <FormInputs
+                                inputs={inputs}
+                                values={info}
+                                errors={errors}
+                                onChange={handleChange}
+                            />
                         </form>
                         <div className="submit-button">
                             {loading && <Loader text="Creating Class..." />}

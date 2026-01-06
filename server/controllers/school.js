@@ -3,10 +3,12 @@ import Admin from "../models/Admin.js";
 
 import fs from "fs";
 
+import { getActiveSession } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import cloudinary from "../utils/cloudinary.js";
 import { sendEmail } from "../utils/email.js";
+import { folderName, successMsg } from "../utils/constants.js";
 
 function generateStrongPassword() {
     const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -95,7 +97,7 @@ export const createSchool = catchAsync(async (req, res, next) => {
     await newSchool.save();
 
     res.status(201).json({
-        status: 'success',
+        status: successMsg,
         message: 'School and admin created successfully',
         data: {
             school: newSchool,
@@ -107,17 +109,24 @@ export const createSchool = catchAsync(async (req, res, next) => {
 });
 
 export const getSchoolInfo = catchAsync(async (req, res, next) => {
-    const schoolId = req.params.id || req.user.schoolID; // Support either param or authenticated user
+    const schoolId = req.user.schoolID; // Support either param or authenticated user
 
-    const school = await School.findById(schoolId).populate('admin', 'username');
+    const school = await School.findById(schoolId)
+        .populate('admin', 'username')
+        .lean();
 
     if (!school) {
         return next(new AppError('School not found', 404));
     }
 
+    const activeSession = await getActiveSession(req.user);
+
     res.status(200).json({
-        status: 'success',
-        data: school
+        status: successMsg,
+        data: {
+            school,
+            activeSession
+        }
     });
 });
 
@@ -140,7 +149,7 @@ export const editSchoolInfo = catchAsync(async (req, res, next) => {
 
     if(req.file) {
         const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "erp_portal"
+            folder: folderName
         });
         logo = result.secure_url;
         cloud_id = result.public_id;
@@ -164,7 +173,7 @@ export const editSchoolInfo = catchAsync(async (req, res, next) => {
     )
 
     res.status(200).json({
-        status: 'success',
+        status: successMsg,
         message: 'School information updated successfully',
         data: updateSchool
     });

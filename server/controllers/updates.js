@@ -3,6 +3,7 @@ import Faculty from "../models/Faculty.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
+import { successMsg } from "../utils/constants.js";
 
 export const createUpdate = catchAsync(async (req, res, next) => {
     req.body.schoolID = req.user.schoolID;
@@ -11,7 +12,7 @@ export const createUpdate = catchAsync(async (req, res, next) => {
     const newUpdate = new Update(req.body);
     const savedUpdate = await newUpdate.save();
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         message: 'Update created successfully!',
         data: savedUpdate
     });
@@ -24,7 +25,7 @@ export const updateUpdate = catchAsync(async (req, res, next) => {
         { new: true }
     );
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         message: 'Update edited successfully!',
         data: update
     });
@@ -33,7 +34,7 @@ export const updateUpdate = catchAsync(async (req, res, next) => {
 export const deleteUpdate = catchAsync(async (req, res, next) => {
     await Update.findByIdAndDelete(req.params.id);
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         message: 'Update deleted successfully!',
     });
 });
@@ -45,7 +46,7 @@ export const bulkDeleteUpdate = catchAsync(async (req, res, next) => {
     }
     await Update.deleteMany({ _id: { $in: ids } });
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         message: `${ids.length} updates deleted successfully!`,
     });
 });
@@ -53,7 +54,7 @@ export const bulkDeleteUpdate = catchAsync(async (req, res, next) => {
 export const getUpdate = catchAsync(async (req, res, next) => {
     const update = await Update.findById(req.params.id).populate("class", "name");
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         data: update
     });
 });
@@ -100,12 +101,11 @@ export const getUpdates = catchAsync(async (req, res, next) => {
     }
 
     const enrichedUpdates = updates.map(update => ({
-        ...update.toObject(),
-        isRead: update.readBy.some(read => read.user.toString() === req.user._id.toString())
+        ...update.toObject()
     }));
 
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         data: enrichedUpdates
     });
 });

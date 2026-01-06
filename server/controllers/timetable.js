@@ -2,6 +2,7 @@ import Timetable from "../models/Timetable.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
+import { successMsg } from "../utils/constants.js";
 
 // Create slot
 export const createSlot = catchAsync(async (req, res, next) => {
@@ -9,7 +10,7 @@ export const createSlot = catchAsync(async (req, res, next) => {
     ...req.body,
     schoolID: req.user.schoolID, // from auth middleware
   });
-  res.status(201).json({ status: "success", data: slot });
+  res.status(201).json({ status: successMsg, data: slot });
 });
 
 export const bulkCreateSlots = catchAsync(async (req, res, next) => {
@@ -25,7 +26,7 @@ export const bulkCreateSlots = catchAsync(async (req, res, next) => {
   const created = await Timetable.insertMany(enrichedSlots);
 
   res.status(201).json({
-    status: 'success',
+    status: successMsg,
     data: created,
   });
 });
@@ -43,7 +44,7 @@ export const getSlots = catchAsync(async (req, res, next) => {
     .populate("course", "name")
     .populate("sclass", "name");
 
-  res.status(200).json({ status: "success", data: slots });
+  res.status(200).json({ status: successMsg, data: slots });
 });
 
 // Update a slot
@@ -53,7 +54,7 @@ export const updateSlot = catchAsync(async (req, res, next) => {
     req.body,
     { new: true }
   );
-  res.status(200).json({ status: "success", data: slot });
+  res.status(200).json({ status: successMsg, data: slot });
 });
 
 // Delete a slot
@@ -68,6 +69,6 @@ export const deleteSlotsForClass = catchAsync(async (req, res, next) => {
     schoolID: req.user.schoolID,
   });
 
-  res.status(200).json({ status: "success", message: "All slots for the class deleted" });
+  res.status(200).json({ status: successMsg, message: "All slots for the class deleted" });
 });
  

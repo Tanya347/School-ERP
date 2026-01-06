@@ -1,5 +1,6 @@
-import {toast} from "react-toastify"
-import axiosInterceptor from "../axiosInterceptor";
+import { toast } from "react-toastify"
+import { successMsg } from "../../config/utils/constants";
+import axiosInterceptor from "../utils/axiosInterceptor";
 
 export const createElementWithPicture = async(file, info, element, url) => {
     const formData = new FormData();
@@ -19,7 +20,7 @@ export const createElementWithPicture = async(file, info, element, url) => {
             }
         });
 
-        if(res.data.status === 'success') {
+        if(res.data.status === successMsg) {
             toast.success(`${element} ${element === "school" ? 'registered' : 'created'} Successfully!`);
         }
 
@@ -35,7 +36,7 @@ export const createElementWithPicture = async(file, info, element, url) => {
 export const createElement = async(response, url, element) => {
     try {
         const res = await axiosInterceptor.post(url, response);
-        if(res.data.status === 'success') {
+        if(res.data.status === successMsg) {
             toast.success(`${element} created successfully!`);
         }
         return res;

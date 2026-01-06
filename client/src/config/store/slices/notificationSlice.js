@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getUpdateURL } from "../../endpoints/get";
-import axiosInterceptor from "../../axiosInterceptor";
+import axiosInterceptor from "../../utils/axiosInterceptor";
 
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetch",

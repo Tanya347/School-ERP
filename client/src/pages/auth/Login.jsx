@@ -10,7 +10,8 @@ import { useDispatch } from "react-redux";
 
 import { loginSuccess } from "../../config/store/slices/authSlice";
 import { postURLs } from "../../config/endpoints/post"
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { loginImagePaths, successMsg } from "../../config/utils/constants";
 
 import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
 
@@ -27,17 +28,7 @@ function Login({ type }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  var url;
-
-  if(type==="Faculty") {
-    url = "/Assets/faculty.jfif"
-
-  } else if(type==="Student") {
-    url = "/Assets/student.jfif";
-
-  } else {
-    url = "/Assets/admin.jfif"
-  }
+  var url = loginImagePaths[type]
 
   // set the use state to what the user entered
   const handleChange = (e) => {
@@ -51,7 +42,7 @@ function Login({ type }) {
     try {
       const { data } = await axiosInterceptor.post(postURLs(type, "login"), credentials)
       
-      if(data.status === "success") {
+      if(data.status === successMsg) {
         toast.success("You have logged in successfully!");
         dispatch(loginSuccess(data.user));
         navigate(`/${data.user.role}`);

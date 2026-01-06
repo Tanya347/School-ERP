@@ -6,6 +6,7 @@ import moment from 'moment';
 import { catchAsync } from '../utils/catchAsync.js';
 import { getActiveSession } from "./session.js";
 import { AppError } from '../utils/customError.js';
+import { dateFormat, successMsg } from '../utils/constants.js';
 
 // create or update attendance
 // --
@@ -17,7 +18,7 @@ export const createAttendance = catchAsync(async (req, res) => {
   // Get all students in the class
   const classInfo = await Class.findById(classid);
   if (!classInfo) {
-    return res.status(404).json({ message: 'Class not found' });
+    return next(new AppError('Class not found', 404));
   }
 
   const allStudents = classInfo.students;
@@ -36,7 +37,7 @@ export const createAttendance = catchAsync(async (req, res) => {
     await existingAttendance.save();
 
     return res.status(200).json({
-      status: 'success',
+      status: successMsg,
       message: 'Attendance updated successfully',
       data: existingAttendance
     });
@@ -54,7 +55,7 @@ export const createAttendance = catchAsync(async (req, res) => {
   });
   await attendance.save();
   res.status(201).json({
-    status: 'success',
+    status: successMsg,
     message: 'Attendance marked successfully',
     data: attendance
   });
@@ -67,7 +68,7 @@ export const getLectureCount = catchAsync(async (req, res, next) => {
   const { classid } = req.params;
   const lectureCount = await Attendance.countDocuments({ classid });
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     data: lectureCount 
   });
 });
@@ -87,7 +88,7 @@ export const getAttendanceDates = catchAsync(async(req, res, next) => {
   }));
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: attendanceSummary
   });
 });
@@ -98,13 +99,13 @@ export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
   const { classid, date } = req.params;
   
   // Standardize and format the incoming date to YYYY-MM-DD
-  const standardizedDate = moment(date).format('YYYY-MM-DD');
+  const standardizedDate = moment(date).format(dateFormat);
 
   // Find all attendance records for the specified class
   const attendances = await Attendance.find({ classid }).populate('present absent', 'name enroll');
 
   // Filter the attendance records by comparing the formatted dates
-  const attendance = attendances.find(att => moment(att.date).format('YYYY-MM-DD') === standardizedDate);
+  const attendance = attendances.find(att => moment(att.date).format(dateFormat) === standardizedDate);
 
   if (!attendance) {
     return next(new AppError('No attendance record found for the specified date and class', 404));
@@ -128,7 +129,7 @@ export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
   const studentsStatus = [...presentStudents, ...absentStudents];
   
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: studentsStatus
   });
 });
@@ -142,7 +143,7 @@ export const clearAttendanceByClass = catchAsync(async (req, res, next) => {
   await Attendance.deleteMany({ classid });
   
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     message: `Attendance records for class ${classid} have been cleared successfully` 
   });
 });
@@ -156,11 +157,11 @@ export const deleteAttendance = catchAsync(async (req, res, next) => {
   const deletedAttendance = await Attendance.findByIdAndDelete(id);
   
   if (!deletedAttendance) {
-    return res.status(404).json({ message: 'Attendance record not found' });
+    return next(new AppError('Attendance record not found', 404));
   }
   
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     message: 'Attendance deleted successfully' 
   });
 });
@@ -201,7 +202,7 @@ export const getClassAttendance = catchAsync(async (req, res, next) => {
   });
   
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: studentAttendance
   });
 });
@@ -224,7 +225,7 @@ export const getStudentAttendance = catchAsync(async (req, res, next) => {
   
   const attendancePercentage = ((attendedLectures / totalLectures) * 100).toFixed(2);
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     data: {
       attendedLectures, 
       totalLectures, 
@@ -245,7 +246,7 @@ export const getStudentPresenceDates = catchAsync(async (req, res, next) => {
   const presenceDates = presentRecords.map(record => record.date);
   
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     data: presenceDates
   });
 });
@@ -261,7 +262,7 @@ export const getStudentAbsenceDates = catchAsync(async (req, res, next) => {
   const absenceDates = absentRecords.map(record => record.date);
   
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     data: absenceDates 
   });
 });
@@ -272,7 +273,7 @@ export const getStudentAbsenceDates = catchAsync(async (req, res, next) => {
 export const clearAllAttendanceRecords = catchAsync(async (req, res, next) => {
   await Attendance.deleteMany({});
   res.status(200).json({ 
-    status: 'success',
+    status: successMsg,
     message: 'All attendance records have been cleared successfully' 
   });
 });

@@ -1,7 +1,5 @@
 import "../../config/style/form.scss";
 
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -9,12 +7,15 @@ import DatePicker from "react-datepicker";
 import useFetch from "../../config/service/useFetch";
 import { putURLs } from "../../config/endpoints/put";
 import { getSingleData } from "../../config/endpoints/get";
-import { formatTime } from "../../config/commons";
+import { formatTime } from "../../config/utils/commons";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { validateEvent } from "../../config/validators/event";
-import { handleChange as commonHandleChange} from "../../config/commons"
+import { handleChange as commonHandleChange} from "../../config/utils/commons"
+import { eventsConst, successMsg } from "../../config/utils/constants";
 
 import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs"
+import FileUpload from "../../components/shared/fileUpload/FileUpload";
 
 const EditEvent = ({ inputs, title }) => {
 
@@ -29,7 +30,7 @@ const EditEvent = ({ inputs, title }) => {
     const navigate = useNavigate();
 
     const id = location.pathname.split("/")[4];
-    const { data, loading } = useFetch(getSingleData(id, "events"))
+    const { data, loading } = useFetch(getSingleData(id, eventsConst))
 
     useEffect(() => {
         if (data) {
@@ -58,7 +59,7 @@ const EditEvent = ({ inputs, title }) => {
                 endDate: end
             }
             const res = await editElementWithPicture(file, newInfo, "event", putURLs("events", id));
-            if(res.data.status === 'success') {
+            if(res.data.status === successMsg) {
                 navigate('/admin/events');
             }
         } catch(err) {
@@ -80,27 +81,13 @@ const EditEvent = ({ inputs, title }) => {
                     </div>
                     <div className="bottom">
                         <div className="right">
-                        <div className="left">
-                            <img
-                                src={
-                                    (file)
-                                        ? URL.createObjectURL(file)
-                                        : (info.poster) ? info.poster : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                                }
-                                alt=""
-                            />
-                                <div className="form-input">
-                                    <label htmlFor="file">
-                                        Image: <DriveFolderUploadOutlinedIcon className="icon" />
-                                    </label>
-                                    <input
-                                        type="file"
-                                        id="file"
-                                        onChange={(e) => setFile(e.target.files[0])}
-                                        style={{ display: "none" }}
-                                    />
-                                </div>
-                        </div>
+                        <FileUpload
+                            file={file}
+                            setFile={setFile}
+                            existingUrl={info.poster}
+                            label="Image"
+                            iconType="outlined"
+                        />
                             <form>
 
                                 <div className="form-input">
@@ -134,19 +121,12 @@ const EditEvent = ({ inputs, title }) => {
                                 </div> 
 
 
-                                {inputs?.map((input) => (
-                                    <div className="form-input" key={input.id}>
-                                        <label>{input.label}</label>
-                                        <input onChange={handleChange}
-                                            type={input.type}
-                                            placeholder={input.placeholder}
-                                            id={input.id}
-                                            value={info[`${input.id}`]}
-                                            className={errors[input.id] ? "error-input" : ""}
-                                        />
-                                        {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                                    </div>
-                                ))}
+                                <FormInputs
+                                    inputs={inputs}
+                                    values={info}
+                                    errors={errors}
+                                    onChange={handleChange}
+                                />
                             </form>
                                 <div className="submit-button">
                                 { sending && <Loader text="editing event..."/>}

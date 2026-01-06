@@ -5,10 +5,11 @@ import { useLocation } from 'react-router-dom';
 
 import useFetch from '../../config/service/useFetch';
 import { getSingleData, getStudentsOfClass } from '../../config/endpoints/get';
-import { formatDate } from '../../config/commons';
+import { formatDate } from '../../config/utils/commons';
 import { clearTestMarks } from "../../config/endpoints/delete";
 import { addTestMarks } from "../../config/endpoints/put";
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { testsConst } from "../../config/utils/constants";
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});
@@ -17,7 +18,7 @@ const ViewTestMarks = () => {
   const location = useLocation();
   
   const id = location.pathname.split("/")[4];
-  const { data } = useFetch(getSingleData(id, "tests"))
+  const { data } = useFetch(getSingleData(id, testsConst))
   
   useEffect(() => {
     const fetchStudents = async() => {

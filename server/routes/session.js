@@ -6,10 +6,11 @@ import {
 } from "../controllers/session.js";
 
 import { protect, restrictTo } from "../controllers/auth.js";
+import { roles } from '../utils/constants.js';
 
 const router = express.Router();
 
 // router.post("/", protect(), restrictTo("admin"), createSession);
-router.post("/", protect(), restrictTo("admin"), createSession)
+router.post("/", protect(), restrictTo(roles.admin), createSession)
 router.get("/:schoolId", protect(), getSession)
 export default router;

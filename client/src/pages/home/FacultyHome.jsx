@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import useFetch from '../../config/service/useFetch';
 import { getSingleData } from '../../config/endpoints/get';
+import { facultiesConst, FACULTY_HOME_COLORS } from '../../config/utils/constants';
 
 import EventCalender from '../../components/calender/Calender';
 import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
@@ -14,9 +15,7 @@ import Course from '../../components/course/Course';
 const FacultyHome = () => {
   
   const { user } = useSelector(state => state.auth);
-  const { data } = useFetch(getSingleData(user._id, "faculties"))
-
-  const colors = ['var(--light-blue)', 'var(--light-pink)', 'var(-light-yellow)', 'var(light-green)', 'var(light-red)']
+  const { data } = useFetch(getSingleData(user._id, facultiesConst))
 
   const classTeacherClass = data?.classesTaught?.find(
     (cls) => cls._id === data.classTeacherTo
@@ -35,7 +34,7 @@ const FacultyHome = () => {
                 <h2 className="c-title">Classes</h2>
                 <div className="classes-container">
                 {data?.classesTaught?.map((item, index) => (
-                  <div className="class-container" key={index} style={{ backgroundColor: colors[index % colors.length]}}>
+                  <div className="class-container" key={index} style={{ backgroundColor: FACULTY_HOME_COLORS[index % FACULTY_HOME_COLORS.length]}}>
                     {item.name} Standard
                 </div>
               ))}

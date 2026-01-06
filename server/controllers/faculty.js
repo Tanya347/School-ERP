@@ -7,6 +7,7 @@ import fs from "fs";
 import { AppError } from "../utils/customError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
+import { folderName, successMsg } from "../utils/constants.js";
 
 export const registerFaculty = catchAsync(async (req, res, next) => {
   
@@ -17,7 +18,7 @@ export const registerFaculty = catchAsync(async (req, res, next) => {
 
   if(req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "erp_portal",
+      folder: folderName,
     });
     profilePicture = result.secure_url;
     cloud_id = result.public_id;
@@ -32,7 +33,7 @@ export const registerFaculty = catchAsync(async (req, res, next) => {
   });
 
   res.status(201).json({
-    status: 'success',
+    status: successMsg,
     data: { user: newUser  },
     message: 'Faculty created successfully!'
   });
@@ -74,7 +75,7 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
     { new: true }
   );
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: updatedFaculty
   });
 });
@@ -87,7 +88,7 @@ export const deleteFaculty = catchAsync(async (req, res, next) => {
   }
   await Faculty.findByIdAndDelete(req.params.id);
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "The Faculty has been deleted"
   });
 });
@@ -104,7 +105,7 @@ export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
     await Faculty.findByIdAndDelete(faculty._id);
   }
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Faculty members deleted successfully"
   });
 });
@@ -115,7 +116,7 @@ export const getFaculty = catchAsync(async (req, res, next) => {
     .populate("subjectsTaught")
     .populate("classesTaught", "name");
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: faculty
   });
 });
@@ -126,7 +127,7 @@ export const getFacultys = catchAsync(async (req, res, next) => {
   let filter = { schoolID: schoolId };
   const facultys = await Faculty.find(filter).populate("subjectsTaught");
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: facultys
   });
 });
@@ -145,7 +146,7 @@ export const getFacultyClasses = catchAsync(async (req, res, next) => {
   }));
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: classes
   });
 });
@@ -166,7 +167,7 @@ export const getFacultyCourses = catchAsync(async (req, res, next) => {
   }));
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: courses
   });
 });
@@ -215,7 +216,7 @@ export const AddNewCourse = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Course assigned successfully",
   });
 });
@@ -260,7 +261,7 @@ export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Course unassigned successfully",
   });
 });
@@ -326,7 +327,7 @@ export const changeCourseFaculty = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Faculty changed successfully",
   });
 });

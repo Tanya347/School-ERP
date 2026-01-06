@@ -1,19 +1,20 @@
 import "../../config/style/form.scss";
 
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 
-import { getClasses, getFacultyData } from "../../config/endpoints/get";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
 import { validateMaterial } from '../../config/validators/material';
+import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
+import { materialsConst, successMsg } from "../../config/utils/constants";
 
 import Dropdown from '../../components/shared/dropdown/Dropdown';
+import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs";
+import FileUpload from "../../components/shared/fileUpload/FileUpload";
 
 const UploadMaterial = ({title, inputs}) => {
 
@@ -26,6 +27,7 @@ const UploadMaterial = ({title, inputs}) => {
   const navigate = useNavigate();
 
   const { user } = useSelector(state => state.auth);
+  const classes = useSelector(selectAvailableClasses);
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateMaterial);
@@ -36,9 +38,9 @@ const UploadMaterial = ({title, inputs}) => {
     setLoading(true);
     
     try {
-      const res = await createElementWithPicture(file, info, "material", postURLs("materials", "normal"));
+      const res = await createElementWithPicture(file, info, "material", postURLs(materialsConst, "normal"));
 
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         navigate(`/${user.role}/materials`);
       }
     } catch (err) {
@@ -64,55 +66,38 @@ const UploadMaterial = ({title, inputs}) => {
         </div>
         <div className="bottom">
           <div className="right">
-            <div className="left">
-              <div className="form-input">
-                <label htmlFor="file">
-                  File: <DriveFolderUploadIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  accept=".jpg,.png,.jpeg,.pdf"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
-                />
-                {file && (
-                  <span style={{ marginLeft: "10px", fontWeight: "bold" }}>{file.name}</span>
-                )}
-              </div>
-            </div>
+            <FileUpload
+              file={file}
+              setFile={setFile}
+              existingUrl={info.fileUrl}
+              label="File"
+              accept=".jpg,.png,.jpeg,.pdf"
+              showPreview={false}
+              showFileName
+              showViewLink
+            />
+
 
             <form>
               <Dropdown
                 id="classId"
                 title="Choose Class"
-                url={user.role === "faculty" ? getFacultyData(user._id, "classes") : getClasses}
+                options={classes}
                 onChange={(e) => {
                   handleChange(e);
                   setSclass(e.target.value);
                 }}
                 value={sclass}
               />
-              {inputs?.map((input) => (
-                <div className="form-input" key={input.id}>
-                  <label>{input.label}</label>
-                  <input
-                    onChange={handleChange}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    id={input.id}
-                    value={info[input.id] || ""}
-                    className={errors[input.id] ? "error-input" : ""}
-                  />
-                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                </div>
-              ))}
+              <FormInputs
+                inputs={inputs}
+                values={info}
+                errors={errors}
+                onChange={handleChange}
+              />
             </form>
             <div className="submit-button">
-            { loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                uploading material...
-              </div>}
+            { loading && <Loader text="uploading material..."/>}
               <button className="clear-btn" onClick={handleClear}>Clear</button>
               <button onClick={handleSubmit} disabled={loading} className="form-btn">Upload Material</button>
             </div>

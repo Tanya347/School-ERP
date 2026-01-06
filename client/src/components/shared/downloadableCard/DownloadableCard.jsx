@@ -3,8 +3,7 @@ import './downloadableCard.scss';
 import { useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
-import useFetch from '../../../config/service/useFetch';
+import { useSelector } from 'react-redux';
 
 const DownloadableCard = ({
   subtitle,
@@ -17,7 +16,7 @@ const DownloadableCard = ({
   
   const cardRef = useRef();
 
-  const session = useFetch(`/sessions/${student?.schoolID}`).data;
+  const { activeSession } = useSelector(state => state.school);
 
   const handleDownloadPDF = async () => {
     const card = cardRef.current;
@@ -58,7 +57,7 @@ const DownloadableCard = ({
           <img src={school?.logo} alt="School Logo" />
           <h2>{school?.name}</h2>
           <h3>{subtitle}</h3>
-          <h3>Session: {session.name}</h3>
+          <h3>Session: {activeSession.name}</h3>
         </div>
 
         <div className="card-student-info">

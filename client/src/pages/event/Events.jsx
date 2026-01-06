@@ -13,13 +13,11 @@ import { useSelector } from "react-redux";
 
 import useFetch from '../../config/service/useFetch';
 import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../config/endpoints/get';
+import { eventsConst, locales, tasksConst, testsConst } from "../../config/utils/constants";
 
 import Modal from '../../components/shared/modal/Modal';
 import EventModal from '../../components/eventModal/EventModal';
 
-const locales = {
-    "en-US": require("date-fns/locale/en-US"),
-};
 const localizer = dateFnsLocalizer({
     format,
     parse,
@@ -37,24 +35,24 @@ const Events = () => {
     const { user } = useSelector(state => state.auth);
     const tasks = useFetch(getTaskCalenderURL(user)).data
     const tests = useFetch(getTestCalenderURL(user)).data
-    const eventsData = useFetch(getDatatableURL("events")).data
+    const eventsData = useFetch(getDatatableURL(eventsConst)).data
 
     useEffect(() => {
 
         const e1 = tasks?.map((t) => {
             const deadline = new Date(t.deadline)
-            return {title: t.title, start:deadline, end: deadline, type: 'tasks'}
+            return {title: t.title, start:deadline, end: deadline, type: tasksConst}
         })
 
         const e2 = tests?.map((t) => {
             const date = new Date(t.date)
-            return {title: t.name, start: date, end: date, type: 'tests'}
+            return {title: t.name, start: date, end: date, type: testsConst}
         })
 
         const e3 = eventsData?.map((t) => {
             const s = new Date(t.startDate)
             const e = new Date(t.endDate)
-            return {title: t.name, start: s, end: e, type: 'events'}
+            return {title: t.name, start: s, end: e, type: eventsConst}
         })
         setEvents([...e1, ...e2, ...e3]);
     }, [tasks, tests, eventsData])
@@ -62,11 +60,11 @@ const Events = () => {
     const handleEventPopup = (e) => {
         const {title, type} = e;
         let clickedItem = null;
-        if (type === 'tasks') {
+        if (type === tasksConst) {
             clickedItem = tasks.find((item) => item.title === title);
-        } else if (type === 'tests') {
+        } else if (type === testsConst) {
             clickedItem = tests.find((item) => item.name === title);
-        } else if (type === 'events') {
+        } else if (type === eventsConst) {
             clickedItem = eventsData.find((item) => item.name === title);
         }
         
@@ -79,9 +77,9 @@ const Events = () => {
 
     const eventPropGetter = (event) => {
         let backgroundColor
-        if(event.type === 'tasks')
+        if(event.type === tasksConst)
             backgroundColor = 'var(--tree-green)'
-        else if(event.type === 'tests')
+        else if(event.type === testsConst)
             backgroundColor = 'var(--green)'
         else
             backgroundColor = 'var(--mild-turquoise)'
@@ -102,10 +100,10 @@ const Events = () => {
                 />
                     
             </div>
-            {openModal && clickedEvent.type !== 'events' && (
+            {openModal && clickedEvent.type !== eventsConst && (
                 <Modal setOpen={setOpenModal} id={clickedEvent._id} type={clickedEvent.type} />
             )}
-            {openModal && clickedEvent.type === 'events' && (
+            {openModal && clickedEvent.type === eventsConst && (
                 <EventModal setOpen={setOpenModal} event={clickedEvent} type="Main" />
             )}
         </div>

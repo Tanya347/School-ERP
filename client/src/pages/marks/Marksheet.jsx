@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import { getSingleData } from '../../config/endpoints/get';
 import useFetch from '../../config/service/useFetch';
+import { marksColumns, schoolsConst } from "../../config/utils/constants";
 
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
@@ -13,16 +14,8 @@ const Marksheet = () => {
 
   const { user } = useSelector(state => state.auth);
   
-  const { data: schoolData } = useFetch(getSingleData(user.schoolID, "schools"));
+  const { data: schoolData } = useFetch(getSingleData(user.schoolID, schoolsConst));
   const { data: marks} = useFetch(`/students/marks/single/${user._id}`);
-  
-  // Define columns for the GenericTable
-  const columns = [
-    { field: "name", label: "Subject Name" },
-    { field: "marks", label: "Marks Obtained" },
-    { field: "maxMarks", label: "Maximum Marks" },
-    { field: "grade", label: "Grade" },
-  ];
 
   // Prepare rows for the table
   const rows = marks?.marksData?.map((item) => {
@@ -47,7 +40,7 @@ const Marksheet = () => {
     <div className="marksheet-container">
       <h1 className="list-title">Marks Obtained</h1>
       <div className="marks-table-container">
-        <GenericTable columns={columns} rows={rows} rowKey="_id" />
+        <GenericTable columns={marksColumns} rows={rows} rowKey="_id" />
       </div>
       {marks.allMarksPresent ?
         (<div>

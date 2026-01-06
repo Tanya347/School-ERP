@@ -4,13 +4,11 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import useFetch from '../../config/service/useFetch';
 import { getLectures } from '../../config/endpoints/get';
+import { todayDay } from "../../config/utils/constants";
 
 const Lecture = ({id, type}) => {
 
   const slots = useFetch(getLectures(id, type)).data;
-
-  const today = new Date();
-  const todayDay = today.toLocaleDateString('en-US', { weekday: 'long' });
 
   const lectures = Array.isArray(slots)
     ? slots

@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 
 import useFetch from "../../config/service/useFetch.js";
 import { getDatatableURL } from "../../config/endpoints/get.js";
-import axiosInterceptor from "../../config/axiosInterceptor.js";
+import axiosInterceptor from "../../config/utils/axiosInterceptor.js";
 import { getDeleteURL } from "../../config/endpoints/delete.js";
 import { bulkDelete } from "../../config/endpoints/post.js";
 import { testAction } from "../../config/endpoints/put.js";
+import { facultiesConst, materialsConst, roles, studentsConst, successMsg, testsConst } from "../../config/utils/constants.js";
 
-import Modal from "../shared/modal/Modal.jsx";
 import AddClass from "../addCourse/AddCourse.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
@@ -38,19 +38,15 @@ const Datatable = ({ column, name }) => {
   const { data, loading } = useFetch(getDatatableURL(path, user));
 
   useEffect(() => {
-    if (path === "queries") {
-      setList(data?.filter((item) => item.queryTo === user._id) || []);
-    } else {
       setList(data || []);
-    }
-  }, [data, path, user._id]);
+  }, [data]);
 
   const handleDelete = async (id) => {
     setConfirmMessage(`Are you sure you want to delete this ${name}?`);
     setConfirmAction(() => async () => {
       try {
         const res = await axiosInterceptor.delete(getDeleteURL(path, id));
-        if (res.data.status === "success") {
+        if (res.data.status === successMsg) {
           toast.success(`${name} deleted successfully!`);
           setList((prevList) => prevList.filter((item) => item._id !== id));
         }
@@ -72,7 +68,7 @@ const Datatable = ({ column, name }) => {
           bulkDelete(path),
           { ids: selectedRows }
         );
-        if (res.data.status === "success") {
+        if (res.data.status === successMsg) {
           toast.success(`${selectedRows.length} ${name}(s) deleted successfully!`);
           setList((prev) => prev.filter((item) => !selectedRows.includes(item._id)));
           setSelectedRows([]);
@@ -97,7 +93,7 @@ const Datatable = ({ column, name }) => {
   const handleActionOnTest = async (id, action) => {
     try {
       const res = await axiosInterceptor.put(testAction(action, id), {});
-      if (res.data.status === "success") {
+      if (res.data.status === successMsg) {
         window.location.reload();
       }
     } catch (err) {
@@ -113,7 +109,7 @@ const Datatable = ({ column, name }) => {
       width: 600,
       renderCell: (params) => (
         <div className="cell-action">
-          {path === "materials" ? (
+          {path === materialsConst ? (
             <div
               className="view-button"
               onClick={() => {
@@ -124,35 +120,35 @@ const Datatable = ({ column, name }) => {
             >
               View
             </div>
-          ) : path === "students" || path === "faculties" ? (
+          ) : path === studentsConst || path === facultiesConst ? (
             <Link to={`/admin/${path}/single/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="view-button">View</div>
             </Link>
           ) : (
             <div className="view-button" onClick={() => handleClick(params.row._id, "query")}>
-              {name === "Query" ? "Respond" : "View"}
+              View
             </div>
           )}
 
-          {(user.role === "admin" || user.role === "faculty") && (
+          {(user.role === roles.admin || user.role === roles.faculty) && (
             <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="edit-button">Edit</div>
             </Link>
           )}
 
-          {(user.role === "admin" || user.role === "faculty") && (
+          {(user.role === roles.admin || user.role === roles.faculty) && (
             <div className="delete-button" onClick={() => handleDelete(params.row._id)}>
               Delete
             </div>
           )}
 
-          {user.role === "admin" && path === "faculties" && (
+          {user.role === roles.admin && path === facultiesConst && (
             <div className="view-button" onClick={() => handleClick(params.row._id, "course")}>
               Add Course
             </div>
           )}
 
-          {user.role === "faculty" && path === "tests" && (
+          {user.role === roles.faculty && path === testsConst && (
             <>
               <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
                 <div className="view-button">Add Marks</div>
@@ -190,7 +186,7 @@ const Datatable = ({ column, name }) => {
                 title={name}
               />
             </Tooltip>
-            {(user.role === "admin" || user.role === "faculty") && (
+            {(user.role === roles.admin || user.role === roles.faculty) && (
               <div style={{ display: "flex", gap: "10px" }}>
                 <Link to={`new`} style={{ textDecoration: "none" }}>
                   <div className="link">Create</div>
@@ -212,7 +208,7 @@ const Datatable = ({ column, name }) => {
             className="datagrid"
             rows={list}
             columns={column.concat(actionColumn)}
-            checkboxSelection={user.role !== "student"}
+            checkboxSelection={user.role !== roles.student}
             onSelectionModelChange={(ids) => setSelectedRows(ids)}
             selectionModel={selectedRows}
             pageSize={10}
@@ -223,7 +219,6 @@ const Datatable = ({ column, name }) => {
           {openModal && (
             <>
               {popupName === "course" && <AddClass setOpen={setOpenModal} facId={rowid} type={path} />}
-              {popupName === "query" && <Modal setOpen={setOpenModal} id={rowid} type={path} />}
             </>
           )}
         </div>

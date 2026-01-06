@@ -1,17 +1,18 @@
 import "../../config/style/form.scss";
 
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { createElementWithPicture } from "../../config/service/usePost";
 import { postURLs } from "../../config/endpoints/post";
 import { validateFaculty } from "../../config/validators/faculty";
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
+import { genderTypes, successMsg } from "../../config/utils/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
+import FormInputs from "../../components/shared/formInputs/FormInputs";
+import FileUpload from "../../components/shared/fileUpload/FileUpload";
 
 const NewFaculty = ({ inputs, title }) => {
   
@@ -32,7 +33,7 @@ const NewFaculty = ({ inputs, title }) => {
     setLoading(true);
     try {
       const res = await createElementWithPicture(file, info, "faculty", postURLs("faculty", "register"));
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         navigate(`/admin/faculties/single/${res.data.data.user._id}`);
       }
     }
@@ -61,39 +62,17 @@ const NewFaculty = ({ inputs, title }) => {
 
           <div className="right">
 
-          <div className="left">
-          <img
-              src={
-                file
-                  ? URL.createObjectURL(file)
-                  : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-              }
-              alt=""
-            />
-
-              <div className="form-input">
-                <label htmlFor="file">
-                  Profile Picture: <DriveFolderUploadIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
-                />
-              </div>
-              
-          </div>
-
+          <FileUpload
+            file={file}
+            setFile={setFile}
+            label="Profile Picture"
+          />
             <form>
 
             <Dropdown
               id="gender"
               title="Gender"
-              options={[
-                { _id: 'Male', name: 'Male' },
-                { _id: 'Female', name: 'Female' },
-              ]}
+              options={genderTypes}
               value={gender}
               onChange={(e) => {
                 setGender(e.target.value);
@@ -101,21 +80,12 @@ const NewFaculty = ({ inputs, title }) => {
               }}
             />
 
-              {inputs.map((input) => (
-                <div className="form-input" key={input.id}>
-                  <label>{input.label}</label>
-                  <input
-                    onChange={handleChange}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    id={input.id}
-                    value={info[input.id] || ""}
-                    className={errors[input.id] ? "input-error" : ""}
-                  />
-                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                </div>
-              ))}
-
+            <FormInputs 
+              inputs={inputs}
+              values={info}
+              errors={errors}
+              onChange={handleChange}
+            />
 
             </form>
             <div className="submit-button">

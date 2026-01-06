@@ -2,44 +2,15 @@ import "./modal.scss"
 
 import CancelIcon from '@mui/icons-material/Cancel';
 
-import { useState } from "react";
-import { toast } from "react-toastify"
-import axiosInterceptor from "../../../config/axiosInterceptor";
-
 import useFetch from "../../../config/service/useFetch"
 import { getModalURL } from "../../../config/endpoints/get";
-import { formatDate } from "../../../config/commons";
-import { putURLs } from "../../../config/endpoints/put";
+import { formatDate } from "../../../config/utils/commons";
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
 
 const Modal = ({ setOpen, id, type }) => {
 
-    const [info, setInfo] = useState({});
-
     const { data } = useFetch(getModalURL(type, id));
-
-    const handleChange = (e) => {
-        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-    }
-
-    const handleClick = async (e) => {
-        e.preventDefault();
-        
-        try {
-            const res = await axiosInterceptor.put(putURLs("queries", id), info)
-            if(res.data.status === 'success') {
-                toast.success("Query updated successfully!");
-            }
-            setOpen(false)
-        }
-        catch (err) {
-            const errorMessage = err.response?.data?.message || "Failed to create user. Please try again.";
-            toast.error(errorMessage);
-            return err;
-        }
-    }
-
     return (
         <div className="modal">
             <div className="m-container">
@@ -83,27 +54,6 @@ const Modal = ({ setOpen, id, type }) => {
                         <p><span>Assigned To</span> : {data?.sclass?.name}</p>
                         <p><span>Subject</span>: {data?.subject?.name}</p>
                         <p><span>Assigned By</span>: {data?.author?.teachername}</p>
-                    </div>
-                }
-
-                {/* If type is query */}
-                {
-                    type === "queries" &&
-                    <div className="m-tasks">
-                        <div className="m-title">{data.title}</div>
-                        <div className="m-desc">{data.description}</div>
-                        <textarea
-                            name="response"
-                            id="response"
-                            cols="30"
-                            rows="10"
-                            value={data.response}
-                            onChange={handleChange}
-                            placeholder='Respond to the query'>
-                        </textarea>
-                        <button className="m-button" onClick={handleClick}>
-                            Done
-                        </button>
                     </div>
                 }
 

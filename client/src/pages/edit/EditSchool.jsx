@@ -1,16 +1,18 @@
 import "../../config/style/form.scss";
 
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners";
 
 import { schoolInputs } from "../../config/formsource/schoolInputs"
 import useFetch from "../../config/service/useFetch";
 import { getSingleData } from "../../config/endpoints/get";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { putURLs } from "../../config/endpoints/put";
+import { schoolsConst, successMsg } from "../../config/utils/constants";
+
+import Loader from "../../components/shared/loader/Loader"
+import FormInputs from "../../components/shared/formInputs/FormInputs"
+import FileUpload from "../../components/shared/fileUpload/FileUpload";
 
 const EditSchool = ({title}) => {
 
@@ -23,12 +25,12 @@ const EditSchool = ({title}) => {
 
   const id = location.pathname.split("/")[4];
 
-  const {data} = useFetch(getSingleData(id, "schools"));
+  const {data} = useFetch(getSingleData(id, schoolsConst));
 
   useEffect(() => {
     setInfo(data)
   }, [data])
-  console.log(info)
+  
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
@@ -37,8 +39,8 @@ const EditSchool = ({title}) => {
     e.preventDefault();
     setLoading(true)
     try {
-      const res = await editElementWithPicture(file, info, "school", putURLs("schools", id));
-      if(res.data.status === 'success') {
+      const res = await editElementWithPicture(file, info, "school", putURLs(schoolsConst, id));
+      if(res.data.status === successMsg) {
         navigate('/admin');
       }
     } catch(err) {
@@ -56,48 +58,23 @@ const EditSchool = ({title}) => {
         </div>
         <div className="bottom">
           <div className="right">
-            <div className="left">
-              <img
-                src={
-                  (file)
-                    ? URL.createObjectURL(file)
-                    : (info?.logo) ? info.logo : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                }
-                alt=""
-              />
-              <div className="form-input">
-                <label htmlFor="file">
-                  Logo: <DriveFolderUploadIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
-                />
-              </div>
-            </div>
+            <FileUpload
+              file={file}
+              setFile={setFile}
+              existingUrl={info?.logo}
+              label="Logo"
+            />
 
             <form>
-                {schoolInputs.map((field) => (
-                  <div className="form-input">
-                    <label>{field.label}</label>
-                    <input
-                      id={field.id}
-                      type={field.type}
-                      placeholder={field.placeholder}
-                      onChange={handleChange}
-                      value={info[field.id] || ""}
-                    />
-                  </div>
-                ))}
+                <FormInputs
+                  inputs={schoolInputs}
+                  values={info}
+                  onChange={handleChange}
+                />
             </form>
 
             <div className="submit-button">
-              {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                editing school information...
-              </div>}
+              {loading && <Loader text="editing school..."/>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit School</button>
             </div>
           </div>

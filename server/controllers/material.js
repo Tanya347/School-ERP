@@ -4,6 +4,7 @@ import fs from "fs";
 
 import { getActiveSession } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { folderName, successMsg } from "../utils/constants.js";
 import cloudinary from "../utils/cloudinary.js";
 
 export const createMaterial = catchAsync(async (req, res, next) => {
@@ -15,7 +16,7 @@ export const createMaterial = catchAsync(async (req, res, next) => {
   if (req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {
     resource_type: 'raw',
-    folder: 'erp_portal'
+    folder: folderName
     });
 
     fileUrl = result.secure_url;
@@ -49,7 +50,7 @@ export const createMaterial = catchAsync(async (req, res, next) => {
 
   await newMaterial.save();
   res.status(201).json({
-    status: 'success',
+    status: successMsg,
     message: "Material uploaded successfully!",
     data: newMaterial
   });
@@ -69,7 +70,7 @@ export const getMaterials = catchAsync(async (req, res, next) => {
     .populate('classId', 'name');
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: materials
   });
 });
@@ -117,7 +118,7 @@ export const editMaterial = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     message: "Material updated successfully!",
     data: updatedMaterial
   });
@@ -133,7 +134,7 @@ export const deleteMaterial = catchAsync(async (req, res, next) => {
     await Material.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
-        status: 'success',
+        status: successMsg,
         message: "Material deleted successfully!"
     });
 });
@@ -151,7 +152,7 @@ export const bulkDeleteMaterial = catchAsync(async (req, res, next) => {
         await material.remove();
     }
     res.status(200).json({
-        status: "success",
+        status: successMsg,
         message: `${ids.length} materials deleted successfully!`,
     });
 });
@@ -168,7 +169,7 @@ export const getMaterial = catchAsync(async (req, res, next) => {
     }
 
     res.status(200).json({
-        status: 'success',
+        status: successMsg,
         data: material
     });
 });

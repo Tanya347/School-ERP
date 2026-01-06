@@ -3,10 +3,9 @@ import "./addMarks.scss"
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 
-import useFetch from '../../config/service/useFetch'
-import { getFacultyData, getMarksOfSubject } from '../../config/endpoints/get'
+import { getMarksOfSubject } from '../../config/endpoints/get'
 import { getClearMarksSubject } from '../../config/endpoints/delete'
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
 
 const ViewMarks = () => {
 
@@ -14,8 +13,7 @@ const ViewMarks = () => {
   const [courseName, setCourseName] = useState("");
   const [stuData, setStuData] = useState({});
 
-  const { user } = useSelector(state => state.auth);
-  const courses = useFetch(getFacultyData(user._id, "courses")).data
+  const courses = useSelector(state => state.faculty.courses);
 
   useEffect(() => {
     const fetchStudents = async () => {

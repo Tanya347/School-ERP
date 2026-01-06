@@ -59,7 +59,7 @@
 }
 
 .cancel-btn {
-  background: var(--light-red);
+  background: var(--light-gray);
   color: var(--light-black);
   border: none;
   padding: 8px 16px;
@@ -68,7 +68,7 @@
 }
 
 .cancel-btn:hover {
-  background: var(--mild-red);
+  background: var(--heading-gray);
 }
 
 .app.dark .confirm-popup {

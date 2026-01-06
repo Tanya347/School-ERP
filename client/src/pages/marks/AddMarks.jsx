@@ -5,10 +5,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-import useFetch from "../../config/service/useFetch";
-import { getFacultyData, getMarksOfSubject, getStudentsOfClass } from "../../config/endpoints/get";
+import { getMarksOfSubject, getStudentsOfClass } from "../../config/endpoints/get";
 import { addMarks } from "../../config/endpoints/put";
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
 
 import Loader from "../../components/shared/loader/Loader"
 import InforBanner from "../../components/shared/infoBanner/InforBanner";
@@ -23,8 +22,7 @@ const AddMarks = () => {
 
   const navigate = useNavigate();
 
-  const { user } = useSelector(state => state.auth);
-  const courses = useFetch(getFacultyData(user._id, "courses")).data;
+  const courses = useSelector(state => state.faculty.courses);
 
   useEffect(() => {
     const fetchStudents = async () => {

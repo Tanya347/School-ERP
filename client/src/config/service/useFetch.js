@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axiosInterceptor from "../axiosInterceptor"
+import axiosInterceptor from "../utils/axiosInterceptor"
 
 const useFetch = (url, options = {}) => {
     const {enabled = true} = options;

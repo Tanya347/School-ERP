@@ -3,6 +3,7 @@ import Student from "../models/Student.js";
 import Faculty from "../models/Faculty.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
+import { successMsg } from "../utils/constants.js";
 
 // Create a new class
 export const createClass = catchAsync(async (req, res, next) => {
@@ -10,7 +11,7 @@ export const createClass = catchAsync(async (req, res, next) => {
   const newClass = new Class(req.body);
   const savedClass = await newClass.save();
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: savedClass,
     message: 'Class created successfully!'
   });
@@ -24,7 +25,7 @@ export const updateClass = catchAsync(async (req, res, next) => {
     { new: true }
   );
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     data: sclass,
     message: 'Class updated successfully!'
   });
@@ -34,7 +35,7 @@ export const updateClass = catchAsync(async (req, res, next) => {
 export const deleteClass = catchAsync(async (req, res, next) => {
   const deletedClass = await Class.findById(req.params.id);
   if (!deletedClass) {
-    return res.status(404).json({ message: 'Class not found' });
+    return next(new AppError('Class not found', 404));
   }
 
   // Remove class reference from associated students
@@ -47,7 +48,7 @@ export const deleteClass = catchAsync(async (req, res, next) => {
   await deletedClass.remove();
   res.status(200).json({
     message: "The class has been deleted",
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -94,7 +95,7 @@ export const getClassDetails = catchAsync(async (req, res, next) => {
   classDetails._doc.teachers = teachers;
   res.status(200).json({
     data: classDetails,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -110,7 +111,7 @@ export const getClassSubjects = catchAsync(async (req, res, next) => {
   }));
   res.status(200).json({
     data: subjects,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -124,7 +125,7 @@ export const getClassStudents = catchAsync(async (req, res, next) => {
   });
   res.status(200).json({
     data: classStudents,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -135,7 +136,7 @@ export const getClasses = catchAsync(async (req, res, next) => {
   const classes = await Class.find(filter).sort({classNumber: 1});
   res.status(200).json({
     data: classes,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -149,7 +150,7 @@ export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
   }).sort({classNumber: 1});
   res.status(200).json({
     data: classes,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -160,14 +161,15 @@ export const addClassTeacher = catchAsync(async (req, res, next) => {
   // Check if the class already has a class teacher
   const sclass = await Class.findById(classId).populate('classTeacher');
   if (!sclass) {
-    return res.status(404).json({ message: 'Class not found' });
+    return next(new AppError('Class not found', 404));
   }
 
   const teacher = await Faculty.findById(teacherId).populate('classTeacherTo');
   if (!teacher) {
-    return res.status(404).json({ message: 'Teacher not found' });
+    return next(new AppError('Teacher not found', 404));
   }
   if (teacher.classTeacherTo) {
+    return next(new AppError('Class not found', 404));
     return res.status(400).json({ message: 'This teacher is already assigned as a class teacher to another class.' });
   }
 
@@ -179,7 +181,7 @@ export const addClassTeacher = catchAsync(async (req, res, next) => {
   await teacher.save();
 
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     message: 'Class teacher assigned successfully!',
     data: {
       class: sclass,

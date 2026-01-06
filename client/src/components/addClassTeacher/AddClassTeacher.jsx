@@ -6,29 +6,30 @@ import { useState } from 'react'
 import { toast } from 'react-toastify';
 
 import { addClassTeacher } from '../../config/endpoints/put';
-import { successMsg, somethingWentWrongMsg } from "../../config/constants"
-import axiosInterceptor from '../../config/axiosInterceptor';
+import { successMsg, somethingWentWrongMsg } from "../../config/utils/constants"
+import axiosInterceptor from '../../config/utils/axiosInterceptor';
 
 import Dropdown from '../shared/dropdown/Dropdown';
 
 const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
   
-    const [teacher, setTeacher] = useState('');
+  const [teacher, setTeacher] = useState('');
 
-    const handleClick = async(e) => {
-        e.preventDefault();
-        try {
-            const res = await axiosInterceptor.put(addClassTeacher(sclass), {teacher})
-            if(res.data.status === successMsg) {
-                window.location.reload();
-            }
-            setOpen(false)
-        } catch(err) {
-            const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
-            toast.error(errorMessage);
-            return err;
-        }
+  const handleClick = async(e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInterceptor.put(addClassTeacher(sclass), {teacher})
+      if(res.data.status === successMsg) {
+        window.location.reload();
+      }
+      setOpen(false)
+    } catch(err) {
+      const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
+      toast.error(errorMessage);
+      return err;
     }
+  }
+  
   return (
     <div className='popup-modal'>
       <div className="popup-container">

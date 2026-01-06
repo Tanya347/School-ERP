@@ -1,5 +1,6 @@
-import {toast} from "react-toastify"
-import axiosInterceptor from "../axiosInterceptor";
+import { toast } from "react-toastify"
+import axiosInterceptor from "../utils/axiosInterceptor";
+import { successMsg } from "../../config/utils/constants";
 
 export const editElementWithPicture = async(file, info, element, url) => {
     const formData = new FormData();
@@ -20,7 +21,7 @@ export const editElementWithPicture = async(file, info, element, url) => {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        if(res.data.status === 'success') {
+        if(res.data.status === successMsg) {
             toast.success(`${element} data edited successfully!`);
         }
 
@@ -36,7 +37,7 @@ export const editElementWithPicture = async(file, info, element, url) => {
 export const editElement = async(response, url, element) => {
     try {
         const res = await axiosInterceptor.put(url, response);
-        if(res.data.status === 'success') {
+        if(res.data.status === successMsg) {
             toast.success(`${element} edited successfully!`);
         }
         return res;

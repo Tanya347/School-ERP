@@ -1,12 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import notificationReducer from "./slices/notificationSlice";
-import { injectStore } from "../axiosInterceptor";
+import schoolReducer from "./slices/schoolSlice";
+import adminReducer from "./slices/adminSlice";
+import facultyReducer from "./slices/facultySlice";
+import studentReducer from "./slices/studentSlice";
+
+import { injectStore } from "../utils/axiosInterceptor";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    notifications: notificationReducer
+    notifications: notificationReducer,
+    school: schoolReducer,
+    admin: adminReducer,
+    faculty: facultyReducer,
+    student: studentReducer
   }
 });
 

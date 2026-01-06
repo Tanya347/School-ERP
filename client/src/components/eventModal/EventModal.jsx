@@ -4,10 +4,11 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
+import { eventsConst, successMsg } from "../../config/utils/constants";
 
-import { formatDate, formatTime, normalizeUrl } from "../../config/commons";
+import { formatDate, formatTime, normalizeUrl } from "../../config/utils/commons";
 import { getDeleteURL } from "../../config/endpoints/delete";
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
 
 // setOpen prop, event is the event we need to display and isUser will only allow the user to delete/edit the event
 
@@ -20,8 +21,8 @@ const EventModal = ({ setOpen, event, type }) => {
     // deleting the event
     const handleDelete = async () => {
         try {
-            const res = await axiosInterceptor.delete(getDeleteURL("events", event._id));
-            if(res.data.status === 'success') {
+            const res = await axiosInterceptor.delete(getDeleteURL(eventsConst, event._id));
+            if(res.data.status === successMsg) {
                 toast.success("Event deleted successfully!");
             }
             window.location.reload();

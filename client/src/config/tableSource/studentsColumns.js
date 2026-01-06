@@ -1,3 +1,5 @@
+import { profile_url } from "../utils/constants";
+
 export const studentColumns = [
     {
       field: "name",
@@ -5,7 +7,7 @@ export const studentColumns = [
       render: (value, row) => (
         <div className="cellWrapper">
           <img
-            src={row.profilePicture || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+            src={row.profilePicture || profile_url}
             alt="avatar"
             className="image"
           />

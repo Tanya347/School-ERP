@@ -3,10 +3,9 @@ import "./viewStudents.scss"
 import { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 
-import useFetch from '../../config/service/useFetch';
-import { getClassDetails, getFacultyData } from '../../config/endpoints/get';
+import { getClassDetails } from '../../config/endpoints/get';
 import { studentColumns } from '../../config/tableSource/studentsColumns';
-import axiosInterceptor from "../../config/axiosInterceptor";
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
 
 import GenericTable from '../../components/shared/table/Table';
 
@@ -17,8 +16,7 @@ const ViewStudents = () => {
   const [className, setClassName] = useState("");
   const [stuData, setStuData] = useState({});
 
-  const { user } = useSelector(state => state.auth);
-  const classes = useFetch(getFacultyData(user._id, "classes")).data
+  const classes = useSelector(state => state.faculty.classes);
 
   useEffect(() => {
     const fetchStudents = async () => {

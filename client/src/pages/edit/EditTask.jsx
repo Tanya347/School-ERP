@@ -3,15 +3,19 @@ import "../../config/style/form.scss";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
-import { getFacultyData, getSingleData } from "../../config/endpoints/get";
+import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { taskInputs } from "../../config/formsource/taskInputs";
+import { validateTask } from "../../config/validators/task";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
+import { tasksConst, successMsg } from "../../config/utils/constants";
 
+import Loader from "../../components/shared/loader/Loader"
+import FormInputs from "../../components/shared/formInputs/FormInputs"
 
 const EditTask = ({ title }) => {
   
@@ -19,17 +23,15 @@ const EditTask = ({ title }) => {
   const [deadline, setDeadline] = useState(null);
   const [sclass, setSclass] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // get location and extract id out of it
-  const { user } = useSelector(state => state.auth);
-
   const id = location.pathname.split("/")[4];
 
-  const classes = useFetch(getFacultyData(user._id, "classes")).data
-  const { data } = useFetch(getSingleData(id, "tasks"));
+  const classes = useSelector(state => state.faculty.classes);
+  const { data } = useFetch(getSingleData(id, tasksConst));
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
@@ -39,7 +41,7 @@ const EditTask = ({ title }) => {
   }, [data, data.deadline])
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateTask)
   }
 
   // update the data in the data base using put method
@@ -54,7 +56,7 @@ const EditTask = ({ title }) => {
 
       const res = await editElement(info, putURLs("tasks", id), "task");
 
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         navigate("/faculty/tasks")
       }
     } catch (err) {
@@ -80,18 +82,12 @@ const EditTask = ({ title }) => {
           <div className="right">
             
             <form>
-              {taskInputs.map((field) => (
-                <div className="form-input" key={field.id}>
-                  <label>{field.label}</label>
-                  <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    onChange={handleChange}
-                    value={info[field.id] || ""}
-                  />
-                </div>
-              ))}
+              <FormInputs
+                inputs={taskInputs}
+                values={info}
+                errors={errors}
+                onChange={handleChange}
+            />
               
             <div className="form-input">
                 <label>Choose a Class</label>
@@ -127,10 +123,7 @@ const EditTask = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submit-button">
-            {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                editing update...
-              </div>}
+            {loading && <Loader text="editing task..." />}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Task</button>
             </div>
           </div>

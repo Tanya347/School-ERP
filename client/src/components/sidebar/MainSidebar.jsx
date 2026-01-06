@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { sidebarConsts } from "./sidebarConsts";
 
 import Tooltip from "../shared/tooltip/Tooltip";
+import { roles } from "../../config/utils/constants";
 
 
 const MainSidebar = () => {
@@ -66,7 +67,7 @@ const MainSidebar = () => {
                                 </Link>
                     ))}
 
-                    {user.role !== 'student' && (
+                    {user.role !== roles.student && (
                         <p className={`title ${collapsed ? 'add-border' : ''}`}>
                             {!collapsed && 'Create and Update'}
                         </p>

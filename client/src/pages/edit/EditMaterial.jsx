@@ -1,19 +1,23 @@
 import "../../config/style/form.scss";
 
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux"
 
-import { getClasses, getSingleData } from "../../config/endpoints/get";
+import { getSingleData } from "../../config/endpoints/get";
 import { materialInputs } from '../../config/formsource/materialInputs';
 import useFetch from '../../config/service/useFetch';
 import { editElementWithPicture } from '../../config/service/usePut';
 import { putURLs } from '../../config/endpoints/put';
 import { validateMaterial }from "../../config/validators/material"
-import { handleChange as commonHandleChange } from '../../config/commons';
+import { handleChange as commonHandleChange } from '../../config/utils/commons';
+import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
+import { materialsConst, successMsg } from "../../config/utils/constants";
 
 import Loader from '../../components/shared/loader/Loader';
+import FormInputs from "../../components/shared/formInputs/FormInputs"
+import FileUpload from "../../components/shared/fileUpload/FileUpload";
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 
 const EditMaterial = ({title}) => {
   const [file, setFile] = useState(null);
@@ -27,8 +31,15 @@ const EditMaterial = ({title}) => {
 
   const id = location.pathname.split("/")[4];
 
-  const { data, dataloading } = useFetch(getSingleData(id, "materials"));
-  const classes = useFetch(getClasses).data;
+  const { data, dataloading } = useFetch(getSingleData(id, materialsConst));
+  const classes = useSelector(selectAvailableClasses);
+
+
+  useEffect(() => {
+    if (data?.classId) {
+      setClassId(data.classId._id || data.classId);
+    }
+  }, [data]);
 
   useEffect(() => {
     setInfo(data);
@@ -43,21 +54,16 @@ const EditMaterial = ({title}) => {
     setLoading(true);
     
     try {
-      if(classId) {
-        info.classId = classId;
-      } else {
-        info.classId = info.classId?._id || info.classId;
-      }
 
       const newInfo = {
-        classId: info.classId,
+        classId: classId || info.classId?._id,
         name: info.name,
         description: info.description
       }
 
       const res = await editElementWithPicture(file, newInfo, "material", putURLs("materials", id));
 
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         navigate('/admin/materials');
       }
     } catch (err) {
@@ -79,53 +85,33 @@ const EditMaterial = ({title}) => {
             </div>
             <div className="bottom">
               <div className="right">
-                <div className="left">
-                  <div className="form-input">
-                    <label htmlFor="file">
-                      File: <DriveFolderUploadIcon className="icon" />
-                    </label>
-                    <input
-                      type="file"
-                      id="file"
-                      accept=".jpg,.png,.jpeg,.pdf"
-                      onChange={(e) => setFile(e.target.files[0])}
-                      style={{ display: "none" }}
-                    />
-                    {!file && info.fileUrl && <button><a href={ info.fileUrl } style={{ textDecoration : "none", color: "black" }} target="__blank">View File</a></button>}
-                    {file && (
-                      <span style={{ marginLeft: "10px", fontWeight: "bold" }}>{file.name}</span>
-                    )}
-                  </div>
-                </div>
+                <FileUpload
+                  file={file}
+                  setFile={setFile}
+                  existingUrl={info.fileUrl}
+                  label="File"
+                  accept=".jpg,.png,.jpeg,.pdf"
+                  showPreview={false}
+                  showFileName
+                  showViewLink
+                />
+
 
                 <form>
-                  <div className="form-input">
-                    <label>Choose a Class</label>
-                    <select
-                      onChange={(e) => setClassId(e.target.value)}
-                      id="classId">
-                        {
-                          classes && classes.length > 0 &&
-                          classes?.map((cl, index) => (
-                            <option key={index} value={cl._id} selected={info?.classId?._id === cl._id}>{cl.name}</option>
-                            ))
-                          }
-                    </select>
-                  </div>
-                  {materialInputs?.map((input) => (
-                    <div className="form-input" key={input.id}>
-                      <label>{input.label}</label>
-                      <input
-                        id={input.id}
-                        onChange={handleChange}
-                        type={input.type}
-                        placeholder={input.placeholder}
-                        value={info[input.id] || ""}
-                        className={errors[input.id] ? "error-input" : ""}
-                      />
-                      {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                    </div>
-                  ))}
+                  <Dropdown
+                    title="Choose Class"
+                    id="classId"
+                    options={classes}
+                    value={classId}
+                    onChange={(e) => setClassId(e.target.value)}
+                  />
+
+                   <FormInputs
+                    inputs={materialInputs}
+                    values={info}
+                    errors={errors}
+                    onChange={handleChange}
+                  />
                 </form>
                 <div className="submit-button">
                 { loading && <Loader text="editing material..."/>}

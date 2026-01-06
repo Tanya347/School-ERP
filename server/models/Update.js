@@ -46,16 +46,6 @@ const UpdateSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Session'
     },
-    readBy: [{
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            refPath: 'readBy.userModel'
-        },
-        userModel: {
-            type: String,
-            enum: ['Faculty', 'Student', 'Admin']
-        }
-    }],
     expiresAt: {
         type: Date,
         default: () => {

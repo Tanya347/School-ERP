@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify"
 import axios from "axios"
-import { successMsg } from "../../constants"
+import { successMsg } from "../../utils/constants"
 
 import { logoutEndpoint, validateEndpoint } from "../../endpoints/post";
 

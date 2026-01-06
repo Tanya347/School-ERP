@@ -4,6 +4,7 @@ import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
+import { folderName, successMsg } from "../utils/constants.js";
 import cloudinary from "../utils/cloudinary.js";
 
 // Create a new event
@@ -30,7 +31,7 @@ export const createEvent = catchAsync(async (req, res, next) => {
 
   if (req.file) {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "erp_portal",
+      folder: folderName,
     });
 
     poster = result.secure_url;
@@ -43,7 +44,7 @@ export const createEvent = catchAsync(async (req, res, next) => {
   const savedEvent = await newEvent.save();
   res.status(200).json({
     data: savedEvent,
-    status: 'success',
+    status: successMsg,
     message: "The event has been successfully created!"
   });
 });
@@ -63,7 +64,7 @@ export const updateEvent = catchAsync(async (req, res, next) => {
     }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "erp_portal",
+      folder: folderName,
     });
 
     poster = result.secure_url;
@@ -87,7 +88,7 @@ export const updateEvent = catchAsync(async (req, res, next) => {
   res.status(200).json({
     data: updatedEvent,
     message: "The event has been successfully updated!",
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -99,7 +100,7 @@ export const deleteEvent = catchAsync(async (req, res, next) => {
   }
   await Event.findByIdAndDelete(req.params.id);
   res.status(200).json({
-    status: 'success',
+    status: successMsg,
     message: "The event has been deleted"
   });
 });
@@ -109,7 +110,7 @@ export const getEvent = catchAsync(async (req, res, next) => {
   const event = await Event.findById(req.params.id);
   res.status(200).json({
     data: event,
-    status: 'success'
+    status: successMsg
   });
 });
 
@@ -120,6 +121,6 @@ export const getEvents = catchAsync(async (req, res, next) => {
   const events = await Event.find(filter).sort({"startDate" : -1});
   res.status(200).json({
     data: events,
-    status: 'success'
+    status: successMsg
   });
 });

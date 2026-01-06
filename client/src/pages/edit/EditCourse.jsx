@@ -1,7 +1,5 @@
 import "../../config/style/form.scss";
 
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -10,10 +8,13 @@ import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElementWithPicture } from "../../config/service/usePut";
 import { courseInputs } from "../../config/formsource/courseInputs"
-import { handleChange as commonHandleChange } from "../../config/commons";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
 import { validateCourse } from "../../config/validators/course"
+import { coursesConst, successMsg } from "../../config/utils/constants";
 
 import Loader from "../../components/shared/loader/Loader";
+import FormInputs from "../../components/shared/formInputs/FormInputs"
+import FileUpload from "../../components/shared/fileUpload/FileUpload"
 
 const EditCourse = ({ title }) => {
   
@@ -28,7 +29,7 @@ const EditCourse = ({ title }) => {
   const id = location.pathname.split("/")[4];
 
   // fetch data using id
-  const { data, courseloading } = useFetch(getSingleData(id, "courses"))
+  const { data, courseloading } = useFetch(getSingleData(id, coursesConst))
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
@@ -51,7 +52,7 @@ const EditCourse = ({ title }) => {
 
     try {
       const res = await editElementWithPicture(file, editInfo, "course", putURLs("courses", id));
-      if(res.data.status === 'success') {
+      if(res.data.status === successMsg) {
         navigate('/admin/courses');
       }
     } catch(err) {
@@ -79,44 +80,21 @@ const EditCourse = ({ title }) => {
           {/* Form */}
           <div className="bottom">
             <div className="right">
-            <div className="left">
-              <img
-                src={
-                  (file)
-                    ? URL.createObjectURL(file)
-                    : (info.syllabusPicture) ? info.syllabusPicture : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-                }
-                alt=""
-              />
+            <FileUpload
+              file={file}
+              setFile={setFile}
+              existingUrl={info?.syllabusPicture}
+              label="Syllabus"
+            />
 
-              <div className="form-input">
-                  <label htmlFor="file">
-                    Syllabus: <DriveFolderUploadIcon className="icon" />
-                  </label>
-                  <input
-                    type="file"
-                    id="file"
-                    onChange={(e) => setFile(e.target.files[0])}
-                    style={{ display: "none" }}
-                  />
-                </div>
-            </div>
               <form>
                 
-                {courseInputs?.map((field) => (
-                  <div className="form-input">
-                    <label>{field.label}</label>
-                    <input
-                      id={field.id}
-                      type={field.type}
-                      placeholder={field.placeholder}
-                      onChange={handleChange}
-                      value={info[field.id] || ""}
-                      className={errors[field.id] ? "error-input" : ""}
-                    />
-                    {errors[field.id] && <span className="error-message">{errors[field.id]}</span>}
-                  </div>
-                ))}
+                <FormInputs
+                  inputs={courseInputs}
+                  values={info}
+                  errors={errors}
+                  onChange={handleChange}
+                />
 
               </form>
 

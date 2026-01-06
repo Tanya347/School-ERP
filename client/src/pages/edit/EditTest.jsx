@@ -3,15 +3,19 @@ import "../../config/style/form.scss";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../config/service/useFetch";
-import { getFacultyData, getSingleData } from "../../config/endpoints/get";
+import { getSingleData } from "../../config/endpoints/get";
 import { putURLs } from "../../config/endpoints/put";
 import { editElement } from "../../config/service/usePut";
 import { testInputs } from "../../config/formsource/testInputs";
+import { validateTest } from "../../config/validators/test";
+import { handleChange as commonHandleChange } from "../../config/utils/commons";
+import { testsConst, successMsg } from "../../config/utils/constants";
 
+import Loader from "../../components/shared/loader/Loader"
+import FormInputs from "../../components/shared/formInputs/FormInputs"
 
 const EditTest = ({ title }) => {
   
@@ -20,19 +24,17 @@ const EditTest = ({ title }) => {
   const [course, setCourse] = useState("");
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user } = useSelector(state => state.auth);
-
   // get location and extract id out of it
   const id = location.pathname.split("/")[4];
   
-  const classes = useFetch(getFacultyData(user._id, "classes")).data
-  const courses = useFetch(getFacultyData(user._id, "courses")).data
-  
-  const { data } = useFetch(getSingleData(id, "tests"))
+  const classes = useSelector(state => state.faculty.classes);
+  const courses = useSelector(state => state.faculty.courses);
+  const { data } = useFetch(getSingleData(id, testsConst))
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
@@ -43,7 +45,7 @@ const EditTest = ({ title }) => {
   }, [data, data.date])
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    commonHandleChange(e, setInfo, setErrors, validateTest);
   }
 
   // update the data in the data base using put method
@@ -58,8 +60,8 @@ const EditTest = ({ title }) => {
       if(course)
         info.subject = course
 
-      const res = await editElement(info, putURLs("tests", id), "test")
-      if(res.data.status === 'success') {
+      const res = await editElement(info, putURLs(testsConst, id), "test")
+      if(res.data.status === successMsg) {
         navigate("/faculty/tests")
       }
     } catch (err) {
@@ -85,18 +87,12 @@ const EditTest = ({ title }) => {
             
             <form>
             
-            {testInputs.map((field) => (
-                <div className="form-input" key={field.id}>
-                  <label>{field.label}</label>
-                  <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    onChange={handleChange}
-                    value={info[field.id] || ""}
-                  />
-                </div>
-            ))}
+            <FormInputs
+              inputs={testInputs}
+              values={info}
+              errors={errors}
+              onChange={handleChange}
+            />
 
             <div className="form-input">
                 <label>Choose a Class</label>
@@ -146,10 +142,7 @@ const EditTest = ({ title }) => {
 
             {/* Submit Button */}
             <div className="submit-button">
-            {loading && <div className="create-loader">
-                <ClipLoader color="black" size={30} />
-                editing update...
-              </div>}
+            {loading && <Loader text="editing test..."/>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit Test</button>
             </div>
           </div>

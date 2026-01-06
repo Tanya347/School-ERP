@@ -4,12 +4,14 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 
 import { useState, useEffect } from 'react';
 import {toast} from "react-toastify"
+import { useSelector } from "react-redux"
 
-import { getClasses, getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
+import { getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
 import { getClearTimetableForClass } from '../../config/endpoints/delete';
-import { periodTimes, days, periods } from '../../config/commons';
-import axiosInterceptor from "../../config/axiosInterceptor";
+import { periodTimes, days, periods } from '../../config/utils/commons';
+import axiosInterceptor from "../../config/utils/axiosInterceptor";
 import { bulkCreateTimetable } from "../../config/endpoints/post";
+import { coursesConst, successMsg } from "../../config/utils/constants";
 
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
 import Loader from '../../components/shared/loader/Loader';
@@ -28,11 +30,13 @@ const NewTimeTable = () => {
   const [clearloading, setClearloading] = useState(false);
   const [saveloading, setSaveloading] = useState(false);
 
+  const classes = useSelector(state => state.admin.classes);
+
   useEffect(() => {
     const fetchData = async () => {
       if (selectedClass) {
         try {
-          const coursesRes = await axiosInterceptor.get(getClassCourses(selectedClass, "courses"));
+          const coursesRes = await axiosInterceptor.get(getClassCourses(selectedClass, coursesConst));
           setCourses(coursesRes.data.data);
 
           const timetableRes = await axiosInterceptor.get(getTimeTableURL(selectedClass, 'class'));
@@ -75,7 +79,7 @@ const NewTimeTable = () => {
       try {
         const res = await axiosInterceptor.delete(getClearTimetableForClass(selectedClass));
         
-        if(res.data.status === 'success') {
+        if(res.data.status === successMsg) {
           setClearedSlots({});
           setSlots({});
           setExistingSlots({});
@@ -126,7 +130,7 @@ const NewTimeTable = () => {
         { slots: slotData }
       );
 
-      if (res.data.status === "success") {
+      if (res.data.status === successMsg) {
         toast.success("Timetable created successfully!");
         window.location.reload(); // Reload to reflect changes
       }
@@ -149,7 +153,7 @@ const NewTimeTable = () => {
         <Dropdown
           id="class"
           title="Choose Class"
-          url={getClasses}
+          options={classes}
           onChange={handleClassSelection}
           value={selectedClass}
         />

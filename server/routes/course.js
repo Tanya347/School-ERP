@@ -13,15 +13,16 @@ import {
 
 import upload from "../utils/multer.js";
 import { restrictTo, protect } from "../controllers/auth.js";
+import { roles } from "../utils/constants.js";
 
 const router = express.Router();
 
-router.post("/", protect(), restrictTo("admin"), upload.single('file'), createCourse);
-router.put("/:id", protect(), restrictTo("admin"), upload.single('file'), updateCourse);
-router.delete("/:id", protect(), restrictTo("admin"), deleteCourse);
+router.post("/", protect(), restrictTo(roles.admin), upload.single('file'), createCourse);
+router.put("/:id", protect(), restrictTo(roles.admin), upload.single('file'), updateCourse);
+router.delete("/:id", protect(), restrictTo(roles.admin), deleteCourse);
 router.get("/:id", protect(), getCourse);
 router.get("/", protect(), getCourses);
-router.put("/exam/setdates", protect(), restrictTo("admin"), setExamDatesForClass);
-router.delete("/exam/clear/:classId", protect(), restrictTo("admin"), clearExamDatesForClass);
+router.put("/exam/setdates", protect(), restrictTo(roles.admin), setExamDatesForClass);
+router.delete("/exam/clear/:classId", protect(), restrictTo(roles.admin), clearExamDatesForClass);
 router.get("/exam/:classId", protect(), getExamDatesForClass);
 export default router;

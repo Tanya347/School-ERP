@@ -2,6 +2,7 @@ import Student from "../models/Student.js"
 import Marks from "../models/Marks.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
+import { successMsg } from "../utils/constants.js";
 
 export const enterMarksForSubject = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
@@ -30,7 +31,7 @@ export const enterMarksForSubject = catchAsync(async (req, res) => {
   }
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Marks entered successfully for all students",
   });
 });
@@ -68,7 +69,7 @@ export const getMarksOfStudent = catchAsync(async (req, res) => {
   const allMarksPresent = marksData.every(m => m.marks !== null);
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: { marksData, allMarksPresent },
   });
 });
@@ -92,7 +93,7 @@ export const getMarksOfSubject = catchAsync(async (req, res) => {
   }));
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: result,
   });
 });
@@ -127,7 +128,7 @@ export const getMarksOfClass = catchAsync(async (req, res) => {
   });
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: Object.values(studentMap),
   });
 });
@@ -143,7 +144,7 @@ export const clearMarksForSubject = catchAsync(async (req, res) => {
   });
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "Marks cleared for the specified subject",
   });
 });
@@ -161,14 +162,14 @@ export const clearMarksForClass = catchAsync(async (req, res) => {
   });
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     message: "All marks cleared for the specified class",
   });
 });
 
 export const getStudentMarksHistory = catchAsync(async (req, res) => {
   const { studentId } = req.params;
-  const { schoolID } = req.user;
+  const { schoolId } = req.user;
 
   const student = await Student.findById(studentId).select("name enroll");
 
@@ -181,7 +182,7 @@ export const getStudentMarksHistory = catchAsync(async (req, res) => {
 
   const marks = await Marks.find({
     student: studentId,
-    schoolID,
+    schoolId,
   })
     .populate({
       path: "course",
@@ -220,7 +221,7 @@ export const getStudentMarksHistory = catchAsync(async (req, res) => {
   });
 
   res.status(200).json({
-    status: "success",
+    status: successMsg,
     data: {
       student: {
         _id: student._id,

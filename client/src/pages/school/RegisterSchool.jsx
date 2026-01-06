@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { createElementWithPicture } from '../../config/service/usePost';
 import { postURLs } from '../../config/endpoints/post';
+import { schoolsConst, successMsg } from "../../config/utils/constants";
 
 import Loader from '../../components/shared/loader/Loader';
 
@@ -27,8 +28,8 @@ const RegisterSchool = () => {
     button.disabled = "true"
     setLoading(true)
     try {
-      const res = await createElementWithPicture(file, info, "school", postURLs("schools", "normal"))
-      if(res.data.status === 'success') {
+      const res = await createElementWithPicture(file, info, "school", postURLs(schoolsConst, "normal"))
+      if(res.data.status === successMsg) {
         navigate("/adminLogin")
       }
     } catch (err) {

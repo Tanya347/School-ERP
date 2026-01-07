@@ -8,7 +8,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import cloudinary from "../utils/cloudinary.js";
 import { sendEmail } from "../utils/email.js";
-import { folderName, successMsg } from "../utils/constants.js";
+import { successMsg, folderName } from "../utils/constants.js";
 
 function generateStrongPassword() {
     const lower = 'abcdefghijklmnopqrstuvwxyz';

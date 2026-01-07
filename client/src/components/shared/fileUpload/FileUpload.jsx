@@ -1,7 +1,7 @@
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 
-import { DEFAULT_PLACEHOLDER } from "../../../config/utils/constants"
+import { DEFAULT_PLACEHOLDER } from "../../../utils/shared/constants"
 
 const FileUpload = ({
   file,
@@ -25,7 +25,7 @@ const FileUpload = ({
       : existingUrl || DEFAULT_PLACEHOLDER;
 
   return (
-    <div className="left">
+    <div className="img-container">
       {showPreview && (
         <img src={previewSrc} alt="preview" />
       )}

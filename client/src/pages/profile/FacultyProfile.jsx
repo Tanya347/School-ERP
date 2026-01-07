@@ -1,13 +1,15 @@
-import "../../config/style/profile.scss";
+import "./profile.scss";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
 
 import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
-import { facultiesConst, profile_url } from "../../config/utils/constants";
+import { facultiesConst } from "../../utils/shared/constants";
+import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
+import { facultyProfileFields } from "../../utils/shared/profileFieldConfigs";
 
 const FacultyProfile = ({ type }) => {
 
@@ -34,74 +36,16 @@ const FacultyProfile = ({ type }) => {
       ) : (
         <>
           <div className="profile-top">
-            <div className="profile-left">
-              <img
-                src={data.profilePicture || profile_url}
-                alt=""
-                className="item-img"
-              />
+            
+            <ProfileHeader
+              image={data.profilePicture}
+              title={data.teachername}
+              fields={facultyProfileFields(data)}
+              onEdit={() =>
+                navigate(`${type === "Admin" ? "/admin" : ""}/faculties/edit/${id}`)
+              }
+            />
 
-              {/* All the details */}
-              <div className="details">
-                {/* Name */}
-                <h1 className="item-title">{data.teachername}</h1>
-
-                {/* ID */}
-                <div className="detail-item">
-                  <span className="item-key">Registration Number:</span>
-                  <span className="item-value">{data.enroll}</span>
-                </div>
-
-                {/* Username */}
-                <div className="detail-item">
-                  <span className="item-key">Username:</span>
-                  <span className="item-value">{data.username}</span>
-                </div>
-
-                {/* Email */}
-                <div className="detail-item">
-                  <span className="item-key">Email:</span>
-                  <span className="item-value">{data.email}</span>
-                </div>
-
-                {/* Phone Number */}
-                <div className="detail-item">
-                  <span className="item-key">Phone Number:</span>
-                  <span className="item-value">{data.facultyPhone}</span>
-                </div>
-
-                {/* Address */}
-                <div className="detail-item">
-                  <span className="item-key">Address:</span>
-                  <span className="item-value">{data.facultyAddress}</span>
-                </div>
-
-                {/* Joining Year */}
-                <div className="detail-item">
-                  <span className="item-key">Joining Year:</span>
-                  <span className="item-value">{data.joiningYear}</span>
-                </div>
-
-                {/* Gender */}
-                <div className="detail-item">
-                  <span className="item-key">Gender:</span>
-                  <span className="item-value">{data.gender}</span>
-                </div>
-
-                {/* Date of Birth */}
-                <div className="detail-item">
-                  <span className="item-key">Date of Birth:</span>
-                  <span className="item-value">{data.dob}</span>
-                </div>
-
-                <button
-                  className="editButton"
-                  onClick={() => navigate(`${type === "Admin" ? "/admin" : ""}/faculties/edit/${id}`)}
-                >
-                  Edit Profile
-                </button>
-              </div>
-            </div>
             <div className="profile-right">
               {classTeacherClass && (
                 <h3>

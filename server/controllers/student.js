@@ -44,7 +44,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
 
   if (!student) {
-    return res.status(404).json({ message: "Student not found" });
+    return next(new AppError('Student not found', 404));
   }
 
   let profilePicture = student.profilePicture;
@@ -110,7 +110,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 
 export const deleteStudent = catchAsync(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
-  if (!student) return res.status(404).json({ message: "Student not found" });
+  if (!student) return next(new AppError('Student not found', 404));
   if (student.cloud_id) {
     await cloudinary.uploader.destroy(student.cloud_id);
   }
@@ -150,7 +150,7 @@ export const getStudent = catchAsync(async (req, res, next) => {
     })
     .exec();
 
-  if (!student) return res.status(404).json({ message: "Student not found" });
+  if (!student) next(new AppError('Student not found', 404));
 
   const { class: { name, ...classInfo }, ...rest } = student.toObject();
   const transformedStudent = { ...rest, classname: name, classInfo };

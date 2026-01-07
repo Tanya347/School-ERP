@@ -4,9 +4,10 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { createElementWithPicture } from '../../config/service/usePost';
-import { postURLs } from '../../config/endpoints/post';
-import { schoolsConst, successMsg } from "../../config/utils/constants";
+import { createElementWithPicture } from '../../utils/service/usePost';
+import { postURLs } from '../../utils/endpoints/post';
+import { schoolsConst } from "../../utils/shared/constants";
+import { checkSuccess } from '../../utils/shared/commons';
 
 import Loader from '../../components/shared/loader/Loader';
 
@@ -29,7 +30,7 @@ const RegisterSchool = () => {
     setLoading(true)
     try {
       const res = await createElementWithPicture(file, info, "school", postURLs(schoolsConst, "normal"))
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate("/adminLogin")
       }
     } catch (err) {

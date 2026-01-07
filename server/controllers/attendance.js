@@ -8,6 +8,7 @@ import { getActiveSession } from "./session.js";
 import { AppError } from '../utils/customError.js';
 import { dateFormat, successMsg } from '../utils/constants.js';
 
+
 // create or update attendance
 // --
 export const createAttendance = catchAsync(async (req, res) => {
@@ -217,7 +218,7 @@ export const getStudentAttendance = catchAsync(async (req, res, next) => {
   const totalLectures = await Attendance.countDocuments({ classid });
   
   if (totalLectures === 0) {
-    return res.status(404).json({ message: 'No attendance records found for the class' });
+    return new AppError('No attendance records found for the class', 404);
   }
   
   // Get number of lectures the student attended

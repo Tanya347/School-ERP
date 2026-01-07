@@ -61,7 +61,7 @@ export const updateSlot = catchAsync(async (req, res, next) => {
 export const deleteSlotsForClass = catchAsync(async (req, res, next) => {
   const classId = req.params.id;
   if (!classId) {
-    return res.status(400).json({ status: "fail", message: "classId query parameter is required" });
+    return next(new AppError('classId query parameter is required', 400));
   }
 
   await Timetable.deleteMany({

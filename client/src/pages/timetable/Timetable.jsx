@@ -3,11 +3,10 @@ import "./timetable.scss"
 import { useState, useEffect, useMemo } from 'react'
 import { useLocation } from "react-router-dom";
 
-import { periodTimes, days, periods } from '../../config/utils/commons';
-import { getTimeTableURL } from '../../config/endpoints/get';
+import { periodTimes, days, periods, checkAdmin } from '../../utils/shared/commons';
+import { getTimeTableURL } from '../../utils/endpoints/get';
 import { useSelector } from "react-redux";
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import { roles } from "../../config/utils/constants";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 
 import Loader from "../../components/shared/loader/Loader"
 
@@ -24,7 +23,7 @@ const Timetable = ({type}) => {
   const id = useMemo(() => {
     if (type !== "class") return null;
 
-    return user.role === roles.admin
+    return checkAdmin(user.role)
       ? location.pathname.split("/").pop()
       : user.class;
   }, [type, user.role, user.class, location.pathname]);

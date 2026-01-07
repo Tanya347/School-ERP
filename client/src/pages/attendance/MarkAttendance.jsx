@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 import { useSelector } from "react-redux";
 
-import { getAttendanceStatusByDate, getStudentsOfClass } from '../../config/endpoints/get'
-import { postURLs } from '../../config/endpoints/post'
-import { createElement } from '../../config/service/usePost'
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import { dateTimeFormat } from "../../config/utils/constants";
+import { getAttendanceStatusByDate, getStudentsOfClass } from '../../utils/endpoints/get'
+import { postURLs } from '../../utils/endpoints/post'
+import { createElement } from '../../utils/service/usePost'
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { dateTimeFormat } from "../../utils/shared/constants";
 
 import InforBanner from '../../components/shared/infoBanner/InforBanner'
+import { toast } from "react-toastify";
 
 const MarkAttendance = () => {
 
@@ -36,6 +37,12 @@ const MarkAttendance = () => {
               const response = await axiosInterceptor.get(getStudentsOfClass(sclass._id));
               setStuData(response.data.data);
             } catch (error) {
+              toast.error(
+                <div>
+                  <strong>Error fetching student data</strong>
+                  <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+                </div>
+              );
               console.error("Error fetching student data:", error);
             }
           }
@@ -63,6 +70,12 @@ const MarkAttendance = () => {
                   setPresentStudents([]);
                 }
             } catch(error) {
+                toast.error(
+                  <div>
+                    <strong>Error fetching attendance dates</strong>
+                    <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+                  </div>
+                );
                 console.log("Error fetching attendance dates", error);
                 setEditMode(false);
                 setPresentStudents([]);

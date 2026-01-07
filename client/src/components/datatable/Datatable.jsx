@@ -6,19 +6,20 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify";
 
-import useFetch from "../../config/service/useFetch.js";
-import { getDatatableURL } from "../../config/endpoints/get.js";
-import axiosInterceptor from "../../config/utils/axiosInterceptor.js";
-import { getDeleteURL } from "../../config/endpoints/delete.js";
-import { bulkDelete } from "../../config/endpoints/post.js";
-import { testAction } from "../../config/endpoints/put.js";
-import { facultiesConst, materialsConst, roles, studentsConst, successMsg, testsConst } from "../../config/utils/constants.js";
+import useFetch from "../../utils/service/useFetch.js";
+import { getDatatableURL } from "../../utils/endpoints/get.js";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor.js";
+import { getDeleteURL } from "../../utils/endpoints/delete.js";
+import { bulkDelete } from "../../utils/endpoints/post.js";
+import { testAction } from "../../utils/endpoints/put.js";
+import { facultiesConst, materialsConst, studentsConst, testsConst } from "../../utils/shared/constants.js";
 
 import AddClass from "../addCourse/AddCourse.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
 import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
 import Loader from "../shared/loader/Loader.jsx";
+import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../utils/shared/commons.js";
 
 const Datatable = ({ column, name }) => {
   
@@ -46,7 +47,7 @@ const Datatable = ({ column, name }) => {
     setConfirmAction(() => async () => {
       try {
         const res = await axiosInterceptor.delete(getDeleteURL(path, id));
-        if (res.data.status === successMsg) {
+        if (checkSuccess(res.data.status)) {
           toast.success(`${name} deleted successfully!`);
           setList((prevList) => prevList.filter((item) => item._id !== id));
         }
@@ -68,7 +69,7 @@ const Datatable = ({ column, name }) => {
           bulkDelete(path),
           { ids: selectedRows }
         );
-        if (res.data.status === successMsg) {
+        if (checkSuccess(res.data.status)) {
           toast.success(`${selectedRows.length} ${name}(s) deleted successfully!`);
           setList((prev) => prev.filter((item) => !selectedRows.includes(item._id)));
           setSelectedRows([]);
@@ -93,7 +94,7 @@ const Datatable = ({ column, name }) => {
   const handleActionOnTest = async (id, action) => {
     try {
       const res = await axiosInterceptor.put(testAction(action, id), {});
-      if (res.data.status === successMsg) {
+      if (checkSuccess(res.data.status)) {
         window.location.reload();
       }
     } catch (err) {
@@ -130,25 +131,25 @@ const Datatable = ({ column, name }) => {
             </div>
           )}
 
-          {(user.role === roles.admin || user.role === roles.faculty) && (
+          {(checkEditor(user.role)) && (
             <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="edit-button">Edit</div>
             </Link>
           )}
 
-          {(user.role === roles.admin || user.role === roles.faculty) && (
+          {(checkEditor(user.role)) && (
             <div className="delete-button" onClick={() => handleDelete(params.row._id)}>
               Delete
             </div>
           )}
 
-          {user.role === roles.admin && path === facultiesConst && (
+          {checkAdmin(user.role) && path === facultiesConst && (
             <div className="view-button" onClick={() => handleClick(params.row._id, "course")}>
               Add Course
             </div>
           )}
 
-          {user.role === roles.faculty && path === testsConst && (
+          {checkFaculty(user.role) && path === testsConst && (
             <>
               <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
                 <div className="view-button">Add Marks</div>
@@ -186,7 +187,7 @@ const Datatable = ({ column, name }) => {
                 title={name}
               />
             </Tooltip>
-            {(user.role === roles.admin || user.role === roles.faculty) && (
+            {(checkEditor(user.role)) && (
               <div style={{ display: "flex", gap: "10px" }}>
                 <Link to={`new`} style={{ textDecoration: "none" }}>
                   <div className="link">Create</div>
@@ -208,7 +209,7 @@ const Datatable = ({ column, name }) => {
             className="datagrid"
             rows={list}
             columns={column.concat(actionColumn)}
-            checkboxSelection={user.role !== roles.student}
+            checkboxSelection={!checkEditor(user.role)}
             onSelectionModelChange={(ids) => setSelectedRows(ids)}
             selectionModel={selectedRows}
             pageSize={10}

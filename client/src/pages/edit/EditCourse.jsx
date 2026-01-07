@@ -1,16 +1,16 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
-import { putURLs } from "../../config/endpoints/put";
-import { editElementWithPicture } from "../../config/service/usePut";
-import { courseInputs } from "../../config/formsource/courseInputs"
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { validateCourse } from "../../config/validators/course"
-import { coursesConst, successMsg } from "../../config/utils/constants";
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+import { putURLs } from "../../utils/endpoints/put";
+import { editElementWithPicture } from "../../utils/service/usePut";
+import { courseInputs } from "../../utils/formsource/courseInputs"
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { validateCourse } from "../../utils/validators/course"
+import { coursesConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
@@ -52,7 +52,7 @@ const EditCourse = ({ title }) => {
 
     try {
       const res = await editElementWithPicture(file, editInfo, "course", putURLs("courses", id));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate('/admin/courses');
       }
     } catch(err) {
@@ -79,7 +79,7 @@ const EditCourse = ({ title }) => {
 
           {/* Form */}
           <div className="bottom">
-            <div className="right">
+            <div className="form-container">
             <FileUpload
               file={file}
               setFile={setFile}

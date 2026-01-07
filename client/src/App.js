@@ -1,6 +1,6 @@
 // CSS
-import "./config/style/dark.scss";
-import "./config/style/base.scss";
+import "./utils/style/dark.scss";
+import "./utils/style/base.scss";
 
 // React
 import { useContext, useEffect } from "react";
@@ -8,28 +8,28 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Context
-import { DarkModeContext } from "./config/context/darkModeContext";
+import { DarkModeContext } from "./utils/context/darkModeContext";
 
 // Redux
-import { verifyUser } from "./config/store/slices/authSlice";
-import { fetchAdminClasses } from "./config/store/slices/adminSlice";
-import { fetchFacultyClasses } from "./config/store/slices/facultySlice";
-import { fetchFacultyCourses } from "./config/store/slices/facultySlice";
-import { fetchStudentProfile } from "./config/store/slices/studentSlice";
+import { verifyUser } from "./utils/store/slices/authSlice";
+import { fetchAdminClasses } from "./utils/store/slices/adminSlice";
+import { fetchFacultyClasses } from "./utils/store/slices/facultySlice";
+import { fetchFacultyCourses } from "./utils/store/slices/facultySlice";
+import { fetchStudentProfile } from "./utils/store/slices/studentSlice";
 
 // UI
 import { ToastContainer } from "react-toastify";
 import NotificationsListener from "./components/navbar/notifications/NotificationsListener";
-import { fetchSchoolInfo } from "./config/store/slices/schoolSlice";
-import { roles } from "./config/utils/constants";
+import { fetchSchoolInfo } from "./utils/store/slices/schoolSlice";
+import { roles } from "./utils/shared/constants";
 
 // Pages
 import Login from "./pages/auth/Login";
 import Landing from "./pages/landing/Landing";
 import RegisterSchool from "./pages/school/RegisterSchool";
-import AdminRoutes from "./config/routes/AdminRoutes";
-import FacultyRoutes from "./config/routes/FacultyRoutes";
-import StudentRoutes from "./config/routes/StudentRoutes";
+import AdminRoutes from "./utils/routes/AdminRoutes";
+import FacultyRoutes from "./utils/routes/FacultyRoutes";
+import StudentRoutes from "./utils/routes/StudentRoutes";
 import ResetPassword from "./pages/auth/ResetPassword";
 
 function App() {

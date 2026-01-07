@@ -9,10 +9,9 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 
 import { sidebarConsts } from "./sidebarConsts";
+import { checkEditor } from "../../utils/shared/commons";
 
 import Tooltip from "../shared/tooltip/Tooltip";
-import { roles } from "../../config/utils/constants";
-
 
 const MainSidebar = () => {
 
@@ -67,7 +66,7 @@ const MainSidebar = () => {
                                 </Link>
                     ))}
 
-                    {user.role !== roles.student && (
+                    {checkEditor(user.role) && (
                         <p className={`title ${collapsed ? 'add-border' : ''}`}>
                             {!collapsed && 'Create and Update'}
                         </p>

@@ -1,18 +1,17 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
-import { putURLs } from "../../config/endpoints/put";
-import { editElementWithPicture } from "../../config/service/usePut";
-import { facultyInputs } from "../../config/formsource/facultyInputs";
-import { validateFaculty } from "../../config/validators/faculty"
-import { facultiesConst, genderTypes, successMsg } from "../../config/utils/constants";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { roles } from "../../config/utils/constants"
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+import { putURLs } from "../../utils/endpoints/put";
+import { editElementWithPicture } from "../../utils/service/usePut";
+import { facultyInputs } from "../../utils/formsource/facultyInputs";
+import { validateFaculty } from "../../utils/validators/faculty"
+import { facultiesConst, genderTypes } from "../../utils/shared/constants";
+import { checkAdmin, checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
 
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
@@ -32,7 +31,7 @@ const EditFaculty = ({ title }) => {
   let id;
   const { user } = useSelector(state => state.auth);
   
-  if (user.role === roles.admin)
+  if (checkAdmin(user.role))
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
@@ -64,7 +63,7 @@ const EditFaculty = ({ title }) => {
         joiningYear: info.joiningYear
       }
       const res = await editElementWithPicture(file, newInfo, "faculty", putURLs(facultiesConst, id));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate(`/admin/faculties/single/${id}`)
       }
     } catch(err) {
@@ -85,7 +84,7 @@ const EditFaculty = ({ title }) => {
               <h1>{title}</h1>
             </div>
             <div className="bottom">
-              <div className="right">
+              <div className="form-container">
 
               <FileUpload
                 file={file}

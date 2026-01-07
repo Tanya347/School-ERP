@@ -31,6 +31,7 @@ const Popup = ({
                         key={index}
                         className="popup-button"
                         onClick={action.onClick}
+                        disabled={action.disabled}
                     >
                         {action.label}
                     </button>

@@ -1,6 +1,6 @@
 import './infoBanner.scss'
 
-import { iconTypes } from "../../../config/utils/constants"
+import { iconTypes } from "../../../utils/shared/constants"
 
 const InforBanner = ({type, header, description}) => {
   return (

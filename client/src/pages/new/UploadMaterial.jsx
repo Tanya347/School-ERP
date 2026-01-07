@@ -1,15 +1,15 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
-import { createElementWithPicture } from '../../config/service/usePost';
-import { postURLs } from '../../config/endpoints/post';
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { validateMaterial } from '../../config/validators/material';
-import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
-import { materialsConst, successMsg } from "../../config/utils/constants";
+import { createElementWithPicture } from '../../utils/service/usePost';
+import { postURLs } from '../../utils/endpoints/post';
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { validateMaterial } from '../../utils/validators/material';
+import { selectAvailableClasses } from "../../utils/store/selectors/classSelectors";
+import { materialsConst } from "../../utils/shared/constants";
 
 import Dropdown from '../../components/shared/dropdown/Dropdown';
 import Loader from "../../components/shared/loader/Loader";
@@ -40,7 +40,7 @@ const UploadMaterial = ({title, inputs}) => {
     try {
       const res = await createElementWithPicture(file, info, "material", postURLs(materialsConst, "normal"));
 
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate(`/${user.role}/materials`);
       }
     } catch (err) {
@@ -65,7 +65,7 @@ const UploadMaterial = ({title, inputs}) => {
           {title}
         </div>
         <div className="bottom">
-          <div className="right">
+          <div className="form-container">
             <FileUpload
               file={file}
               setFile={setFile}

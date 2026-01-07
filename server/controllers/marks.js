@@ -47,7 +47,7 @@ export const getMarksOfStudent = catchAsync(async (req, res) => {
     });
 
   if (!student) {
-    return res.status(404).json({ message: "Student not found" });
+    return next(new AppError('Student not found', 404));
   }
 
   const marks = await Marks.find({
@@ -174,10 +174,7 @@ export const getStudentMarksHistory = catchAsync(async (req, res) => {
   const student = await Student.findById(studentId).select("name enroll");
 
   if(!student) {
-    return res.status(404).json({
-      status: "fail",
-      message: "Student not found"
-    });
+    return next(new AppError('Student not found', 404));
   }
 
   const marks = await Marks.find({

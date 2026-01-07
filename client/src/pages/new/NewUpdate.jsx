@@ -1,15 +1,15 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { postURLs } from "../../config/endpoints/post";
-import { createElement } from "../../config/service/usePost";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { validateUpdate } from "../../config/validators/update";
-import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
-import { noticeTypes, roles, successMsg, updatesConst } from "../../config/utils/constants";
+import { postURLs } from "../../utils/endpoints/post";
+import { createElement } from "../../utils/service/usePost";
+import { checkAdmin, checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { validateUpdate } from "../../utils/validators/update";
+import { selectAvailableClasses } from "../../utils/store/selectors/classSelectors";
+import { noticeTypes, updatesConst } from "../../utils/shared/constants";
 
 import Dropdown from "../../components/shared/dropdown/Dropdown";
 import Loader from "../../components/shared/loader/Loader";
@@ -48,8 +48,8 @@ const NewUpdate = ({ inputs }) => {
     }
 
     try {
-      const res = await createElement(user.role === roles.admin ? info : payload, postURLs(updatesConst, "normal"), "Update");
-      if(res.data.status === successMsg) {
+      const res = await createElement(checkAdmin(user.role) ? info : payload, postURLs(updatesConst, "normal"), "Update");
+      if(checkSuccess(res.data.status)) {
         navigate(`/${user.role}/updates`)
       }
     } catch (err) {
@@ -89,7 +89,7 @@ const NewUpdate = ({ inputs }) => {
           <h1>Add New Update</h1>
         </div>
         <div className="bottom">
-          <div className="right">
+          <div className="form-container">
             <form>
               <FormInputs
                 inputs={inputs}

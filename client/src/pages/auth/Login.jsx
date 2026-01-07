@@ -8,12 +8,13 @@ import { useState } from 'react'
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 
-import { loginSuccess } from "../../config/store/slices/authSlice";
-import { postURLs } from "../../config/endpoints/post"
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import { loginImagePaths, successMsg } from "../../config/utils/constants";
+import { loginSuccess } from "../../utils/store/slices/authSlice";
+import { postURLs } from "../../utils/endpoints/post"
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { loginImagePaths } from "../../utils/shared/constants";
 
 import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
+import { checkSuccess } from "../../utils/shared/commons";
 
 // type will tell whether admin or student
 function Login({ type }) {
@@ -28,8 +29,6 @@ function Login({ type }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  var url = loginImagePaths[type]
-
   // set the use state to what the user entered
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }))
@@ -42,7 +41,7 @@ function Login({ type }) {
     try {
       const { data } = await axiosInterceptor.post(postURLs(type, "login"), credentials)
       
-      if(data.status === successMsg) {
+      if(checkSuccess(data.status)) {
         toast.success("You have logged in successfully!");
         dispatch(loginSuccess(data.user));
         navigate(`/${data.user.role}`);
@@ -60,7 +59,7 @@ function Login({ type }) {
     <div className="admin-login">
 
       <div className="img-container">
-        <img src={url} alt="" />
+        <img src={loginImagePaths[type]} alt="" />
       </div>
 
       <div className="l-container">

@@ -5,8 +5,8 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
-import useFetch from "../../config/service/useFetch.js"
-import { getClassCourses, getTableWithoutActionURL } from "../../config/endpoints/get.js";
+import useFetch from "../../utils/service/useFetch.js"
+import { getClassCourses, getTableWithoutActionURL } from "../../utils/endpoints/get.js";
 
 // column, name and type are props input at the place datatable is used
 const TableWithoutAction = ({ column, name }) => {

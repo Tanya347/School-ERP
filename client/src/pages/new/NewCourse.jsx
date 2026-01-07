@@ -1,14 +1,14 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"
 
-import { postURLs } from "../../config/endpoints/post";
-import { createElementWithPicture } from "../../config/service/usePost";
-import { validateCourse } from "../../config/validators/course";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { coursesConst, successMsg } from "../../config/utils/constants";
+import { postURLs } from "../../utils/endpoints/post";
+import { createElementWithPicture } from "../../utils/service/usePost";
+import { validateCourse } from "../../utils/validators/course";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { coursesConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
@@ -38,7 +38,7 @@ const NewCourse = ({ inputs, title }) => {
     setLoading(true);
     try {
       const res = await createElementWithPicture(file, info, "course", postURLs(coursesConst, "normal"));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate('/admin/courses');
       }
     } catch(err) {
@@ -66,13 +66,13 @@ const NewCourse = ({ inputs, title }) => {
         </div>
         
         <div className="bottom">
-          <div className="right">
-            <FileUpload
-              file={file}
-              setFile={setFile}
-              existingUrl={info?.syllabusPicture}
-              label="Syllabus"
-            />
+          <div className="form-container">
+              <FileUpload
+                file={file}
+                setFile={setFile}
+                existingUrl={info?.syllabusPicture}
+                label="Syllabus"
+              />
 
             <form>
               <FormInputs 

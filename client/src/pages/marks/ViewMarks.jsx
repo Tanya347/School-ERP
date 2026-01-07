@@ -3,9 +3,11 @@ import "./addMarks.scss"
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 
-import { getMarksOfSubject } from '../../config/endpoints/get'
-import { getClearMarksSubject } from '../../config/endpoints/delete'
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { getMarksOfSubject } from '../../utils/endpoints/get'
+import { getClearMarksSubject } from '../../utils/endpoints/delete'
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { toast } from "react-toastify";
+import { checkSuccess } from "../../utils/shared/commons";
 
 const ViewMarks = () => {
 
@@ -22,6 +24,12 @@ const ViewMarks = () => {
           const response = await axiosInterceptor.get(getMarksOfSubject);
           setStuData(response.data.data);
         } catch (error) {
+          toast.error(
+            <div>
+              <strong>Error fetching student data</strong>
+              <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+            </div>
+          );
           console.error("Error fetching student data:", error);
         }
       }
@@ -37,12 +45,18 @@ const ViewMarks = () => {
   const handleClear = async() => {
     // this deletes data from the database
     try {
-        await axiosInterceptor.delete(getClearMarksSubject(course), { withCredentials: true }
+        const res = await axiosInterceptor.delete(getClearMarksSubject(course), { withCredentials: true }
         );
-  
-        // this filters the array by filtering out the deleted element based on the id
-        setStuData({});
+
+        if (checkSuccess(res.data.status)) {
+          toast.success("Marks cleared successfully!");
+          setStuData({});
+        }
       } catch (err) {
+        const errorMessage =
+          err.response?.data?.message ||
+          "Failed to clear marks. Please try again.";
+        toast.error(errorMessage);
         console.log(err)
       }
   }

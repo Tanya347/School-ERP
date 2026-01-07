@@ -12,7 +12,8 @@ import {
 import Student from "../models/Student.js";
 import Admin from "../models/Admin.js";
 import Faculty from "../models/Faculty.js";
-import { roles } from "../utils/constants.js";
+
+import { successMsg, roles } from "../utils/constants.js";
 
 const router = express.Router();
 

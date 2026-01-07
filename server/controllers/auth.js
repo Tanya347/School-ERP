@@ -160,7 +160,7 @@ export const forgotPassword = (model, type) => catchAsync(async(req, res, next) 
     await user.save({validateBeforeSave: false});
 
     return next(
-      new AppError('There was an error senging the email. Try again later!', 500)
+      new AppError('There was an error sending the email. Try again later!', 500)
     )
   }
 })

@@ -3,11 +3,12 @@ import "./viewStudents.scss"
 import { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 
-import { getClassDetails } from '../../config/endpoints/get';
-import { studentColumns } from '../../config/tableSource/studentsColumns';
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { getClassDetails } from '../../utils/endpoints/get';
+import { studentColumns } from '../../utils/tableSource/studentsColumns';
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 
 import GenericTable from '../../components/shared/table/Table';
+import { toast } from "react-toastify";
 
 
 const ViewStudents = () => {
@@ -25,6 +26,12 @@ const ViewStudents = () => {
           const response = await axiosInterceptor.get(getClassDetails(sclass));
           setStuData(response.data.data);
         } catch (error) {
+          toast.error(
+            <div>
+              <strong>Error fetching students data</strong>
+              <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+            </div>
+          );
           console.error("Error fetching student data:", error);
         }
       }

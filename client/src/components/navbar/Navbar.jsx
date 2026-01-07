@@ -7,14 +7,15 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useState, useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
-import { clearNotifications } from "../../config/store/slices/notificationSlice";
-import { clearAdmin } from '../../config/store/slices/adminSlice';
-import { clearFaculty } from '../../config/store/slices/facultySlice';
-import { clearStudent } from "../../config/store/slices/studentSlice";
-import { clearSchool } from '../../config/store/slices/schoolSlice';
-import { logoutUser } from "../../config/store/slices/authSlice"
-import { DarkModeContext } from "../../config/context/darkModeContext";
-import { profile_url, roles } from '../../config/utils/constants';
+import { clearNotifications } from "../../utils/store/slices/notificationSlice";
+import { clearAdmin } from '../../utils/store/slices/adminSlice';
+import { clearFaculty } from '../../utils/store/slices/facultySlice';
+import { clearStudent } from "../../utils/store/slices/studentSlice";
+import { clearSchool } from '../../utils/store/slices/schoolSlice';
+import { logoutUser } from "../../utils/store/slices/authSlice"
+import { DarkModeContext } from "../../utils/context/darkModeContext";
+import { profile_url } from '../../utils/shared/constants';
+import { checkAdmin, toTitleCase } from '../../utils/shared/commons';
 
 import NotificationsDropdown from './notifications/NotificationsDropdown';
 
@@ -28,6 +29,7 @@ const Navbar = () => {
     const { user } = useSelector(state => state.auth);
 
     const dispatch = useDispatch();
+    const { info } = useSelector(state => state.school);
 
     const { list = [] } = useSelector(
         state => state.notifications
@@ -75,18 +77,6 @@ const Navbar = () => {
     }, [showNotifications]);
 
 
-    const { info } = useSelector(state => state.school);
-
-    // Helper function to convert string to Title Case
-    function toTitleCase(str) {
-        if (!str) return '';
-        return str
-            .toLowerCase()
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-    }
-
     return (
         <div className='navbar-container'>
             <div className="navbar-content">
@@ -100,7 +90,7 @@ const Navbar = () => {
                 </div>
                 <div className="right-navbar-container">
                     <div className="profile">
-                        {user.role === roles.admin ? ( <img src={profile_url} alt="" /> ) : ( <img src={user.profilePicture} alt="" />)}
+                        {checkAdmin(user.role) ? ( <img src={profile_url} alt="" /> ) : ( <img src={user.profilePicture} alt="" />)}
                     </div>
                     <h3 className="username">{user.username}</h3>
                     <div className="notifications-wrapper" ref={dropdownRef}>

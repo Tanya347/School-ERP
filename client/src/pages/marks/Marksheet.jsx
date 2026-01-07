@@ -2,9 +2,9 @@ import './marksheet.scss'
 
 import { useSelector } from "react-redux";
 
-import { getSingleData } from '../../config/endpoints/get';
-import useFetch from '../../config/service/useFetch';
-import { marksColumns, schoolsConst } from "../../config/utils/constants";
+import { getSingleData } from '../../utils/endpoints/get';
+import useFetch from '../../utils/service/useFetch';
+import { marksColumns, schoolsConst } from "../../utils/shared/constants";
 
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';

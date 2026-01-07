@@ -2,11 +2,12 @@ import './eventsList.scss'
 
 import { useEffect, useState } from "react";
 
-import { getDatatableURL } from "../../config/endpoints/get"
-import useFetch from "../../config/service/useFetch";
+import { getDatatableURL } from "../../utils/endpoints/get"
+import useFetch from "../../utils/service/useFetch";
 
 import Loader from "../../components/shared/loader/Loader";
 import EventModal from "../../components/eventModal/EventModal";
+import { eventPicture } from '../../utils/shared/constants';
 
 const EventsList = ({type}) => {
   
@@ -47,7 +48,7 @@ const EventsList = ({type}) => {
           {list?.map((item, i) => (
             <div className="card" key={item._id}>
               <div class="content">
-                {<img id="post-image" src={item.poster? item.poster : "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"} alt="" />}
+                {<img id="post-image" src={item.poster? item.poster : eventPicture} alt="" />}
                 <h4>{item.name}</h4>
                 <span className={`event-tag ${getEventStatus(item.startDate, item.endDate).toLowerCase()}`}>
                   {getEventStatus(item.startDate, item.endDate)}

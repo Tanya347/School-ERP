@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
-import { PIE_CHART_COLORS } from "../../../config/utils/constants"
+import { PIE_CHART_COLORS } from "../../../utils/shared/constants"
 
 export const MyPieChart = ({entryCounts, showLegend}) => {
     const data = Object.entries(entryCounts).map(([name, value]) => ({

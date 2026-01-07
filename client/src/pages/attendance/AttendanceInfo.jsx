@@ -15,12 +15,13 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { getAttendanceDates, getLectureCount } from "../../config/endpoints/get"
-import { getClearClassURL } from "../../config/endpoints/delete";
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import { successMsg, dateTimeFormat, locales } from "../../config/utils/constants";
+import { getAttendanceDates, getLectureCount } from "../../utils/endpoints/get"
+import { getClearClassURL } from "../../utils/endpoints/delete";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { dateTimeFormat, locales } from "../../utils/shared/constants";
+import { checkSuccess } from "../../utils/shared/commons";
 
-import CustomToolbar from "../../config/utils/CustomToolbar"
+import CustomToolbar from "../../utils/shared/CustomToolbar"
 import AttendanceTable from "../../components/attendanceTable/AttendanceTable";
 
 const localizer = dateFnsLocalizer({
@@ -65,6 +66,12 @@ const AttendanceInfo = () => {
                     const response = await axiosInterceptor.get(`${getLectureCount}/${sclass}`)
                     setLectures(response.data.data);
                 } catch(error) {
+                    toast.error(
+                        <div>
+                            <strong>Error fetching no. of lectures</strong>
+                            <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+                        </div>
+                    );
                     console.log("Error fetching no. of lectures", error);
                 }
             }
@@ -84,6 +91,12 @@ const AttendanceInfo = () => {
                     })
                     setDates(event)
                 } catch(error) {
+                    toast.error(
+                        <div>
+                            <strong>Error fetching attendance dates</strong>
+                            <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+                        </div>
+                    );
                     console.log("Error fetching attendance dates", error);
                 }
             }
@@ -103,7 +116,7 @@ const AttendanceInfo = () => {
     // this deletes data from the database
         try {
             const res = await axiosInterceptor.delete(getClearClassURL(sclass));
-            if(res.data.status === successMsg) {
+            if(checkSuccess(res.data.status)) {
                 toast.success("Attendance has been cleared!");
                 setRefreshTrigger(prev => prev + 1);
             }

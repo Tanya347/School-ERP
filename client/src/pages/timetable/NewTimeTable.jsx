@@ -6,12 +6,12 @@ import { useState, useEffect } from 'react';
 import {toast} from "react-toastify"
 import { useSelector } from "react-redux"
 
-import { getClassCourses, getTimeTableURL } from "../../config/endpoints/get";
-import { getClearTimetableForClass } from '../../config/endpoints/delete';
-import { periodTimes, days, periods } from '../../config/utils/commons';
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import { bulkCreateTimetable } from "../../config/endpoints/post";
-import { coursesConst, successMsg } from "../../config/utils/constants";
+import { getClassCourses, getTimeTableURL } from "../../utils/endpoints/get";
+import { getClearTimetableForClass } from '../../utils/endpoints/delete';
+import { periodTimes, days, periods, checkSuccess } from '../../utils/shared/commons';
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { bulkCreateTimetable } from "../../utils/endpoints/post";
+import { coursesConst } from "../../utils/shared/constants";
 
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
 import Loader from '../../components/shared/loader/Loader';
@@ -52,6 +52,12 @@ const NewTimeTable = () => {
           });
           setExistingSlots(mapped);
         } catch (error) {
+          toast.error(
+            <div>
+              <strong>Error fetching timetable data</strong>
+              <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+            </div>
+          );
           console.error(error);
         }
       }
@@ -79,7 +85,7 @@ const NewTimeTable = () => {
       try {
         const res = await axiosInterceptor.delete(getClearTimetableForClass(selectedClass));
         
-        if(res.data.status === successMsg) {
+        if(checkSuccess(res.data.status)) {
           setClearedSlots({});
           setSlots({});
           setExistingSlots({});
@@ -87,7 +93,7 @@ const NewTimeTable = () => {
         }
       } catch (error) {
         console.error(error);
-        alert("Failed to clear slots.");
+        toast.error("Failed to clear slots.");
       } finally {
         setShowConfirm(false);
         setClearloading(false);
@@ -130,7 +136,7 @@ const NewTimeTable = () => {
         { slots: slotData }
       );
 
-      if (res.data.status === successMsg) {
+      if (checkSuccess(res.data.status)) {
         toast.success("Timetable created successfully!");
         window.location.reload(); // Reload to reflect changes
       }

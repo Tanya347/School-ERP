@@ -1,14 +1,14 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { createElement } from "../../config/service/usePost";
-import { postURLs } from "../../config/endpoints/post";
-import { validateTask } from "../../config/validators/task";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { successMsg, tasksConst } from "../../config/utils/constants";
+import { createElement } from "../../utils/service/usePost";
+import { postURLs } from "../../utils/endpoints/post";
+import { validateTask } from "../../utils/validators/task";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { tasksConst } from "../../utils/shared/constants";
 
 import Dropdown from "../../components/shared/dropdown/Dropdown";
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
@@ -42,7 +42,7 @@ const NewTask = ({ inputs, title }) => {
         ...info, deadline: deadline, author: user._id, 
       }
       const res = await createElement(newtask, postURLs(tasksConst, "normal"), "Task");
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate("/faculty/tasks")
       }
     } catch (err) {
@@ -70,7 +70,7 @@ const NewTask = ({ inputs, title }) => {
         </div>
         
         <div className="bottom">
-          <div className="right">
+          <div className="form-container">
             <form>
 
               <FormInputs

@@ -1,21 +1,25 @@
 import './facultyHome.scss'
 
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import useFetch from '../../config/service/useFetch';
-import { getSingleData } from '../../config/endpoints/get';
-import { facultiesConst, FACULTY_HOME_COLORS } from '../../config/utils/constants';
+import useFetch from '../../utils/service/useFetch';
+import { getSingleData } from '../../utils/endpoints/get';
+import { facultiesConst, FACULTY_HOME_COLORS } from '../../utils/shared/constants';
+import { facultyProfileFields } from '../../utils/shared/profileFieldConfigs';
 
 import EventCalender from '../../components/calender/Calender';
 import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
 import Lecture from '../../components/lecture/Lecture';
-import FacultyProfile from '../../components/profile/FacultyProfile';
 import Course from '../../components/course/Course';
+import ProfileHeader from '../../components/shared/profileHeader/ProfileHeader';
 
 const FacultyHome = () => {
   
   const { user } = useSelector(state => state.auth);
   const { data } = useFetch(getSingleData(user._id, facultiesConst))
+
+  const navigate = useNavigate();
 
   const classTeacherClass = data?.classesTaught?.find(
     (cls) => cls._id === data.classTeacherTo
@@ -55,7 +59,14 @@ const FacultyHome = () => {
           </div>
         </div>
         <div className="right-container">
-          <FacultyProfile data={data}/>
+          {/* <div className="profile-container"> */}
+            <ProfileHeader
+              image={data?.profilePicture}
+              title={data?.teachername}
+              fields={facultyProfileFields(data || {})}
+              onEdit={() => navigate(`/faculty/edit/${data?._id}`)}
+            />
+          {/* </div> */}
           <Lecture id={user?._id} type={user?.role}/>
         </div>
       </div>

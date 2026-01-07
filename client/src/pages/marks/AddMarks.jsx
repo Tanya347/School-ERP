@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-import { getMarksOfSubject, getStudentsOfClass } from "../../config/endpoints/get";
-import { addMarks } from "../../config/endpoints/put";
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { getMarksOfSubject, getStudentsOfClass } from "../../utils/endpoints/get";
+import { addMarks } from "../../utils/endpoints/put";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { checkSuccess } from "../../utils/shared/commons";
 
 import Loader from "../../components/shared/loader/Loader"
 import InforBanner from "../../components/shared/infoBanner/InforBanner";
@@ -32,6 +33,12 @@ const AddMarks = () => {
         const response = await axiosInterceptor.get(getStudentsOfClass(sclass));
         setStuData(response.data.data);
       } catch (error) {
+        toast.error(
+          <div>
+            <strong>Error fetching student data</strong>
+            <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+          </div>
+        );
         console.error("Error fetching student data:", error);
       }
     };
@@ -53,6 +60,12 @@ const AddMarks = () => {
 
         setMarksData(prefilledMarks);
       } catch (error) {
+        toast.error(
+          <div>
+            <strong>Error fetching marks data</strong>
+            <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
+          </div>
+        );
         console.error("Error fetching marks data:", error);
       }
     };
@@ -87,7 +100,7 @@ const AddMarks = () => {
         marksData: formattedMarksData,
       });
 
-      if (res.data.status === "success") {
+      if (checkSuccess(res.data.status)) {
         toast.success("Marks added successfully!");
         navigate("/faculty/marks");
       }

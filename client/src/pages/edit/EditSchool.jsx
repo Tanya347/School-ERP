@@ -1,18 +1,19 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { schoolInputs } from "../../config/formsource/schoolInputs"
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
-import { editElementWithPicture } from "../../config/service/usePut";
-import { putURLs } from "../../config/endpoints/put";
-import { schoolsConst, successMsg } from "../../config/utils/constants";
+import { schoolInputs } from "../../utils/formsource/schoolInputs"
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+import { editElementWithPicture } from "../../utils/service/usePut";
+import { putURLs } from "../../utils/endpoints/put";
+import { schoolsConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader"
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload";
+import { checkSuccess } from "../../utils/shared/commons";
 
 const EditSchool = ({title}) => {
 
@@ -40,7 +41,7 @@ const EditSchool = ({title}) => {
     setLoading(true)
     try {
       const res = await editElementWithPicture(file, info, "school", putURLs(schoolsConst, id));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate('/admin');
       }
     } catch(err) {
@@ -57,7 +58,7 @@ const EditSchool = ({title}) => {
           <h1>{title}</h1>
         </div>
         <div className="bottom">
-          <div className="right">
+          <div className="form-container">
             <FileUpload
               file={file}
               setFile={setFile}

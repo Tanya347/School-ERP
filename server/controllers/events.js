@@ -4,8 +4,9 @@ import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
-import { folderName, successMsg } from "../utils/constants.js";
 import cloudinary from "../utils/cloudinary.js";
+
+import { successMsg, folderName } from "../utils/constants.js";
 
 // Create a new event
 export const createEvent = catchAsync(async (req, res, next) => {
@@ -55,7 +56,7 @@ export const updateEvent = catchAsync(async (req, res, next) => {
   let cloud_id = null;
   const event = await Event.findById(req.params.id);
   if (!event) {
-    return next(new Error("Event not found"));
+    return next(new AppError('Event not found', 404));
   }
 
   if (req.file) {

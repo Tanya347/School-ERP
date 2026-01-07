@@ -1,16 +1,17 @@
 import "./attendanceTable.scss";
 
-import CancelIcon from "@mui/icons-material/Cancel";
 import { toast } from "react-toastify";
 
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import useFetch from "../../config/service/useFetch";
-
-import { getAttendanceStatusByDate } from "../../config/endpoints/get";
-import { getClearDayAttendance } from "../../config/endpoints/delete";
-import { successMsg, attendanceColumns } from "../../config/utils/constants";
-
+import Popup from "../shared/popup/Popup";
 import GenericTable from "../shared/table/Table";
+
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import useFetch from "../../utils/service/useFetch";
+
+import { getAttendanceStatusByDate } from "../../utils/endpoints/get";
+import { getClearDayAttendance } from "../../utils/endpoints/delete";
+import { attendanceColumns } from "../../utils/shared/constants";
+import { checkSuccess } from "../../utils/shared/commons";
 
 const AttendanceTable = ({ classid, date, setOpen, id, refreshTrigger }) => {
   const { data = [] } = useFetch(
@@ -23,7 +24,7 @@ const AttendanceTable = ({ classid, date, setOpen, id, refreshTrigger }) => {
         getClearDayAttendance(id)
       );
 
-      if (res.data.status === successMsg) {
+      if (checkSuccess(res.data.status)) {
         toast.success("Attendance has been cleared!");
         refreshTrigger((prev) => prev + 1);
       }
@@ -38,29 +39,28 @@ const AttendanceTable = ({ classid, date, setOpen, id, refreshTrigger }) => {
   };
 
   return (
-    <div className="attendance-modal">
-      <div className="att-container">
-        <CancelIcon
-          className="att-close"
-          onClick={() => setOpen(false)}
+    <Popup
+      title={`Attendance — ${date}`}
+      onClose={() => setOpen(false)}
+      customClass="attendance-modal"
+      content={
+        <GenericTable
+          columns={attendanceColumns}
+          rows={data}
+          rowKey="id"
+          customStyles={{
+            head: { backgroundColor: "#EEEEEE" },
+          }}
         />
-
-        <div className="attendance-status">
-          <GenericTable
-            columns={attendanceColumns}
-            rows={data}
-            rowKey="id"
-            customStyles={{
-              head: { backgroundColor: "#EEEEEE" },
-            }}
-          />
-        </div>
-
-        <div className="clear-button">
-          <button onClick={handleClear}>Clear Attendance</button>
-        </div>
-      </div>
-    </div>
+      }
+      actions={[
+        {
+          label: "Clear Attendance",
+          onClick: handleClear,
+          disabled: data.length === 0,
+        },
+      ]}
+    />
   );
 };
 

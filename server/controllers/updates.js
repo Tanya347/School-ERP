@@ -42,7 +42,7 @@ export const deleteUpdate = catchAsync(async (req, res, next) => {
 export const bulkDeleteUpdate = catchAsync(async (req, res, next) => {
     const { ids } = req.body;
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
-        return res.status(400).json({ message: "No IDs provided for deletion" });
+        return next(new AppError("No IDs provided for deletion", 400));
     }
     await Update.deleteMany({ _id: { $in: ids } });
     res.status(200).json({
@@ -68,7 +68,7 @@ export const getUpdates = catchAsync(async (req, res, next) => {
 
     if (facultyId) {
         const faculty = await Faculty.findById(facultyId).populate('classesTaught');
-        if (!faculty) return res.status(404).json({ message: "Faculty not found" });
+        if (!faculty) next(new AppError('Faculty not found', 404));
 
         const classesTaught = faculty.classesTaught.map(c => c._id);
 

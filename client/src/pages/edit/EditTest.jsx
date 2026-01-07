@@ -1,21 +1,22 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useSelector } from "react-redux";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
-import { putURLs } from "../../config/endpoints/put";
-import { editElement } from "../../config/service/usePut";
-import { testInputs } from "../../config/formsource/testInputs";
-import { validateTest } from "../../config/validators/test";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { testsConst, successMsg } from "../../config/utils/constants";
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+import { putURLs } from "../../utils/endpoints/put";
+import { editElement } from "../../utils/service/usePut";
+import { testInputs } from "../../utils/formsource/testInputs";
+import { validateTest } from "../../utils/validators/test";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { testsConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader"
 import FormInputs from "../../components/shared/formInputs/FormInputs"
+import Dropdown from "../../components/shared/dropdown/Dropdown";
 
 const EditTest = ({ title }) => {
   
@@ -61,7 +62,7 @@ const EditTest = ({ title }) => {
         info.subject = course
 
       const res = await editElement(info, putURLs(testsConst, id), "test")
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate("/faculty/tests")
       }
     } catch (err) {
@@ -83,7 +84,7 @@ const EditTest = ({ title }) => {
 
         {/* Form */}
         <div className="bottom">
-          <div className="right">
+          <div className="form-container">
             
             <form>
             
@@ -94,33 +95,21 @@ const EditTest = ({ title }) => {
               onChange={handleChange}
             />
 
-            <div className="form-input">
-                <label>Choose a Class</label>
-                <select
-                  onChange={(e) => setSclass(e.target.value)}
-                  id="classId">
-                    {
-                      classes && classes.length > 0 &&
-                      classes?.map((cl, index) => (
-                        <option key={index} value={cl._id} selected={info?.sclass?._id === cl._id}>{cl.name}</option>
-                        ))
-                      }
-                </select>
-              </div>
+              <Dropdown
+                title="Choose a Class"
+                options={classes}
+                value={sclass || info?.sclass?._id || ""}
+                onChange={(e) => setSclass(e.target.value)}
+              />
 
-              <div className="form-input">
-                <label>Choose a Course</label>
-                <select
-                  onChange={(e) => setCourse(e.target.value)}
-                  id="classId">
-                    {
-                      courses && courses.length > 0 &&
-                      courses?.map((cr, index) => (
-                        <option key={index} value={cr._id} selected={info?.subject?._id === cr._id}>{cr.name}</option>
-                        ))
-                      }
-                </select>
-              </div>
+
+              <Dropdown
+                title="Choose a Course"
+                options={courses}
+                value={course || info?.subject?._id || ""}
+                onChange={(e) => setCourse(e.target.value)}
+              />
+
 
               <div className="form-input">
 

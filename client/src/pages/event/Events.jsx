@@ -11,9 +11,9 @@ import { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { useSelector } from "react-redux";
 
-import useFetch from '../../config/service/useFetch';
-import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../config/endpoints/get';
-import { eventsConst, locales, tasksConst, testsConst } from "../../config/utils/constants";
+import useFetch from '../../utils/service/useFetch';
+import { getDatatableURL, getTaskCalenderURL, getTestCalenderURL } from '../../utils/endpoints/get';
+import { eventsConst, locales, tasksConst, testsConst } from "../../utils/shared/constants";
 
 import Modal from '../../components/shared/modal/Modal';
 import EventModal from '../../components/eventModal/EventModal';

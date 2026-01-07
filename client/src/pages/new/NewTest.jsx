@@ -1,14 +1,14 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { postURLs } from "../../config/endpoints/post";
-import { createElement } from "../../config/service/usePost";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { validateTest } from "../../config/validators/test";
-import { successMsg, testsConst } from "../../config/utils/constants";
+import { postURLs } from "../../utils/endpoints/post";
+import { createElement } from "../../utils/service/usePost";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { validateTest } from "../../utils/validators/test";
+import { testsConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
@@ -42,7 +42,7 @@ const NewTest = ({ inputs, title }) => {
           ...info, date: start, author: user._id
         }
         const res = await createElement(newtest, postURLs(testsConst, "normals"), "Test");
-        if(res.data.status === successMsg) {
+        if(checkSuccess(res.data.status)) {
           navigate("/faculty/tests");
         }
       } catch (error) {
@@ -69,7 +69,7 @@ const NewTest = ({ inputs, title }) => {
           <h1>{title}</h1>
         </div>
         <div className="top">
-          <div className="right">
+          <div className="form-container">
             <form>
 
               <FormInputs

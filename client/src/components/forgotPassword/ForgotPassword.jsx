@@ -1,51 +1,60 @@
-import '../shared/popup/popup.scss'
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-import CancelIcon from '@mui/icons-material/Cancel';
+import Popup from "../shared/popup/Popup";
 
-import { useState } from 'react'
-import { toast } from 'react-toastify';
-import { successMsg } from "../../config/utils/constants";
+import { forgotPaswordURL } from "../../utils/endpoints/post";
+import { somethingWentWrongMsg } from "../../utils/shared/constants";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { checkSuccess } from "../../utils/shared/commons";
 
-import { forgotPaswordURL } from '../../config/endpoints/post';
-import { somethingWentWrongMsg } from "../../config/utils/constants"
-import axiosInterceptor from '../../config/utils/axiosInterceptor';
+const ForgotPassword = ({ setOpen, type }) => {
+  const [email, setEmail] = useState("");
 
-const ForgotPassword = ({setOpen, type}) => {
-  
-  const [email, setEmail] = useState('');
-
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const handleGenerate = async () => {
     try {
-      const res = await axiosInterceptor.post(forgotPaswordURL(type), {email})
-      if(res.data.status === successMsg) {
-        toast.success("Reset password link sent to your email!")
+      const res = await axiosInterceptor.post(
+        forgotPaswordURL(type),
+        { email }
+      );
+
+      if (checkSuccess(res.data.status)) {
+        toast.success(
+          "Reset password link sent to your email!"
+        );
       }
-      setOpen(false)
+
+      setOpen(false);
     } catch (err) {
-      const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
-      toast.error(errorMessage);
-      return err;
+      toast.error(
+        err.response?.data?.message ||
+          somethingWentWrongMsg
+      );
     }
-  }
+  };
+
   return (
-    <div className='popup-modal'>
-      <div className="popup-container">
-        <CancelIcon
-          className='popup-close'
-          onClick={() => setOpen(false)}
-        />
-        <div className="popup-title">Please enter your email</div>
+    <Popup
+      title="Please enter your email"
+      onClose={() => setOpen(false)}
+      content={
         <input
-          className='popup-input'
+          className="popup-input"
           type="email"
-          placeholder='Enter email'
+          placeholder="Enter email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button onClick={handleClick} className='popup-button'>Generate Reset Link</button>
-      </div>
-    </div>
-  )
-}
+      }
+      actions={[
+        {
+          label: "Generate Reset Link",
+          onClick: handleGenerate,
+          disabled: !email,
+        },
+      ]}
+    />
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;

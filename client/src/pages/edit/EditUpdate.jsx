@@ -1,18 +1,18 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
-import { selectAvailableClasses } from "../../config/store/selectors/classSelectors";
-import { putURLs } from "../../config/endpoints/put";
-import { editElement } from "../../config/service/usePut";
-import { updateInputs } from "../../config/formsource/updateInputs";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { validateUpdate} from "../../config/validators/update";
-import { noticeTypes, successMsg, updatesConst } from "../../config/utils/constants";
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+import { selectAvailableClasses } from "../../utils/store/selectors/classSelectors";
+import { putURLs } from "../../utils/endpoints/put";
+import { editElement } from "../../utils/service/usePut";
+import { updateInputs } from "../../utils/formsource/updateInputs";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { validateUpdate} from "../../utils/validators/update";
+import { noticeTypes, updatesConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
@@ -66,7 +66,7 @@ const EditUpdate = ({ title }) => {
 
       const res = await editElement(info, putURLs("updates", id), "update");
 
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate(`/${user.role}/updates`)
       }
     } catch (err) {
@@ -87,7 +87,7 @@ const EditUpdate = ({ title }) => {
               <h1>{title}</h1>
             </div>
             <div className="bottom">
-              <div className="right">
+              <div className="form-container">
                 <form>
 
                   <FormInputs

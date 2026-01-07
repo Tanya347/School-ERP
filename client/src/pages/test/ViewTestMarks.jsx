@@ -3,13 +3,14 @@ import "./viewTestMarks.scss"
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 
-import useFetch from '../../config/service/useFetch';
-import { getSingleData, getStudentsOfClass } from '../../config/endpoints/get';
-import { formatDate } from '../../config/utils/commons';
-import { clearTestMarks } from "../../config/endpoints/delete";
-import { addTestMarks } from "../../config/endpoints/put";
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
-import { testsConst } from "../../config/utils/constants";
+import useFetch from '../../utils/service/useFetch';
+import { getSingleData, getStudentsOfClass } from '../../utils/endpoints/get';
+import { formatDate } from '../../utils/shared/commons';
+import { clearTestMarks } from "../../utils/endpoints/delete";
+import { addTestMarks } from "../../utils/endpoints/put";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { testsConst } from "../../utils/shared/constants";
+import { toast } from "react-toastify";
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState({});
@@ -53,6 +54,10 @@ const ViewTestMarks = () => {
       await axiosInterceptor.put(addTestMarks, { marksData: marksArray });
       window.location.reload();
     } catch (error) {
+      const errorMessage =
+          error.response?.data?.message ||
+          "Failed to add test marks";
+      toast.error(errorMessage);
       console.error("Error submitting marks:", error);
     }
   };
@@ -63,6 +68,10 @@ const ViewTestMarks = () => {
       setMarksData({})
       window.location.reload();
     } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to clear marks. Please try again.";
+      toast.error(errorMessage);
       console.error("Error clearing marks:", error);
     }
   };

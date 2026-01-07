@@ -1,17 +1,17 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 
-import useFetch from "../../config/service/useFetch";
-import { putURLs } from "../../config/endpoints/put";
-import { getSingleData } from "../../config/endpoints/get";
-import { formatTime } from "../../config/utils/commons";
-import { editElementWithPicture } from "../../config/service/usePut";
-import { validateEvent } from "../../config/validators/event";
-import { handleChange as commonHandleChange} from "../../config/utils/commons"
-import { eventsConst, successMsg } from "../../config/utils/constants";
+import useFetch from "../../utils/service/useFetch";
+import { putURLs } from "../../utils/endpoints/put";
+import { getSingleData } from "../../utils/endpoints/get";
+import { checkSuccess, formatTime } from "../../utils/shared/commons";
+import { editElementWithPicture } from "../../utils/service/usePut";
+import { validateEvent } from "../../utils/validators/event";
+import { handleChange as commonHandleChange} from "../../utils/shared/commons"
+import { eventsConst } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
@@ -59,7 +59,7 @@ const EditEvent = ({ inputs, title }) => {
                 endDate: end
             }
             const res = await editElementWithPicture(file, newInfo, "event", putURLs("events", id));
-            if(res.data.status === successMsg) {
+            if(checkSuccess(res.data.status)) {
                 navigate('/admin/events');
             }
         } catch(err) {
@@ -80,7 +80,7 @@ const EditEvent = ({ inputs, title }) => {
                         <h1>{title}</h1>
                     </div>
                     <div className="bottom">
-                        <div className="right">
+                        <div className="form-container">
                         <FileUpload
                             file={file}
                             setFile={setFile}

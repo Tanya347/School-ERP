@@ -5,9 +5,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import useFetch from '../../config/service/useFetch'
-import { getClassDetails } from '../../config/endpoints/get'
-import { studentColumns } from '../../config/tableSource/studentsColumns'
+import useFetch from '../../utils/service/useFetch'
+import { getClassDetails } from '../../utils/endpoints/get'
+import { studentColumns } from '../../utils/tableSource/studentsColumns'
 
 import GenericTable from '../../components/shared/table/Table'
 import Course from '../../components/course/Course'

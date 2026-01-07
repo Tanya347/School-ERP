@@ -125,7 +125,7 @@ export const getMarksOfAllStudents = catchAsync(async (req, res, next) => {
 
   const test = await Test.findById(testid).populate('marks.student_id', 'name enroll');
   if (!test) {
-  return res.status(404).json({ message: 'Test not found' });
+    return next(new AppError('Test not found', 404));
   }
 
   const studentsInClass = await Student.find({ class: test.sclass }).select('name enroll');
@@ -155,12 +155,12 @@ export const getMarksOfOneStudent = catchAsync(async (req, res, next) => {
 
   const test = await Test.findById(testid);
   if (!test) {
-    return res.status(404).json({ message: 'Test not found' });
+    return next(new AppError('Test not found', 404));
   }
 
   const student = await Student.findById(studentid).select('name enroll');
   if (!student) {
-    return res.status(404).json({ message: 'Student not found' });
+    return next(new AppError('Student not found', 404));
   }
 
   const studentMarks = test.marks.find(mark =>
@@ -187,7 +187,7 @@ export const clearMarksOfTest = catchAsync(async (req, res, next) => {
 
   const test = await Test.findById(testid);
   if (!test) {
-    return res.status(404).json({ message: 'Test not found' });
+    return next(new AppError('Test not found', 404));
   }
 
   // Clear the marks array
@@ -207,7 +207,7 @@ export const completeTest = catchAsync(async (req, res, next) => {
 
   const test = await Test.findById(testid);
   if (!test) {
-    return res.status(404).json({ message: 'Test not found' });
+    return next(new AppError('Test not found', 404));
   }
 
   // Update the state of the test to 'completed'
@@ -228,7 +228,7 @@ export const cancelTest = catchAsync(async (req, res, next) => {
 
   const test = await Test.findById(testid);
   if (!test) {
-    return res.status(404).json({ message: 'Test not found' });
+    return next(new AppError('Test not found', 404))
   }
 
   // Update the state of the test to 'canceled'

@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from "react-redux"
 
-import { getClassExamDates } from '../../config/endpoints/get';
-import axiosInterceptor from '../../config/utils/axiosInterceptor';
-import { successMsg } from "../../config/utils/constants";
+import { getClassExamDates } from '../../utils/endpoints/get';
+import axiosInterceptor from '../../utils/shared/axiosInterceptor';
+import { checkSuccess } from '../../utils/shared/commons';
 
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import ConfirmPopup from '../../components/shared/confirmationPopup/ConfirmatinPopup';
@@ -42,7 +42,7 @@ const AddExamDates = () => {
           getClassExamDates(selectedClass)
         );
 
-        if (examRes.data.status === successMsg) {
+        if (checkSuccess(examRes.data.status)) {
           const examList = examRes.data.data.examDates || [];
 
           setCourses(examList);
@@ -57,7 +57,12 @@ const AddExamDates = () => {
           setExamDates(initialExamDates);
         }
       } catch (err) {
-        toast.error("Failed to fetch exam dates");
+        toast.error(
+          <div>
+            <strong>Failed to fetch exam dates</strong>
+            <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
+          </div>
+        );
         throw(err)
       }
     };
@@ -83,7 +88,7 @@ const AddExamDates = () => {
         exams,
       });
 
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         toast.success("Dates added successfully");
       }
     } catch (err) {
@@ -102,7 +107,7 @@ const AddExamDates = () => {
       setLoading(true);
       try {
         const res = await axiosInterceptor.delete(clearExamDates(selectedClass));
-        if(res.data.status === successMsg) {
+        if(checkSuccess(res.data.status)) {
           setExamDates({});
           toast.success("Exam dates cleared successfully");
         }

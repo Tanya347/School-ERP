@@ -2,18 +2,20 @@ import "./studentHome.scss"
 
 import { CircularProgressbar } from "react-circular-progressbar";
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { getSingleData, getStudentAttendance } from "../../config/endpoints/get"
-import useFetch from "../../config/service/useFetch"
-import axiosInterceptor from "../../config/utils/axiosInterceptor";
+import { getSingleData, getStudentAttendance } from "../../utils/endpoints/get"
+import useFetch from "../../utils/service/useFetch"
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo"
 import EventCalender from "../../components/calender/Calender"
 import Lecture from "../../components/lecture/Lecture"
-import StudentProfile from "../../components/profile/StudentProfile"
 import Course from "../../components/course/Course"
 import Loader from "../../components/shared/loader/Loader"
+import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
+import { studentProfileFields } from "../../utils/shared/profileFieldConfigs";
 
 const StudentHome = () => {
 
@@ -22,6 +24,8 @@ const StudentHome = () => {
   const { user } = useSelector(state => state.auth);
   const { data, loading } = useFetch(getSingleData(user._id, "students"))
  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchAttendance = async () => {
       if(data?.classInfo?._id) {
@@ -77,7 +81,14 @@ const StudentHome = () => {
           </div>
         </div>
          <div className="right-container">
-          <StudentProfile data={data}/>
+          {/* <div className="profile-container"> */}
+            <ProfileHeader
+              image={data.profilePicture}
+              title={data.name}
+              fields={studentProfileFields(data)}
+              onEdit={() => navigate(`/student/edit/${data._id}`)}
+            />
+          {/* </div> */}
           <Lecture id={user?.class} type={user?.role} />
         </div>
       </div>

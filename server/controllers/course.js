@@ -4,8 +4,9 @@ import Class from "../models/Class.js";
 import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import { folderName, successMsg } from "../utils/constants.js";
 import cloudinary from "../utils/cloudinary.js";
+
+import { successMsg, folderName } from "../utils/constants.js";
 
 // Create a new course and add it to the class
 export const createCourse = catchAsync(async (req, res, next) => {
@@ -61,7 +62,7 @@ export const updateCourse = catchAsync(async (req, res, next) => {
 export const deleteCourse = catchAsync(async (req, res, next) => {
   const course = await Course.findById(req.params.id);
   if (!course) {
-    return res.status(404).json({ message: "Course not found" });
+    return next(new AppError('Course not found', 404));
   }
 
   // Remove course from the class's subjects array
@@ -107,7 +108,7 @@ export const setExamDatesForClass = catchAsync(async (req, res, next) => {
   const { classId, exams } = req.body;
 
   if (!classId || !Array.isArray(exams)) {
-    return res.status(400).json({ message: 'classId and exams array are required' });
+    return next(new AppError('classId and exams array are required', 404))
   }
 
   // Optional: Validate all exam entries
@@ -137,13 +138,13 @@ export const clearExamDatesForClass = catchAsync(async (req, res, next) => {
   const { classId } = req.params;
 
   if (!classId) {
-    return res.status(400).json({ message: "classId is required" });
+    return next(new AppError('classId parameter is required', 404));
   }
 
   // Get all course IDs for the class
   const classDoc = await Class.findById(classId).select('subjects');
   if (!classDoc) {
-    return res.status(404).json({ message: "Class not found" });
+    return next(new AppError('Class not found', 404));
   }
 
   const courseIds = classDoc.subjects;
@@ -169,11 +170,7 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
     .populate('teacher', 'teachername');
 
   if (!courses || courses.length === 0) {
-    return res.status(404).json({
-      message: 'No courses found for this class',
-      data: [],
-      allExamsPlanned: false
-    });
+    return next(new AppError('No courses found for the specified class', 404));
   }
 
   const examDates = courses.map(course => ({

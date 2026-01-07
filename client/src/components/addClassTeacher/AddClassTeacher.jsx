@@ -1,51 +1,57 @@
-import '../shared/popup/popup.scss'
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-import CancelIcon from '@mui/icons-material/Cancel';
+import Popup from "../shared/popup/Popup";
+import Dropdown from "../shared/dropdown/Dropdown";
 
-import { useState } from 'react'
-import { toast } from 'react-toastify';
+import { addClassTeacher } from "../../utils/endpoints/put";
+import { somethingWentWrongMsg } from "../../utils/shared/constants";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import { checkSuccess } from "../../utils/shared/commons";
 
-import { addClassTeacher } from '../../config/endpoints/put';
-import { successMsg, somethingWentWrongMsg } from "../../config/utils/constants"
-import axiosInterceptor from '../../config/utils/axiosInterceptor';
+const AddClassTeacher = ({ sclass, teacherList, setOpen }) => {
+  const [teacher, setTeacher] = useState("");
 
-import Dropdown from '../shared/dropdown/Dropdown';
-
-const AddClassTeacher = ({sclass, teacherList, setOpen}) => {
-  
-  const [teacher, setTeacher] = useState('');
-
-  const handleClick = async(e) => {
-    e.preventDefault();
+  const handleAdd = async () => {
     try {
-      const res = await axiosInterceptor.put(addClassTeacher(sclass), {teacher})
-      if(res.data.status === successMsg) {
+      const res = await axiosInterceptor.put(
+        addClassTeacher(sclass),
+        { teacher }
+      );
+
+      if (checkSuccess(res.data.status)) {
         window.location.reload();
       }
-      setOpen(false)
-    } catch(err) {
-      const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
-      toast.error(errorMessage);
-      return err;
-    }
-  }
-  
-  return (
-    <div className='popup-modal'>
-      <div className="popup-container">
-        <CancelIcon
-          className='popup-close'
-          onClick={() => setOpen(false)}
-        />
-        <Dropdown
-            title="Select Teacher"
-            value={teacher}
-            options={teacherList}
-            onChange={(e) => setTeacher(e.target.value)} />
-        <button onClick={handleClick} className='popup-button'>Add Class Teacher</button>
-      </div>
-    </div>
-  )
-}
 
-export default AddClassTeacher
+      setOpen(false);
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || somethingWentWrongMsg
+      );
+    }
+  };
+
+  return (
+    <Popup
+      title="Add Class Teacher"
+      onClose={() => setOpen(false)}
+      content={
+        <Dropdown
+          title="Select Teacher"
+          value={teacher}
+          options={teacherList}
+          onChange={(e) => setTeacher(e.target.value)}
+        />
+      }
+      actions={[
+        {
+          label: "Add Class Teacher",
+          onClick: handleAdd,
+          disabled: !teacher,
+        },
+      ]}
+    />
+  );
+};
+
+export default AddClassTeacher;

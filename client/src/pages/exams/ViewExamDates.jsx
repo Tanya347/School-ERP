@@ -2,15 +2,17 @@ import './viewExamDates.scss'
 
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify"
 
-import { getClassExamDates, getSingleData } from '../../config/endpoints/get';
-import useFetch from '../../config/service/useFetch';
-import axiosInterceptor from '../../config/utils/axiosInterceptor';
+import { getClassExamDates, getSingleData } from '../../utils/endpoints/get';
+import useFetch from '../../utils/service/useFetch';
+import axiosInterceptor from '../../utils/shared/axiosInterceptor';
+import { examColumns } from '../../utils/shared/constants';
+import { checkSuccess } from '../../utils/shared/commons';
 
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"
-import { successMsg } from '../../config/utils/constants';
 
 const ViewExamDates = () => {
 
@@ -24,10 +26,16 @@ const ViewExamDates = () => {
       if(user) {
         try {
           const response = await axiosInterceptor.get(getClassExamDates(user?.class));
-          if(response.data.status === successMsg) {
+          if(checkSuccess(response.data.status)) {
             setData(response.data.data);
           }
         } catch (err) {
+          toast.error(
+            <div>
+              <strong>Failed to fetch exam dates</strong>
+              <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
+            </div>
+          );
           console.error(err);
         }
       }
@@ -35,24 +43,12 @@ const ViewExamDates = () => {
     fetchData();
   }, [user]);
 
-  const columns = [
-    { field: "name", label: "Subject" },
-    { field: "code", label: "Code" },
-    { field: "teacherName", label: "Teacher" },
-    {
-      field: "examDate",
-      label: "Exam Date",
-      render: (value) =>
-        value ? new Date(value).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "",
-    },
-  ];
-
   return (
     <div className='view-exam-dates-container'>
       <h1 className="list-title">Exam Dates</h1>
       <div className="exams-date-containers">
         <GenericTable
-          columns={columns}
+          columns={examColumns}
           rows={data?.examDates || []}
           rowKey="_id"
         />

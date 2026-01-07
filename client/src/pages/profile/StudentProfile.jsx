@@ -1,14 +1,17 @@
-import "../../config/style/profile.scss";
+import "./profile.scss";
 import 'react-circular-progressbar/dist/styles.css';
 
 import { useLocation, useNavigate } from "react-router-dom";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+
+import { studentsConst } from "../../utils/shared/constants";
+import { studentProfileFields } from "../../utils/shared/profileFieldConfigs";
 
 import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
-import { profile_url, studentsConst } from "../../config/utils/constants";
+import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
 
 const StudentProfile = ({ type }) => {
   
@@ -30,77 +33,16 @@ const StudentProfile = ({ type }) => {
       ) : (
         <>
           <div className="profile-top">
-            <div className="profile-left">
-              <img
-                src={data.profilePicture || profile_url}
-                alt=""
-                className="item-img"
-              />
+            
+            <ProfileHeader
+              image={data.profilePicture}
+              title={data.name}
+              fields={studentProfileFields(data)}
+              onEdit={() =>
+                navigate(`${type === "Admin" ? "/admin" : ""}/students/edit/${id}`)
+              }
+            />
 
-              <div className="details">
-                {/* Name */}
-                <h1 className="item-title">{data.name}</h1>
-
-                {/* ID */}
-                <div className="detail-item">
-                  <span className="item-key">Enrollment Number:</span>
-                  <span className="item-value">{data?.enroll}</span>
-                </div>
-
-                {/* Username */}
-                <div className="detail-item">
-                  <span className="item-key">Username:</span>
-                  <span className="item-value">{data?.username}</span>
-                </div>
-
-                {/* Email */}
-                <div className="detail-item">
-                  <span className="item-key">Email:</span>
-                  <span className="item-value">{data?.email}</span>
-                </div>
-
-                {/* Phone Number */}
-                <div className="detail-item">
-                  <span className="item-key">Phone Number:</span>
-                  <span className="item-value">{data?.studentPhone}</span>
-                </div>
-
-                {/* Address */}
-                <div className="detail-item">
-                  <span className="item-key">Address:</span>
-                  <span className="item-value">{data?.studentAddress}</span>
-                </div>
-
-                {/* Department */}
-                <div className="detail-item">
-                  <span className="item-key">Class:</span>
-                  <span className="item-value">{data?.classname}</span>
-                </div>
-
-                {/* Gender */}
-                <div className="detail-item">
-                  <span className="item-key">Gender:</span>
-                  <span className="item-value">{data?.gender}</span>
-                </div>
-
-                {/* Date of Birth */}
-                <div className="detail-item">
-                  <span className="item-key">Date of Birth:</span>
-                  <span className="item-value">{data?.dob}</span>
-                </div>
-
-                <button
-                  className="edit-button"
-                  onClick={() =>
-                    navigate(
-                      `${type === "Admin" ? "/admin" : ""}/students/edit/${id}`
-                    )
-                  }
-                >
-                  Edit Profile
-                </button>
-              </div>
-            </div>
             <div className="profile-right">
               Future scope: show attendance chart, marks history etc.
             </div>

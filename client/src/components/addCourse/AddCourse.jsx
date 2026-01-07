@@ -6,15 +6,16 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {toast} from "react-toastify"
 
-import useFetch from '../../config/service/useFetch.js';
-import { getCourseClasses, getFacultyData } from '../../config/endpoints/get.js';
-import { editCourse } from '../../config/endpoints/patch.js';
-import axiosInterceptor from '../../config/utils/axiosInterceptor.js';
-import { successMsg, somethingWentWrongMsg, coursesConst } from "../../config/utils/constants.js"
+import useFetch from '../../utils/service/useFetch.js';
+import { getCourseClasses, getFacultyData } from '../../utils/endpoints/get.js';
+import { editCourse } from '../../utils/endpoints/patch.js';
+import axiosInterceptor from '../../utils/shared/axiosInterceptor.js';
+import { somethingWentWrongMsg, coursesConst } from "../../utils/shared/constants.js"
 
 import Dropdown from '../shared/dropdown/Dropdown.jsx';
 import Popup from '../shared/popup/Popup.jsx';
 import Tooltip from "../shared/tooltip/Tooltip.jsx";
+import { checkSuccess } from '../../utils/shared/commons.js';
 
 const AddCourse = ({ setOpen, facId }) => {
 
@@ -33,7 +34,7 @@ const AddCourse = ({ setOpen, facId }) => {
         try {
             const res = await axiosInterceptor.patch(editCourse(facId, sclass, course, "addCourse"))
 
-            if(res.data.status === successMsg) {
+            if(checkSuccess(res.data.status)) {
                 toast.success("Course assigned to faculty successfully!");
                 navigate(`/admin/faculties/single/${facId}`)
             }
@@ -52,7 +53,12 @@ const AddCourse = ({ setOpen, facId }) => {
             const res = await axiosInterceptor.get(getFacultyData(facId, coursesConst));
             setAssignedCourses(res.data.data);
         } catch (err) {
-            toast.error("Failed to fetch assigned courses");
+            toast.error(
+                <div>
+                    <strong>Error in fetching assigned courses</strong>
+                    <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
+                </div>
+            );
         } finally {
             setLoadingCourses(false);
         }

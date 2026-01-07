@@ -4,8 +4,9 @@ import fs from "fs";
 
 import { getActiveSession } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
-import { folderName, successMsg } from "../utils/constants.js";
 import cloudinary from "../utils/cloudinary.js";
+
+import { successMsg, folderName } from "../utils/constants.js";
 
 export const createMaterial = catchAsync(async (req, res, next) => {
 
@@ -32,10 +33,7 @@ export const createMaterial = catchAsync(async (req, res, next) => {
   } else if (req.user.role === 'faculty') {
     authorModel = 'Faculty';
   } else {
-    return res.status(400).json({
-    status: 'fail',
-    message: 'Invalid user role for author'
-    });
+    return next(new AppError('Invalid user role for author', 400))
   }
 
   const newMaterial = new Material({
@@ -82,10 +80,7 @@ export const editMaterial = catchAsync(async (req, res, next) => {
   const material = await Material.findById(req.params.id);
 
   if (!material) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Material not found'
-    });
+    return next(new AppError('Material not found', 404));
   }
 
   if (req.file) {
@@ -142,7 +137,7 @@ export const deleteMaterial = catchAsync(async (req, res, next) => {
 export const bulkDeleteMaterial = catchAsync(async (req, res, next) => {
     const { ids } = req.body;
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
-        return res.status(400).json({ message: "No IDs provided for deletion" });
+        return next(new AppError('No material IDs provided for deletion', 400));
     }
     const materials = await Material.find({ _id: { $in: ids } });
     for (const material of materials) {
@@ -162,10 +157,7 @@ export const getMaterial = catchAsync(async (req, res, next) => {
         .populate('classId', 'name');
 
     if (!material) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Material not found'
-        });
+        return next(new AppError('Material not found', 404));
     }
 
     res.status(200).json({

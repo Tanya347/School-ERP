@@ -4,10 +4,10 @@ import './calender.scss';
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 
-import useFetch from '../../config/service/useFetch';
-import { getDatatableURL } from '../../config/endpoints/get';
-import { isEventDate } from "../../config/utils/commons";
-import { eventsConst } from "../../config/utils/constants";
+import useFetch from '../../utils/service/useFetch';
+import { getDatatableURL } from '../../utils/endpoints/get';
+import { getTimeRange, isEventDate } from "../../utils/shared/commons";
+import { eventsConst } from "../../utils/shared/constants";
 
 const EventCalender = () => {
   
@@ -59,13 +59,7 @@ const EventCalender = () => {
             const start = new Date(event.startDate);
             const end = new Date(event.endDate);
 
-            const timeRange = `${start.toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })} - ${end.toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}`;
+            const timeRange = getTimeRange(start, end);
 
             return (
               <>

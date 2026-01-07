@@ -2,8 +2,8 @@ import './adminWidgets.scss';
 
 import { Link } from 'react-router-dom';
 
-import useFetch from '../../config/service/useFetch';
-import { getAllCount } from '../../config/endpoints/get';
+import useFetch from '../../utils/service/useFetch.js';
+import { getAllCount } from '../../utils/endpoints/get.js';
 
 import Loader from '../shared/loader/Loader';
 import { ADMIN_WIDGETS } from './adminwidgets.js';

@@ -1,13 +1,13 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { postURLs } from "../../config/endpoints/post";
-import { createElementWithPicture } from "../../config/service/usePost";
-import { validateEvent } from "../../config/validators/event";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { eventsConst, successMsg } from "../../config/utils/constants";
+import { postURLs } from "../../utils/endpoints/post";
+import { createElementWithPicture } from "../../utils/service/usePost";
+import { validateEvent } from "../../utils/validators/event";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { eventsConst } from "../../utils/shared/constants";
 
 import DatePickerComponent from "../../components/shared/datepicker/Datepicker";
 import Loader from "../../components/shared/loader/Loader";
@@ -41,7 +41,7 @@ const NewEvent = ({ inputs, title }) => {
         endDate: end
       }
       const res = await createElementWithPicture(file, newInfo, "event", postURLs(eventsConst, "normal"));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate("/admin/events")
       }
     } catch(err) {
@@ -72,13 +72,13 @@ const NewEvent = ({ inputs, title }) => {
             <h1>{title}</h1>
           </div>
             <div className="bottom">
-                <div className="right">
-              <FileUpload
-                file={file}
-                setFile={setFile}
-                label="Image"
-                iconType="outlined"
-              />
+                <div className="form-container">
+                    <FileUpload
+                      file={file}
+                      setFile={setFile}
+                      label="Image"
+                      iconType="outlined"
+                    />
                 <form>
 
                   <DatePickerComponent 

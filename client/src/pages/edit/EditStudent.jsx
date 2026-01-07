@@ -1,17 +1,17 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import useFetch from "../../config/service/useFetch";
-import { getSingleData } from "../../config/endpoints/get";
-import { putURLs } from "../../config/endpoints/put";
-import { editElementWithPicture } from "../../config/service/usePut";
-import { studentInputs } from "../../config/formsource/studentInputs";
-import { validateStudent } from "../../config/validators/student";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { genderTypes, roles, successMsg } from "../../config/utils/constants";
+import useFetch from "../../utils/service/useFetch";
+import { getSingleData } from "../../utils/endpoints/get";
+import { putURLs } from "../../utils/endpoints/put";
+import { editElementWithPicture } from "../../utils/service/usePut";
+import { studentInputs } from "../../utils/formsource/studentInputs";
+import { validateStudent } from "../../utils/validators/student";
+import { checkAdmin, checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { genderTypes } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
@@ -33,7 +33,7 @@ const EditUser = ({ title }) => {
   const classes = useSelector(state => state.admin.classes);
   const { user } = useSelector(state => state.auth);
   
-  if(user.role === roles.admin) 
+  if(checkAdmin(user.role)) 
     id = location.pathname.split("/")[4];
   else
     id = location.pathname.split("/")[3];
@@ -64,7 +64,7 @@ const EditUser = ({ title }) => {
         class: info.class
       }
       const res = await editElementWithPicture(file, newInfo, "student", putURLs("students", id));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate(`/admin/students/single/${id}`);
       }
     } catch(err) {
@@ -85,7 +85,7 @@ const EditUser = ({ title }) => {
               <h1>{title}</h1>
             </div>
             <div className="bottom">
-              <div className="right">
+              <div className="form-container">
               <FileUpload
                 file={file}
                 setFile={setFile}
@@ -113,7 +113,7 @@ const EditUser = ({ title }) => {
                     }}
                   />
 
-                  {user.role=== roles.admin && <Dropdown
+                  {checkAdmin(user.role) && <Dropdown
                     id="class"
                     title="Choose Class"
                     options={classes}

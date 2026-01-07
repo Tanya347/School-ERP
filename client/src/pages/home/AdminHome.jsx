@@ -6,11 +6,12 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
-import useFetch from "../../config/service/useFetch";
-import { schoolGenderCount } from "../../config/endpoints/get";
-import { postURLs } from "../../config/endpoints/post";
-import axiosInterceptor from "../../config/utils/axiosInterceptor.js";
-import { sessionsConst, successMsg } from "../../config/utils/constants";
+import useFetch from "../../utils/service/useFetch.js";
+import { schoolGenderCount } from "../../utils/endpoints/get.js";
+import { postURLs } from "../../utils/endpoints/post.js";
+import axiosInterceptor from "../../utils/shared/axiosInterceptor.js";
+import { sessionsConst } from "../../utils/shared/constants.js";
+import { checkSuccess } from "../../utils/shared/commons.js";
 
 import { MyPieChart } from "../../components/shared/graphs/PieChart";
 import SchoolInfo from "../../components/schoolInfo/SchoolInfo";
@@ -36,7 +37,7 @@ const AdminHome = () => {
       try {
         setLoading(true);
         const res = await axiosInterceptor.post(postURLs(sessionsConst, "normal"), {});
-        if(res.data.status === successMsg) {
+        if(checkSuccess(res.data.status)) {
           toast.success(`session started successfully!`);
         }
       } catch (err) {

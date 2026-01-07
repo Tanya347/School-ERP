@@ -1,14 +1,14 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux"
 
-import { createElementWithPicture } from "../../config/service/usePost";
-import { postURLs } from "../../config/endpoints/post";
-import { validateStudent } from "../../config/validators/student";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { genderTypes, successMsg } from "../../config/utils/constants";
+import { createElementWithPicture } from "../../utils/service/usePost";
+import { postURLs } from "../../utils/endpoints/post";
+import { validateStudent } from "../../utils/validators/student";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { genderTypes } from "../../utils/shared/constants";
 
 import Dropdown from "../../components/shared/dropdown/Dropdown";
 import Loader from "../../components/shared/loader/Loader";
@@ -37,7 +37,7 @@ const NewUser = ({ inputs, title }) => {
     
     try {
       const res = await createElementWithPicture(file, info, "student", postURLs("student", "register"));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate(`/admin/students/single/${res.data.data.user._id}`);
       }
     }
@@ -65,13 +65,13 @@ const NewUser = ({ inputs, title }) => {
         </div>
         <div className="bottom">
 
-          <div className="right">
+          <div className="form-container">
 
-          <FileUpload
-            file={file}
-            setFile={setFile}
-            label="Profile Picture"
-          />
+            <FileUpload
+              file={file}
+              setFile={setFile}
+              label="Profile Picture"
+            />
             <form>
 
             <Dropdown
@@ -84,7 +84,7 @@ const NewUser = ({ inputs, title }) => {
                 setGender(e.target.value);
               }}
             />
-
+              
               <FormInputs
                 inputs={inputs}
                 values={info}

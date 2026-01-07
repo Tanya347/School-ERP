@@ -2,9 +2,9 @@ import "./modal.scss"
 
 import CancelIcon from '@mui/icons-material/Cancel';
 
-import useFetch from "../../../config/service/useFetch"
-import { getModalURL } from "../../../config/endpoints/get";
-import { formatDate } from "../../../config/utils/commons";
+import useFetch from "../../../utils/service/useFetch"
+import { getModalURL } from "../../../utils/endpoints/get";
+import { formatDate } from "../../../utils/shared/commons";
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
 

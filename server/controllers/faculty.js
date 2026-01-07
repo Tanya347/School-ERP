@@ -47,7 +47,7 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
   const faculty = await Faculty.findById(req.params.id);
 
   if (!faculty) {
-    return res.status(404).json({ message: "Faculty not found" });
+    return next(new AppError('Faculty not found', 404));
   }
   if (req.file) {
     if (faculty.cloud_id) {

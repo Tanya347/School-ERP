@@ -1,13 +1,13 @@
-import "../../config/style/form.scss";
+import "../../utils/style/form.scss";
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { createElementWithPicture } from "../../config/service/usePost";
-import { postURLs } from "../../config/endpoints/post";
-import { validateFaculty } from "../../config/validators/faculty";
-import { handleChange as commonHandleChange } from "../../config/utils/commons";
-import { genderTypes, successMsg } from "../../config/utils/constants";
+import { createElementWithPicture } from "../../utils/service/usePost";
+import { postURLs } from "../../utils/endpoints/post";
+import { validateFaculty } from "../../utils/validators/faculty";
+import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
+import { genderTypes } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
@@ -33,7 +33,7 @@ const NewFaculty = ({ inputs, title }) => {
     setLoading(true);
     try {
       const res = await createElementWithPicture(file, info, "faculty", postURLs("faculty", "register"));
-      if(res.data.status === successMsg) {
+      if(checkSuccess(res.data.status)) {
         navigate(`/admin/faculties/single/${res.data.data.user._id}`);
       }
     }
@@ -60,13 +60,14 @@ const NewFaculty = ({ inputs, title }) => {
         </div>
         <div className="bottom">
 
-          <div className="right">
+          <div className="form-container">
 
-          <FileUpload
-            file={file}
-            setFile={setFile}
-            label="Profile Picture"
-          />
+
+            <FileUpload
+              file={file}
+              setFile={setFile}
+              label="Profile Picture"
+            />
             <form>
 
             <Dropdown

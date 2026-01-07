@@ -2,9 +2,9 @@ import './lecture.scss'
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-import useFetch from '../../config/service/useFetch';
-import { getLectures } from '../../config/endpoints/get';
-import { todayDay } from "../../config/utils/constants";
+import useFetch from '../../utils/service/useFetch';
+import { getLectures } from '../../utils/endpoints/get';
+import { todayDay } from "../../utils/shared/constants";
 
 const Lecture = ({id, type}) => {
 

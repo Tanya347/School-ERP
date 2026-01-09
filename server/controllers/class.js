@@ -142,11 +142,10 @@ export const getClasses = catchAsync(async (req, res, next) => {
 
 // Get all classes with subjects populated
 export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
-  const schoolId = req.user.schoolID;
-  let filter = { schoolID: schoolId };
-  const classes = await Class.find(filter).populate({
+  const classes = await Class.find().populate({
     path: 'subjects',
     model: 'Course',
+    match: { schoolID: req.user.schoolID },
   }).sort({classNumber: 1});
   res.status(200).json({
     data: classes,

@@ -15,10 +15,9 @@ const NotificationsDropdown = ({notifs, user}) => {
                                 {notifs.map((n, index) => (
                                         <div
                                                 key={index}
-                                                className={`notification-item ${n.read ? '' : 'unread'}`}
+                                                className='notification-item'
                                         >
-                                                <h4>{n.title}</h4>
-                                                <p>{n.description}</p>
+                                                <h4>{n.title}: <span>{n.desc.slice(0, 80)} ...</span></h4>
                                         </div>
                                 ))}
                                 </>

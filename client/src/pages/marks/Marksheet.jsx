@@ -2,20 +2,19 @@ import './marksheet.scss'
 
 import { useSelector } from "react-redux";
 
-import { getSingleData } from '../../utils/endpoints/get';
 import useFetch from '../../utils/service/useFetch';
-import { marksColumns, schoolsConst } from "../../utils/shared/constants";
+import { marksColumns } from "../../utils/shared/constants";
 
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from '../../components/shared/infoBanner/InforBanner';
+import { getMarksOfStudent } from '../../utils/endpoints/get';
 
 const Marksheet = () => {
 
   const { user } = useSelector(state => state.auth);
-  
-  const { data: schoolData } = useFetch(getSingleData(user.schoolID, schoolsConst));
-  const { data: marks} = useFetch(`/students/marks/single/${user._id}`);
+  const { info } = useSelector(state => state.school);
+  const { data: marks} = useFetch(getMarksOfStudent(user._id));
 
   // Prepare rows for the table
   const rows = marks?.marksData?.map((item) => {
@@ -49,7 +48,7 @@ const Marksheet = () => {
             subtitle="Final Examination Marksheet"
             type="marksheet"
             student={user}
-            school={schoolData}
+            school={info}
             tableData={marks}
             onDownloadName={`${user.name}_Marksheet.pdf`}
           />

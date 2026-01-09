@@ -5,59 +5,69 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-}
+    position: relative;
 
+    .dark-mode-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        svg {
+            font-size: 2rem;
+        }
+    }
 
-.landing-container img {
-    height: 450px;
-}
+    img {
+        height: 450px;
+    }
 
-.landing-container h1 {
-    font-size: 3em;
-    color: var(--tree-green);
-    margin-bottom: 20px;
-    border-bottom: 3px solid var(--orange);
-}
+    h1 {
+        font-size: 3em;
+        color: var(--tree-green);
+        margin-bottom: 20px;
+        border-bottom: 3px solid var(--orange);
+    }
 
-.landing-container .button-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-}
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
 
-.landing-container .button-container .not-admin {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
+        button {
+            border: none;
+            padding: 10px 10px;
+            background-color: var(--tree-green);
+            color: var(--white);
+            width: 200px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 115px;
 
-.landing-container .button-container .is-admin button{
-    background-color: var(--orange);
-}
+            &:hover {
+                background-color: var(--turquoise);
+            }
+        }
 
-.landing-container .button-container .is-admin button:hover{
-    background-color: #fe715bdd;
-}
+        .not-admin {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
 
-.landing-container .button-container button {
-    border: none;
-    padding: 10px 10px;
-    background-color: var(--tree-green);
-    color: var(--white);
-    width: 200px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 115px;
-}
+        .is-admin button{
+            background-color: var(--orange);
 
-.landing-container .button-container button:hover {
-    background-color: var(--dark-tree-green);
+            &:hover {
+                background-color: #fe715bdd;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 600px) {
@@ -73,5 +83,11 @@
 
     .landing-container .button-container button {
         margin-top: 15px;
+    }
+}
+
+.app.dark .landing-container {
+    h1 {
+        color: var(--mild-turquoise);
     }
 }

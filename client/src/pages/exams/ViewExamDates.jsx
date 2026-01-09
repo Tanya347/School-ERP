@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify"
 
-import { getClassExamDates, getSingleData } from '../../utils/endpoints/get';
-import useFetch from '../../utils/service/useFetch';
+import { getClassExamDates } from '../../utils/endpoints/get';
 import axiosInterceptor from '../../utils/shared/axiosInterceptor';
 import { examColumns } from '../../utils/shared/constants';
 import { checkSuccess } from '../../utils/shared/commons';
@@ -19,7 +18,7 @@ const ViewExamDates = () => {
   const [data, setData] = useState([]);
   
   const { user } = useSelector(state => state.auth);
-  const { data: schoolData } = useFetch(getSingleData(user.schoolID, "schools"));
+  const { info } = useSelector(state => state.school);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +60,7 @@ const ViewExamDates = () => {
             subtitle="School Examination Admit Card"
             type="admitcard"
             student={user}
-            school={schoolData}
+            school={info}
             tableData={data}
             onDownloadName={`${user.name}_AdmitCard.pdf`}
           />

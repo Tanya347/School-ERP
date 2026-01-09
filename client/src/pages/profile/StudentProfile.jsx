@@ -12,6 +12,7 @@ import { studentProfileFields } from "../../utils/shared/profileFieldConfigs";
 import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
 import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
+import StudentMarksHistory from "../../components/studentMarksHistory/StudentMarksHistory";
 
 const StudentProfile = ({ type }) => {
   
@@ -44,7 +45,7 @@ const StudentProfile = ({ type }) => {
             />
 
             <div className="profile-right">
-              Future scope: show attendance chart, marks history etc.
+              <StudentMarksHistory studentId={id} />
             </div>
           </div>
           <div className="profile-bottom">

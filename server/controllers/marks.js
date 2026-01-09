@@ -3,6 +3,7 @@ import Marks from "../models/Marks.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
+import { AppError } from "../utils/customError.js";
 
 export const enterMarksForSubject = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
@@ -167,9 +168,9 @@ export const clearMarksForClass = catchAsync(async (req, res) => {
   });
 });
 
-export const getStudentMarksHistory = catchAsync(async (req, res) => {
+export const getStudentMarksHistory = catchAsync(async (req, res, next) => {
   const { studentId } = req.params;
-  const { schoolId } = req.user;
+  const schoolId = req.user;
 
   const student = await Student.findById(studentId).select("name enroll");
 

@@ -86,7 +86,7 @@
     .popup-button {
         border: none;
         padding: 10px 20px;
-        background-color: var(--black);
+        background-color: var(--tree-green);
         color: var(--white);
         font-weight: bold;
         cursor: pointer;
@@ -97,11 +97,16 @@
     }
     
     .popup-button:hover {
-        background-color: var(--dark-gray);
+        background-color: var(--dark-tree-green);
     }
 }
 
 .app.dark .popup-modal {
+
+    input {
+        background-color: var(--black);
+        color: white;
+    }
 
     .popup-container {
         background-color: var(--light-black);

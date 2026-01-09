@@ -1,10 +1,12 @@
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
+import Faculty from "../models/Faculty.js";
 
 import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
+import { AppError } from "../utils/customError.js";
 
 import { successMsg, folderName } from "../utils/constants.js";
 
@@ -65,15 +67,24 @@ export const deleteCourse = catchAsync(async (req, res, next) => {
     return next(new AppError('Course not found', 404));
   }
 
-  // Remove course from the class's subjects array
-  await Class.findByIdAndUpdate(course.class, { $pull: { subjects: req.params.id } });
+  if (course.class) {
+    await Class.findByIdAndUpdate(course.class, {
+      $pull: { subjects: course._id }
+    });
+  }
+
+  await Faculty.updateMany(
+    { subjectsTaught: course._id },
+    { $pull: { subjectsTaught: course._id } }
+  );
 
   // Delete syllabus image from Cloudinary if it exists
   if (course.cloud_id) {
     await cloudinary.uploader.destroy(course.cloud_id);
   }
 
-  await course.remove();
+  await Course.findByIdAndDelete(course._id);
+
   res.status(200).json({
     status: successMsg,
     message: "The course has been deleted"
@@ -195,4 +206,48 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
+  const { ids } = req.body;
+
+  const courses = await Course.find({ _id: { $in: ids } });
+
+  if (!courses.length) {
+    return next(new AppError("No courses found", 404));
+  }
+
+  // 1️⃣ Remove syllabus images
+  for (const course of courses) {
+    if (course.cloud_id) {
+      await cloudinary.uploader.destroy(course.cloud_id);
+    }
+  }
+
+  // 2️⃣ Remove courses from Class.subjects
+  const classIds = courses
+    .map(course => course.class)
+    .filter(Boolean);
+
+  if (classIds.length) {
+    await Class.updateMany(
+      { _id: { $in: classIds } },
+      { $pull: { subjects: { $in: ids } } }
+    );
+  }
+
+  // 3️⃣ Remove courses from Faculty.subjectsTaught
+  await Faculty.updateMany(
+    { subjectsTaught: { $in: ids } },
+    { $pull: { subjectsTaught: { $in: ids } } }
+  );
+
+  // 4️⃣ Delete courses
+  await Course.deleteMany({ _id: { $in: ids } });
+
+  res.status(200).json({
+    status: successMsg,
+    message: "Courses deleted successfully"
+  });
+});
+
 

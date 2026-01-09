@@ -2,9 +2,12 @@ import "./login.scss"
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import { Tooltip } from "@mui/material";
 
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 
@@ -12,9 +15,11 @@ import { loginSuccess } from "../../utils/store/slices/authSlice";
 import { postURLs } from "../../utils/endpoints/post"
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import { loginImagePaths } from "../../utils/shared/constants";
+import { DarkModeContext } from "../../utils/context/darkModeContext";
+import { checkSuccess } from "../../utils/shared/commons";
 
 import ForgotPassword from "../../components/forgotPassword/ForgotPassword"
-import { checkSuccess } from "../../utils/shared/commons";
+import Loader from "../../components/shared/loader/Loader";
 
 // type will tell whether admin or student
 function Login({ type }) {
@@ -25,8 +30,10 @@ function Login({ type }) {
     username: undefined,
     password: undefined
   })
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { Dispatch } = useContext(DarkModeContext);
   const dispatch = useDispatch();
 
   // set the use state to what the user entered
@@ -37,7 +44,7 @@ function Login({ type }) {
   const handleClick = async (e) => {
    
     e.preventDefault();
-    
+    setLoading(true);
     try {
       const { data } = await axiosInterceptor.post(postURLs(type, "login"), credentials)
       
@@ -51,13 +58,22 @@ function Login({ type }) {
       toast.error(errorMessage);
       throw err;
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   }
 
   return (
-    <div className="admin-login">
-
+    <div className="login-container">
+      <Tooltip title="Toggle Dark Mode" placement="left">
+        <div className="dark-mode-toggle" onClick={() => Dispatch({ type: "TOGGLE" })}>
+          <DarkModeIcon className="icon" />
+        </div>
+      </Tooltip>
+      <Tooltip title="Go Back" placement="left">
+        <div className="back-icon" onClick={() => navigate("/")}>
+          <ArrowCircleLeftOutlinedIcon className="icon" />
+        </div>
+      </Tooltip>
       <div className="img-container">
         <img src={loginImagePaths[type]} alt="" />
       </div>
@@ -101,6 +117,7 @@ function Login({ type }) {
           Forgot Password?
         </p>}
 
+        {loading && <Loader text="Logging in..." />}
         <button onClick={handleClick} className="l-button">
           Login
         </button>

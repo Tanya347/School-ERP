@@ -142,7 +142,7 @@ const RegisterSchool = () => {
 
         
           <div className="submit-button">
-            {loading && <Loader text="Registering School..." />}
+          {loading && <Loader text="Registering School..." />}
             <button className="clear-btn" onClick={handleClear}>Clear</button>
             <button onClick={handleClick} className="l-button">
               Register School

@@ -114,3 +114,11 @@ export const getLectures = (id, type) => {
  export const getMarksOfSubject = (course) => {
     return `/marks/subject/${course}`;
  }
+
+ export const getMarksOfStudent = (userId) => {
+    return `/marks/single/${userId}`;
+ }
+
+ export const getStudentMarksHistory = (studentId) => {
+    return `/marks/history/${studentId}`;
+ }

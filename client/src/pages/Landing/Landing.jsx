@@ -1,15 +1,27 @@
-import "./Landing.scss"
+import "./landing.scss"
+
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { Link } from 'react-router-dom'
+import { useContext } from 'react';
+
+import { DarkModeContext } from "../../utils/context/darkModeContext";
+import { Tooltip } from "@mui/material";
 
 const Landing = () => {
+
+  const { Dispatch } = useContext(DarkModeContext);
 
   return (
     
     <div className="landing-container">
-      {/* <img src="/Assets/brand.png" alt="" style={{height: "100px"}} /> */}
-      <h1>Edu-Sangam</h1>
-      <img src="/Assets/landing.jfif" alt="" />
+      <Tooltip title="Toggle Dark Mode" placement="left">
+        <div className="dark-mode-toggle" onClick={() => Dispatch({ type: "TOGGLE" })}>
+          <DarkModeIcon className="icon" />
+        </div>
+      </Tooltip>
+      <h1>SmartCampus</h1>
+      <img src="/Assets/landing.png" alt="" />
       <div className="button-container">
         
         <div className="not-admin">
@@ -21,7 +33,7 @@ const Landing = () => {
           <button>Login as Faculty</button>
         </Link>
         </div>
-        <div className="is-admin">
+        <div>
           <Link to="/adminLogin">
             <button>Login as Admin</button>
           </Link>

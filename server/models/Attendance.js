@@ -36,16 +36,9 @@ const AttendanceSchema = new mongoose.Schema(
         },
       },
     ],
-    classid: {
+    classID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Class",
-      required: [true, "Class ID is required"],
-      validate: {
-        validator: function (v) {
-          return mongoose.isValidObjectId(v); // Ensures valid MongoDB ObjectId
-        },
-        message: "Invalid class ID",
-      },
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -54,9 +47,15 @@ const AttendanceSchema = new mongoose.Schema(
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'
+    },
+    sessionID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Session'
     }
   },
   { timestamps: true }
 );
+
+AttendanceSchema.index({ date: 1, classID: 1, sessionID: 1 });
 
 export default mongoose.model("Attendance", AttendanceSchema);

@@ -1,6 +1,7 @@
 import './addCourse.scss'
 
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Tooltip } from '@mui/material';
 
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,11 +12,10 @@ import { getCourseClasses, getFacultyData } from '../../utils/endpoints/get.js';
 import { editCourse } from '../../utils/endpoints/patch.js';
 import axiosInterceptor from '../../utils/shared/axiosInterceptor.js';
 import { somethingWentWrongMsg, coursesConst } from "../../utils/shared/constants.js"
+import { checkSuccess } from '../../utils/shared/commons.js';
 
 import Dropdown from '../shared/dropdown/Dropdown.jsx';
 import Popup from '../shared/popup/Popup.jsx';
-import Tooltip from "../shared/tooltip/Tooltip.jsx";
-import { checkSuccess } from '../../utils/shared/commons.js';
 
 const AddCourse = ({ setOpen, facId }) => {
 
@@ -104,7 +104,7 @@ const AddCourse = ({ setOpen, facId }) => {
                                 </span>
                             </div>
 
-                                <Tooltip content={"Remove course"} position="top">
+                                <Tooltip title="Remove Course" arrow>
                                     <CancelIcon
                                         className="remove-btn"
                                         onClick={() =>

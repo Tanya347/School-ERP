@@ -2,6 +2,7 @@ import "./mainSidebar.scss"
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+import { Tooltip } from "@mui/material";
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
@@ -10,8 +11,6 @@ import { useSelector } from "react-redux";
 
 import { sidebarConsts } from "./sidebarConsts";
 import { checkEditor } from "../../utils/shared/commons";
-
-import Tooltip from "../shared/tooltip/Tooltip";
 
 const MainSidebar = () => {
 
@@ -38,7 +37,7 @@ const MainSidebar = () => {
 
                     <Link to={`/${user.role}`} style={{ textDecoration: "none" }}>
                         <li>
-                            <Tooltip content="Dashboard" position="right">
+                            <Tooltip title="Dashboard" arrow>
                                 <DashboardIcon className="icon" />
                             </Tooltip>
                             <span  className="sidebar-item">{!collapsed && 'Dashboard'}</span>
@@ -58,7 +57,7 @@ const MainSidebar = () => {
                                     style={{ textDecoration: "none" }}
                                 >
                                     <li>
-                                        <Tooltip content={item.title} position="right">
+                                        <Tooltip title={item.title} arrow>
                                         <item.icon className="icon" />
                                         </Tooltip>
                                         <span className="sidebar-item">{!collapsed && item.title}</span>
@@ -77,7 +76,7 @@ const MainSidebar = () => {
                         .map(item => (
                             <Link key={item.title} to={item.path} style={{ textDecoration: "none" }}>
                                 <li>
-                                    <Tooltip content={item.title} position="right">
+                                    <Tooltip title={item.title} arrow>
                                     <item.icon className="icon" />
                                     </Tooltip>
                                     <span className="sidebar-item">{!collapsed && item.title}</span>
@@ -98,7 +97,7 @@ const MainSidebar = () => {
                             style={{ textDecoration: "none" }}
                             >
                             <li>
-                                <Tooltip content={item.title} position="right">
+                                <Tooltip title={item.title} arrow>
                                 <item.icon className="icon" />
                                 </Tooltip>
                                 <span className="sidebar-item">{!collapsed && item.title}</span>

@@ -100,6 +100,7 @@ const EditFaculty = ({ title }) => {
                     inputs={facultyInputs}
                     values={info}
                     errors={errors}
+                    role={user.role}
                     onChange={handleChange}
                   />
 

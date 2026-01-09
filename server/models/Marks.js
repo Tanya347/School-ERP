@@ -11,7 +11,7 @@ const MarksSchema = new mongoose.Schema({
     ref: "Course",
     required: true,
   },
-  session: {
+  sessionID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Session",
     required: true,

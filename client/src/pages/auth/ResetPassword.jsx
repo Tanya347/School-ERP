@@ -42,15 +42,16 @@ const ResetPassword = ({type}) => {
         try {
         console.log("h")
 
-            const res = await axiosInterceptor.patch(resetPasswordURL(type, token, user.role), passwordCreds, {withCredentials: true})
+            const res = await axiosInterceptor.patch(resetPasswordURL(type, token, user?.role), passwordCreds, {withCredentials: true})
             if(checkSuccess(res.data.status)) {
                 toast.success("Password changed successfully!");
                 if(type === 'change') {
                     dispatch(logoutUser());
-                }
-                navigate(`/${user.role}Login`);
+                    navigate(`/${user.role}Login`);
+                } else navigate(`/${type}Login`);
             }
         } catch(err) {
+            console.log(err)
             const errorMessage = err.response?.data?.message || somethingWentWrongMsg;
             toast.error(errorMessage);
             return err;

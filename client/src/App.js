@@ -15,7 +15,6 @@ import { verifyUser } from "./utils/store/slices/authSlice";
 import { fetchAdminClasses } from "./utils/store/slices/adminSlice";
 import { fetchFacultyClasses } from "./utils/store/slices/facultySlice";
 import { fetchFacultyCourses } from "./utils/store/slices/facultySlice";
-import { fetchStudentProfile } from "./utils/store/slices/studentSlice";
 
 // UI
 import { ToastContainer } from "react-toastify";
@@ -62,10 +61,6 @@ function App() {
       case roles.faculty:
         dispatch(fetchFacultyClasses(user._id));
         dispatch(fetchFacultyCourses(user._id));
-        break;
-
-      case roles.student:
-        dispatch(fetchStudentProfile(user._id));
         break;
 
       default:

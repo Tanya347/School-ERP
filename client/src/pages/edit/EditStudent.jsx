@@ -24,6 +24,7 @@ const EditUser = ({ title }) => {
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState({});
+  const [sclass, setSclass] = useState("");
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,18 +55,19 @@ const EditUser = ({ title }) => {
     try {
       const newInfo = {
         name: info.name,
-        username: info.name,
+        username: info.username,
         email: info.email,
         enroll: info.enroll,
         studentPhone: info.studentPhone,
         studentAddress: info.studentAddress,
         dob: info.dob,
         gender: info.gender,
-        class: info.class
+        ...(checkAdmin(user.role) && { class: sclass || info.class._id })
       }
       const res = await editElementWithPicture(file, newInfo, "student", putURLs("students", id));
       if(checkSuccess(res.data.status)) {
         navigate(`/admin/students/single/${id}`);
+        window.location.reload();
       }
     } catch(err) {
       console.error(err);
@@ -101,6 +103,7 @@ const EditUser = ({ title }) => {
                     values={info}
                     errors={errors}
                     onChange={handleChange}
+                    role={user.role}
                   />
 
                   <Dropdown
@@ -117,11 +120,13 @@ const EditUser = ({ title }) => {
                     id="class"
                     title="Choose Class"
                     options={classes}
-                    value={info?.sclass.name}
+                    value={sclass || info?.class?._id || ""}
                     onChange={(e) => {
+                      setSclass(e.target.value);
                       handleChange(e);
                     }}
-                  />}
+                  />
+                  }
 
                 </form>
 

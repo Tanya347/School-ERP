@@ -1,5 +1,7 @@
 .view-class {
     width: 100%;
+    min-height: 100vh;
+    height: fit-content;
 
     .view-class-container {
         margin-top: 50px;

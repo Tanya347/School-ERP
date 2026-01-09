@@ -2,10 +2,9 @@ import "../../utils/style/form.scss";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import { schoolInputs } from "../../utils/formsource/schoolInputs"
-import useFetch from "../../utils/service/useFetch";
-import { getSingleData } from "../../utils/endpoints/get";
 import { editElementWithPicture } from "../../utils/service/usePut";
 import { putURLs } from "../../utils/endpoints/put";
 import { schoolsConst } from "../../utils/shared/constants";
@@ -17,8 +16,8 @@ import { checkSuccess } from "../../utils/shared/commons";
 
 const EditSchool = ({title}) => {
 
-  const [info, setInfo] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [schoolInfo, setSchoolInfo] = useState({});
+  const [infoloading, setInfoloading] = useState(false);
   const [file, setFile] = useState("");
 
   const location = useLocation();
@@ -26,28 +25,29 @@ const EditSchool = ({title}) => {
 
   const id = location.pathname.split("/")[4];
 
-  const {data} = useFetch(getSingleData(id, schoolsConst));
+  const { info } = useSelector(state => state.school);
 
   useEffect(() => {
-    setInfo(data)
-  }, [data])
-  
+    setSchoolInfo(info)
+  }, [info])
+
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setSchoolInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
 
   const handleClick = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setInfoloading(true)
     try {
-      const res = await editElementWithPicture(file, info, "school", putURLs(schoolsConst, id));
+      const res = await editElementWithPicture(file, schoolInfo, "school", putURLs(schoolsConst, id));
       if(checkSuccess(res.data.status)) {
         navigate('/admin');
+        window.location.reload();
       }
     } catch(err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setInfoloading(false);
     }
   }
 
@@ -62,20 +62,20 @@ const EditSchool = ({title}) => {
             <FileUpload
               file={file}
               setFile={setFile}
-              existingUrl={info?.logo}
+              existingUrl={schoolInfo?.logo}
               label="Logo"
             />
 
             <form>
                 <FormInputs
                   inputs={schoolInputs}
-                  values={info}
+                  values={schoolInfo}
                   onChange={handleChange}
                 />
             </form>
 
             <div className="submit-button">
-              {loading && <Loader text="editing school..."/>}
+              {infoloading && <Loader text="editing school..."/>}
               <button onClick={handleClick} id="submit" className="form-btn">Edit School</button>
             </div>
           </div>

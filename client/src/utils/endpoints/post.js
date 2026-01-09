@@ -30,6 +30,7 @@ export const resetPasswordURL = (type, token, role) => {
     return `/${rolePath}/updatePassword/${token}`;
   }
 
+  console.log(type);
   return `/auth/resetPassword/${type}/${token}`;
 };
 

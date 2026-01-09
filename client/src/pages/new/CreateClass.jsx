@@ -37,6 +37,7 @@ const CreateClass = ({ inputs, title}) => {
             const res = await createElement(info, postURLs(classesConst, "normal"), "Class")
             if(checkSuccess(res.data.status)) {
                 navigate('/admin/classes');
+                window.location.reload();
             }
         } catch(err) {
             console.log(err)

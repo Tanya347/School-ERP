@@ -90,7 +90,7 @@ export const createSchool = catchAsync(async (req, res, next) => {
     await sendEmail({
         email: email,
         subject: 'Your Admin Portal Credentials',
-        message: `Welcome to the ERP Portal!\n\nYour admin username: ${username}\nYour temporary password: ${password}\n\nPlease log in to the admin portal and change your username and password as soon as possible.`
+        message: `Welcome to the SmartCampus ERP Portal !\n\nYour admin username: ${username}\nYour temporary password: ${password}\n\nPlease log in to the admin portal and change your username and password as soon as possible.`
     });
 
     newSchool.admin = newAdmin._id;

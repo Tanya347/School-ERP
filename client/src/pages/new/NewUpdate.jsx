@@ -45,6 +45,7 @@ const NewUpdate = ({ inputs }) => {
     // If updateType is 'general', remove 'class' field
     if (payload.updateType === "general") {
       delete payload.class;
+      delete info.class;
     }
 
     try {

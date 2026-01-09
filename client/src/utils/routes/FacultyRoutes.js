@@ -19,6 +19,7 @@ import EditFaculty from '../../pages/edit/EditFaculty';
 import EditTask from '../../pages/edit/EditTask';
 import EditTest from '../../pages/edit/EditTest';
 import EditUpdate from '../../pages/edit/EditUpdate';
+import EditMaterial from '../../pages/edit/EditMaterial';
 
 // Pages
 import FacultyProfile from "../../pages/profile/FacultyProfile";
@@ -146,7 +147,7 @@ const FacultyRoutes = () => {
           {/* edit materials */}
           <Route
             path="materials/edit/:materialId"
-            element={ <List title="Edit Material"/>}
+            element={ <EditMaterial title="Edit Material"/>}
           />
 
           {/* ROUTES FOR TESTS */}

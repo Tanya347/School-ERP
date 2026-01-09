@@ -11,7 +11,7 @@ export const studentInputs = [
         label: "Username",
         type: "text",
         placeholder: "Enter username",
-        editAccess: "admin"
+        editAccess: "both"
     },
     {
         id: "password",

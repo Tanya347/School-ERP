@@ -53,7 +53,7 @@ const TestSchema = new mongoose.Schema(
             ref: 'Faculty',
             required: [true, 'Author is required']
         },
-        sclass: {
+        classID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Class',
             required: [true, 'Class is required']

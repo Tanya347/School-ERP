@@ -13,7 +13,7 @@ const EventSchema = new mongoose.Schema({
         },
     },
     startDate: {
-        type: String,
+        type: Date,
         required: [true, "Start date is required"],
         validate: {
           validator: function (v) {
@@ -23,7 +23,7 @@ const EventSchema = new mongoose.Schema({
         },
     },
     endDate: {
-        type: String,
+        type: Date,
         required: [true, "End date is required"],
         validate: [
           {
@@ -99,6 +99,6 @@ const EventSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Session'
     }
-}, { timestamps: true })
+}, { timestamps: true, index: { schoolID: 1, sessionID: 1, startDate: 1 } })
 
 export default mongoose.model("Event", EventSchema);

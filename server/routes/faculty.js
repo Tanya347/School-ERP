@@ -22,7 +22,7 @@ import { roles } from "../utils/constants.js";
 const router = express.Router();
 
 router.post("/registerFaculty", protect(), restrictTo(roles.admin), upload.single('file'), registerFaculty);
-router.put("/:id", protect(), restrictTo(roles.admin), upload.single('file'), updateFaculty);
+router.put("/:id", protect(), restrictTo(roles.admin, roles.faculty), upload.single('file'), updateFaculty);
 router.delete("/:id", protect(), restrictTo(roles.admin), deleteFaculty);
 router.get("/:id", protect(), getFaculty);
 router.get("/", protect(), getFacultys);

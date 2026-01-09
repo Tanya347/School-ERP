@@ -22,24 +22,6 @@ const ClassSchema = new mongoose.Schema({
           message: 'Class number must be a valid number'
           }
     },
-    students: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Student',
-        },
-    ],
-    subjects: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Course',
-        },
-    ],
-    teachers: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Faculty',
-        },
-    ],
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'

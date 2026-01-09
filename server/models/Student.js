@@ -88,7 +88,7 @@ const StudentSchema = new mongoose.Schema(
         message: 'Gender must be "Male" or "Female"',
       },
     },
-    class: {
+    classID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Class',
     },

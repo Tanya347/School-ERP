@@ -141,7 +141,7 @@ export const forgotPassword = (model, type) => catchAsync(async(req, res, next) 
   const resetToken = user.createPasswordResetToken();
   await user.save({validateBeforeSave: false});
 
-  const resetURL = `${process.env.client}/resetPassword/${type}/${resetToken}`;
+  const resetURL = `${process.env.CLIENT}/resetPassword/${type}/${resetToken}`;
   const message = `Forgot your password? Submit a patch request to: ${resetURL}.\nIf you didn't forget your password, please ignore this email`;
 
   try {

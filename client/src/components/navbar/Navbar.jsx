@@ -3,6 +3,7 @@ import './navbar.scss'
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { Tooltip } from '@mui/material';
 
 import { useState, useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearNotifications } from "../../utils/store/slices/notificationSlice";
 import { clearAdmin } from '../../utils/store/slices/adminSlice';
 import { clearFaculty } from '../../utils/store/slices/facultySlice';
-import { clearStudent } from "../../utils/store/slices/studentSlice";
 import { clearSchool } from '../../utils/store/slices/schoolSlice';
 import { logoutUser } from "../../utils/store/slices/authSlice"
 import { DarkModeContext } from "../../utils/context/darkModeContext";
@@ -52,7 +52,6 @@ const Navbar = () => {
         dispatch(clearSchool());
         dispatch(clearAdmin());
         dispatch(clearFaculty());
-        dispatch(clearStudent());
     }
 
     const unreadCount = notifications.filter(n => !n.read).length;
@@ -98,12 +97,16 @@ const Navbar = () => {
                         {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
                         {showNotifications && <NotificationsDropdown notifs={notifications} user={user}/>}
                     </div>
-                    <div className="dark-mode-toggle" onClick={() => Dispatch({ type: "TOGGLE" })}>
-                        <DarkModeIcon className="icon" />
-                    </div>
-                    <div className="" onClick={handleLogout}>
-                        <ExitToAppIcon className="icon" />
-                    </div>
+                    <Tooltip title="Toggle Dark Mode" arrow>
+                        <div className="dark-mode-toggle" onClick={() => Dispatch({ type: "TOGGLE" })}>
+                            <DarkModeIcon className="icon" />
+                        </div>
+                    </Tooltip>
+                    <Tooltip title="Logout" arrow>
+                        <div className="" onClick={handleLogout}>
+                            <ExitToAppIcon className="icon" />
+                        </div>
+                    </Tooltip>
                 </div>
             </div>
         </div>

@@ -21,14 +21,12 @@ const NewTest = ({ inputs, title }) => {
   const [loading, setLoading] = useState(false);
   const [start, setStart] = useState("")
   const [errors, setErrors] = useState({});
-  const [studentClass, setStudentClass] = useState("");
   const [subject, setSubject] = useState("");
   
   const navigate = useNavigate();
   
   const { user } = useSelector(state => state.auth);
   const courses = useSelector(state => state.faculty.courses);
-  const classes = useSelector(state => state.faculty.classes);
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateTest);
@@ -57,7 +55,6 @@ const NewTest = ({ inputs, title }) => {
     setInfo({});
     setErrors({});
     setSubject("");
-    setStudentClass("");
     setStart("");
   }
  
@@ -78,7 +75,13 @@ const NewTest = ({ inputs, title }) => {
                 errors={errors}
                 onChange={handleChange}
               />
-
+                
+              <DatePickerComponent
+                selectedDate={start}
+                onChange={(date) => setStart(date)}
+                placeholder="Date and Time"
+                label="Select Date and Time"
+              />
               <Dropdown
                 id="subject"
                 title="Select Course"
@@ -90,23 +93,6 @@ const NewTest = ({ inputs, title }) => {
                 value={subject}
               />
 
-              <Dropdown
-                id="sclass"
-                title="Select Class"
-                options={classes}
-                onChange={(e) => {
-                  handleChange(e);
-                  setStudentClass(e.target.value);
-                }}
-                value={studentClass}
-              />
-
-              <DatePickerComponent
-                selectedDate={start}
-                onChange={(date) => setStart(date)}
-                placeholder="Date and Time"
-                label="Select Date and Time"
-              />
             
             </form>
             <div className="submit-button">

@@ -30,9 +30,10 @@ const UpdateSchema = new mongoose.Schema({
             message: 'Type must be either "general" or "specific"'
         },
     },
-    class: {
+    classID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class'
+        ref: 'Class',
+        required: [function() { return this.updateType === 'specific'; }, 'Class is required when updateType is specific']
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,

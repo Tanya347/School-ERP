@@ -42,12 +42,12 @@ export const PIE_CHART_COLORS = ['#48A6A7', '#9ACBD0', '#F2EFE7', '#006A71'];
 export const dateTimeFormat  = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
 
 export const loginImagePaths = {
-  "Faculty": "/Assets/faculty.jfif",
-  "Student": "/Assets/student.jfif",
-  "Admin": "/Assets/admin.jfif"
+  "Faculty": "/Assets/faculty.png",
+  "Student": "/Assets/student.png",
+  "Admin": "/Assets/admin.png"
 }
 
-export const FACULTY_HOME_COLORS = ['var(--light-blue)', 'var(--light-pink)', 'var(-light-yellow)', 'var(light-green)', 'var(light-red)'];
+export const FACULTY_HOME_COLORS = ['var(--light-blue)', 'var(--light-pink)', 'var(--light-yellow)', 'var(--light-green)', 'var(--light-red)'];
 
 export const roles = {
   admin: "admin",

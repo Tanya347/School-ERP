@@ -8,7 +8,8 @@ import {
   updateCourse,
   setExamDatesForClass,
   clearExamDatesForClass,
-  getExamDatesForClass
+  getExamDatesForClass,
+  bulkDeleteCourse,
 } from "../controllers/course.js";
 
 import upload from "../utils/multer.js";
@@ -25,4 +26,5 @@ router.get("/", protect(), getCourses);
 router.put("/exam/setdates", protect(), restrictTo(roles.admin), setExamDatesForClass);
 router.delete("/exam/clear/:classId", protect(), restrictTo(roles.admin), clearExamDatesForClass);
 router.get("/exam/:classId", protect(), getExamDatesForClass);
+router.post("/bulk/delete", protect(), restrictTo(roles.admin), bulkDeleteCourse);
 export default router;

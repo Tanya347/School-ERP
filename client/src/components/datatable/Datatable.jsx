@@ -1,6 +1,8 @@
 import "./datatable.scss";
 
 import { DataGrid } from "@mui/x-data-grid";
+import { Tooltip } from "@mui/material";
+
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
@@ -13,13 +15,12 @@ import { getDeleteURL } from "../../utils/endpoints/delete.js";
 import { bulkDelete } from "../../utils/endpoints/post.js";
 import { testAction } from "../../utils/endpoints/put.js";
 import { facultiesConst, materialsConst, studentsConst, testsConst } from "../../utils/shared/constants.js";
+import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../utils/shared/commons.js";
 
 import AddClass from "../addCourse/AddCourse.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
-import Tooltip from "../../components/shared/tooltip/Tooltip.jsx";
 import Loader from "../shared/loader/Loader.jsx";
-import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../utils/shared/commons.js";
 
 const Datatable = ({ column, name }) => {
   
@@ -62,7 +63,7 @@ const Datatable = ({ column, name }) => {
   };
 
   const handleBulkDelete = async () => {
-    setConfirmMessage(`Are you sure you want to delete ${selectedRows.length} ${name}(s)?`);
+    setConfirmMessage(`Are you sure you want to delete ${selectedRows?.length} ${name}(s)?`);
     setConfirmAction(() => async () => {
       try {
         const res = await axiosInterceptor.post(
@@ -70,7 +71,7 @@ const Datatable = ({ column, name }) => {
           { ids: selectedRows }
         );
         if (checkSuccess(res.data.status)) {
-          toast.success(`${selectedRows.length} ${name}(s) deleted successfully!`);
+          toast.success(`${selectedRows?.length} ${name}(s) deleted successfully!`);
           setList((prev) => prev.filter((item) => !selectedRows.includes(item._id)));
           setSelectedRows([]);
         }
@@ -175,7 +176,7 @@ const Datatable = ({ column, name }) => {
         <div className="datatable">
           <div className="datatable-header">
             <div className="datatable-title">{name}</div>
-            <Tooltip content={"Export to Excel"} position="top">
+            <Tooltip title={"Export to Excel"} arrow>
               <ExportButton
                 data={list}
                 formatted={list.map((item) => ({
@@ -193,7 +194,7 @@ const Datatable = ({ column, name }) => {
                   <div className="link">Create</div>
                 </Link>
 
-                {selectedRows.length > 0 && (
+                {selectedRows?.length > 0 && (
                   <div
                     className="link delete"
                     onClick={() => handleBulkDelete()}
@@ -208,8 +209,8 @@ const Datatable = ({ column, name }) => {
           <DataGrid
             className="datagrid"
             rows={list}
-            columns={column.concat(actionColumn)}
-            checkboxSelection={!checkEditor(user.role)}
+            columns={column?.concat(actionColumn)}
+            checkboxSelection={user.role !== "student"}
             onSelectionModelChange={(ids) => setSelectedRows(ids)}
             selectionModel={selectedRows}
             pageSize={10}

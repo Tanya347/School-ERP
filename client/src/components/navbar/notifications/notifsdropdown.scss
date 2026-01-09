@@ -26,6 +26,8 @@
 
     .notification-item {
       padding: 10px;
+      text-align: left;
+      background-color: var(--light-turquoise-two);
       border-bottom: 2px solid var(--turquoise);
       margin-bottom: 5px;
 
@@ -33,16 +35,16 @@
         margin: 0 0 5px;
         font-size: 14px;
         font-weight: 600;
+
+        span {
+          font-weight: 400;
+        }
       }
 
       p {
         margin: 0;
         font-size: 13px;
         color: var(--gray);
-      }
-
-      &.unread {
-        background-color: var(--light-turquoise-two);
       }
     }
 
@@ -77,9 +79,7 @@
     background-color: var(--light-black);
     border: 1px solid var(--light-gray);
     color: var(--white);
-    .unread {
-      background-color: var(--dark-tree-green);
-    }
+
     .notifications-button {
       button {
         background-color: var(--tree-green);

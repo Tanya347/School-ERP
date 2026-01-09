@@ -33,10 +33,10 @@ const TaskSchema = new mongoose.Schema(
         message: "Deadline must be a future date",
       },
     },
-    sclass: {
+    courseID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Class",
-      required: [true, "Class is required"],
+      ref: "Course",
+      required: true
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,

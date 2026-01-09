@@ -23,10 +23,9 @@ const CourseSchema = new mongoose.Schema(
         message: "Subject code must contain only letters, numbers, underscores, or hyphens",
       },
     },
-    class: {
+    classID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Class",
-      required: [true, "Class reference is required"],
     },
     syllabusPicture: {
       type: String,

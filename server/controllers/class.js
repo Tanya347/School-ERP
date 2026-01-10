@@ -5,7 +5,9 @@ import Faculty from "../models/Faculty.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
 
+
 // Create a new class
+// -----------------------------------------------
 export const createClass = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const newClass = new Class(req.body);
@@ -17,7 +19,9 @@ export const createClass = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Update an existing class
+// -----------------------------------------------
 export const updateClass = catchAsync(async (req, res, next) => {
   const sclass = await Class.findByIdAndUpdate(
     req.params.id,
@@ -40,8 +44,8 @@ export const deleteClass = catchAsync(async (req, res, next) => {
 
   // Remove class reference from associated students
   await Student.updateMany(
-    { class: deletedClass._id },
-    { $unset: { class: 1 } }
+    { classID: deletedClass._id },
+    { $unset: { classID: "" } }
   );
 
   // Delete the class
@@ -52,7 +56,9 @@ export const deleteClass = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get class details with populated subjects and students
+// -----------------------------------------------
 export const getClassDetails = catchAsync(async (req, res, next) => {
   const classId = req.params.id;
   const classDetails = await Class.findById(classId)
@@ -99,38 +105,36 @@ export const getClassDetails = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get class subjects
-export const getClassSubjects = catchAsync(async (req, res, next) => {
+// -----------------------------------------------
+export const getClassSubjects = catchAsync(async (req, res) => {
   const classId = req.params.id;
-  const courses = await Class.findById(classId).populate('subjects');
-  const subjects = courses.subjects.map((sub) => ({
-    _id: sub._id,
-    name: sub.name,
-    code: sub.subjectCode,
-    teacher: sub.teacher
-  }));
+  const subjects = await Course.find({ classID: classId })
+  .select('name subjectCode teacher');
   res.status(200).json({
     data: subjects,
     status: successMsg
   });
 });
 
+
 // Get class students
-export const getClassStudents = catchAsync(async (req, res, next) => {
+// -----------------------------------------------
+export const getClassStudents = catchAsync(async (req, res) => {
   const classId = req.params.id;
-  const classStudents = await Class.findById(classId).populate({
-    path: 'students',
-    model: 'Student',
-    select: 'name profilePicture cloud_id gender enroll studentPhone email',
-  });
+  const classStudents = await Student.find({ classID: classId, passedOut: false });
+
   res.status(200).json({
     data: classStudents,
     status: successMsg
   });
 });
 
+
 // Get all classes
-export const getClasses = catchAsync(async (req, res, next) => {
+// -----------------------------------------------
+export const getClasses = catchAsync(async (req, res) => {
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };
   const classes = await Class.find(filter).sort({classNumber: 1});
@@ -140,7 +144,9 @@ export const getClasses = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get all classes with subjects populated
+// -----------------------------------------------
 export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
   const classes = await Class.find().populate({
     path: 'subjects',
@@ -153,6 +159,9 @@ export const getClassesWithSubjects = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Add a class teacher
+// -----------------------------------------------
 export const addClassTeacher = catchAsync(async (req, res, next) => {
   const classId = req.params.id;
   const teacherId = req.body.teacher;
@@ -169,7 +178,6 @@ export const addClassTeacher = catchAsync(async (req, res, next) => {
   }
   if (teacher.classTeacherTo) {
     return next(new AppError('Class not found', 404));
-    return res.status(400).json({ message: 'This teacher is already assigned as a class teacher to another class.' });
   }
 
   // Set the classTeacher field in Class and classTeacherTo in Faculty

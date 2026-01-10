@@ -15,11 +15,11 @@ import { protect } from "../controllers/auth.js";
 const router = express.Router();
 
 router.put('/:subjectId', protect(), enterMarksForSubject);
-router.get('/single/:studentid', protect(), getMarksOfStudent);
-router.get('/subject/:subjectid', protect(), getMarksOfSubject);
-router.get('/class/:classid', protect(), getMarksOfClass);
-router.delete('/subject/:subjectid', protect(), clearMarksForSubject);
-router.delete('/class/:classid', protect(), clearMarksForClass);
+router.get('/single/:studentId', protect(), getMarksOfStudent);
+router.get('/subject/:subjectId', protect(), getMarksOfSubject);
+router.get('/class/:classId', protect(), getMarksOfClass);
+router.delete('/subject/:subjectId', protect(), clearMarksForSubject);
+router.delete('/class/:classId', protect(), clearMarksForClass);
 router.get('/history/:studentId', getStudentMarksHistory)
 
 export default router;

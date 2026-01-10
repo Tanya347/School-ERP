@@ -18,12 +18,12 @@ const timetableSlotSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  faculty: {
+  facultyID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Faculty",
     required: true,
   },
-  course: {
+  courseID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",
     required: true,

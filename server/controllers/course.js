@@ -10,16 +10,13 @@ import { AppError } from "../utils/customError.js";
 
 import { successMsg, folderName } from "../utils/constants.js";
 
+
 // Create a new course and add it to the class
+// -----------------------------------------------
 export const createCourse = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const newCourse = new Course(req.body);
   
-  await Class.updateOne(
-    { _id: newCourse.class },
-    { $addToSet: { subjects: newCourse._id } }
-  );
-
   let syllabusPicture = null;
   let cloud_id = null;
 
@@ -34,19 +31,27 @@ export const createCourse = catchAsync(async (req, res, next) => {
     fs.unlinkSync(req.file.path);
   }
 
-  const savedCourse = await Course.create({
+  const course = await Course.create({
     ...req.body,
     syllabusPicture,
-    cloud_id
+    cloud_id,
   });
+
+  // Link to Class
+  await Class.findByIdAndUpdate(course.classID, {
+    $addToSet: { subjects: course._id },
+  });
+
   res.status(200).json({
     status: successMsg,
-    data: savedCourse,
+    data: course,
     message: "The course has been successfully created"
   });
 });
 
+
 // Update a course
+// -----------------------------------------------
 export const updateCourse = catchAsync(async (req, res, next) => {
   const course = await Course.findByIdAndUpdate(
     req.params.id,
@@ -60,23 +65,22 @@ export const updateCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Delete a course and remove it from the class
+// -----------------------------------------------
 export const deleteCourse = catchAsync(async (req, res, next) => {
+
   const course = await Course.findById(req.params.id);
+
   if (!course) {
     return next(new AppError('Course not found', 404));
   }
 
-  if (course.class) {
-    await Class.findByIdAndUpdate(course.class, {
+  if (course.classID) {
+    await Class.findByIdAndUpdate(course.classID, {
       $pull: { subjects: course._id }
     });
   }
-
-  await Faculty.updateMany(
-    { subjectsTaught: course._id },
-    { $pull: { subjectsTaught: course._id } }
-  );
 
   // Delete syllabus image from Cloudinary if it exists
   if (course.cloud_id) {
@@ -91,10 +95,12 @@ export const deleteCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get a course with populated fields
+// -----------------------------------------------
 export const getCourse = catchAsync(async (req, res, next) => {
   const course = await Course.findById(req.params.id)
-    .populate('class', 'name')
+    .populate('classID', 'name')
     .populate('teacher', 'teachername');
   res.status(200).json({
     status: successMsg,
@@ -102,12 +108,14 @@ export const getCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get all courses with populated fields
+// -----------------------------------------------
 export const getCourses = catchAsync(async (req, res, next) => {
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };
   const courses = await Course.find(filter)
-    .populate('class', 'name')
+    .populate('classID', 'name')
     .populate('teacher', 'teachername');
   res.status(200).json({
     status: successMsg,
@@ -115,6 +123,9 @@ export const getCourses = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Set exam dates for multiple courses in a class
+// -----------------------------------------------
 export const setExamDatesForClass = catchAsync(async (req, res, next) => {
   const { classId, exams } = req.body;
 
@@ -125,10 +136,10 @@ export const setExamDatesForClass = catchAsync(async (req, res, next) => {
   // Optional: Validate all exam entries
   const bulkOps = exams.map((exam) => ({
     updateOne: {
-      filter: { _id: exam.courseId, class: classId },
+      filter: { _id: exam.courseId, classID: classId },
       update: {
         $set: {
-          'examStatus.status': 'planned',
+          'examStatus.status': 'completed',
           'examStatus.examDate': new Date(exam.examDate),
         },
       },
@@ -144,7 +155,9 @@ export const setExamDatesForClass = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Clear exam date and status for a course
+// -----------------------------------------------
 export const clearExamDatesForClass = catchAsync(async (req, res, next) => {
   const { classId } = req.params;
 
@@ -162,8 +175,11 @@ export const clearExamDatesForClass = catchAsync(async (req, res, next) => {
 
   // Clear examStatus fields for all courses in the class
   const result = await Course.updateMany(
-    { _id: { $in: courseIds } },
-    { $unset: { 'examStatus.examDate': "", 'examStatus.status': "pending" } }
+    { classID: classId },
+    {
+      $set: { 'examStatus.status': 'pending' },
+      $unset: { 'examStatus.examDate': "" }
+    }
   );
 
   res.status(200).json({
@@ -173,11 +189,14 @@ export const clearExamDatesForClass = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Get exam dates for all courses in a class
+// -----------------------------------------------
 export const getExamDatesForClass = catchAsync(async (req, res, next) => {
   const { classId } = req.params;
 
-  const courses = await Course.find({ class: classId })
-    .populate('class', 'name')
+  const courses = await Course.find({ classID: classId })
+    .populate('classID', 'name')
     .populate('teacher', 'teachername');
 
   if (!courses || courses.length === 0) {
@@ -202,11 +221,14 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
     data: {
       examDates,
       allExamsPlanned,
-      className: courses[0].class.name
+      className: courses[0].classID.name
     }
   });
 });
 
+
+// Bulk delete courses
+// -----------------------------------------------
 export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
   const { ids } = req.body;
 
@@ -225,7 +247,7 @@ export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
 
   // 2️⃣ Remove courses from Class.subjects
   const classIds = courses
-    .map(course => course.class)
+    .map(course => course.classID)
     .filter(Boolean);
 
   if (classIds.length) {
@@ -234,12 +256,6 @@ export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
       { $pull: { subjects: { $in: ids } } }
     );
   }
-
-  // 3️⃣ Remove courses from Faculty.subjectsTaught
-  await Faculty.updateMany(
-    { subjectsTaught: { $in: ids } },
-    { $pull: { subjectsTaught: { $in: ids } } }
-  );
 
   // 4️⃣ Delete courses
   await Course.deleteMany({ _id: { $in: ids } });

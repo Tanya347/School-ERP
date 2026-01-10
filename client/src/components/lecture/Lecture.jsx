@@ -14,8 +14,8 @@ const Lecture = ({id, type}) => {
     ? slots
         .filter(slot => slot.day === todayDay)
         .map(slot => ({
-          class: slot.sclass?.name || '',
-          course: slot.course?.name || '',
+          class: slot.classID?.name || '',
+          course: slot.courseID?.name || '',
           startTime: slot.startTime,
           endTime: slot.endTime
         }))

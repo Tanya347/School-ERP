@@ -10,6 +10,9 @@ import cloudinary from "../utils/cloudinary.js";
 import { sendEmail } from "../utils/email.js";
 import { successMsg, folderName } from "../utils/constants.js";
 
+
+// Helper function to generate a strong password
+// -----------------------------------------------
 function generateStrongPassword() {
     const lower = 'abcdefghijklmnopqrstuvwxyz';
     const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -27,6 +30,9 @@ function generateStrongPassword() {
     return password.split('').sort(() => 0.5 - Math.random()).join('');
 }
 
+
+// Helper function to generate a valid username
+// -----------------------------------------------
 function getUsername(name) {
     let baseUsername = name.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
     if (baseUsername.length < 5) baseUsername = baseUsername.padEnd(5, '0');
@@ -34,6 +40,9 @@ function getUsername(name) {
     return baseUsername + Math.floor(1000 + Math.random() * 9000);
 }
 
+
+// create a new school along with its admin
+// -----------------------------------------------
 export const createSchool = catchAsync(async (req, res, next) => {
     let logo = null;
     let cloud_id = null;
@@ -69,7 +78,6 @@ export const createSchool = catchAsync(async (req, res, next) => {
         logo,
         principal,
         moto,
-        logo, 
         cloud_id,
         viceprincipal,
     });
@@ -93,9 +101,6 @@ export const createSchool = catchAsync(async (req, res, next) => {
         message: `Welcome to the SmartCampus ERP Portal !\n\nYour admin username: ${username}\nYour temporary password: ${password}\n\nPlease log in to the admin portal and change your username and password as soon as possible.`
     });
 
-    newSchool.admin = newAdmin._id;
-    await newSchool.save();
-
     res.status(201).json({
         status: successMsg,
         message: 'School and admin created successfully',
@@ -108,11 +113,13 @@ export const createSchool = catchAsync(async (req, res, next) => {
     });
 });
 
+
+// fetch school info along with active session and admin username
+// --
 export const getSchoolInfo = catchAsync(async (req, res, next) => {
     const schoolId = req.user.schoolID; // Support either param or authenticated user
 
     const school = await School.findById(schoolId)
-        .populate('admin', 'username')
         .lean();
 
     if (!school) {
@@ -120,16 +127,21 @@ export const getSchoolInfo = catchAsync(async (req, res, next) => {
     }
 
     const activeSession = await getActiveSession(req.user);
+    const admin = await Admin.findOne({ schoolID: schoolId }).select("username");
 
     res.status(200).json({
         status: successMsg,
         data: {
             school,
-            activeSession
+            activeSession,
+            admin
         }
     });
 });
 
+
+// edit school info
+// --
 export const editSchoolInfo = catchAsync(async (req, res, next) => {
     const schoolId = req.params.id;
 
@@ -140,7 +152,7 @@ export const editSchoolInfo = catchAsync(async (req, res, next) => {
     }
 
     // Authorization check: Only the admin who owns this school can edit
-    if (!req.user || req.user.role !== 'admin' || school.admin.toString() !== req.user._id.toString()) {
+    if (!req.user || req.user.role !== 'admin' || school._id.toString() !== req.user.schoolID.toString()) {
         return next(new AppError('You are not authorized to update this school', 403));
     }
 

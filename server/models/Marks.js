@@ -34,4 +34,9 @@ const MarksSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+MarksSchema.index(
+  { student: 1, course: 1, sessionID: 1, schoolID: 1 },
+  { unique: true }
+);
+
 export default mongoose.model("Marks", MarksSchema);

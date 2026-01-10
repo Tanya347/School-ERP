@@ -37,7 +37,13 @@ const UpdateSchema = new mongoose.Schema({
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Faculty'
+        refPath: 'authorType',
+        required: [true, 'Author is required']
+    },
+    authorType: {
+        type: String,
+        enum: ['Faculty', 'Admin'],
+        required: [true, 'Author type is required']
     },
     schoolID: {
         type: mongoose.Schema.Types.ObjectId,

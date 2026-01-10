@@ -88,10 +88,6 @@ const StudentSchema = new mongoose.Schema(
         message: 'Gender must be "Male" or "Female"',
       },
     },
-    classID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class',
-    },
     studentPhone: {
       type: String,
       required: [true, 'Phone number is required'],
@@ -134,6 +130,10 @@ const StudentSchema = new mongoose.Schema(
     role: {
       type: String,
       default: 'student',
+    },
+    classID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Class',
     },
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,

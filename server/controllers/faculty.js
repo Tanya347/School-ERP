@@ -9,9 +9,21 @@ import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
 import { folderName, successMsg } from "../utils/constants.js";
 
+
+// Register a new faculty member
+// -----------------------------------------------
 export const registerFaculty = catchAsync(async (req, res, next) => {
   
   req.body.schoolID = req.user.schoolID;
+
+  const exists = await Faculty.findOne({
+    $or: [{ email: req.body.email }, { username: req.body.username }],
+    schoolID: req.user.schoolID
+  });
+
+  if (exists) {
+    return next(new AppError("Faculty already exists", 400));
+  }
 
   let profilePicture = null;
   let cloud_id = null;
@@ -39,7 +51,9 @@ export const registerFaculty = catchAsync(async (req, res, next) => {
   });
 })
 
+
 // Update a faculty member
+// -----------------------------------------------
 export const updateFaculty = catchAsync(async (req, res, next) => {
   let profilePicture = null;
   let cloud_id = null;
@@ -65,44 +79,94 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
     cloud_id = faculty.cloud_id;
   }
 
-  const updatedFaculty = await Faculty.findByIdAndUpdate(
-    req.params.id,
-    {
-      ...req.body,
-      profilePicture,
-      cloud_id,
-    },
-    { new: true }
+  const allowedFields = [
+    "teachername",
+    "email",
+    "username",
+    "facultyPhone",
+    "facultyAddress",
+    "dob",
+    "gender",
+    "joiningYear",
+    "classTeacherTo"
+  ];
+
+  const updates = {};
+
+  allowedFields.forEach(f => {
+    if (req.body[f] !== undefined) updates[f] = req.body[f];
+  });
+
+  updates.profilePicture = profilePicture;
+  updates.cloud_id = cloud_id;
+
+  const updatedFaculty = await Faculty.findOneAndUpdate(
+    { _id: req.params.id, schoolID: req.user.schoolID },
+    updates,
+    { new: true, runValidators: true }
   );
+
   res.status(200).json({
     status: successMsg,
     data: updatedFaculty
   });
 });
 
+
 // Delete a faculty member
+// -----------------------------------------------
 export const deleteFaculty = catchAsync(async (req, res, next) => {
-  const faculty = await Faculty.findById(req.params.id);
+
+  const faculty = await Faculty.findOne({
+    _id: req.params.id,
+    schoolID: req.user.schoolID
+  });
+
+  if (!faculty) return next(new AppError("Faculty not found", 404));
+
+  await Course.updateMany(
+    { teacher: faculty._id },
+    { $set: { teacher: null } }
+  );
+
+  await Class.updateMany(
+    { teachers: faculty._id },
+    { $pull: { teachers: faculty._id } }
+  );
+
   if (faculty.cloud_id) {
     await cloudinary.uploader.destroy(faculty.cloud_id);
   }
-  await Faculty.findByIdAndDelete(req.params.id);
+
+  await faculty.deleteOne();
+
   res.status(200).json({
     status: successMsg,
     message: "The Faculty has been deleted"
   });
 });
 
+
+// Bulk delete faculty members
+// -----------------------------------------------
 export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
   const ids = req.body.ids;
 
   // Find all faculty members to be deleted
-  const faculties = await Faculty.find({ _id: { $in: ids } });
+  const faculties = await Faculty.find({
+    _id: { $in: ids },
+    schoolID: req.user.schoolID
+  });
+
   for (const faculty of faculties) {
+
+    await Course.updateMany({ teacher: faculty._id }, { $set: { teacher: null } });
+    await Class.updateMany({ teachers: faculty._id }, { $pull: { teachers: faculty._id } });
+
     if (faculty.cloud_id) {
       await cloudinary.uploader.destroy(faculty.cloud_id);
     }
-    await Faculty.findByIdAndDelete(faculty._id);
+    await faculty.deleteOne();
   }
   res.status(200).json({
     status: successMsg,
@@ -110,69 +174,56 @@ export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get a single faculty member
+// -----------------------------------------------
 export const getFaculty = catchAsync(async (req, res, next) => {
-  const faculty = await Faculty.findById(req.params.id)
-    .populate("subjectsTaught")
-    .populate("classesTaught", "name");
+  const faculty = await Faculty.findById(req.params.id);
   res.status(200).json({
     status: successMsg,
     data: faculty
   });
 });
 
+
 // Get all faculty members
+// -----------------------------------------------
 export const getFacultys = catchAsync(async (req, res, next) => {
   const schoolId = req.user.schoolID;
-  let filter = { schoolID: schoolId };
-  const facultys = await Faculty.find(filter).populate("subjectsTaught");
+  const facultys = await Faculty.find({ schoolID: schoolId });
   res.status(200).json({
     status: successMsg,
     data: facultys
   });
 });
 
+
 // Get faculty classes
+// -----------------------------------------------
 export const getFacultyClasses = catchAsync(async (req, res, next) => {
-  const faculty = await Faculty.findById(req.params.id).populate(
-    "classesTaught",
-    "name classTeacher"
-  );
+  const classes = await Class.find({
+    teachers: req.params.id,
+    schoolID: req.user.schoolID
+  }).select("name classTeacher");
 
-  const classes = faculty.classesTaught.map((sclass) => ({
-    _id: sclass._id,
-    name: sclass.name,
-    classTeacher: sclass.classTeacher
-  }));
-
-  res.status(200).json({
-    status: successMsg,
-    data: classes
-  });
+  res.status(200).json({ status: successMsg, data: classes });
 });
+
 
 // Get faculty courses
+// -----------------------------------------------
 export const getFacultyCourses = catchAsync(async (req, res, next) => {
-  const faculty = await Faculty.findById(req.params.id).populate(
-    "subjectsTaught",
-    "name subjectCode class marksAdded"
-  );
+  const courses = await Course.find({
+    teacher: req.params.id,
+    schoolID: req.user.schoolID
+  }).populate("class", "name");
 
-  const courses = faculty.subjectsTaught.map((course) => ({
-    _id: course._id,
-    name: course.name,
-    sclass: course.class,
-    subjectCode: course.subjectCode,
-    marksAdded: course.marksAdded,
-  }));
-
-  res.status(200).json({
-    status: successMsg,
-    data: courses
-  });
+  res.status(200).json({ status: successMsg, data: courses });
 });
 
+
 // Add a new course to a faculty member
+// -----------------------------------------------
 export const AddNewCourse = catchAsync(async (req, res, next) => {
   const { facId, classId, courseId } = req.params;
 
@@ -187,16 +238,6 @@ export const AddNewCourse = catchAsync(async (req, res, next) => {
       new AppError("This course is already assigned to a faculty", 400)
     );
   }
-
-  await Faculty.updateOne(
-    { _id: facId },
-    {
-      $addToSet: {
-        subjectsTaught: courseId,
-        classesTaught: classId,
-      },
-    }
-  );
 
   await Class.updateOne(
     { _id: classId },
@@ -221,6 +262,9 @@ export const AddNewCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Remove a course from a faculty member
+// -----------------------------------------------
 export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
   const { facId, classId, courseId } = req.params;
 
@@ -229,17 +273,6 @@ export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
   if (!course || course.teacher?.toString() !== facId) {
     return next(new AppError("Course not assigned to this faculty", 400));
   }
-
-  // Remove from Faculty
-  await Faculty.updateOne(
-    { _id: facId },
-    {
-      $pull: {
-        subjectsTaught: courseId,
-        classesTaught: classId,
-      },
-    }
-  );
 
   // Remove from Class
   await Class.updateOne(
@@ -266,6 +299,9 @@ export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Change course faculty
+// -----------------------------------------------
 export const changeCourseFaculty = catchAsync(async (req, res, next) => {
   const { courseId, newFacId, classId } = req.params;
 
@@ -283,16 +319,6 @@ export const changeCourseFaculty = catchAsync(async (req, res, next) => {
 
   // Remove from old faculty
   if (oldFacId) {
-    await Faculty.updateOne(
-      { _id: oldFacId },
-      {
-        $pull: {
-          subjectsTaught: courseId,
-          classesTaught: classId,
-        },
-      }
-    );
-
     await Class.updateOne(
       { _id: classId },
       {
@@ -300,17 +326,6 @@ export const changeCourseFaculty = catchAsync(async (req, res, next) => {
       }
     );
   }
-
-  // Assign to new faculty
-  await Faculty.updateOne(
-    { _id: newFacId },
-    {
-      $addToSet: {
-        subjectsTaught: courseId,
-        classesTaught: classId,
-      },
-    }
-  );
 
   await Class.updateOne(
     { _id: classId },

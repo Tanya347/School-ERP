@@ -14,12 +14,18 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import { sendEmail } from "../utils/email.js";
 
+
+// sign token
+// -----------------------------------------------
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT, {
     expiresIn: process.env.JWT_EXPIRES_IN
   });
 }
 
+
+// create and send token
+// -----------------------------------------------
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
@@ -39,6 +45,9 @@ const createSendToken = (user, statusCode, res) => {
   })
 }
 
+
+// register admin
+// -----------------------------------------------
 export const registerAdmin = catchAsync(async (req, res, next) => {
   const newUser = await Admin.create({
     username: req.body.username,
@@ -48,6 +57,9 @@ export const registerAdmin = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 201, res);
 })
 
+
+// login
+// -----------------------------------------------
 export const login = (model) => catchAsync(async (req, res, next) => {
 
   const {username, password} = req.body;
@@ -64,6 +76,9 @@ export const login = (model) => catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+
+// protect routes
+// -----------------------------------------------
 export const protect = () => catchAsync(async(req, res, next) => {
   let token;
 
@@ -97,6 +112,9 @@ export const protect = () => catchAsync(async(req, res, next) => {
   }
 })
 
+
+// restrict to specific roles
+// -----------------------------------------------
 export const restrictTo = (...roles) => {
   return catchAsync(async (req, res, next) => {
     if(!roles.includes(req.user.role)) {
@@ -106,6 +124,9 @@ export const restrictTo = (...roles) => {
   })
 }
 
+
+// logout
+// -----------------------------------------------
 export const logout = catchAsync(async (req, res, next) => {
   res.cookie('jwt', '', {
     expires: new Date(0),
@@ -120,6 +141,9 @@ export const logout = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// check if owner of resource
+// -----------------------------------------------
 export const isOwner = (model) => catchAsync(async (req, res, next) => {
   const resource = await model.findById(req.params.id);
   if(!resource) {
@@ -131,6 +155,9 @@ export const isOwner = (model) => catchAsync(async (req, res, next) => {
   next();
 })
 
+
+// forgot password
+// -----------------------------------------------
 export const forgotPassword = (model, type) => catchAsync(async(req, res, next) => {
   const user = await model.findOne({email: req.body.email});
   
@@ -165,6 +192,9 @@ export const forgotPassword = (model, type) => catchAsync(async(req, res, next) 
   }
 })
 
+
+// reset password
+// -----------------------------------------------
 export const resetPassword = (model) => catchAsync(async(req, res, next) => {
   const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
   const user = await model.findOne({
@@ -191,6 +221,9 @@ export const resetPassword = (model) => catchAsync(async(req, res, next) => {
   })
 })
 
+
+// update password
+// -----------------------------------------------
 export const updatePassword = (model) => catchAsync(async (req, res, next) => {
 
   const user = await model.findById(req.params.id).select('+password');

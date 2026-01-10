@@ -2,7 +2,11 @@ import Admin from "../models/Admin.js";
 
 import { catchAsync } from '../utils/catchAsync.js';
 import { successMsg } from "../utils/constants.js";
+import { AppError } from "../utils/customError.js";
 
+
+// filter object to allow only specified fields
+// -----------------------------------------------
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
     Object.keys(obj).forEach((el) => {
@@ -11,8 +15,9 @@ const filterObj = (obj, ...allowedFields) => {
     return newObj;
   }
 
+
 // update admin data
-// --
+// -----------------------------------------------
 export const updateAdmin = catchAsync(async (req, res, next) => {
   
     // create error if user posts password data
@@ -23,8 +28,8 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     const filteredBody = filterObj(req.body, 'username');
   
     const updatedUser = await Admin.findByIdAndUpdate(
-      req.user.id,
-      { $set: filteredBody},
+      { _id: req.user.id, schoolID: req.user.schoolID },
+      { $set: filteredBody },
       { new: true, runValidators: true }
     );
     res.status(200).json({
@@ -36,11 +41,18 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
     });
   });
 
-  // delete admin profile
-  // --
+
+// delete admin profile
+// -----------------------------------------------
   export const deleteAdmin = catchAsync(async (req, res, next) => {
     res.cookie('jwt', '', { expires: new Date(0), httpOnly: true });
-    await Await.findByIdAndDelete(req.user.id);
+
+    const count = await Admin.countDocuments({ schoolID: req.user.schoolID });
+    if (count <= 1) {
+      return next(new AppError("Cannot delete the only admin of a school", 400));
+    }
+
+    await Admin.findByIdAndDelete(req.user.id);
     res.status(200).json({
       status: successMsg, 
       data: null,

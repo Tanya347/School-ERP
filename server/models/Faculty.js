@@ -141,18 +141,6 @@ const FacultySchema = new mongoose.Schema(
       type: String,
       default: 'faculty',
     },
-    subjectsTaught: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course',
-      },
-    ],
-    classesTaught: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class',
-      },
-    ],
     schoolID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'School'

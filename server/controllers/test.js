@@ -7,6 +7,9 @@ import { AppError } from "../utils/customError.js";
 import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
 
+
+// create test
+// -----------------------------------------------
 export const createTest = catchAsync(async (req, res, next) => {
 
   req.body.schoolID = req.user.schoolID;
@@ -19,7 +22,7 @@ export const createTest = catchAsync(async (req, res, next) => {
     return next(new AppError("Course not found", 404));
   }
 
-  req.body.sclass = course.class;
+  req.body.classID = course.classID;
 
   const newTest = new Test(req.body);
   const savedTest = await newTest.save();
@@ -30,6 +33,9 @@ export const createTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// update test
+// -----------------------------------------------
 export const updateTest = catchAsync(async (req, res, next) => {
   const test = await Test.findByIdAndUpdate(
     req.params.id,
@@ -43,6 +49,9 @@ export const updateTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// delete test
+// -----------------------------------------------
 export const deleteTest = catchAsync(async (req, res, next) => {
   await Test.findByIdAndDelete(req.params.id);
   res.status(200).json({
@@ -51,9 +60,12 @@ export const deleteTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// get test
+// -----------------------------------------------
 export const getTest = catchAsync(async (req, res, next) => {
   const test = await Test.findById(req.params.id)
-    .populate("sclass", "name")
+    .populate("classID", "name")
     .populate("author", "teachername")
     .populate("subject", "name")
     .populate("marks.student_id", "name enroll")
@@ -64,6 +76,9 @@ export const getTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// get single test
+// -----------------------------------------------
 export const getSingleTest = catchAsync(async (req, res, next) => {
   const test = await Test.findById(req.params.id);
   res.status(200).json({
@@ -72,12 +87,15 @@ export const getSingleTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// get tests with filters
+// -----------------------------------------------
 export const getTests = catchAsync(async (req, res, next) => {
   const { facultyId, classId } = req.query;
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };
   if (facultyId) filter.author = facultyId;
-  if (classId) filter.sclass = classId;
+  if (classId) filter.classID = classId;
 
   const tasks = await Test.find(filter);
 
@@ -87,7 +105,9 @@ export const getTests = catchAsync(async (req, res, next) => {
   });
 })
 
+
 // Add/Edit marks for a test
+// -----------------------------------------------
 export const addEditMarks = catchAsync(async (req, res, next) => {
   const { testid } = req.params;
   const { marksData } = req.body; // array of student IDs and marks from the request body
@@ -97,7 +117,7 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
     return next(new AppError('Test not found', 404));
   }
 
-  const studentsInClass = await Student.find({ class: test.sclass }).select('_id');
+  const studentsInClass = await Student.find({ classID: test.classID }).select('_id');
 
   // Create a map of student IDs from marksData for quick lookup
   const marksDataMap = new Map(marksData.map(({ student_id, value }) => [student_id, value]));
@@ -131,6 +151,7 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
 
 
 // Get marks of all students for a test
+// -----------------------------------------------
 export const getMarksOfAllStudents = catchAsync(async (req, res, next) => {
   const { testid } = req.params;
 
@@ -139,7 +160,7 @@ export const getMarksOfAllStudents = catchAsync(async (req, res, next) => {
     return next(new AppError('Test not found', 404));
   }
 
-  const studentsInClass = await Student.find({ class: test.sclass }).select('name enroll');
+  const studentsInClass = await Student.find({ classID: test.classID }).select('name enroll');
 
   const result = studentsInClass.map(student => {
     const studentMarks = test.marks.find(mark =>
@@ -161,6 +182,7 @@ export const getMarksOfAllStudents = catchAsync(async (req, res, next) => {
 
 
 // Get marks of one student for a test
+// -----------------------------------------------
 export const getMarksOfOneStudent = catchAsync(async (req, res, next) => {
   const { testid, studentid } = req.params;
 
@@ -193,6 +215,7 @@ export const getMarksOfOneStudent = catchAsync(async (req, res, next) => {
 
 
 // Clear marks of a test
+// -----------------------------------------------
 export const clearMarksOfTest = catchAsync(async (req, res, next) => {
   const { testid } = req.params;
 
@@ -213,6 +236,9 @@ export const clearMarksOfTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// complete test
+// -----------------------------------------------
 export const completeTest = catchAsync(async (req, res, next) => {
   const { testid } = req.params;
 
@@ -234,6 +260,9 @@ export const completeTest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// cancel test
+// -----------------------------------------------
 export const cancelTest = catchAsync(async (req, res, next) => {
   const { testid } = req.params;
 

@@ -5,9 +5,13 @@ import fs from "fs";
 import { getActiveSession } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
+import { AppError } from "../utils/customError.js";
 
 import { successMsg, folderName } from "../utils/constants.js";
 
+
+// create material
+// -----------------------------------------------
 export const createMaterial = catchAsync(async (req, res, next) => {
 
   const activeSession = await getActiveSession(req.user);
@@ -54,18 +58,24 @@ export const createMaterial = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Get materials for the user based on role
+// -----------------------------------------------
 export const getMaterials = catchAsync(async (req, res, next) => {
-  let filter = { schoolID: req.user.schoolID };
+  let filter = { 
+    schoolID: req.user.schoolID,
+    sessionID: req.user.sessionID
+  };
 
   if (req.user.role === 'admin' || req.user.role === 'faculty') {
     filter.author = req.user._id;
   } else if (req.user.role === 'student') {
     // Assuming req.user.classId contains the student's class ID
-    filter.classId = req.user.class;
+    filter.classID = req.user.class;
   }
 
   const materials = await Material.find(filter)
-    .populate('classId', 'name');
+    .populate('classID', 'name');
 
   res.status(200).json({
     status: successMsg,
@@ -73,6 +83,9 @@ export const getMaterials = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Edit a material
+// -----------------------------------------------
 export const editMaterial = catchAsync(async (req, res, next) => {
   let fileUrl = null;
   let cloud_id = null;
@@ -81,6 +94,14 @@ export const editMaterial = catchAsync(async (req, res, next) => {
 
   if (!material) {
     return next(new AppError('Material not found', 404));
+  }
+
+  if (material.schoolID.toString() !== req.user.schoolID.toString()) {
+    return next(new AppError('Not authorized to edit this material', 403));
+  }
+
+  if (material.author.toString() !== req.user._id.toString()) {
+    return next(new AppError('Not authorized to edit this material', 403));
   }
 
   if (req.file) {
@@ -119,8 +140,23 @@ export const editMaterial = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// Delete a material
+// -----------------------------------------------
 export const deleteMaterial = catchAsync(async (req, res, next) => {
     const material = await Material.findById(req.params.id);
+
+    if (!material) {
+        return next(new AppError('Material not found', 404));
+    }
+
+    if (material.schoolID.toString() !== req.user.schoolID.toString()) {
+        return next(new AppError('Not authorized to delete this material', 403));
+    }
+
+    if (material.author.toString() !== req.user._id.toString()) {
+        return next(new AppError('Not authorized to delete this material', 403));
+    }
 
     if (material.cloud_id) {
         await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
@@ -134,30 +170,44 @@ export const deleteMaterial = catchAsync(async (req, res, next) => {
     });
 });
 
+
+// Bulk delete materials
+// -----------------------------------------------
 export const bulkDeleteMaterial = catchAsync(async (req, res, next) => {
     const { ids } = req.body;
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
         return next(new AppError('No material IDs provided for deletion', 400));
     }
-    const materials = await Material.find({ _id: { $in: ids } });
+    const materials = await Material.find({ 
+        _id: { $in: ids },
+        schoolID: req.user.schoolID,
+        author: req.user._id
+    });
     for (const material of materials) {
         if (material.cloud_id) {
             await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
         }
-        await material.remove();
+        await Material.findByIdAndDelete(material._id);
     }
     res.status(200).json({
         status: successMsg,
-        message: `${ids.length} materials deleted successfully!`,
+        message: `${materials.length} materials deleted successfully!`,
     });
 });
 
+
+// Get a single material
+// -----------------------------------------------
 export const getMaterial = catchAsync(async (req, res, next) => {
     const material = await Material.findById(req.params.id)
-        .populate('classId', 'name');
+        .populate('classID', 'name');
 
     if (!material) {
         return next(new AppError('Material not found', 404));
+    }
+
+    if (material.schoolID.toString() !== req.user.schoolID.toString()) {
+        return next(new AppError('Not authorized to view this material', 403));
     }
 
     res.status(200).json({

@@ -4,7 +4,11 @@ import Faculty from "../models/Faculty.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
+import { AppError } from "../utils/customError.js";
 
+
+// Create an update
+// -----------------------------------------------
 export const createUpdate = catchAsync(async (req, res, next) => {
     req.body.schoolID = req.user.schoolID;
     const activeSession = await getActiveSession(req.user);
@@ -18,12 +22,15 @@ export const createUpdate = catchAsync(async (req, res, next) => {
     });
 });
 
+
+// Edit an update
+// -----------------------------------------------
 export const updateUpdate = catchAsync(async (req, res, next) => {
     const update = await Update.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },
         { new: true }
-    );
+    ).populate("classID", "name");
     res.status(200).json({
         status: successMsg,
         message: 'Update edited successfully!',
@@ -31,7 +38,17 @@ export const updateUpdate = catchAsync(async (req, res, next) => {
     });
 });
 
+
+// Delete an update
+// -----------------------------------------------
 export const deleteUpdate = catchAsync(async (req, res, next) => {
+    const update = await Update.findById(req.params.id);
+    if (!update) {
+        return next(new AppError('Update not found', 404));
+    }
+    if (update.schoolID.toString() !== req.user.schoolID.toString()) {
+        return next(new AppError('Not authorized to delete this update', 403));
+    }
     await Update.findByIdAndDelete(req.params.id);
     res.status(200).json({
         status: successMsg,
@@ -39,73 +56,82 @@ export const deleteUpdate = catchAsync(async (req, res, next) => {
     });
 });
 
+
+// Bulk delete updates
+// -----------------------------------------------
 export const bulkDeleteUpdate = catchAsync(async (req, res, next) => {
     const { ids } = req.body;
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
         return next(new AppError("No IDs provided for deletion", 400));
     }
-    await Update.deleteMany({ _id: { $in: ids } });
+    await Update.deleteMany({ 
+        _id: { $in: ids },
+        schoolID: req.user.schoolID
+    });
     res.status(200).json({
         status: successMsg,
         message: `${ids.length} updates deleted successfully!`,
     });
 });
 
+
+// Get a single update
+// -----------------------------------------------
 export const getUpdate = catchAsync(async (req, res, next) => {
-    const update = await Update.findById(req.params.id).populate("class", "name");
+    const update = await Update.findById(req.params.id).populate("classID", "name");
+    if (!update) {
+        return next(new AppError('Update not found', 404));
+    }
+    if (update.schoolID.toString() !== req.user.schoolID.toString()) {
+        return next(new AppError('Not authorized to view this update', 403));
+    }
     res.status(200).json({
         status: successMsg,
         data: update
     });
 });
 
-export const getUpdates = catchAsync(async (req, res, next) => {
-    const { classId, facultyId } = req.query;
-    let updates = [];
 
-    const now = new Date();
-    const baseFilter = { schoolID: req.user.schoolID, expiresAt: { $gt: now } };
+// Get updates for the user based on role
+// -----------------------------------------------
+export const getUpdates = catchAsync(async (req, res) => {
+  const { classId } = req.query;
+  const now = new Date();
 
-    if (facultyId) {
-        const faculty = await Faculty.findById(facultyId).populate('classesTaught');
-        if (!faculty) next(new AppError('Faculty not found', 404));
+  const filter = {
+    schoolID: req.user.schoolID,
+    expiresAt: { $gt: now }
+  };
 
-        const classesTaught = faculty.classesTaught.map(c => c._id);
+  // Student → class based
+  if (req.user.role === "student") {
+    filter.$or = [
+      { updateType: "general" },
+      { updateType: "specific", classID: req.user.class }
+    ];
+  }
 
-        updates = await Update.find({
-            $or: [
-                { updateType: 'general' },
-                { updateType: 'specific', class: { $in: classesTaught } },
-                { author: facultyId }
-            ],
-            ...baseFilter
-        }).populate("class", "name");
-    }
+  // Faculty → their class teacher class
+  if (req.user.role === "faculty") {
+    const faculty = await Faculty.findById(req.user._id);
+    filter.$or = [
+      { updateType: "general" },
+      { author: faculty._id },
+      { classID: faculty.classTeacherTo }
+    ];
+  }
 
-    else if (classId) {
-        const filter = {
-        $or: [
-            { updateType: 'general' },
-            { updateType: 'specific', class: classId }
-        ],
-        ...baseFilter
-        };
+  // Admin → all
+  if (req.user.role === "admin") {
+    filter.$or = [
+      { updateType: "general" }
+    ];
+  }
 
-        updates = await Update.find(filter).populate("class", "name");
-    }
+  const updates = await Update.find(filter)
+    .populate("classID", "name")
+    .populate("author", "teachername");
 
-    else {
-        updates = await Update.find({
-            schoolID: req.user.schoolID
-        }).populate("class", "name");
-    }
-
-    const enrichedUpdates = updates.map(update => ({
-        ...update.toObject()
-    }));
-
-    res.status(200).json({
-        status: successMsg,
-        data: enrichedUpdates
-    });
+  res.status(200).json({ status: successMsg, data: updates });
 });
+

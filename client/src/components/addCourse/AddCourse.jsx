@@ -108,7 +108,7 @@ const AddCourse = ({ setOpen, facId }) => {
                                     <CancelIcon
                                         className="remove-btn"
                                         onClick={() =>
-                                            handleRemoveCourse(course._id, course.sclass)
+                                            handleRemoveCourse(course._id, course.classID)
                                         }
                                     />
                                 </Tooltip>

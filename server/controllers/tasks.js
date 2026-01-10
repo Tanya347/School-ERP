@@ -4,6 +4,9 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
 
+
+// create task
+// -----------------------------------------------
 export const createTask = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const activeSession = await getActiveSession(req.user);
@@ -17,6 +20,9 @@ export const createTask = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// update task
+// -----------------------------------------------
 export const updateTask = catchAsync(async (req, res, next) => {
   const task = await Task.findByIdAndUpdate(
     req.params.id,
@@ -30,17 +36,26 @@ export const updateTask = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// delete task
+// -----------------------------------------------
 export const deleteTask = catchAsync(async (req, res, next) => {
-  await Task.findByIdAndDelete(req.params.id);
+  await Task.deleteOne({
+    _id: req.params.id,
+    schoolID: req.user.schoolID
+  });
   res.status(200).json({
     status: successMsg,
     message: "Task has been deleted successfully!"
   });
 });
 
+
+// get task
+// -----------------------------------------------
 export const getTask = catchAsync(async (req, res, next) => {
   const task = await Task.findById(req.params.id)
-    .populate('sclass', 'name')
+    .populate('courseID', 'name')
     .populate('author', 'teachername');
   res.status(200).json({
     status: successMsg,
@@ -48,17 +63,23 @@ export const getTask = catchAsync(async (req, res, next) => {
   });
 });
 
+
+// get tasks with filters
+// -----------------------------------------------
 export const getTasks = catchAsync(async (req, res, next) => {
   const { facultyId, classId } = req.query;
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };
   if (facultyId) filter.author = facultyId;
-  if (classId) filter.sclass = classId;
 
-  const tasks = await Task.find(filter).populate("sclass", "name");
+  let tasks = await Task.find(filter).populate("courseID", "name classID");
+
+  if (classId) {
+    tasks = tasks.filter(task => task.courseID.classID.toString() === classId);
+  }
 
   res.status(200).json({
     status: successMsg,
     data: tasks,
   });
-})
+});

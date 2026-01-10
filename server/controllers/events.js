@@ -8,7 +8,9 @@ import cloudinary from "../utils/cloudinary.js";
 
 import { successMsg, folderName } from "../utils/constants.js";
 
+
 // Create a new event
+// -----------------------------------------------
 export const createEvent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const activeSession = await getActiveSession(req.user);
@@ -16,18 +18,11 @@ export const createEvent = catchAsync(async (req, res, next) => {
   let poster = null;
   let cloud_id = null;
 
-  // Ensure startDate and endDate are valid ISO 8601 strings
   if (req.body.startDate) {
     const start = new Date(req.body.startDate);
-    if (!isNaN(start)) {
-      req.body.startDate = start.toISOString();
-    }
   }
   if (req.body.endDate) {
     const end = new Date(req.body.endDate);
-    if (!isNaN(end)) {
-      req.body.endDate = end.toISOString();
-    }
   }
 
   if (req.file) {
@@ -50,11 +45,13 @@ export const createEvent = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Update an existing event
+// -----------------------------------------------
 export const updateEvent = catchAsync(async (req, res, next) => {
   let poster = null;
   let cloud_id = null;
-  const event = await Event.findById(req.params.id);
+  const event = await Event.findOne({ _id: req.params.id, schoolID: req.user.schoolID });
   if (!event) {
     return next(new AppError('Event not found', 404));
   }
@@ -78,7 +75,7 @@ export const updateEvent = catchAsync(async (req, res, next) => {
   }
 
   const updatedEvent = await Event.findByIdAndUpdate(
-    req.params.id,
+    { _id: req.params.id, schoolID: req.user.schoolID },
     {
       ...req.body,
       poster,
@@ -93,20 +90,24 @@ export const updateEvent = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Delete an event
+// -----------------------------------------------
 export const deleteEvent = catchAsync(async (req, res, next) => {
-  const event = await Event.findById(req.params.id);
+  const event = await Event.findOne({ _id: req.params.id, schoolID: req.user.schoolID });
   if(event.cloud_id) {
     await cloudinary.uploader.destroy(event.cloud_id);
   }
-  await Event.findByIdAndDelete(req.params.id);
+  await event.deleteOne();
   res.status(200).json({
     status: successMsg,
     message: "The event has been deleted"
   });
 });
 
+
 // Get a specific event by ID
+// -----------------------------------------------
 export const getEvent = catchAsync(async (req, res, next) => {
   const event = await Event.findById(req.params.id);
   res.status(200).json({
@@ -115,7 +116,9 @@ export const getEvent = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Get all events
+// -----------------------------------------------
 export const getEvents = catchAsync(async (req, res, next) => {
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };

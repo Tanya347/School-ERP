@@ -4,25 +4,44 @@ import Marks from "../models/Marks.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
+import Course from "../models/Course.js";
 
+
+// Enter or update marks for a subject
+// -----------------------------------------------
 export const enterMarksForSubject = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
   const { marksData } = req.body;
   const { sessionID, schoolID } = req.user;
-
+  
   for (const data of marksData) {
+
     const { studentId, marks } = data;
+
+    const course = await Course.findOne({
+      _id: subjectId,
+      schoolID
+    });
+  
+    const student = await Student.findOne({
+      _id: studentId,
+      class: course.classID,
+      schoolID
+    });
+  
+    if (!student) throw new AppError("Invalid student for this subject", 400);
 
     await Marks.findOneAndUpdate(
       {
         student: studentId,
         course: subjectId,
-        session: sessionID,
+        sessionID,
+        schoolID,
       },
       {
         student: studentId,
         course: subjectId,
-        session: sessionID,
+        sessionID,
         schoolID,
         marksObtained: marks,
         status: "evaluated",
@@ -37,34 +56,37 @@ export const enterMarksForSubject = catchAsync(async (req, res) => {
   });
 });
 
+
+// Get marks of a student
+// -----------------------------------------------
 export const getMarksOfStudent = catchAsync(async (req, res) => {
-  const { studentid } = req.params;
+  const { studentId } = req.params;
   const { sessionID } = req.user;
 
-  const student = await Student.findById(studentid)
-    .populate({
-      path: "class",
-      populate: { path: "subjects", select: "name" },
-    });
-
+  const student = await Student.findById(studentId).populate("classID");
   if (!student) {
     return next(new AppError('Student not found', 404));
   }
 
-  const marks = await Marks.find({
-    student: studentid,
-    session: sessionID,
-  }).populate("course", "name");
+  const courses = await Course.find({
+    classID: student.classID,
+    schoolID: req.user.schoolID
+  }).select("name");
 
-  const marksMap = {};
-  marks.forEach(m => {
-    marksMap[m.course._id.toString()] = m.marksObtained;
+  const marks = await Marks.find({
+    student: studentId,
+    sessionID,
+    schoolID: req.user.schoolID
   });
 
-  const marksData = student.class.subjects.map(subject => ({
-    subjectId: subject._id,
-    subjectName: subject.name,
-    marks: marksMap[subject._id.toString()] ?? null,
+
+  const marksMap = {};
+  marks.forEach(m => marksMap[m.course.toString()] = m.marksObtained);
+
+  const marksData = courses.map(c => ({
+    subjectId: c._id,
+    subjectName: c.name,
+    marks: marksMap[c._id.toString()] ?? null
   }));
 
   const allMarksPresent = marksData.every(m => m.marks !== null);
@@ -76,15 +98,18 @@ export const getMarksOfStudent = catchAsync(async (req, res) => {
 });
 
 
+// Get marks of a subject for all students in that subject's class
+// -----------------------------------------------
 export const getMarksOfSubject = catchAsync(async (req, res) => {
-  const { subjectid } = req.params;
+  const { subjectId } = req.params;
   const { sessionID } = req.user;
 
   const marks = await Marks.find({
-    course: subjectid,
-    session: sessionID,
+    course: subjectId,
+    sessionID,
+    schoolID: req.user.schoolID,
   })
-    .populate("student", "name enroll");
+  .populate("student", "name enroll");
 
   const result = marks.map(m => ({
     _id: m.student._id,
@@ -100,17 +125,33 @@ export const getMarksOfSubject = catchAsync(async (req, res) => {
 });
 
 
+// Get marks of all students in a class across all subjects
+// -----------------------------------------------
 export const getMarksOfClass = catchAsync(async (req, res) => {
-  const { classid } = req.params;
+  const { classId } = req.params;
   const { sessionID } = req.user;
 
-  const students = await Student.find({ class: classid }).select("name enroll");
+  const students = await Student.find({ 
+    classID: classId,
+    schoolID: req.user.schoolID 
+  }).select("name enroll");
 
-  const marks = await Marks.find({ session: sessionID })
-    .populate("course", "name")
-    .populate("student", "_id");
+  const courses = await Course.find({
+    classID: classId,
+    schoolID: req.user.schoolID
+  }).select("_id name");
 
-  const subjectSet = new Set(marks.map(m => m.course.name));
+  const marks = await Marks.find({
+    sessionID,
+    schoolID: req.user.schoolID,
+    course: { $in: courses.map(c => c._id) }
+  })
+  .populate("course", "name")
+  .populate("student", "_id");
+
+  // Filter marks for only the current class
+  const classMarks = marks.filter(m => m.course.classID?.toString() === classId);
+  const subjectSet = new Set(classMarks.map(m => m.course.name));
 
   const studentMap = {};
   students.forEach(s => {
@@ -122,7 +163,7 @@ export const getMarksOfClass = catchAsync(async (req, res) => {
     subjectSet.forEach(sub => (studentMap[s._id][sub] = null));
   });
 
-  marks.forEach(m => {
+  classMarks.forEach(m => {
     if (studentMap[m.student._id]) {
       studentMap[m.student._id][m.course.name] = m.marksObtained;
     }
@@ -135,13 +176,16 @@ export const getMarksOfClass = catchAsync(async (req, res) => {
 });
 
 
+// Clear marks for a subject
+// -----------------------------------------------
 export const clearMarksForSubject = catchAsync(async (req, res) => {
-  const { subjectid } = req.params;
+  const { subjectId } = req.params;
   const { sessionID } = req.user;
 
   await Marks.deleteMany({
-    course: subjectid,
-    session: sessionID,
+    course: subjectId,
+    sessionID,
+    schoolID: req.user.schoolID,
   });
 
   res.status(200).json({
@@ -151,15 +195,18 @@ export const clearMarksForSubject = catchAsync(async (req, res) => {
 });
 
 
+// Clear marks for all subjects in a class
+// -----------------------------------------------
 export const clearMarksForClass = catchAsync(async (req, res) => {
-  const { classid } = req.params;
+  const { classId } = req.params;
   const { sessionID } = req.user;
 
-  const students = await Student.find({ class: classid }).select("_id");
+  const students = await Student.find({ classID: classId, schoolID: req.user.schoolID }).select("_id");
 
   await Marks.deleteMany({
     student: { $in: students.map(s => s._id) },
-    session: sessionID,
+    sessionID,
+    schoolID: req.user.schoolID
   });
 
   res.status(200).json({
@@ -168,9 +215,12 @@ export const clearMarksForClass = catchAsync(async (req, res) => {
   });
 });
 
+
+// Get student's marks history across sessions
+// -----------------------------------------------
 export const getStudentMarksHistory = catchAsync(async (req, res, next) => {
   const { studentId } = req.params;
-  const schoolId = req.user;
+  const schoolId = req.user.schoolID;
 
   const student = await Student.findById(studentId).select("name enroll");
 
@@ -180,38 +230,38 @@ export const getStudentMarksHistory = catchAsync(async (req, res, next) => {
 
   const marks = await Marks.find({
     student: studentId,
-    schoolId,
+    schoolID: schoolId,
   })
     .populate({
       path: "course",
-      select: "name class",
+      select: "name classID",
       populate: {
-        path: "class",
+        path: "classID",
         select: "name"
       }
     })
     .populate({
-      path: "session",
+      path: "sessionID",
       select: "name startYear endYear",
     })
-    .sort({ "session.startYear": 1});
+    .sort({ "sessionID.startYear": 1});
 
   const historyMap = {};
 
   marks.forEach(mark => {
-    const sessionId = mark.session._id.toString();
+    const sessionId = mark.sessionID._id.toString();
 
     if(!historyMap[sessionId]) {
       historyMap[sessionId] = {
         sessionId,
-        sessionName: mark.session.name,
-        className: mark.course.class?.name || "N/A",
+        sessionName: mark.sessionID.name,
+        className: mark.course.classID?.name || "N/A",
         subjects: []
       };
     }
 
     historyMap[sessionId].subjects.push({
-      subkectId: mark.course._id,
+      subjectId: mark.course._id,
       subjectName: mark.course.name,
       marks: mark.marksObtained,
       status: mark.status

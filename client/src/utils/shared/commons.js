@@ -88,16 +88,6 @@ export const checkSuccess = (status) => {
   return status === successMsg;
 }
 
-export const getTimeRange = (start, end) => {
-  return `${start.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  })} - ${end.toLocaleTimetring([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  })}`
-}
-
 export function toTitleCase(str) {
   if (!str) return '';
     return str

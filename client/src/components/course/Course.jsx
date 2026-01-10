@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import Popup from '../shared/popup/Popup'
 
-const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
+const Course = ({index, name, subjectCode, syllabusPicture, teacher, className, examStatus}) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
@@ -19,6 +19,8 @@ const Course = ({index, name, subjectCode, syllabusPicture, teacher}) => {
         <div className="course" key={index}>
             <h3>{name}</h3>
             <p>{subjectCode}</p>
+            {className && <p><span style={{"fontWeight":"bold"}}>Class: </span>{className}</p>}
+            {examStatus && <p><span style={{"fontWeight":"bold"}}>Exam Status: </span>{examStatus}</p>}
             {teacher && <p><span style={{"fontWeight":"bold"}}>Taught by: </span>{teacher}</p>}
             <button onClick={() => openModal(syllabusPicture)}>View Syllabus</button>
         </div>

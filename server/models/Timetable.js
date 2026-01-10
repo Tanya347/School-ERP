@@ -21,7 +21,6 @@ const timetableSlotSchema = new mongoose.Schema({
   facultyID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Faculty",
-    required: true,
   },
   courseID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -43,10 +42,5 @@ const timetableSlotSchema = new mongoose.Schema({
     ref: 'Session',
   }
 }, { timestamps: true });
-
-timetableSlotSchema.index(
-  { schoolID, sessionID, classID, day, period },
-  { unique: true }
-);
 
 export default mongoose.model("TimetableSlot", timetableSlotSchema);

@@ -1,4 +1,4 @@
-import "./landing.scss"
+import "./landing.scss";
 
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 

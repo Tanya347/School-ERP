@@ -6,7 +6,7 @@ import Calendar from 'react-calendar';
 
 import useFetch from '../../utils/service/useFetch';
 import { getDatatableURL } from '../../utils/endpoints/get';
-import { getTimeRange, isEventDate } from "../../utils/shared/commons";
+import { isEventDate } from "../../utils/shared/commons";
 import { eventsConst } from "../../utils/shared/constants";
 
 const EventCalender = () => {
@@ -32,6 +32,16 @@ const EventCalender = () => {
     setSelectedDate(isSameDate ? null : date);
   };
 
+  const getTimeRange = (start, end) => {
+    return `${start.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    })} - ${end.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    })}`
+  }
+
   return (
     <div className="calendar-container">
       <Calendar
@@ -52,20 +62,20 @@ const EventCalender = () => {
         onClickDay={handleDateClick}
       />
 
-      {selectedDate && isEventDate(selectedDate) && (
+      {selectedDate && isEventDate(selectedDate, events) && (
         <div className="event-popup">
           {(() => {
-            const event = isEventDate(selectedDate);
-            const start = new Date(event.startDate);
-            const end = new Date(event.endDate);
+            const event = isEventDate(selectedDate, events);
+            const start = new Date(event?.startDate);
+            const end = new Date(event?.endDate);
 
             const timeRange = getTimeRange(start, end);
 
             return (
               <>
-                <strong>{event.name}</strong>
+                <strong>{event?.name}</strong>
                 <p><b>Time:</b> {timeRange}</p>
-                <p><b>Venue:</b> {event.venue}</p>
+                <p><b>Venue:</b> {event?.venue}</p>
               </>
             );
           })()}

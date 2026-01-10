@@ -39,6 +39,7 @@ const AdminHome = () => {
         const res = await axiosInterceptor.post(postURLs(sessionsConst, "normal"), {});
         if(checkSuccess(res.data.status)) {
           toast.success(`session started successfully!`);
+          setTimeout(() => window.location.reload(), 5000);
         }
       } catch (err) {
         const errorMessage = err.response?.data?.message || `Failed to start the session. Please try again.`;

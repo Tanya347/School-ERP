@@ -41,8 +41,8 @@ const EditUpdate = ({ title }) => {
     setInfo(data)
     setNoticeType(data.updateType)
 
-    if (data.class) {
-      setSelectedClass(data.class._id || data.class);
+    if (data.classID) {
+      setSelectedClass(data.classID._id || data.classID);
     }
   }, [data])
 
@@ -59,9 +59,9 @@ const EditUpdate = ({ title }) => {
     setLoading(true);
     try {
       if (noticeType === "general") {
-        info.class = null;
+        info.classID = null;
       } else {
-        info.class = selectedClass;
+        info.classID = selectedClass;
       }
 
       const res = await editElement(info, putURLs("updates", id), "update");
@@ -94,6 +94,7 @@ const EditUpdate = ({ title }) => {
                     inputs={updateInputs}
                     values={info}
                     errors={errors}
+                    type="edit"
                     onChange={handleChange}
                   />
 
@@ -111,13 +112,13 @@ const EditUpdate = ({ title }) => {
 
                   {noticeType === "specific" && (
                     <Dropdown
-                      id="class"
+                      id="classID"
                       title="Choose Class"
                       options={classes}
                       value={selectedClass}
                       onChange={(e) => {
                         setSelectedClass(e.target.value);
-                        setInfo(prev => ({ ...prev, class: e.target.value }));
+                        setInfo(prev => ({ ...prev, classID: e.target.value }));
                       }}
                     />
                   )}

@@ -21,10 +21,10 @@ const NewTask = ({ inputs, title }) => {
   const [deadline, setDeadline] = useState(new Date());
   const { user } = useSelector(state => state.auth);
   const [errors, setErrors] = useState({});
-  const [studentClass, setStudentClass] = useState("");
+  const [course, setCourse] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const classes = useSelector(state => state.faculty.classes);
+  const courses = useSelector(state => state.faculty.courses);
 
   const navigate = useNavigate();
   
@@ -56,7 +56,7 @@ const NewTask = ({ inputs, title }) => {
     e.preventDefault();
     setInfo({});
     setErrors({});
-    setStudentClass("");
+    setCourse("");
     setDeadline(new Date());
   }
 
@@ -81,14 +81,15 @@ const NewTask = ({ inputs, title }) => {
               />
 
               <Dropdown
-                id="sclass"
-                title="Choose Class"
-                options={classes}
+                id="courseID"
+                title="Choose Course"
+                options={courses}
                 onChange={(e) => {
                   handleChange(e);
-                  setStudentClass(e.target.value);
+                  setCourse(e.target.value);
                 }}
-                value={studentClass}
+                value={course}
+                getLabel={(course) => `${course.classID?.name} ${course.name}`}
               />
                 
               <div className="form-input">

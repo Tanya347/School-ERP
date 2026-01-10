@@ -41,26 +41,30 @@ const EventsList = ({type}) => {
     return (
       <div className="events-list">
 
-        <div className="events-title">Events List</div>
-        <div className="event-container">{loading ? (
-          <Loader text="Loading events..." type="global" />
-        ) : (<div className="cards-container">
-          {list?.map((item, i) => (
-            <div className="card" key={item._id}>
-              <div class="content">
-                {<img id="post-image" src={item.poster? item.poster : eventPicture} alt="" />}
-                <h4>{item.name}</h4>
-                <span className={`event-tag ${getEventStatus(item.startDate, item.endDate).toLowerCase()}`}>
-                  {getEventStatus(item.startDate, item.endDate)}
-                </span>
-                <p>{item.desc.slice(0, 60)}...</p>
-                <button onClick={() => handleEventPopup(item._id)}>View</button>
-              </div>
-            </div>
-          ))}
-        </div>)}
-        {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} type={type} />}
+      <div className="events-title">Events List</div>
+      <div className="event-container">{loading ? (
+        <Loader text="Loading events..." type="global" />
+      ) : list.length === 0 ? (
+        <div>No events available.</div>
+      ) : (
+        <div className="cards-container">
+        {list.map((item, i) => (
+          <div className="card" key={item._id}>
+          <div className="content">
+            <img id="post-image" src={item.poster ? item.poster : eventPicture} alt="" />
+            <h4>{item.name}</h4>
+            <span className={`event-tag ${getEventStatus(item.startDate, item.endDate).toLowerCase()}`}>
+            {getEventStatus(item.startDate, item.endDate)}
+            </span>
+            <p>{item.desc.slice(0, 60)}...</p>
+            <button onClick={() => handleEventPopup(item._id)}>View</button>
+          </div>
+          </div>
+        ))}
         </div>
+      )}
+      {openModal && <EventModal setOpen={setOpenModal} event={clickedEvent} type={type} />}
+      </div>
       </div>
     )
 }

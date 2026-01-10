@@ -32,7 +32,7 @@ const AddCourse = ({ setOpen, facId }) => {
     const handleClick = async(e) => {
         e.preventDefault();
         try {
-            const res = await axiosInterceptor.patch(editCourse(facId, sclass, course, "addCourse"))
+            const res = await axiosInterceptor.patch(editCourse(facId, course, "addCourse"))
 
             if(checkSuccess(res.data.status)) {
                 toast.success("Course assigned to faculty successfully!");
@@ -69,9 +69,9 @@ const AddCourse = ({ setOpen, facId }) => {
         fetchAssignedCourses();
     }, [fetchAssignedCourses]);
 
-    const handleRemoveCourse = async (courseId, classId) => {
+    const handleRemoveCourse = async (courseId) => {
         try {
-            await axiosInterceptor.patch(editCourse(facId, classId, courseId, "removeCourse"));
+            await axiosInterceptor.patch(editCourse(facId, courseId, "removeCourse"));
 
             toast.success("Course removed successfully");
             fetchAssignedCourses();
@@ -108,7 +108,7 @@ const AddCourse = ({ setOpen, facId }) => {
                                     <CancelIcon
                                         className="remove-btn"
                                         onClick={() =>
-                                            handleRemoveCourse(course._id, course.classID)
+                                            handleRemoveCourse(course._id)
                                         }
                                     />
                                 </Tooltip>

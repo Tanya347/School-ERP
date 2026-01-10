@@ -24,7 +24,7 @@ const ViewExamDates = () => {
     const fetchData = async () => {
       if(user) {
         try {
-          const response = await axiosInterceptor.get(getClassExamDates(user?.class));
+          const response = await axiosInterceptor.get(getClassExamDates(user?.classID));
           if(checkSuccess(response.data.status)) {
             setData(response.data.data);
           }

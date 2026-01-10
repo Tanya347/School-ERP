@@ -23,9 +23,9 @@ export const getStudentAttendance = (studentid, classid) => {
 }
 export const getDatatableURL = (path, user) => {
     if(path === testsConst)
-        return checkStudent(user.role) ? `/tests?classId=${user.class}` : `/tests?facultyId=${user._id}`;
+        return checkStudent(user.role) ? `/tests?classId=${user.classID}` : `/tests?facultyId=${user._id}`;
     else if(path === tasksConst)
-        return checkStudent(user.role) ? `/tasks?classId=${user.class}` : `/tasks?facultyId=${user._id}`;
+        return checkStudent(user.role) ? `/tasks?classId=${user.classID}` : `/tasks?facultyId=${user._id}`;
     else if(path === updatesConst)
         return getUpdateURL(user) ;
     else    
@@ -49,7 +49,7 @@ export const getTableWithoutActionURL = (path, id) => {
 export const getUpdateURL = (user) => {
     const base = `/updates`;
     if (checkFaculty(user.role)) return `${base}?facultyId=${user._id}`;
-    if (checkStudent(user.role)) return `${base}?classId=${user.class}`;
+    if (checkStudent(user.role)) return `${base}?classId=${user.classID}`;
     return base;
 }
 
@@ -68,18 +68,22 @@ export const getTaskCalenderURL = (user) => {
     if(checkFaculty(user.role))
         return `/tasks?facultyId=${user._id}`
     else if(checkStudent(user.role))
-        return `/tasks?studentId=${user.class}`
+        return `/tasks?studentId=${user.classID}`
 }
 
 export const getTestCalenderURL = (user) => {
     if(checkFaculty(user.role))
         return `/tests?facultyId=${user._id}`
     else if(checkStudent(user.role))
-        return `/tests?classId=${user.class}`
+        return `/tests?classId=${user.classID}`
 }
 
 export const getClassDetails = (cl) => {
     return `/classes/details/${cl}`
+}
+
+export const getCourseStudents = (courseId) => {
+    return `/courses/students/${courseId}`;
 }
 
 export const getSingleData = (id, type) => {

@@ -13,8 +13,8 @@ import { DarkModeContext } from "./utils/context/darkModeContext";
 // Redux
 import { verifyUser } from "./utils/store/slices/authSlice";
 import { fetchAdminClasses } from "./utils/store/slices/adminSlice";
-import { fetchFacultyClasses } from "./utils/store/slices/facultySlice";
 import { fetchFacultyCourses } from "./utils/store/slices/facultySlice";
+import { fetchFacultyClasses } from "./utils/store/slices/facultySlice";
 
 // UI
 import { ToastContainer } from "react-toastify";
@@ -59,8 +59,8 @@ function App() {
         break;
 
       case roles.faculty:
-        dispatch(fetchFacultyClasses(user._id));
         dispatch(fetchFacultyCourses(user._id));
+        dispatch(fetchFacultyClasses(user._id));
         break;
 
       default:

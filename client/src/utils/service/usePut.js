@@ -15,6 +15,7 @@ export const editElementWithPicture = async(file, info, element, url) => {
         formData.append("file", file);
     }
 
+    console.log(file)
     try {
         const res = await axiosInterceptor.put(url, formData, {
             headers: {

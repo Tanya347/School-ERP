@@ -12,7 +12,10 @@ import Course from "../models/Course.js";
 export const enterMarksForSubject = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
   const { marksData } = req.body;
-  const { sessionID, schoolID } = req.user;
+  const { schoolID  } = req.user;
+
+  const activeSession = await getActiveSession(req.user);
+  const sessionID = activeSession._id;
   
   for (const data of marksData) {
 
@@ -25,7 +28,7 @@ export const enterMarksForSubject = catchAsync(async (req, res) => {
   
     const student = await Student.findOne({
       _id: studentId,
-      class: course.classID,
+      classID: course.classID,
       schoolID
     });
   
@@ -219,6 +222,7 @@ export const clearMarksForClass = catchAsync(async (req, res) => {
 // Get student's marks history across sessions
 // -----------------------------------------------
 export const getStudentMarksHistory = catchAsync(async (req, res, next) => {
+
   const { studentId } = req.params;
   const schoolId = req.user.schoolID;
 

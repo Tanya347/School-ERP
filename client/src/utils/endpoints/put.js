@@ -10,9 +10,7 @@ export const addClassTeacher = (sclass) => {
     return `/classes/classTeacher/${sclass}`
 }
 
-export const setExamDates = () => {
-    return `/courses/exam/setdates`;
-}
+export const updateExamDates = `/courses/exam/setdates`;
 
 export const testAction = (action, id) => {
     return `/tests/${action}/${id}`

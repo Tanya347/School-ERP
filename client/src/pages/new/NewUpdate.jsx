@@ -44,11 +44,13 @@ const NewUpdate = ({ inputs }) => {
 
     // If updateType is 'general', remove 'class' field
     if (payload.updateType === "general") {
-      delete payload.class;
-      delete info.class;
+      delete payload.classID;
+      delete info.classID;
     }
 
     try {
+      console.log(info)
+      console.log(payload)
       const res = await createElement(checkAdmin(user.role) ? info : payload, postURLs(updatesConst, "normal"), "Update");
       if(checkSuccess(res.data.status)) {
         navigate(`/${user.role}/updates`)
@@ -78,7 +80,7 @@ const NewUpdate = ({ inputs }) => {
       setSclass("");
       setInfo((prev) => ({
         ...prev,
-        class: "",
+        classID: "",
       }));
     }
   }, [noticeType]);
@@ -112,13 +114,13 @@ const NewUpdate = ({ inputs }) => {
 
             {noticeType && noticeType === "specific" && 
               <Dropdown
-                id="class"
+                id="classID"
                 title="Choose Class"
                 options={classes}
                 value={sclass}
                 onChange={(e) => {
                   setSclass(e.target.value);
-                  setInfo(prev => ({ ...prev, class: e.target.value }));
+                  setInfo(prev => ({ ...prev, classID: e.target.value }));
                 }}
               />
             }

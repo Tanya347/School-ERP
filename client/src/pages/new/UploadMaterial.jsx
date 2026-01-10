@@ -80,7 +80,7 @@ const UploadMaterial = ({title, inputs}) => {
 
             <form>
               <Dropdown
-                id="classId"
+                id="classID"
                 title="Choose Class"
                 options={classes}
                 onChange={(e) => {

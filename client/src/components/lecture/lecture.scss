@@ -8,6 +8,8 @@
     -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
     box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
     border-radius: 5px;      
+    position: relative;
+    min-height: 200px;
 
     h2 {
         margin-top: 20px;
@@ -19,11 +21,7 @@
         align-items: center;
         width: 90%;
         margin: 20px;
-
-        .today-date {
-
-        }
-
+        
         .horizontal-line {
             width: 60%;
             height: 50%;
@@ -77,4 +75,8 @@
         }
 
     }
+}
+
+.app.dark .lecture-component {
+    background-color: var(--black);
 }

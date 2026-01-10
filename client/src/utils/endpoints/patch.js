@@ -1,3 +1,3 @@
-export const editCourse = (facId, sclass, course, type) => {
-    return `/faculties/${type}/${facId}/${sclass}/${course}`
+export const editCourse = (facId, course, type) => {
+    return `/faculties/${type}/${facId}/${course}`
 }

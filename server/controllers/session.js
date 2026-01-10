@@ -1,4 +1,4 @@
-import Session from '../models/session.js';
+import Session from '../models/Session.js';
 import Faculty from "../models/Faculty.js";
 import Class from "../models/Class.js";
 import Course from "../models/Course.js";
@@ -12,10 +12,11 @@ import Attendance from "../models/Attendance.js";
 import { catchAsync } from '../utils/catchAsync.js';
 import { successMsg } from "../utils/constants.js";
 
+import mongoose from 'mongoose';
 
 // Generate session metadata
 // -----------------------------------------------
-const getSessionMeta = () => {
+export const getSessionMeta = () => {
   const startYear = new Date().getFullYear();
   const endYear = startYear + 1;
   return {
@@ -60,8 +61,7 @@ const updateClass = async (schoolID) => {
 
     const nextClassId = classMap.get(nextClassNumber);
     if(!nextClassId) {
-       if (nextClassNumber === 13) {
-        studentUpdates.push({
+      studentUpdates.push({
         updateOne: {
           filter: { _id: student._id },
           update: {
@@ -71,9 +71,8 @@ const updateClass = async (schoolID) => {
           }
           }
         }
-        });
-        return; // Skip further processing for this student
-      }
+      });
+      return; // Skip further processing for this student
     }
 
     if (nextClassId) {

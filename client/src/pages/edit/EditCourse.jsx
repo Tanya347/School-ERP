@@ -52,7 +52,7 @@ const EditCourse = ({ title }) => {
 
     try {
       const res = await editElementWithPicture(file, editInfo, "course", putURLs("courses", id));
-      if(checkSuccess(res.data.status)) {
+      if(checkSuccess(res?.data?.status)) {
         navigate('/admin/courses');
       }
     } catch(err) {
@@ -80,12 +80,12 @@ const EditCourse = ({ title }) => {
           {/* Form */}
           <div className="bottom">
             <div className="form-container">
-            <FileUpload
-              file={file}
-              setFile={setFile}
-              existingUrl={info?.syllabusPicture}
-              label="Syllabus"
-            />
+              <FileUpload
+                file={file}
+                setFile={setFile}
+                existingUrl={info?.syllabusPicture}
+                label="Syllabus"
+              />
 
               <form>
                 
@@ -93,6 +93,7 @@ const EditCourse = ({ title }) => {
                   inputs={courseInputs}
                   values={info}
                   errors={errors}
+                  type="edit"
                   onChange={handleChange}
                 />
 

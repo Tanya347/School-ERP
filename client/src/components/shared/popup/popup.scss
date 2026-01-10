@@ -36,7 +36,8 @@
         padding: 20px;
         height: fit-content;
         position: relative;
-        width: 400px;
+        width: fit-content;
+        min-width: 400px;
         z-index: 200;
 
         .popup-input {

@@ -11,9 +11,10 @@ import { addTestMarks } from "../../utils/endpoints/put";
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import { testsConst } from "../../utils/shared/constants";
 import { toast } from "react-toastify";
+import InforBanner from "../../components/shared/infoBanner/InforBanner";
 
 const ViewTestMarks = () => {
-  const [stuData, setStuData] = useState({});
+  const [stuData, setStuData] = useState([]);
   const [marksData, setMarksData] = useState({});
 
   const location = useLocation();
@@ -22,9 +23,10 @@ const ViewTestMarks = () => {
   const { data } = useFetch(getSingleData(id, testsConst))
   
   useEffect(() => {
+    if (!data?.classID?._id) return;
     const fetchStudents = async() => {
       try {
-        const response = await axiosInterceptor.get(getStudentsOfClass(data.sclass._id));
+        const response = await axiosInterceptor.get(getStudentsOfClass(data?.classID?._id));
         setStuData(response.data.data);
       }
       catch(error) {
@@ -51,7 +53,9 @@ const ViewTestMarks = () => {
         value: marksData[studentId].value,
       }));
 
-      await axiosInterceptor.put(addTestMarks, { marksData: marksArray });
+      console.log(marksArray)
+      await axiosInterceptor.put(addTestMarks(id), { marksData: marksArray });
+      toast.success("Test marks added successfully");
       window.location.reload();
     } catch (error) {
       const errorMessage =
@@ -81,12 +85,12 @@ const ViewTestMarks = () => {
         <div className="view-test-marks-container">
           <div className="upper-container">
               <div className="test-info-container">
-              <div className="mTitle">{data?.name}</div>
+              <h3 className="mTitle">{data?.name}</h3>
               <p><span>Syllabus</span> : {data?.syllabus}</p>
               <p><span>Duration</span> : {data?.duration} min</p>
               <p><span>Marks</span>: {data?.totalMarks}</p> 
               <p><span>Date</span> : {formatDate(data?.date)}</p>
-              <p><span>Assigned To</span> : {data?.sclass?.name}</p>
+              <p><span>Assigned To</span> : {data?.classID?.name}</p>
               <p><span>Subject</span>: {data?.subject?.name}</p>
               <p><span>Assigned By</span>: {data?.author?.teachername}</p> 
             </div>
@@ -98,49 +102,56 @@ const ViewTestMarks = () => {
             )}
             
           </div>
-          <div className="lower-container">
-          {data.marks && data.marks.length > 0 ? (
-            <div className="marks-adding-table">
-              <div className="marks-row" id='title-row'>
-                <div className="marks-col">Enrollment Number</div>
-                <div className="marks-col">Student</div>
-                <div className="marks-col">Present</div>
-                <div className="marks-col">Marks</div>
-              </div>
-              {data.marks.map((mark, index) => (
-                <div className="marks-row" key={index}>
-                  <div className="marks-col">{mark.student_id.enroll}</div>
-                  <div className="marks-col">{mark.student_id.name}</div>
-                  <div className="marks-col">{mark.present ? "Yes" : "No"}</div>
-                  <div className="marks-col">{mark.value}</div>
+          {data?.state === "completed" ? (
+            <div className="lower-container">
+            {data?.marks && data?.marks?.length > 0 ? (
+              <div className="marks-adding-table">
+                <div className="marks-row" id='title-row'>
+                  <div className="marks-col">Enrollment Number</div>
+                  <div className="marks-col">Student</div>
+                  <div className="marks-col">Present</div>
+                  <div className="marks-col">Marks</div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="marks-adding-table">
-              <div className="marks-row" id='title-row'>
-                <div className="marks-col">Enrollment Number</div>
-                <div className="marks-col">Student</div>
-                <div className="marks-col">Marks</div>
-              </div>
-              {stuData?.students?.map((student, index) => (
-                <div className="marks-row" key={index}>
-                  <div className="marks-col">{student.enroll}</div>
-                  <div className="marks-col">{student.name}</div>
-                  <div className="marks-col">
-                    <input type="number" name="marks" min="0" max="100"
-                      onChange={(e) => handleMarksChange(student._id, e.target.value)} />
+                {data?.marks?.map((mark, index) => (
+                  <div className="marks-row" key={index}>
+                    <div className="marks-col">{mark.student_id.enroll}</div>
+                    <div className="marks-col">{mark.student_id.name}</div>
+                    <div className="marks-col">{mark.present ? "Yes" : "No"}</div>
+                    <div className="marks-col">{mark.value}</div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <div className="marks-adding-table">
+                <div className="marks-row" id='title-row'>
+                  <div className="marks-col">Enrollment Number</div>
+                  <div className="marks-col">Student</div>
+                  <div className="marks-col">Marks</div>
                 </div>
-              ))}
-            </div>
+                {stuData && stuData?.map((student, index) => (
+                  <div className="marks-row" key={index}>
+                    <div className="marks-col">{student?.enroll}</div>
+                    <div className="marks-col">{student?.name}</div>
+                    <div className="marks-col">
+                      <input type="number" name="marks" min="0" max="100"
+                        onChange={(e) => handleMarksChange(student?._id, e.target.value)} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!(data?.marks && data?.marks?.length > 0) && (
+              <div className="add-marks-button">
+                <button onClick={handleSubmit}>Add Marks</button>
+              </div>
+            )}
+          </div>) : (
+            <InforBanner
+              type="error"
+              header="Test Cancelled"
+              description="This test has been marked as cancelled. You cannot add or edit marks for a cancelled test."
+            ></InforBanner>
           )}
-          {!(data.marks && data.marks.length > 0) && (
-            <div className="add-marks-button">
-              <button onClick={handleSubmit}>Add Marks</button>
-            </div>
-          )}
-        </div>
         </div>
     </div>
   )

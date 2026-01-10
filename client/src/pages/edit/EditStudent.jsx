@@ -62,7 +62,7 @@ const EditUser = ({ title }) => {
         studentAddress: info.studentAddress,
         dob: info.dob,
         gender: info.gender,
-        ...(checkAdmin(user.role) && { class: sclass || info.class._id })
+        ...(checkAdmin(user.role) && { classID: sclass || info.classID._id })
       }
       const res = await editElementWithPicture(file, newInfo, "student", putURLs("students", id));
       if(checkSuccess(res.data.status)) {
@@ -104,9 +104,10 @@ const EditUser = ({ title }) => {
                     errors={errors}
                     onChange={handleChange}
                     role={user.role}
+                    type="edit"
                   />
 
-                  <Dropdown
+                  {user?.role === "admin" && <Dropdown
                     id="gender"
                     title="Gender"
                     options={genderTypes}
@@ -114,13 +115,13 @@ const EditUser = ({ title }) => {
                     onChange={(e) => {
                       handleChange(e);
                     }}
-                  />
+                  />}
 
                   {checkAdmin(user.role) && <Dropdown
-                    id="class"
+                    id="classID"
                     title="Choose Class"
                     options={classes}
-                    value={sclass || info?.class?._id || ""}
+                    value={sclass || info?.classID?._id || ""}
                     onChange={(e) => {
                       setSclass(e.target.value);
                       handleChange(e);

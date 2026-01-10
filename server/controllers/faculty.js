@@ -177,11 +177,17 @@ export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
 
 // Get a single faculty member
 // -----------------------------------------------
-export const getFaculty = catchAsync(async (req, res, next) => {
-  const faculty = await Faculty.findById(req.params.id);
+export const getFaculty = catchAsync(async (req, res) => {
+  const faculty = await Faculty.findById(req.params.id).populate("classTeacherTo", "name"); ;
+  
+  const courses = await Course.find({
+    teacher: req.params.id,
+    schoolID: req.user.schoolID
+  }).populate("classID", "name");
+
   res.status(200).json({
     status: successMsg,
-    data: faculty
+    data: { faculty, courses }
   });
 });
 
@@ -197,35 +203,35 @@ export const getFacultys = catchAsync(async (req, res, next) => {
   });
 });
 
-
-// Get faculty classes
-// -----------------------------------------------
-export const getFacultyClasses = catchAsync(async (req, res, next) => {
-  const classes = await Class.find({
-    teachers: req.params.id,
-    schoolID: req.user.schoolID
-  }).select("name classTeacher");
-
-  res.status(200).json({ status: successMsg, data: classes });
-});
-
-
 // Get faculty courses
 // -----------------------------------------------
 export const getFacultyCourses = catchAsync(async (req, res, next) => {
   const courses = await Course.find({
     teacher: req.params.id,
     schoolID: req.user.schoolID
-  }).populate("class", "name");
+  }).populate("classID", "name");
 
   res.status(200).json({ status: successMsg, data: courses });
 });
 
 
+// Get faculty classes
+// -----------------------------------------------
+export const getFacultyClasses = catchAsync(async (req, res, next) => {
+  const facId = req.params.id;
+
+  const courses = await Course.find({ teacher: facId, schoolID: req.user.schoolID });
+  
+  const classes = await Class.find({
+    _id: { $in: courses.map(c => c.classID) }
+  });
+  res.status(200).json({ status: successMsg, data: classes });
+});
+
 // Add a new course to a faculty member
 // -----------------------------------------------
-export const AddNewCourse = catchAsync(async (req, res, next) => {
-  const { facId, classId, courseId } = req.params;
+export const addNewCourse = catchAsync(async (req, res, next) => {
+  const { facId, courseId } = req.params;
 
   const course = await Course.findById(courseId);
 
@@ -240,7 +246,7 @@ export const AddNewCourse = catchAsync(async (req, res, next) => {
   }
 
   await Class.updateOne(
-    { _id: classId },
+    { _id: course.classID },
     {
       $addToSet: {
         teachers: facId,
@@ -266,24 +272,13 @@ export const AddNewCourse = catchAsync(async (req, res, next) => {
 // Remove a course from a faculty member
 // -----------------------------------------------
 export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
-  const { facId, classId, courseId } = req.params;
+  const { facId, courseId } = req.params;
 
   const course = await Course.findById(courseId);
 
   if (!course || course.teacher?.toString() !== facId) {
     return next(new AppError("Course not assigned to this faculty", 400));
   }
-
-  // Remove from Class
-  await Class.updateOne(
-    { _id: classId },
-    {
-      $pull: {
-        teachers: facId,
-        subjects: courseId,
-      },
-    }
-  );
 
   // Reset Course
   await Course.updateOne(
@@ -303,7 +298,7 @@ export const removeCourseFromFaculty = catchAsync(async (req, res, next) => {
 // Change course faculty
 // -----------------------------------------------
 export const changeCourseFaculty = catchAsync(async (req, res, next) => {
-  const { courseId, newFacId, classId } = req.params;
+  const { courseId, newFacId } = req.params;
 
   const course = await Course.findById(courseId);
 
@@ -320,7 +315,7 @@ export const changeCourseFaculty = catchAsync(async (req, res, next) => {
   // Remove from old faculty
   if (oldFacId) {
     await Class.updateOne(
-      { _id: classId },
+      { _id: course.classID },
       {
         $pull: { teachers: oldFacId },
       }
@@ -328,7 +323,7 @@ export const changeCourseFaculty = catchAsync(async (req, res, next) => {
   }
 
   await Class.updateOne(
-    { _id: classId },
+    { _id: course.classID },
     {
       $addToSet: { teachers: newFacId },
     }

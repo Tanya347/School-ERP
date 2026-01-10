@@ -95,7 +95,6 @@ export const getUpdate = catchAsync(async (req, res, next) => {
 // Get updates for the user based on role
 // -----------------------------------------------
 export const getUpdates = catchAsync(async (req, res) => {
-  const { classId } = req.query;
   const now = new Date();
 
   const filter = {
@@ -107,7 +106,7 @@ export const getUpdates = catchAsync(async (req, res) => {
   if (req.user.role === "student") {
     filter.$or = [
       { updateType: "general" },
-      { updateType: "specific", classID: req.user.class }
+      { updateType: "specific", classID: req.user.classID }
     ];
   }
 
@@ -118,13 +117,6 @@ export const getUpdates = catchAsync(async (req, res) => {
       { updateType: "general" },
       { author: faculty._id },
       { classID: faculty.classTeacherTo }
-    ];
-  }
-
-  // Admin → all
-  if (req.user.role === "admin") {
-    filter.$or = [
-      { updateType: "general" }
     ];
   }
 

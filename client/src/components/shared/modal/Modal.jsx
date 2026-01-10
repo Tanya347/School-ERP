@@ -11,6 +11,7 @@ import { formatDate } from "../../../utils/shared/commons";
 const Modal = ({ setOpen, id, type }) => {
 
     const { data } = useFetch(getModalURL(type, id));
+    
     return (
         <div className="modal">
             <div className="m-container">
@@ -27,7 +28,7 @@ const Modal = ({ setOpen, id, type }) => {
                     <div className="m-tasks">
                         <div className="m-title">{data.title}</div>
                         <div className="m-desc">{data.desc}</div>
-                        {data.updateType === "specific" && <p><span>For</span>: Class {data?.class?.name}</p>}
+                        {data.updateType === "specific" && <p><span>For</span>: Class {data?.classID?.name}</p>}
                     </div>
                 }
 
@@ -38,12 +39,12 @@ const Modal = ({ setOpen, id, type }) => {
                         <div className="m-title">{data.title}</div>
                         <div className="m-desc">{data.desc}</div>
                         <p><span>Deadline</span> : {formatDate(data.deadline)}</p>
-                        <p><span>Assigned To</span> : {data?.sclass?.name}</p>
+                        <p><span>Assigned To</span> : {data?.courseID?.subjectCode} {data?.courseID?.name}</p>
                         <p><span>Assigned By</span>: {data?.author?.teachername}</p>
                     </div>
                 }
 
-                {/* If type is tasks */}
+                {/* If type is tests */}
                 {
                     (type === "facTests" || type==="stuTests" || type === 'tests') &&
                     <div className="m-tasks">
@@ -51,20 +52,20 @@ const Modal = ({ setOpen, id, type }) => {
                         <p><span>Syllabus</span> : {data?.syllabus}</p>
                         <p><span>Duration</span> : {data?.duration} min</p>
                         <p><span>Date</span> : {formatDate(data.date)}</p>
-                        <p><span>Assigned To</span> : {data?.sclass?.name}</p>
+                        <p><span>Assigned To</span> : {data?.classID?.name}</p>
                         <p><span>Subject</span>: {data?.subject?.name}</p>
                         <p><span>Assigned By</span>: {data?.author?.teachername}</p>
                     </div>
                 }
 
-                {/* If type is tasks */}
+                {/* If type is courses */}
                 {
                     type === "courses" &&
                     <div className="m-tasks">
                         <div className="m-title">{data?.subjectCode} {data?.name}</div>
                         {data.syllabusPicture && <img className="syll" src={data.syllabusPicture} alt="syllabus"/>}
                         {data.teacher && <p><span>Taught by</span> : {data?.teacher?.teachername}</p>}
-                        <p><span>Class</span> : {data?.class?.name}</p>
+                        <p><span>Class</span> : {data?.classID?.name}</p>
                         
                     </div>
                 }

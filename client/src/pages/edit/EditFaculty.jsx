@@ -39,7 +39,7 @@ const EditFaculty = ({ title }) => {
   const { data, loading } = useFetch(getSingleData(id, facultiesConst))
 
   useEffect(() => {
-    setInfo(data)
+    setInfo(data.faculty)
   }, [data])
 
 
@@ -89,7 +89,7 @@ const EditFaculty = ({ title }) => {
               <FileUpload
                 file={file}
                 setFile={setFile}
-                existingUrl={info.profilePicture}
+                existingUrl={info?.profilePicture}
                 label="Profile Picture"
               />
 
@@ -100,19 +100,20 @@ const EditFaculty = ({ title }) => {
                     inputs={facultyInputs}
                     values={info}
                     errors={errors}
-                    role={user.role}
+                    role={user?.role}
                     onChange={handleChange}
+                    type="edit"
                   />
 
-                  <Dropdown
+                  {user?.role === "admin" && <Dropdown
                     id="gender"
                     title="Gender"
                     options={genderTypes}
-                    value={info.gender}
+                    value={info?.gender}
                     onChange={(e) => {
                       handleChange(e);
                     }}
-                  />
+                  />}
 
                 </form>
                 <div className="submit-button">

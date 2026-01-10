@@ -5,13 +5,13 @@ import {
   deleteFaculty,
   getFaculty,
   getFacultys,
-  getFacultyClasses,
   getFacultyCourses,
   registerFaculty,
-  AddNewCourse,
+  addNewCourse,
   bulkDeleteFaculty,
   removeCourseFromFaculty,
-  changeCourseFaculty
+  changeCourseFaculty,
+  getFacultyClasses
 } from "../controllers/faculty.js";
 
 import upload from "../utils/multer.js";
@@ -26,11 +26,11 @@ router.put("/:id", protect(), restrictTo(roles.admin, roles.faculty), upload.sin
 router.delete("/:id", protect(), restrictTo(roles.admin), deleteFaculty);
 router.get("/:id", protect(), getFaculty);
 router.get("/", protect(), getFacultys);
-router.get("/classes/:id", protect(), getFacultyClasses);
 router.get("/courses/:id", protect(), getFacultyCourses);
-router.patch('/addCourse/:facId/:classId/:courseId', protect(), restrictTo(roles.admin), AddNewCourse);
-router.patch("/removeCourse/:facId/:classId/:courseId", protect(), restrictTo(roles.admin), removeCourseFromFaculty);
-router.patch("/changeCourseFaculty/:courseId/:newFacId/:classId", protect(), restrictTo(roles.admin), changeCourseFaculty);
+router.get("/classes/:id", protect(), getFacultyClasses);
+router.patch('/addCourse/:facId/:courseId', protect(), restrictTo(roles.admin), addNewCourse);
+router.patch("/removeCourse/:facId/:courseId", protect(), restrictTo(roles.admin), removeCourseFromFaculty);
+router.patch("/changeCourseFaculty/:courseId/:newFacId", protect(), restrictTo(roles.admin), changeCourseFaculty);
 router.post("/bulk/delete", protect(), restrictTo(roles.admin), bulkDeleteFaculty);
 router.patch("/updatePassword/:id", protect(), restrictTo(roles.faculty), updatePassword(Faculty));
 

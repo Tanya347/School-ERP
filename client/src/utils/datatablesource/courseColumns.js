@@ -10,11 +10,11 @@ export const courseColumns = [
         width: 100,
     },
     {
-        field: "class",
+        field: "classID",
         headerName: "Class",
         width: 100,
         renderCell: (params) => {
-            return params.row.class.name
+            return params.row.classID.name
         }
     },
     {

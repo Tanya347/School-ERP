@@ -23,7 +23,7 @@
         .classes-container {
             display: flex;
             width: 90%;
-        margin-top: 40px;
+            margin-top: 40px;
             flex-direction: row;
             flex-wrap: wrap;
             gap: 20px;
@@ -90,13 +90,12 @@
                 }
 
                  .tt-button {
-                    background-color: var(--light-red);
+                    background-color: var(--light-pink);
                     padding: 8px 20px;
                     font-size: 15px;
                     transition: all ease-in-out 0.2s;
                     &:hover {
-                        background-color: var(--mild-red);
-                        color: var(--white);
+                        background-color: var(--light-red);
                     }
                 }
             }

@@ -15,30 +15,16 @@ const EventSchema = new mongoose.Schema({
     startDate: {
         type: Date,
         required: [true, "Start date is required"],
-        validate: {
-          validator: function (v) {
-            return validator.isISO8601(v); // Ensures the date is in ISO 8601 format
-          },
-          message: "Test date and time must be valid",
-        },
     },
     endDate: {
         type: Date,
         required: [true, "End date is required"],
-        validate: [
-          {
-            validator: function (v) {
-              return validator.isISO8601(v); // Ensures the date is in ISO 8601 format
-            },
-            message: "End date must be a valid ISO 8601 date",
+        validate: {
+          validator: function (v) {
+            return v >= this.startDate; // Ensures end date is not before start date
           },
-          {
-            validator: function (v) {
-              return new Date(v) >= new Date(this.startDate); // Ensures end date is not before start date
-            },
-            message: "End date must be after the start date",
-          },
-        ],
+          message: "End date must be after the start date",
+        },
     },
     desc: {
         type: String,

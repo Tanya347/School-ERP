@@ -21,13 +21,13 @@ import AddClass from "../addCourse/AddCourse.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
 import Loader from "../shared/loader/Loader.jsx";
+import Popup from "../shared/popup/Popup.jsx";
+import Modal from "../shared/modal/Modal.jsx";
 
 const Datatable = ({ column, name }) => {
   
   const [list, setList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [popupName, setPopupName] = useState("");
-  const [rowid, setRowid] = useState("");
+  const [popupData, setPopupData] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
@@ -85,12 +85,21 @@ const Datatable = ({ column, name }) => {
     setShowConfirm(true);
   };
 
-
-  const handleClick = (id, type) => {
-    setOpenModal(true);
-    setRowid(id);
-    setPopupName(type);
+  const modalTypeMap = {
+    tasks: "tasks",
+    tests: "tests",
+    updates: "updates",
+    materials: "materials",
+    courses: "courses",
   };
+
+  const handleView = (row) => {
+    setPopupData({
+      id: row._id,
+      type: modalTypeMap[path]
+    });
+  };
+
 
   const handleActionOnTest = async (id, action) => {
     try {
@@ -127,7 +136,7 @@ const Datatable = ({ column, name }) => {
               <div className="view-button">View</div>
             </Link>
           ) : (
-            <div className="view-button" onClick={() => handleClick(params.row._id, "query")}>
+            <div className="view-button" onClick={() => handleView(params.row)}>
               View
             </div>
           )}
@@ -145,19 +154,22 @@ const Datatable = ({ column, name }) => {
           )}
 
           {checkAdmin(user.role) && path === facultiesConst && (
-            <div className="view-button" onClick={() => handleClick(params.row._id, "course")}>
+            <div
+              className="view-button"
+              onClick={() =>
+                setPopupData({ id: params.row._id, type: facultiesConst })
+              }
+            >
               Add Course
             </div>
           )}
+
 
           {checkFaculty(user.role) && path === testsConst && (
             <>
               <Link to={`/faculty/tests/marks/${params.row._id}`} style={{ textDecoration: "none" }}>
                 <div className="view-button">Add Marks</div>
               </Link>
-              <div className="edit-button" onClick={() => handleActionOnTest(params.row._id, "complete")}>
-                Mark Complete
-              </div>
               <div className="delete-button" onClick={() => handleActionOnTest(params.row._id, "cancel")}>
                 Mark Cancelled
               </div>
@@ -185,7 +197,7 @@ const Datatable = ({ column, name }) => {
                   updatedAt: new Date(item.updatedAt).toLocaleString(),
                 }))}
                 filename={`${name}_data`}
-                title={name}
+                sheetName={name}
               />
             </Tooltip>
             {(checkEditor(user.role)) && (
@@ -218,11 +230,24 @@ const Datatable = ({ column, name }) => {
             getRowId={(row) => row._id}
           />
 
-          {openModal && (
-            <>
-              {popupName === "course" && <AddClass setOpen={setOpenModal} facId={rowid} type={path} />}
-            </>
+          {popupData && popupData.type === facultiesConst && (
+            <AddClass setOpen={() => setPopupData(null)} facId={popupData.id} type={path} />
           )}
+
+          {popupData && popupData.type !== facultiesConst && (
+            <Popup
+              title={`View ${name}`}
+              onClose={() => setPopupData(null)}
+              content={
+                <Modal
+                  id={popupData.id}
+                  type={popupData.type}
+                  setOpen={() => setPopupData(null)}
+                />
+              }
+            />
+          )}
+
         </div>
       )}
       {showConfirm && (

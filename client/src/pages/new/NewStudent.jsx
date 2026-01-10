@@ -93,7 +93,7 @@ const NewUser = ({ inputs, title }) => {
               />
 
               <Dropdown
-                id="class"
+                id="classID"
                 title="Choose Class"
                 options={classes}
                 value={studentClass}

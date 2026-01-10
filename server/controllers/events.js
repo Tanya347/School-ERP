@@ -19,10 +19,10 @@ export const createEvent = catchAsync(async (req, res, next) => {
   let cloud_id = null;
 
   if (req.body.startDate) {
-    const start = new Date(req.body.startDate);
+    req.body.startDate = new Date(req.body.startDate);
   }
   if (req.body.endDate) {
-    const end = new Date(req.body.endDate);
+    req.body.endDate = new Date(req.body.endDate);
   }
 
   if (req.file) {
@@ -49,6 +49,13 @@ export const createEvent = catchAsync(async (req, res, next) => {
 // Update an existing event
 // -----------------------------------------------
 export const updateEvent = catchAsync(async (req, res, next) => {
+  if (req.body.startDate) {
+    req.body.startDate = new Date(req.body.startDate);
+  }
+  if (req.body.endDate) {
+    req.body.endDate = new Date(req.body.endDate);
+  }
+
   let poster = null;
   let cloud_id = null;
   const event = await Event.findOne({ _id: req.params.id, schoolID: req.user.schoolID });
@@ -74,7 +81,7 @@ export const updateEvent = catchAsync(async (req, res, next) => {
     cloud_id = event.cloud_id;
   }
 
-  const updatedEvent = await Event.findByIdAndUpdate(
+  const updatedEvent = await Event.findOneAndUpdate(
     { _id: req.params.id, schoolID: req.user.schoolID },
     {
       ...req.body,

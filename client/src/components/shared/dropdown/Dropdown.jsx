@@ -6,7 +6,8 @@ const Dropdown = ({
   id = '',
   onChange,
   value = "",
-  loading = false
+  loading = false,
+  getLabel
 }) => {
 
   return (
@@ -21,7 +22,7 @@ const Dropdown = ({
         <option value="">-</option>
         {options?.map((opt, index) => (
           <option key={index} value={opt._id}>
-            {opt.name}
+            {getLabel ? getLabel(opt) : opt.name}
           </option>
         ))}
       </select>

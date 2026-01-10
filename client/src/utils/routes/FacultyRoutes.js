@@ -201,14 +201,14 @@ const FacultyRoutes = () => {
           />
 
           {/* view and edit attendance on faculty side */}
-          <Route
+          {/* <Route
             path="attendance/:classId"
             element={<AttendanceInfo />}
-          />
+          /> */}
 
           {/* student attendance percentage */}
           <Route
-            path="courses/attendance/:courseId"
+            path="classes/attendance/:classId"
             element={ <TableWithoutAction column={attendanceColumns} name="Attendance" />}
             />
 

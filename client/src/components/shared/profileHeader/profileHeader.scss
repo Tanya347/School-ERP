@@ -10,6 +10,7 @@
     width: 80%;
     border-radius: 10px;
     text-align: center;
+    position: relative;
     background-color: var(--white);
 
     .item-img {
@@ -52,6 +53,16 @@
 
         &:hover {
           transform: translateY(-2px);
+        }
+    }
+}
+
+.app.dark .profile-container {
+    background-color: var(--black);
+    .edit-button {
+        background-color: var(--tree-green);
+        &:hover {
+            background-color: var(--mild-turquoise);
         }
     }
 }

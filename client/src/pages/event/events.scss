@@ -1,0 +1,28 @@
+.events {
+    min-height: 100vh;
+    height: fit-content;
+}
+
+.app.dark .events {
+    background-color: var(--black);
+
+    .rbc-btn-group {
+        button {
+            background-color: var(--light-black);
+            color: var(--white);
+            border: 1px solid var(--gray);
+            &:hover {
+                background-color: var(--gray);
+            }
+        }
+    }
+
+    .rbc-off-range-bg {
+        background-color: var(--light-black);
+    }
+
+    .rbc-today {
+        background-color: var(--light-black);
+        color: var(--mild-turquoise);
+    }
+}

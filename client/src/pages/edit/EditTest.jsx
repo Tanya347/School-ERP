@@ -57,7 +57,7 @@ const EditTest = ({ title }) => {
       if(date)
         info.date = date
       if(sclass)
-        info.sclass = sclass
+        info.classID = sclass
       if(course)
         info.subject = course
 
@@ -93,12 +93,13 @@ const EditTest = ({ title }) => {
               values={info}
               errors={errors}
               onChange={handleChange}
+              type="edit"
             />
 
               <Dropdown
                 title="Choose a Class"
                 options={classes}
-                value={sclass || info?.sclass?._id || ""}
+                value={sclass || info?.classID?._id || ""}
                 onChange={(e) => setSclass(e.target.value)}
               />
 

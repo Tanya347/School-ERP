@@ -142,11 +142,11 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 // Delete a student
 // -----------------------------------------------
 export const deleteStudent = catchAsync(async (req, res, next) => {
-
+  const activeSession = await getActiveSession(req.user);
   const student = await Student.findOne({
     _id: req.params.id,
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID
+    sessionID: activeSession._id
   });
 
   if (!student) return next(new AppError('Student not found', 404));
@@ -166,11 +166,11 @@ export const deleteStudent = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
   const { ids } = req.body; // Expecting an array of student IDs in the request body
-
+  const activeSession = await getActiveSession(req.user);
   const students = await Student.find({
     _id: { $in: ids },
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID
+    sessionID: activeSession._id
   });
 
   for (const student of students) {
@@ -191,10 +191,11 @@ export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
 // Get student details
 // -----------------------------------------------
 export const getStudent = catchAsync(async (req, res, next) => {
-  const student = await Student.Student.findOne({
+  const activeSession = await getActiveSession(req.user);
+  const student = await Student.findOne({
       _id: req.params.id,
       schoolID: req.user.schoolID,
-      sessionID: req.user.sessionID
+      sessionID: activeSession._id
     })
     .populate({
       path: 'classID',

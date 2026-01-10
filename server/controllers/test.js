@@ -60,6 +60,19 @@ export const deleteTest = catchAsync(async (req, res, next) => {
   });
 });
 
+// delete bulk tests
+// -----------------------------------------------
+export const deleteBulkTests = catchAsync(async (req, res) => {
+  const { ids } = req.body;
+
+  await Test.deleteMany({ _id: { $in: ids } });
+
+  res.status(200).json({
+    status: successMsg,
+    message: "Tests have been deleted successfully!"
+  });
+});
+
 
 // get test
 // -----------------------------------------------
@@ -68,8 +81,11 @@ export const getTest = catchAsync(async (req, res, next) => {
     .populate("classID", "name")
     .populate("author", "teachername")
     .populate("subject", "name")
-    .populate("marks.student_id", "name enroll")
-
+    .populate({
+      path: "marks.student_id",
+      select: "name enroll",
+      match: { _id: req.user._id }
+    });
   res.status(200).json({
     status: successMsg,
     data: test,
@@ -117,6 +133,10 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
     return next(new AppError('Test not found', 404));
   }
 
+  if (test.state === 'canceled') {
+    return next(new AppError('Cannot add marks to a canceled test', 400));
+  }
+
   const studentsInClass = await Student.find({ classID: test.classID }).select('_id');
 
   // Create a map of student IDs from marksData for quick lookup
@@ -139,6 +159,9 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
       test.marks.push({ student_id, value, present });
     }
   });
+
+  // Mark test as completed
+  test.state = 'completed';
 
   // Save the updated test document
   await test.save();
@@ -233,30 +256,6 @@ export const clearMarksOfTest = catchAsync(async (req, res, next) => {
   res.status(200).json({ 
     status: successMsg,
     message: 'Marks cleared successfully'
-  });
-});
-
-
-// complete test
-// -----------------------------------------------
-export const completeTest = catchAsync(async (req, res, next) => {
-  const { testid } = req.params;
-
-  const test = await Test.findById(testid);
-  if (!test) {
-    return next(new AppError('Test not found', 404));
-  }
-
-  // Update the state of the test to 'completed'
-  test.state = 'completed';
-
-  // Save the updated test document
-  await test.save();
-
-  res.status(200).json({
-    status: successMsg,
-    message: 'Test completed successfully',
-    data: test
   });
 });
 

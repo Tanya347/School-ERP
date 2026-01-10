@@ -31,13 +31,14 @@ const EditMaterial = ({title}) => {
 
   const id = location.pathname.split("/")[4];
 
+  const { user } = useSelector(state => state.auth);
   const { data, dataloading } = useFetch(getSingleData(id, materialsConst));
   const classes = useSelector(selectAvailableClasses);
 
 
   useEffect(() => {
-    if (data?.classId) {
-      setClassId(data.classId._id || data.classId);
+    if (data?.classID) {
+      setClassId(data.classID._id || data.classID);
     }
   }, [data]);
 
@@ -56,7 +57,7 @@ const EditMaterial = ({title}) => {
     try {
 
       const newInfo = {
-        classId: classId || info.classId?._id,
+        classID: classId || info.classID?._id,
         name: info.name,
         description: info.description
       }
@@ -64,7 +65,7 @@ const EditMaterial = ({title}) => {
       const res = await editElementWithPicture(file, newInfo, "material", putURLs("materials", id));
 
       if(checkSuccess(res.data.status)) {
-        navigate('/admin/materials');
+        navigate(`/${user.role}/materials`);
       }
     } catch (err) {
       console.error(err);
@@ -100,10 +101,12 @@ const EditMaterial = ({title}) => {
                 <form>
                   <Dropdown
                     title="Choose Class"
-                    id="classId"
+                    id="classID"
                     options={classes}
-                    value={classId}
-                    onChange={(e) => setClassId(e.target.value)}
+                    value={classId || info?.classID?._id || ""}
+                    onChange={
+                      (e) => setClassId(e.target.value)
+                    }
                   />
 
                    <FormInputs
@@ -111,6 +114,7 @@ const EditMaterial = ({title}) => {
                     values={info}
                     errors={errors}
                     onChange={handleChange}
+                    type="edit"
                   />
                 </form>
                 <div className="submit-button">

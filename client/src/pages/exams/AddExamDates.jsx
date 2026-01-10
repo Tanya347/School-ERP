@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { useSelector } from "react-redux"
 
 import { getClassExamDates } from '../../utils/endpoints/get';
+import { updateExamDates } from '../../utils/endpoints/put';
+import { clearExamDatesForClass } from '../../utils/endpoints/delete';
 import axiosInterceptor from '../../utils/shared/axiosInterceptor';
 import { checkSuccess } from '../../utils/shared/commons';
 
@@ -83,8 +85,10 @@ const AddExamDates = () => {
 
     try {
       setLoading(true);
-      const res = await axiosInterceptor.put(setExamDates, {
-        classId: selectedClass,
+      console.log(selectedClass)
+      console.log(exams)
+      const res = await axiosInterceptor.put(updateExamDates, {
+        classID: selectedClass,
         exams,
       });
 
@@ -92,6 +96,7 @@ const AddExamDates = () => {
         toast.success("Dates added successfully");
       }
     } catch (err) {
+      console.log(err)
       const errorMessage = err.response?.data?.message || `Failed to add dates`;
       toast.error(errorMessage);
       return err;
@@ -106,7 +111,7 @@ const AddExamDates = () => {
     setConfirmAction(() => async () => {
       setLoading(true);
       try {
-        const res = await axiosInterceptor.delete(clearExamDates(selectedClass));
+        const res = await axiosInterceptor.delete(clearExamDatesForClass(selectedClass));
         if(checkSuccess(res.data.status)) {
           setExamDates({});
           toast.success("Exam dates cleared successfully");
@@ -129,7 +134,7 @@ const AddExamDates = () => {
       <h1>Add Exam Date and Time</h1>
       <div className="class-dropdown">
         <Dropdown
-          id="class"
+          id="classID"
           title="Choose Class"
           options={classes}
           onChange={handleClassSelection}

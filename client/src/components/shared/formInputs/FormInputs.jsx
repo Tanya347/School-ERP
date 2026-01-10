@@ -4,6 +4,7 @@ const FormInputs = ({
   errors = {},
   onChange,
   role = "",
+  type = "new"
 }) => {
 
   const hasEditAccess = (role, input) => {
@@ -19,7 +20,7 @@ const FormInputs = ({
   return (
     <>
       {inputs.map((input) =>
-        hasEditAccess(role, input) ? (
+        hasEditAccess(role, input) || type !== "edit" ? (
           <div className="form-input" key={input.id}>
             <label>{input.label}</label>
 

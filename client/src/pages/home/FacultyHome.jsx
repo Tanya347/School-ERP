@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import useFetch from '../../utils/service/useFetch';
 import { getSingleData } from '../../utils/endpoints/get';
-import { facultiesConst, FACULTY_HOME_COLORS } from '../../utils/shared/constants';
+import { facultiesConst } from '../../utils/shared/constants';
 import { facultyProfileFields } from '../../utils/shared/profileFieldConfigs';
 
 import EventCalender from '../../components/calender/Calender';
@@ -13,11 +13,12 @@ import SchoolInfo from '../../components/schoolInfo/SchoolInfo'
 import Lecture from '../../components/lecture/Lecture';
 import Course from '../../components/course/Course';
 import ProfileHeader from '../../components/shared/profileHeader/ProfileHeader';
+import Loader from '../../components/shared/loader/Loader';
 
 const FacultyHome = () => {
   
   const { user } = useSelector(state => state.auth);
-  const { data } = useFetch(getSingleData(user._id, facultiesConst))
+  const { data, loading } = useFetch(getSingleData(user._id, facultiesConst))
 
   const navigate = useNavigate();
 
@@ -34,26 +35,24 @@ const FacultyHome = () => {
           <div className="bottom-container">
             <EventCalender />
             <div className="faculty-courses-container">
-              {classTeacherClass && <h3>Class Teacher To: <span>{classTeacherClass.name} Standard</span></h3>}
-                <h2 className="c-title">Classes</h2>
-                <div className="classes-container">
-                {data?.classesTaught?.map((item, index) => (
-                  <div className="class-container" key={index} style={{ backgroundColor: FACULTY_HOME_COLORS[index % FACULTY_HOME_COLORS.length]}}>
-                    {item.name} Standard
-                </div>
-              ))}
-              </div>
+             {loading ? (<Loader text="Loading courses information..." type="global"/>) : (<>{classTeacherClass && <h3>Class Teacher To: <span>{data?.faculty?.classTeacherTo?.name} Standard</span></h3>}
               <h2 className="c-title">Courses</h2>
               <div className="courses-container">
-                {data?.subjectsTaught?.map((item, index) => (
-                  <Course
-                    name={item.name}
-                    index={index}
-                    subjectCode={item.subjectCode}
-                    syllabusPicture={item.syllabusPicture} 
-                  />
-                ))}
-              </div>
+                {data?.courses?.length > 0 ? (
+                  data?.courses?.map((item, index) => (
+                    <Course
+                      name={item.name}
+                      index={index}
+                      subjectCode={item.subjectCode}
+                      syllabusPicture={item.syllabusPicture} 
+                      examStatus={item?.examStatus?.status}
+                      className={item?.classID?.name}
+                    />
+                  ))
+                ) : (
+                  <p>No courses available</p>
+                )}
+              </div></>)}
             </div>
 
           </div>
@@ -61,10 +60,11 @@ const FacultyHome = () => {
         <div className="right-container">
           {/* <div className="profile-container"> */}
             <ProfileHeader
-              image={data?.profilePicture}
-              title={data?.teachername}
-              fields={facultyProfileFields(data || {})}
-              onEdit={() => navigate(`/faculty/edit/${data?._id}`)}
+              image={data?.faculty?.profilePicture}
+              title={data?.faculty?.teachername}
+              fields={facultyProfileFields(data?.faculty || {})}
+              loading={loading}
+              onEdit={() => navigate(`/faculty/edit/${data?.faculty?._id}`)}
             />
           {/* </div> */}
           <Lecture id={user?._id} type={user?.role}/>

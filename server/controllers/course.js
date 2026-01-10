@@ -1,6 +1,5 @@
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
-import Faculty from "../models/Faculty.js";
 
 import fs from "fs";
 
@@ -53,14 +52,36 @@ export const createCourse = catchAsync(async (req, res, next) => {
 // Update a course
 // -----------------------------------------------
 export const updateCourse = catchAsync(async (req, res, next) => {
-  const course = await Course.findByIdAndUpdate(
+  
+
+  const course = await Course.findById(req.params.id);
+
+  let syllabusPicture = null;
+  let cloud_id = null;
+
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: folderName,
+    });
+
+    syllabusPicture = result.secure_url;
+    cloud_id = result.public_id;
+
+    fs.unlinkSync(req.file.path);
+  } else {
+    syllabusPicture = course.syllabusPicture;
+    cloud_id = course.cloud_id;
+  }
+
+  const updatedCourse = await Course.findByIdAndUpdate(
     req.params.id,
-    { $set: req.body },
+    { $set: { ...req.body, syllabusPicture, cloud_id } },
     { new: true }
   );
+
   res.status(200).json({
     status: successMsg,
-    data: course,
+    data: updatedCourse,
     message: "The course has been successfully updated!"
   });
 });
@@ -127,16 +148,16 @@ export const getCourses = catchAsync(async (req, res, next) => {
 // Set exam dates for multiple courses in a class
 // -----------------------------------------------
 export const setExamDatesForClass = catchAsync(async (req, res, next) => {
-  const { classId, exams } = req.body;
+  const { classID, exams } = req.body;
 
-  if (!classId || !Array.isArray(exams)) {
+  if (!classID || !Array.isArray(exams)) {
     return next(new AppError('classId and exams array are required', 404))
   }
 
   // Optional: Validate all exam entries
   const bulkOps = exams.map((exam) => ({
     updateOne: {
-      filter: { _id: exam.courseId, classID: classId },
+      filter: { _id: exam.courseId, classID },
       update: {
         $set: {
           'examStatus.status': 'completed',
@@ -211,9 +232,9 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
     code: course.subjectCode,
   }));
 
-  // Check if all courses have examStatus.status === 'planned'
+  // Check if all courses have examStatus.status === 'completed'
   const allExamsPlanned = courses.every(
-    course => course.examStatus?.status === 'planned'
+    course => course.examStatus?.status === 'completed'
   );
 
   res.status(200).json({
@@ -267,3 +288,30 @@ export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
 });
 
 
+// Get students under a course
+// -----------------------------------------------
+export const getStudentsInCourse = catchAsync(async (req, res, next) => {
+  const courseId = req.params.courseId;
+
+  const course = await Course.findById(courseId);
+
+  if (!course) {
+    return next(new AppError('Course not found', 404));
+  }
+
+  const classID = course.classID;
+
+  const classDoc = await Class.findById(classID).populate('students').populate({
+    path: 'students',
+    select: 'name profilePicture email enroll gender studentPhone'
+  });
+
+  if (!classDoc) {
+    return next(new AppError('Class not found', 404));
+  }
+
+  res.status(200).json({
+    status: successMsg,
+    data: classDoc.students
+  });
+});

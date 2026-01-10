@@ -62,16 +62,19 @@ export const createMaterial = catchAsync(async (req, res, next) => {
 // Get materials for the user based on role
 // -----------------------------------------------
 export const getMaterials = catchAsync(async (req, res, next) => {
+
+  const activeSession = await getActiveSession(req.user);
+
   let filter = { 
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID
+    sessionID: activeSession._id
   };
 
   if (req.user.role === 'admin' || req.user.role === 'faculty') {
     filter.author = req.user._id;
   } else if (req.user.role === 'student') {
     // Assuming req.user.classId contains the student's class ID
-    filter.classID = req.user.class;
+    filter.classID = req.user.classID;
   }
 
   const materials = await Material.find(filter)

@@ -46,9 +46,19 @@ const StudentHome = () => {
     <div className='student-home-container'>
       <div className="main-container">
         <div className="left-container">
-          <SchoolInfo schoolID={user.schoolID} />
+          <SchoolInfo schoolID={user?.schoolID} />
           <div className="bottom-container">
-            <EventCalender />
+            <div className="bottom-left-container">
+              <div className="attendance-container">
+                {Object.keys(attendance).length > 0  && <div className="attendance">
+                  <h2 className="title">Attendance</h2>
+                  <CircularProgressbar value={parseFloat(attendance?.attendancePercentage?.toFixed(2))} text={`${attendance?.attendancePercentage?.toFixed(2)}%`} strokeWidth={10} className="progressbar" />
+                  <div><span>Classes Attended:</span> {attendance?.attendedLectures}</div>
+                  <div><span>Total Classes:</span> {attendance?.totalLectures}</div>
+                </div>}
+              </div>
+              <EventCalender />
+            </div>
             <div className="student-courses-container">
               <h2 className="course-title">Courses</h2>
               {
@@ -70,14 +80,6 @@ const StudentHome = () => {
               }
           
             </div>
-            <div className="attendance-container">
-              {Object.keys(attendance).length > 0  && <div className="attendance">
-                <h2 className="title">Attendance</h2>
-                <CircularProgressbar value={parseFloat(attendance?.attendancePercentage?.toFixed(2))} text={`${attendance?.attendancePercentage?.toFixed(2)}%`} strokeWidth={10} className="progressbar" />
-                <div><span>Classes Attended:</span> {attendance?.attendedLectures}</div>
-                <div><span>Total Classes:</span> {attendance?.totalLectures}</div>
-              </div>}
-            </div>
           </div>
         </div>
          <div className="right-container">
@@ -89,7 +91,7 @@ const StudentHome = () => {
               onEdit={() => navigate(`/student/edit/${data._id}`)}
             />
           {/* </div> */}
-          <Lecture id={user?.class} type={user?.role} />
+          <Lecture id={user?.classID} type={user?.role} />
         </div>
       </div>
     </div>

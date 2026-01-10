@@ -71,6 +71,7 @@ const EditSchool = ({title}) => {
                   inputs={schoolInputs}
                   values={schoolInfo}
                   onChange={handleChange}
+                  type="edit"
                 />
             </form>
 

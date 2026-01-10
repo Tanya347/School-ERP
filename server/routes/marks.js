@@ -20,6 +20,6 @@ router.get('/subject/:subjectId', protect(), getMarksOfSubject);
 router.get('/class/:classId', protect(), getMarksOfClass);
 router.delete('/subject/:subjectId', protect(), clearMarksForSubject);
 router.delete('/class/:classId', protect(), clearMarksForClass);
-router.get('/history/:studentId', getStudentMarksHistory)
+router.get('/history/:studentId', protect(), getStudentMarksHistory)
 
 export default router;

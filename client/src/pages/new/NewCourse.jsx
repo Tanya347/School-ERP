@@ -82,7 +82,7 @@ const NewCourse = ({ inputs, title }) => {
                 onChange={handleChange}
               />
               <Dropdown
-                id="class"
+                id="classID"
                 title="Choose Class"
                 options={classes}
                 onChange={(e) => {

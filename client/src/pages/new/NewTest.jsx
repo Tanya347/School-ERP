@@ -28,6 +28,7 @@ const NewTest = ({ inputs, title }) => {
   const { user } = useSelector(state => state.auth);
   const courses = useSelector(state => state.faculty.courses);
 
+  console.log(courses)
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateTest);
   }
@@ -91,6 +92,7 @@ const NewTest = ({ inputs, title }) => {
                   setSubject(e.target.value);
                 }}
                 value={subject}
+                getLabel={(course) => `${course.classID?.name} ${course.name}`}
               />
 
             

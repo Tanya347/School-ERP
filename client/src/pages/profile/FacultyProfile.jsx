@@ -23,12 +23,6 @@ const FacultyProfile = ({ type }) => {
     id = location.pathname.split("/")[4];
   const { data, loading } = useFetch(getSingleData(id, facultiesConst))
 
-
-  // Find the class object where _id matches classTeacherTo
-  const classTeacherClass = data?.classesTaught?.find(
-    (cls) => cls._id === data.classTeacherTo
-  );
-
   return (
     <div className="single-profile-container faculty-profile">
       {loading ? (
@@ -38,51 +32,39 @@ const FacultyProfile = ({ type }) => {
           <div className="profile-top">
             
             <ProfileHeader
-              image={data.profilePicture}
-              title={data.teachername}
-              fields={facultyProfileFields(data)}
+              image={data?.faculty?.profilePicture}
+              title={data?.faculty?.teachername}
+              fields={facultyProfileFields(data?.faculty)}
               onEdit={() =>
                 navigate(`${type === "Admin" ? "/admin" : ""}/faculties/edit/${id}`)
               }
             />
 
             <div className="profile-right">
-              {classTeacherClass && (
+              {data?.faculty?.classTeacherTo && (
                 <h3>
-                  Class Teacher To: <span>{classTeacherClass.name} Standard</span>
+                  Class Teacher To: <span>{data?.faculty?.classTeacherTo?.name} Standard</span>
                 </h3>
               )}
               <div className="class-course-container">
-                <div className="f-classes-container">
-                  <h2 className="f-class-title">Classes</h2>
-                  {data?.classesTaught?.length === 0 ? (
-                    <span style={{"fontWeight": "normal"}}>No classes assigned yet.</span>
-                  ) : (
-                    data?.classesTaught?.map((item, index) => (
-                      <div className="class-container" key={index}>
-                        {item.name} Standard
-                      </div>
-                    ))
-                  )}
-                </div>
                 <div className="f-courses-container">
                   <h2 className="f-course-title">Courses</h2>
                   <div className="courses-wrapper">
-                    {(data?.subjectsTaught === null ||
-                      data?.subjectsTaught?.length === 0) ? (
-                      <span style={{"fontWeight": "normal"}}>No courses assigned yet.</span>
+                    {data?.courses?.length === 0 ? (
+                      <span style={{ fontWeight: "normal" }}>
+                        No courses assigned yet.
+                      </span>
                     ) : (
-                      <>
-                        {data?.subjectsTaught?.map((item, index) => (
-                          <Course
-                            key={item.subjectCode || index}
-                            name={item.name}
-                            index={index}
-                            subjectCode={item.subjectCode}
-                            syllabusPicture={item.syllabusPicture}
-                          />
-                        ))}
-                      </>
+                      data?.courses?.map((item, index) => (
+                        <Course
+                          key={item._id}
+                          name={item.name}
+                          subjectCode={item.subjectCode}
+                          syllabusPicture={item.syllabusPicture}
+                          className={item.classID?.name}   // 👈 extra useful info
+                          examStatus={item.examStatus?.status}
+                        />
+                      ))
                     )}
                   </div>
                 </div>

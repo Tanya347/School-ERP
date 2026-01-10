@@ -15,11 +15,11 @@ export const updateColumns = [
         width: 150,
     },
     {
-        field: "class",
+        field: "classID",
         headerName: "Class",
         width: 150,
         renderCell: (params) => {
-            return params.row.class ? params.row.class.name : '';
+            return params.row.classID ? params.row.classID.name : '';
         }
     }
 ];

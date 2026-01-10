@@ -26,10 +26,10 @@ const AttendanceTable = ({ classid, date, setOpen, id, refreshTrigger }) => {
 
       if (checkSuccess(res.data.status)) {
         toast.success("Attendance has been cleared!");
-        refreshTrigger((prev) => prev + 1);
+        setOpen(false);
+        refreshTrigger(prev => prev + 1);
       }
 
-      setOpen(false);
     } catch (err) {
       toast.error(
         err.response?.data?.message ||
@@ -38,9 +38,17 @@ const AttendanceTable = ({ classid, date, setOpen, id, refreshTrigger }) => {
     }
   };
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
   return (
     <Popup
-      title={`Attendance — ${date}`}
+      title={`Attendance — ${formatDate(date)}`}
       onClose={() => setOpen(false)}
       customClass="attendance-modal"
       content={

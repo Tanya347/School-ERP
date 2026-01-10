@@ -45,9 +45,9 @@ const NewTimeTable = () => {
           timetableArray.forEach(slot => {
             const key = `${slot.day}_${slot.period}`;
             mapped[key] = {
-              courseId: slot.course._id,
-              courseName: slot.course.name,
-              facultyName: slot.faculty.teachername
+              courseId: slot.courseID._id,
+              courseName: slot.courseID.name,
+              facultyName: slot.facultyID.teachername
             };
           });
           setExistingSlots(mapped);
@@ -120,9 +120,9 @@ const NewTimeTable = () => {
           period: Number(period),
           startTime: start,
           endTime: end,
-          sclass: selectedClass,
-          course: course._id,
-          faculty: course.teacher,
+          classID: selectedClass,
+          courseID: course._id,
+          facultyID: course.teacher,
         });
       }
 
@@ -157,7 +157,7 @@ const NewTimeTable = () => {
 
       <div className="class-dropdown">
         <Dropdown
-          id="class"
+          id="classID"
           title="Choose Class"
           options={classes}
           onChange={handleClassSelection}

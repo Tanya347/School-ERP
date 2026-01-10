@@ -50,12 +50,26 @@ export const deleteTask = catchAsync(async (req, res, next) => {
   });
 });
 
+// delete bulk tasks
+// -----------------------------------------------
+export const deleteBulkTasks = catchAsync(async (req, res, next) => {
+  const { ids } = req.body;
+  await Task.deleteMany({
+    _id: { $in: ids },
+    schoolID: req.user.schoolID
+  });
+  res.status(200).json({
+    status: successMsg,
+    message: "Tasks have been deleted successfully!"
+  });
+});
+
 
 // get task
 // -----------------------------------------------
 export const getTask = catchAsync(async (req, res, next) => {
   const task = await Task.findById(req.params.id)
-    .populate('courseID', 'name')
+    .populate('courseID', 'name subjectCode')
     .populate('author', 'teachername');
   res.status(200).json({
     status: successMsg,
@@ -66,16 +80,16 @@ export const getTask = catchAsync(async (req, res, next) => {
 
 // get tasks with filters
 // -----------------------------------------------
-export const getTasks = catchAsync(async (req, res, next) => {
+export const getTasks = catchAsync(async (req, res) => {
   const { facultyId, classId } = req.query;
   const schoolId = req.user.schoolID;
   let filter = { schoolID: schoolId };
   if (facultyId) filter.author = facultyId;
 
-  let tasks = await Task.find(filter).populate("courseID", "name classID");
+  let tasks = await Task.find(filter).populate("courseID", "subjectCode classID");
 
   if (classId) {
-    tasks = tasks.filter(task => task.courseID.classID.toString() === classId);
+    tasks = tasks.filter(task => task?.courseID && task?.courseID?.classID?.toString() === classId);
   }
 
   res.status(200).json({

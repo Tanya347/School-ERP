@@ -35,7 +35,7 @@ export const validateTest = (id, value) => {
         return "Test date and time must be valid";
       return "";
 
-    case "sclass":
+    case "classID":
       if (!value) return "Class is required";
       return "";
 

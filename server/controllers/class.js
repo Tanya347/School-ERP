@@ -1,9 +1,11 @@
 import Class from "../models/Class.js";
 import Student from "../models/Student.js";
 import Faculty from "../models/Faculty.js";
+import Course from "../models/Course.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
+import { AppError } from "../utils/customError.js";
 
 
 // Create a new class
@@ -177,7 +179,7 @@ export const addClassTeacher = catchAsync(async (req, res, next) => {
     return next(new AppError('Teacher not found', 404));
   }
   if (teacher.classTeacherTo) {
-    return next(new AppError('Class not found', 404));
+    return next(new AppError('Teacher already assigned to a class', 404));
   }
 
   // Set the classTeacher field in Class and classTeacherTo in Faculty
@@ -191,7 +193,7 @@ export const addClassTeacher = catchAsync(async (req, res, next) => {
     status: successMsg,
     message: 'Class teacher assigned successfully!',
     data: {
-      class: sclass,
+      classID: sclass,
       teacher: teacher
     }
   });

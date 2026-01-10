@@ -3,7 +3,6 @@ import express from "express";
 import {
     logout,
     protect,
-    registerAdmin,
     login,
     forgotPassword,
     resetPassword
@@ -17,7 +16,6 @@ import { successMsg, roles } from "../utils/constants.js";
 
 const router = express.Router();
 
-router.post("/registerAdmin", registerAdmin);
 router.post("/loginAdmin", login(Admin));
 router.post("/loginFaculty", login(Faculty));
 router.post("/loginStudent", login(Student));

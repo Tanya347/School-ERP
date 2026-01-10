@@ -9,19 +9,27 @@
         justify-content: center;
         align-items: center;
         gap: 20px;
-
         
         .widget {
+            text-decoration: none;
             border-radius: 10px;
             padding: 10px;
             display: flex;
             position: relative;
-            gap: 10px;
             height: 80px;
             background-color: var(--white);
             width: 20%;
             -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
             box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+            .widget-link {
+                text-decoration: none;
+                color: inherit;
+                align-items: center;
+                justify-content: space-between;
+                display: flex;
+                gap: 20px;
+            }
 
             @media screen and (max-width: 700px){
                 width: 40%;
@@ -37,7 +45,7 @@
                 transition: all 0.3s ease-in-out;
             }
 
-            .left-container {
+            .left-widget-container {
                 display: flex;
                 align-items: center;
                 padding: 10px;
@@ -50,10 +58,11 @@
                 background-color: inherit;
             }
 
-            .right-container {
+            .right-widget-container {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
+                color: var(--black);
                 h4 {
                     color: var(--gray);
                     font-weight: 700;
@@ -69,7 +78,7 @@
         .widget {
             background-color: var(--dark-green);
 
-            .right-container {
+            .right-widget-container {
                 h4 {
                     color: var(--white);
                 }

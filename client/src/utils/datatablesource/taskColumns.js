@@ -13,11 +13,11 @@ export const taskColumns = [
         width: 500,
     },
     {
-        field: "sclass",
+        field: "courseID",
         headerName: "Assigned To",
         width: 250,
         renderCell: (params) => {
-            return params.row.sclass ? params.row.sclass.name : '';
+            return params.row.courseID ? params.row.courseID.subjectCode : '';
         }
     },
     {

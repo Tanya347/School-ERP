@@ -53,7 +53,7 @@ const EditTask = ({ title }) => {
       if(deadline)
         info.deadline = deadline
       if(sclass)
-        info.sclass = sclass
+        info.classID = sclass
 
       const res = await editElement(info, putURLs("tasks", id), "task");
 
@@ -88,12 +88,13 @@ const EditTask = ({ title }) => {
                 values={info}
                 errors={errors}
                 onChange={handleChange}
+                type="edit"
             />
               
             <Dropdown
               title="Choose a Class"
               options={classes}
-              value={sclass || info?.sclass?._id || ""}
+              value={sclass || info?.classID?._id || ""}
               onChange={(e) => setSclass(e.target.value)}
             />
 

@@ -12,34 +12,36 @@ const AdminWidgets = () => {
   const { data = {}, loading } = useFetch(getAllCount);
 
   return (
-    <div className="admin-widgets">
-      {ADMIN_WIDGETS.map(({ key, label, link, Icon, bg, color }) => (
-        <div className="widget" key={key}>
-          {loading ? (
-            <Loader type="global" />
-          ) : (
-            <Link
-              to={link}
-              className="widget-link"
-            >
-              <div className="left-container">
-                <Icon
-                  className="icon"
-                  style={{
-                    backgroundColor: bg,
-                    color,
-                  }}
-                />
-              </div>
+    <div className="widgets">
+      <div className="admin-widgets">
+        {ADMIN_WIDGETS.map(({ key, label, link, Icon, bg, color }) => (
+          <div className="widget" key={key}>
+            {loading ? (
+              <Loader type="global" />
+            ) : (
+              <Link
+                to={link}
+                className="widget-link"
+              >
+                <div className="left-widget-container">
+                  <Icon
+                    className="icon"
+                    style={{
+                      backgroundColor: bg,
+                      color,
+                    }}
+                  />
+                </div>
 
-              <div className="right-container">
-                <h2>{data[key] ?? 0}</h2>
-                <h4>{label}</h4>
-              </div>
-            </Link>
-          )}
-        </div>
-      ))}
+                <div className="right-widget-container">
+                  <h2>{data[key] ?? 0}</h2>
+                  <h4>{label}</h4>
+                </div>
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

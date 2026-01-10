@@ -24,7 +24,7 @@ const router = express.Router();
 
 router.post("/", protect(), restrictTo(roles.faculty), createAttendance)
 router.get("/lecturecount/:classId", protect(), getLectureCount)
-router.get("/dates/:classid", protect(), getAttendanceDates)
+router.get("/dates/:classId", protect(), getAttendanceDates)
 router.get("/date/:classId/:date", protect(), getAttendanceStatusByDate)
 router.get("/classperc/:classId", protect(), getClassAttendance)
 router.get("/studentperc/:studentid/:classId", protect(), getStudentAttendance)

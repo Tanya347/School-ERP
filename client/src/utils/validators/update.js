@@ -27,7 +27,7 @@ export const validateUpdate = (id, value, extra = {}) => {
         return "Update type must be General or Specific";
       return "";
 
-    case "class":
+    case "classID":
       if (updateType === "specific" && !value)
         return "Class is required for specific updates";
       return "";

@@ -126,6 +126,7 @@ const EditEvent = ({ inputs, title }) => {
                                     values={info}
                                     errors={errors}
                                     onChange={handleChange}
+                                    type="edit"
                                 />
                             </form>
                                 <div className="submit-button">

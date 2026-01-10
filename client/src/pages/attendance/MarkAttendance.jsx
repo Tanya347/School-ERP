@@ -17,8 +17,7 @@ import { toast } from "react-toastify";
 
 const MarkAttendance = () => {
 
-    const [sclass, setSclass] = useState("");
-    const [stuData, setStuData] = useState({});
+    const [stuData, setStuData] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [sdate, setSdate] = useState(new Date());
     const [presentStudents, setPresentStudents] = useState([]);
@@ -26,15 +25,12 @@ const MarkAttendance = () => {
     const navigate = useNavigate();
     
     const { user } = useSelector(state => state.auth);
-    const classes = useSelector(state => state.faculty.classes);
-
-    let isClassTeacher = sclass?.classTeacher === user._id;;
 
     useEffect(() => {
         const fetchStudents = async () => {
-          if (sclass) {
+          if (user?.classTeacherTo) {
             try {
-              const response = await axiosInterceptor.get(getStudentsOfClass(sclass._id));
+              const response = await axiosInterceptor.get(getStudentsOfClass(user?.classTeacherTo));
               setStuData(response.data.data);
             } catch (error) {
               toast.error(
@@ -48,14 +44,14 @@ const MarkAttendance = () => {
           }
         };
         fetchStudents();
-      }, [sclass])
+      }, [user?.classTeacherTo])
     
       useEffect(() => {
         const fetchDates = async() => {
-        if(sclass && sdate) {
+        if(user?.classTeacherTo && sdate) {
             try {
                 const formattedDate = moment(sdate).format(dateTimeFormat);
-                const response = await axiosInterceptor.get(`${getAttendanceStatusByDate(sclass._id, formattedDate)}`)
+                const response = await axiosInterceptor.get(`${getAttendanceStatusByDate(user?.classTeacherTo, formattedDate)}`)
                 
                 const attData = response.data.data;
 
@@ -84,7 +80,7 @@ const MarkAttendance = () => {
         }
 
         fetchDates();
-      }, [sclass, sdate])
+      }, [user?.classTeacherTo, sdate])
 
       const handleCheckboxChange = (studentId) => {
         setPresentStudents((prev) => {
@@ -102,7 +98,7 @@ const MarkAttendance = () => {
             const newAtt = {
                 present: presentStudents,
                 date: sdate,
-                classid: sclass,
+                classID: user?.classTeacherTo,
                 author: user._id
             }
             await createElement(newAtt, postURLs('attendances', "normal"), "Attendance");
@@ -119,41 +115,11 @@ const MarkAttendance = () => {
         <h1>Mark Attendance</h1>
         <p>Manage and track student attendance records</p>
             <div className="mark-attendance-container">
-            <div className="classes-button">
-              {
-                  classes?.map((cl, index) => (
-                    <button  
-                      className={sclass && sclass._id === cl._id ? 'selected-class' : ''}
-                      key={index} onClick={() => setSclass(cl)}>
-                        Class {cl.name}
-                    </button>
-                  ))
-              }
-            </div>
-            {sclass ? 
+            {user?.classTeacherTo ? 
                 (
                     <>
-                    <h1>Class: {sclass.name}</h1>
                     <div className="attendance-header">
-                      {editMode && isClassTeacher && (
-                        <div className="edit-mode-banner">
-                          <InforBanner
-                            type="info"
-                            header="Edit Mode Activated"
-                            description="Attendance for the selected date has already been marked. You can update the existing records."
-                          ></InforBanner>
-                        </div>
-                      )}
-                      {!isClassTeacher && (
-                        <div className="not-authorized-banner">
-                          <InforBanner
-                            type="error"
-                            header="Access Denied"
-                            description="You are not authorized to mark attendance for this class."
-                          ></InforBanner>
-                        </div>
-                      )}
-                      {isClassTeacher && <div className="attendance-date-picker">
+                      <div className="attendance-date-picker">
                           <DatePicker
                             class="date-picker"
                             placeholderText="Choose Date"
@@ -161,39 +127,43 @@ const MarkAttendance = () => {
                             selected={sdate}
                             onChange={(sdate) => setSdate(sdate)}
                           />
-                      </div>}
+                      </div>
                     </div>
         
         
-                    {isClassTeacher && <div className="attendance-marking-table">
+                    <div className="attendance-marking-table">
                       <div className="attendance-row" id='title-row'>
                           <div className="attendance-col">Enrollment Number</div>
                           <div className="attendance-col">Student</div>
                           <div className="attendance-col">Present</div>
                       </div>
           
-                      {stuData?.students?.map((st, index) => (
+                      {stuData?.map((st, index) => (
                           <div className="attendance-row" key={index}>
-                              <div className="attendance-col">{st.enroll}</div>
-                              <div className="attendance-col">{st.name}</div>
+                              <div className="attendance-col">{st?.enroll}</div>
+                              <div className="attendance-col">{st?.name}</div>
                               <div className="attendance-col">
                                   <input type="checkbox" name="attendance" id="attendance"
-                                      checked={presentStudents.includes(st._id)}
-                                      onChange={() => handleCheckboxChange(st._id)}
+                                      checked={presentStudents.includes(st?._id)}
+                                      onChange={() => handleCheckboxChange(st?._id)}
                                   />
                               </div>
                           </div>
                       ))}
-                    </div>}
+                    </div>
         
                     
-                    {isClassTeacher && <div className="mark-attendance-button">
+                    <div className="mark-attendance-button">
                         <button onClick={handleSubmit}>{editMode ? "Update Attendance" : "Mark Attendance"}</button>
-                    </div>}
+                    </div>
                     </>
                 ) : (
                     <>
-                    <h1>Please select a class</h1>
+                      <InforBanner
+                        type="info"
+                        header="No Class Assigned"
+                        description="You are not assigned as a class teacher to any class."
+                      ></InforBanner>
                     </>
                 )
             }

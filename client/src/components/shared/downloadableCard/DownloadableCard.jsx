@@ -57,7 +57,7 @@ const DownloadableCard = ({
           <img src={school?.logo} alt="School Logo" />
           <h2>{school?.name}</h2>
           <h3>{subtitle}</h3>
-          <h3>Session: {activeSession.name}</h3>
+          <h3>Session: {activeSession?.name}</h3>
         </div>
 
         <div className="card-student-info">

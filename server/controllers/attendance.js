@@ -11,13 +11,13 @@ import { dateFormat, successMsg } from '../utils/constants.js';
 
 // create or update attendance
 // -----------------------------------------------
-export const createAttendance = catchAsync(async (req, res) => {
-  const { date, present, classId, author } = req.body;
+export const createAttendance = catchAsync(async (req, res, next) => {
+  const { date, present, classID, author } = req.body;
   const schoolID = req.user.schoolID;
   const activeSession = await getActiveSession(req.user);
 
   // Get all students in the class
-  const classInfo = await Class.findById(classId);
+  const classInfo = await Class.findById(classID);
   if (!classInfo) {
     return next(new AppError('Class not found', 404));
   }
@@ -27,9 +27,9 @@ export const createAttendance = catchAsync(async (req, res) => {
 
   // Check if attendance already exists for this class and date
   const existingAttendance = await Attendance.findOne({
-    classID: classId,
+    classID,
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID,
+    sessionID: activeSession._id,
     date: { $gte: new Date(moment(date).startOf('day')), $lte: new Date(moment(date).endOf('day')) }
   });
 
@@ -51,7 +51,7 @@ export const createAttendance = catchAsync(async (req, res) => {
     date,
     present,
     absent,
-    classID: classId,
+    classID,
     author,
     schoolID,
     sessionID: activeSession._id
@@ -102,26 +102,27 @@ export const getAttendanceDates = catchAsync(async(req, res, next) => {
 // -----------------------------------------------
 export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
   const { classId, date } = req.params;
-  
+  const activeSession = await getActiveSession(req.user);
+
+  const start = moment(date).startOf("day").toDate();
+  const end = moment(date).endOf("day").toDate();
+
   // Standardize and format the incoming date to YYYY-MM-DD
   const standardizedDate = moment(date).format(dateFormat);
 
   // Find all attendance records for the specified class
-  const attendances = await Attendance.findOne({
+  const attendance = await Attendance.findOne({
     classID: classId,
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID,
-    date: {
-      $gte: moment(date).startOf("day").toDate(),
-      $lte: moment(date).endOf("day").toDate()
-    }
+    sessionID: activeSession._id,
+    date: { $gte: start, $lte: end }
   }).populate("present absent", "name enroll");
 
-  // Filter the attendance records by comparing the formatted dates
-  const attendance = attendances.find(att => moment(att.date).format(dateFormat) === standardizedDate);
-
   if (!attendance) {
-    return next(new AppError('No attendance record found for the specified date and class', 404));
+    return res.status(200).json({
+      status: "success",
+      data: [] 
+    });
   }
   
   // Combine present and absent students with their status
@@ -152,11 +153,12 @@ export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const clearAttendanceByClass = catchAsync(async (req, res, next) => {
   const { classId } = req.params;
+  const activeSession = await getActiveSession(req.user);
   
   await Attendance.deleteMany({
     classID: classId,
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID
+    sessionID: activeSession._id
   });
 
   
@@ -291,9 +293,10 @@ export const getStudentAbsenceDates = catchAsync(async (req, res, next) => {
 // clear all attendance records
 // -----------------------------------------------
 export const clearAllAttendanceRecords = catchAsync(async (req, res, next) => {
+  const activeSession = await getActiveSession(req.user);
   await Attendance.deleteMany({
     schoolID: req.user.schoolID,
-    sessionID: req.user.sessionID
+    sessionID: activeSession._id
   });
 
   res.status(200).json({ 

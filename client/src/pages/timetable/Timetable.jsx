@@ -25,8 +25,8 @@ const Timetable = ({type}) => {
 
     return checkAdmin(user.role)
       ? location.pathname.split("/").pop()
-      : user.class;
-  }, [type, user.role, user.class, location.pathname]);
+      : user.classID;
+  }, [type, user.role, user.classID, location.pathname]);
 
 
   useEffect(() => {
@@ -51,14 +51,14 @@ const Timetable = ({type}) => {
         slots.forEach((slot) => {
           const key = `${slot.day}_${slot.period}`;
           mapped[key] = {
-            courseName: slot.course?.name || "—",
-            facultyName: slot.faculty?.teachername || "Not Assigned",
-            className: slot.sclass?.name || "",
+            courseName: slot.courseID?.name || "—",
+            facultyName: slot.facultyID?.teachername || "Not Assigned",
+            className: slot.classID?.name || "",
           };
         });
 
         if (type === "class") {
-          setTitle(slots[0]?.sclass?.name + " Standard");
+          setTitle(slots[0]?.classID?.name + " Standard");
         } else {
           setTitle("My Timetable");
         }

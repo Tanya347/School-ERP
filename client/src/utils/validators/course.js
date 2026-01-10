@@ -17,7 +17,7 @@ export const validateCourse = (id, value) => {
         return "Subject code can contain only letters, numbers, _ or -";
       return "";
 
-    case "class":
+    case "classID":
       if (!value) return "Class is required";
       return "";
 

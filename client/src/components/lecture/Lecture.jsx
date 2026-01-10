@@ -6,9 +6,11 @@ import useFetch from '../../utils/service/useFetch';
 import { getLectures } from '../../utils/endpoints/get';
 import { todayDay } from "../../utils/shared/constants";
 
+import Loader from '../shared/loader/Loader';
+
 const Lecture = ({id, type}) => {
 
-  const slots = useFetch(getLectures(id, type)).data;
+  const { data: slots, loading} = useFetch(getLectures(id, type));
 
   const lectures = Array.isArray(slots)
     ? slots
@@ -23,7 +25,7 @@ const Lecture = ({id, type}) => {
 
   return (
     <div className='lecture-component'>
-        <h2>Today's Lectures</h2>
+        {!loading ? (<><h2>Today's Lectures</h2>
         <div className="lecture-header">
           <span className='today-date'>{new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
           <span className="horizontal-line"></span>
@@ -51,7 +53,7 @@ const Lecture = ({id, type}) => {
               </div>
             )
           }
-        </div>
+        </div></>) : (<Loader text="Loading lectures..." type="global"/>)}
     </div>
   )
 }

@@ -10,8 +10,8 @@ import {
   clearMarksOfTest,
   addEditMarks,
   getTests,
-  completeTest,
-  cancelTest
+  cancelTest,
+  deleteBulkTests
 } from "../controllers/test.js";
 
 import { protect } from "../controllers/auth.js";
@@ -28,7 +28,7 @@ router.put("/addMarks/:testid", protect(), addEditMarks);
 router.get("/singlemarks/:testid/:studentid", protect(), getMarksOfOneStudent)
 router.get("/allmarks/:testid", protect(), getMarksOfAllStudents)
 router.delete('/marks/:testid', protect(), clearMarksOfTest)
-router.put('/complete/:testid', protect(), completeTest);
 router.put('/cancel/:testid', protect(), cancelTest);
+router.post("/bulk/delete", protect(), deleteBulkTests);
 
 export default router;

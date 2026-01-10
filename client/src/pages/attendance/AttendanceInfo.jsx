@@ -13,7 +13,7 @@ import moment from 'moment';
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+// import { useParams, useNavigate } from "react-router-dom";
 
 import { getAttendanceDates, getLectureCount } from "../../utils/endpoints/get"
 import { getClearClassURL } from "../../utils/endpoints/delete";
@@ -23,6 +23,7 @@ import { checkSuccess } from "../../utils/shared/commons";
 
 import CustomToolbar from "../../utils/shared/CustomToolbar"
 import AttendanceTable from "../../components/attendanceTable/AttendanceTable";
+import InforBanner from "../../components/shared/infoBanner/InforBanner";
 
 const localizer = dateFnsLocalizer({
     format,
@@ -33,37 +34,35 @@ const localizer = dateFnsLocalizer({
 });
 
 const AttendanceInfo = () => {
-    
-    const [sclass, setSclass] = useState("");
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [dates, setDates] = useState([]);
     const [lectures, setLectures ]= useState(0);
-    const [className, setClassName] = useState("");
+    // const [className, setClassName] = useState("");
     const [openModal, setOpenModal] = useState(false);
     const [viewDate, setViewDate] = useState('');
     const [attId, setAttId] = useState('');
 
-    const { classId } = useParams();
-    const navigate = useNavigate();
+    const { user } = useSelector(state => state.auth);
 
-    const classes = useSelector(state => state.faculty.classes);
+    // const { classId } = useParams();
+    // const navigate = useNavigate();
 
-    useEffect(() => {
-        if (classId) {
-            setSclass(classId);
+    // useEffect(() => {
+    //     if (classId) {
+    //         setSclass(classId);
 
-            const cl = classes?.find(c => c._id === classId);
-            if (cl) setClassName(cl.name);
-        }
-    }, [classId, classes]);
+    //         const cl = classes?.find(c => c._id === classId);
+    //         if (cl) setClassName(cl.name);
+    //     }
+    // }, [classId, classes]);
 
   
     useEffect(() => {
 
         const fetchLectures = async() => {
-            if(sclass) {
+            if(user?.classTeacherTo) {
                 try {
-                    const response = await axiosInterceptor.get(`${getLectureCount}/${sclass}`)
+                    const response = await axiosInterceptor.get(`${getLectureCount}/${user?.classTeacherTo}`)
                     setLectures(response.data.data);
                 } catch(error) {
                     toast.error(
@@ -78,13 +77,13 @@ const AttendanceInfo = () => {
         }
 
         fetchLectures();
-    }, [sclass, refreshTrigger])
+    }, [user?.classTeacherTo, refreshTrigger])
 
     useEffect(() => {
         const fetchDates = async() => {
-            if(sclass) {
+            if(user?.classTeacherTo) {
                 try {
-                    const response = await axiosInterceptor.get(`${getAttendanceDates}/${sclass}`)
+                    const response = await axiosInterceptor.get(`${getAttendanceDates}/${user?.classTeacherTo}`)
                     const event = response?.data.data?.map((a) => {
                         const d = new Date(a.date)
                         return {id: a.id, title: `${a.presentCount} Pres. ${a.absentCount} Abs.`, start: d}
@@ -103,7 +102,7 @@ const AttendanceInfo = () => {
         }
 
         fetchDates();
-    }, [sclass, refreshTrigger])
+    }, [user?.classTeacherTo, refreshTrigger])
 
   const handleEventPopup = (e) => {
     setAttId(e.id)
@@ -115,7 +114,7 @@ const AttendanceInfo = () => {
     const handleClear = async() => {
     // this deletes data from the database
         try {
-            const res = await axiosInterceptor.delete(getClearClassURL(sclass));
+            const res = await axiosInterceptor.delete(getClearClassURL(user?.classTeacherTo));
             if(checkSuccess(res.data.status)) {
                 toast.success("Attendance has been cleared!");
                 setRefreshTrigger(prev => prev + 1);
@@ -133,21 +132,8 @@ const AttendanceInfo = () => {
     <div className="attendance-info">
         <h1 className="attendance-title">Attendance</h1>
         <div className="attendance-info-container">
-            <div className="classes-button">
-                {
-                    classes?.map((cl, index) => (
-                        <button
-                            key={index}
-                            onClick={() => navigate(`/faculty/attendance/${cl._id}`)}
-                            className={sclass && sclass === cl._id ? 'selected-class' : ''}
-
-                        >{cl.name}</button>
-                    ))
-                }
-            </div>
-            {sclass ? (
+            {user?.classTeacherTo ? (
                 <>
-                    <h1>Class: {className}</h1>
                     <h1>Total No. of Lectures: {lectures}</h1>
                     <div className="attendance-dates-calender">
                         <Calendar
@@ -168,7 +154,7 @@ const AttendanceInfo = () => {
                             <button onClick={handleClear}>Clear Class Attendance</button>
                         </div>
 
-                        <Link to={`/faculty/classes/attendance/${sclass}`} >
+                        <Link to={`/faculty/classes/attendance/${user?.classTeacherTo}`} >
                             <div className="view-percentage">
                                 <button>View Percentage Status</button>
                             </div>
@@ -177,11 +163,15 @@ const AttendanceInfo = () => {
                 </>
             ) : (
               <>
-                <h1>Please select a class</h1>
+                 <InforBanner
+                    type="info"
+                    header="No Class Assigned"
+                    description="You are not assigned as a class teacher to any class."
+                ></InforBanner>
               </>
             )}
         </div>
-        {openModal && <AttendanceTable setOpen={setOpenModal} classid={sclass} date={viewDate} id={attId}/>}
+        {openModal && <AttendanceTable setOpen={setOpenModal} classid={user?.classTeacherTo} date={viewDate} id={attId} refreshTrigger={setRefreshTrigger}/>}
 
     </div>
   )

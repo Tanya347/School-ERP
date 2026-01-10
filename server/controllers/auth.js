@@ -46,18 +46,6 @@ const createSendToken = (user, statusCode, res) => {
 }
 
 
-// register admin
-// -----------------------------------------------
-export const registerAdmin = catchAsync(async (req, res, next) => {
-  const newUser = await Admin.create({
-    username: req.body.username,
-    password: req.body.password,
-    role: req.body.role
-  })
-  createSendToken(newUser, 201, res);
-})
-
-
 // login
 // -----------------------------------------------
 export const login = (model) => catchAsync(async (req, res, next) => {

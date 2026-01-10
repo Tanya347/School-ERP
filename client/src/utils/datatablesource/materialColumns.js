@@ -10,11 +10,11 @@ export const materialColumns = [
         width: 500,
     },
     {
-        field: "classId",
+        field: "classID",
         headerName: "Assigned To",
         width: 250,
         renderCell: (params) => {
-            return params.row.classId ? params.row.classId.name : '';
+            return params.row.classID ? params.row.classID.name : '';
         }
     }
 ];

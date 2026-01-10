@@ -18,7 +18,7 @@ export const getClearTimetableForClass = (classid) => {
     return `/timetables/${classid}`
 }
 
-export const clearExamDates = (sclass) => {
+export const clearExamDatesForClass = (sclass) => {
     return `/courses/exam/clear/${sclass}`
 }
 

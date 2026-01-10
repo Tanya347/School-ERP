@@ -25,7 +25,7 @@ export const validateTask = (id, value) => {
         return "Deadline must be a future date";
       return "";
 
-    case "sclass":
+    case "classID":
       if (!value) return "Class is required";
       return "";
 

@@ -1,9 +1,10 @@
 import School from "../models/School.js";
 import Admin from "../models/Admin.js";
+import Session from "../models/Session.js";
 
 import fs from "fs";
 
-import { getActiveSession } from "./session.js";
+import { getActiveSession, getSessionMeta } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import cloudinary from "../utils/cloudinary.js";
@@ -94,6 +95,19 @@ export const createSchool = catchAsync(async (req, res, next) => {
         schoolID: newSchool._id
     });
 
+    // create first academic session for the school
+    const { name: sessionName, startYear, endYear } = getSessionMeta();
+
+    const [firstSession] = await Session.create(
+      [{
+        name: sessionName,
+        startYear,
+        endYear,
+        schoolID: newSchool._id,
+        isActive: true
+      }],
+    );
+
     // Send credentials to school's email
     await sendEmail({
         email: email,
@@ -103,19 +117,20 @@ export const createSchool = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
         status: successMsg,
-        message: 'School and admin created successfully',
+        message: 'School, active session and admin created successfully',
         data: {
             school: newSchool,
             admin: {
                 username: newAdmin.username
-            }
+            },
+            firstSession
         }
     });
 });
 
 
 // fetch school info along with active session and admin username
-// --
+// -----------------------------------------------
 export const getSchoolInfo = catchAsync(async (req, res, next) => {
     const schoolId = req.user.schoolID; // Support either param or authenticated user
 
@@ -141,7 +156,7 @@ export const getSchoolInfo = catchAsync(async (req, res, next) => {
 
 
 // edit school info
-// --
+// -----------------------------------------------
 export const editSchoolInfo = catchAsync(async (req, res, next) => {
     const schoolId = req.params.id;
 
@@ -178,8 +193,7 @@ export const editSchoolInfo = catchAsync(async (req, res, next) => {
             ...req.body,
             logo,
             cloud_id,
-            admin: school.admin,
-            sessions: school.sessions
+            admin: school.admin
         },
         { new: true}
     )

@@ -13,4 +13,10 @@
     .info-container {
         margin-top: 30px;
     }
+
+    .marksheet-pdf-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

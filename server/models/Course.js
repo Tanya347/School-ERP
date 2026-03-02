@@ -51,11 +51,11 @@ const CourseSchema = new mongoose.Schema(
     examStatus: {
       status: {
         type: String,
-        enum: ['pending', 'completed', 'marks_published'],
+        enum: ['pending', 'dates_published', 'completed', 'marks_published'],
         default: 'pending',
       },
       examDate: {
-        type: String,
+        type: Date,
       },
     },
   },

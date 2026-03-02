@@ -160,7 +160,7 @@ export const setExamDatesForClass = catchAsync(async (req, res, next) => {
       filter: { _id: exam.courseId, classID },
       update: {
         $set: {
-          'examStatus.status': 'completed',
+          'examStatus.status': 'dates_published',
           'examStatus.examDate': new Date(exam.examDate),
         },
       },
@@ -232,9 +232,9 @@ export const getExamDatesForClass = catchAsync(async (req, res, next) => {
     code: course.subjectCode,
   }));
 
-  // Check if all courses have examStatus.status === 'completed'
+  // Check if all courses have examStatus.status === 'pending'
   const allExamsPlanned = courses.every(
-    course => course.examStatus?.status === 'completed'
+    course => course.examStatus?.status !== 'pending'
   );
 
   res.status(200).json({

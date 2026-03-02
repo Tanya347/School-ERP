@@ -1,5 +1,80 @@
 .marks-history {
   padding: 20px;
+  width: 100%;
+  overflow-x: auto;
+
+  .history-table-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+      .session-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      height: 300px;
+      width: 700px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+      .session-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        h3 {
+          margin: 0;
+        }
+
+        .class-name {
+          font-size: 14px;
+          font-weight: 500;
+          color: #555;
+        }
+      }
+
+      .marks-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th, td {
+          padding: 10px;
+          text-align: left;
+          border-bottom: 1px solid #eee;
+        }
+
+        th {
+          background: #f7f7f7;
+          font-weight: 600;
+        }
+
+        .status {
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 600;
+          text-transform: capitalize;
+
+          &.pass {
+            background: #e6f7ee;
+            color: #1b8a5a;
+          }
+
+          &.fail {
+            background: #fdecea;
+            color: #c0392b;
+          }
+
+          &.pending {
+            background: #fff6e5;
+            color: #d68910;
+          }
+        }
+      }
+    }
+  }
 
   .student-header {
     margin-bottom: 25px;
@@ -13,69 +88,7 @@
     }
   }
 
-  .session-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
-    .session-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-
-      h3 {
-        margin: 0;
-      }
-
-      .class-name {
-        font-size: 14px;
-        font-weight: 500;
-        color: #555;
-      }
-    }
-
-    .marks-table {
-      width: 100%;
-      border-collapse: collapse;
-
-      th, td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #eee;
-      }
-
-      th {
-        background: #f7f7f7;
-        font-weight: 600;
-      }
-
-      .status {
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 13px;
-        font-weight: 600;
-        text-transform: capitalize;
-
-        &.pass {
-          background: #e6f7ee;
-          color: #1b8a5a;
-        }
-
-        &.fail {
-          background: #fdecea;
-          color: #c0392b;
-        }
-
-        &.pending {
-          background: #fff6e5;
-          color: #d68910;
-        }
-      }
-    }
-  }
 
   .no-data {
     text-align: center;

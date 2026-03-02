@@ -8,6 +8,7 @@ import { AppError } from "../utils/customError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
 import { folderName, successMsg } from "../utils/constants.js";
+import { sendRegistrationEmail } from "../utils/email.js";
 
 
 // Register a new faculty member
@@ -43,6 +44,13 @@ export const registerFaculty = catchAsync(async (req, res, next) => {
     profilePicture,
     cloud_id,
   });
+
+  // Send registration email with credentials
+  try {
+    await sendRegistrationEmail(newUser.email, newUser.username, req.body.password, 'Faculty');
+  } catch (error) {
+    console.error('Error sending registration email:', error);
+  }
 
   res.status(201).json({
     status: successMsg,

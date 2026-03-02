@@ -113,11 +113,11 @@ export const getTests = catchAsync(async (req, res, next) => {
   if (facultyId) filter.author = facultyId;
   if (classId) filter.classID = classId;
 
-  const tasks = await Test.find(filter);
+  const tests = await Test.find(filter).populate("subject", "subjectCode");
 
   res.status(200).json({
     status: successMsg,
-    data: tasks,
+    data: tests,
   });
 })
 

@@ -21,7 +21,7 @@ const ViewMarks = () => {
     const fetchStudents = async () => {
       if (course) {
         try {
-          const response = await axiosInterceptor.get(getMarksOfSubject);
+          const response = await axiosInterceptor.get(getMarksOfSubject(course));
           setStuData(response.data.data);
         } catch (error) {
           toast.error(

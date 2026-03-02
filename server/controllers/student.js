@@ -7,7 +7,8 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { getActiveSession } from "./session.js";
 import cloudinary from "../utils/cloudinary.js";
 import { folderName, successMsg } from "../utils/constants.js";
-
+import { AppError } from "../utils/customError.js";
+import { sendRegistrationEmail } from "../utils/email.js";
 
 // Register a new student
 // -----------------------------------------------
@@ -15,6 +16,26 @@ export const registerStudent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
   const activeSession = await getActiveSession(req.user);
   req.body.sessionID = activeSession._id;
+
+  const classDoc = await Class.findById(req.body.classID);
+
+  if (!classDoc) {
+    return next(new AppError("Invalid class selected", 400));
+  }
+
+  const dob = new Date(req.body.dob);
+  const today = new Date();
+
+  const age = today.getFullYear() - dob.getFullYear();
+
+  if (age < classDoc.minAge || age > classDoc.maxAge) {
+    return next(
+      new AppError(
+        `Student age must be between ${classDoc.minAge} and ${classDoc.maxAge} for this class`,
+        400
+      )
+    );
+  }
 
   // image upload handler
   let profilePicture = null;
@@ -42,6 +63,14 @@ export const registerStudent = catchAsync(async (req, res, next) => {
       $addToSet: { students: newUser._id }
     });
   }
+
+  // Send registration email with credentials
+  try {
+    await sendRegistrationEmail(newUser.email, newUser.username, req.body.password, 'Student');
+  } catch (error) {
+    console.error('Error sending registration email:', error);
+  }
+
   res.status(201).json({
     status: successMsg,
     data: { user: newUser  },
@@ -57,6 +86,26 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 
   if (!student) {
     return next(new AppError('Student not found', 404));
+  }
+
+  const classDoc = await Class.findById(req.body.classID);
+
+  if (!classDoc) {
+    return next(new AppError("Invalid class selected", 400));
+  }
+
+  const dob = new Date(req.body.dob);
+  const today = new Date();
+
+  const age = today.getFullYear() - dob.getFullYear();
+
+  if (age < classDoc.minAge || age > classDoc.maxAge) {
+    return next(
+      new AppError(
+        `Student age must be between ${classDoc.minAge} and ${classDoc.maxAge} for this class`,
+        400
+      )
+    );
   }
 
   let profilePicture = student.profilePicture;

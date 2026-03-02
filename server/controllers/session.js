@@ -8,6 +8,7 @@ import TimetableSlot from "../models/Timetable.js";
 import Task from "../models/Task.js";
 import Test from "../models/Test.js";
 import Attendance from "../models/Attendance.js";
+import Material from "../models/Material.js";
 
 import { catchAsync } from '../utils/catchAsync.js';
 import { successMsg } from "../utils/constants.js";
@@ -128,99 +129,76 @@ export const createSession = catchAsync(async (req, res, next) => {
         return next(new AppError('School ID is required', 400));
     }
 
-    const mongoSession = await mongoose.startSession();
-    mongoSession.startTransaction();
+    // find the current active session
+    const activeSession = await Session.findOne({ schoolID, isActive: true });
 
-    try {
-
-      // find the current active session
-      const activeSession = await Session.findOne({ schoolID, isActive: true }).session(mongoSession);
-
-      // Deactivate old session FIRST
-      if (activeSession) {
-        await Session.updateOne(
-          { _id: activeSession._id },
-          { isActive: false },
-          { session: mongoSession }
-        );
-      }
-
-      // Prepare session name and new session instance
-      const { name, startYear, endYear } = getSessionMeta();
-      const [newSession] = await Session.create(
-        [{
-          name,
-          startYear,
-          endYear,
-          schoolID,
-          isActive: true,
-        }],
-        { session: mongoSession }
+    // Deactivate old session FIRST
+    if (activeSession) {
+      await Session.updateOne(
+        { _id: activeSession._id },
+        { isActive: false }
       );
+    }
 
-      // Clear interconnections
-      await Promise.all([
-        Faculty.updateMany(
-          { schoolID },
-          { $set: { classTeacherTo: null } },
-          { session: mongoSession }
-        ),
-        Class.updateMany(
-          { schoolID },
-          { $set: { classTeacher: null } },
-          { session: mongoSession }
-        ),
-        Course.updateMany(
-          { schoolID },
-          {
-            $set: {
-              'examStatus.status': 'pending',
-              'examStatus.examDate': null,
-              teacher: null,
-            },
+    // Prepare session name and new session instance
+    const { name, startYear, endYear } = getSessionMeta();
+    const newSession = await Session.create({
+      name,
+      startYear,
+      endYear,
+      schoolID,
+      isActive: true,
+    });
+
+    // Clear interconnections
+    await Promise.all([
+      Faculty.updateMany(
+        { schoolID },
+        { $set: { classTeacherTo: null } }
+      ),
+      Class.updateMany(
+        { schoolID },
+        { $set: { classTeacher: null } }
+      ),
+      Course.updateMany(
+        { schoolID },
+        {
+          $set: {
+            'examStatus.status': 'pending',
+            'examStatus.examDate': null,
+            teacher: null,
           },
-          { session: mongoSession }
-        ),
+        }
+      ),
+    ]);
+
+    // Promote students & update classes
+    await updateClass(schoolID)
+
+    // Update students' session
+    await Student.updateMany(
+      { schoolID, passedOut: false },
+      { $set: { sessionID: newSession._id } }
+    );
+
+    // Delete old session data
+    if (activeSession) {
+        await Promise.all([
+        Event.deleteMany({ sessionID: activeSession._id }),
+        TimetableSlot.deleteMany({ sessionID: activeSession._id }),
+        Task.deleteMany({ sessionID: activeSession._id }),
+        Test.deleteMany({ sessionID: activeSession._id }),
+        Attendance.deleteMany({ sessionID: activeSession._id }),
+        Material.deleteMany({ sessionID: activeSession._id }),
+        Update.deleteMany({ sessionID: activeSession._id }),
       ]);
-
-      // Promote students & update classes
-      await updateClass(schoolID)
-
-      // Update students' session
-      await Student.updateMany(
-        { schoolID, passedOut: false },
-        { $set: { sessionID: newSession._id } },
-        { session: mongoSession }
-      );
-
-      // Delete old session data
-      if (activeSession) {
-          await Promise.all([
-          Event.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-          TimetableSlot.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-          Task.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-          Test.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-          Attendance.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-          Material.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-          Update.deleteMany({ sessionID: activeSession._id }, { session: mongoSession }),
-        ]);
-      }
-
-      await mongoSession.commitTransaction();
-      mongoSession.endSession();
-
-      res.status(201).json({
-        status: successMsg,
-        message: "New academic session created successfully",
-        session: newSession,
-      });
-
     }
-    catch(error) {
-      await mongoSession.abortTransaction();
-      mongoSession.endSession();
-      throw err;
-    }
+
+    res.status(201).json({
+      status: successMsg,
+      message: "New academic session created successfully",
+      session: newSession,
+    });
 });
 
 // Get session by school ID

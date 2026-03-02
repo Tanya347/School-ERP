@@ -44,21 +44,6 @@ const FacultySchema = new mongoose.Schema(
     },
     enroll: {
       type: String,
-      required: [true, 'Enrollment number is required'],
-      validate: [
-        {
-            validator: function(v) {
-                return validator.isNumeric(v); // Check if the value is numeric
-            },
-            message: 'Enrollment number should contain only numbers'
-        },
-        {
-            validator: function(v) {
-                return /^\d{10}$/.test(v); // Check if the string is exactly 10 digits
-            },
-            message: 'Enrollment number must be exactly 10 digits'
-        }
-      ]
     },
     profilePicture: {
       type: String,
@@ -110,6 +95,7 @@ const FacultySchema = new mongoose.Schema(
         },
         message: 'Invalid phone number',
       },
+      unique: true,
     },
     facultyAddress: {
       type: String,
@@ -162,6 +148,20 @@ FacultySchema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, 12);
     next();
 })
+
+FacultySchema.pre('save', async function(next) {
+  if (!this.isNew) return next();
+
+  const count = await mongoose.model('Faculty').countDocuments({
+    schoolID: this.schoolID
+  });
+
+  const year = new Date().getFullYear();
+
+  this.enroll = `${year}${String(count + 1).padStart(4, '0')}`;
+
+  next();
+});
 
 FacultySchema.methods.correctPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);

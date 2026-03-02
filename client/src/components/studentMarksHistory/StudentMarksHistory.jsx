@@ -20,41 +20,43 @@ const StudentMarksHistory = ({studentId}) => {
       {data?.history?.length === 0 ? (
         <p className="no-data">No marks history available</p>
       ) : (
-        data?.history?.map((session) => (
-          <div className="session-card" key={session.sessionId}>
-            
-            <div className="session-header">
-              <h3>{session.sessionName}</h3>
-              <span className="class-name">
-                Class: {session.className}
-              </span>
-            </div>
+        <div className="history-table-container">
+          {data?.history?.map((session) => (
+            <div className="session-card" key={session.sessionId}>
+              
+              <div className="session-header">
+                <h3>{session.sessionName}</h3>
+                <span className="class-name">
+                  Class: {session.className}
+                </span>
+              </div>
 
-            <table className="marks-table">
-              <thead>
-                <tr>
-                  <th>Subject</th>
-                  <th>Marks</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {session.subjects.map((sub) => (
-                  <tr key={sub.subjectId}>
-                    <td>{sub.subjectName}</td>
-                    <td>{sub.marks}</td>
-                    <td>
-                      <span className={`status ${sub.status}`}>
-                        {sub.status}
-                      </span>
-                    </td>
+              <table className="marks-table">
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Marks</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {session.subjects.map((sub) => (
+                    <tr key={sub.subjectId}>
+                      <td>{sub.subjectName}</td>
+                      <td>{sub.marks}</td>
+                      <td>
+                        <span className={`status ${sub.status}`}>
+                          {sub.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-          </div>
-        ))
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

@@ -12,6 +12,7 @@ import { checkSuccess } from '../../utils/shared/commons';
 import DownloadableCard from '../../components/shared/downloadableCard/DownloadableCard';
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"
+import Loader from '../../components/shared/loader/Loader';
 
 const ViewExamDates = () => {
 
@@ -19,11 +20,13 @@ const ViewExamDates = () => {
   
   const { user } = useSelector(state => state.auth);
   const { info } = useSelector(state => state.school);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       if(user) {
         try {
+          setLoading(true);
           const response = await axiosInterceptor.get(getClassExamDates(user?.classID));
           if(checkSuccess(response.data.status)) {
             setData(response.data.data);
@@ -36,6 +39,8 @@ const ViewExamDates = () => {
             </div>
           );
           console.error(err);
+        } finally {
+          setLoading(false);
         }
       }
     }
@@ -44,35 +49,41 @@ const ViewExamDates = () => {
 
   return (
     <div className='view-exam-dates-container'>
-      <h1 className="list-title">Exam Dates</h1>
-      <div className="exams-date-containers">
-        <GenericTable
-          columns={examColumns}
-          rows={data?.examDates || []}
-          rowKey="_id"
-        />
-      </div>
-
-      {data?.allExamsPlanned ? (
-        <div>
-          <h1 className="list-title">Admit Card</h1>
-          <DownloadableCard
-            subtitle="School Examination Admit Card"
-            type="admitcard"
-            student={user}
-            school={info}
-            tableData={data}
-            onDownloadName={`${user.name}_AdmitCard.pdf`}
-          />
-        </div>
+      {loading ? (
+        <Loader text="Loading exam dates..." type="global"/>
       ) : (
-          <div className="info-container">
-            <InforBanner
-              type="info"
-              header="Admit Card Not Generated"
-              description="Admin Card is not generated yet as all dates have not been released."
-            ></InforBanner>
+        <>
+          <h1 className="list-title">Exam Dates</h1>
+          <div className="exams-date-containers">
+            <GenericTable
+              columns={examColumns}
+              rows={data?.examDates || []}
+              rowKey="_id"
+            />
           </div>
+
+          {data?.allExamsPlanned ? (
+            <div>
+              <h1 className="list-title">Admit Card</h1>
+              <DownloadableCard
+                subtitle="School Examination Admit Card"
+                type="admitcard"
+                student={user}
+                school={info}
+                tableData={data}
+                onDownloadName={`${user.name}_AdmitCard.pdf`}
+              />
+            </div>
+          ) : (
+            <div className="info-container">
+              <InforBanner
+                type="info"
+                header="Admit Card Not Generated"
+                description="Admin Card is not generated yet as all dates have not been released."
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   )

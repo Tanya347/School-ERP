@@ -88,19 +88,19 @@ const DownloadableCard = ({
               <tbody>
                 {tableData?.marksData?.map((item) => (
                   <tr key={item._id}>
-                    <td style={{ border: '1px solid #ccc', padding: '10px' }}>{item.sub_id?.name}</td>
-                    <td style={{ border: '1px solid #ccc', padding: '10px' }}>{item.total}</td>
+                    <td style={{ border: '1px solid #ccc', padding: '10px' }}>{item.subjectName}</td>
+                    <td style={{ border: '1px solid #ccc', padding: '10px' }}>{item.marks}</td>
                     <td style={{ border: '1px solid #ccc', padding: '10px' }}>100</td>
                     <td style={{ border: '1px solid #ccc', padding: '10px' }}>
-                      {item.total >= 90
+                      {item.marks >= 90
                         ? 'A+'
-                        : item.total >= 80
+                        : item.marks >= 80
                         ? 'A'
-                        : item.total >= 70
+                        : item.marks >= 70
                         ? 'B'
-                        : item.total >= 60
+                        : item.marks >= 60
                         ? 'C'
-                        : item.total >= 50
+                        : item.marks >= 50
                         ? 'D'
                         : 'F'}
                     </td>

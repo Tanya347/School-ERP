@@ -11,4 +11,16 @@ export const classInputs = [
         type: "Number",
         placeholder: "Enter numerical class number",
     },
+    {
+        id: "minAge",
+        label: "Minimum Age",
+        type: "Number",
+        placeholder: "Enter minimum age for the class",
+    },
+    {
+        id: "maxAge",
+        label: "Maximum Age",
+        type: "Number",
+        placeholder: "Enter maximum age for the class",
+    },
 ];

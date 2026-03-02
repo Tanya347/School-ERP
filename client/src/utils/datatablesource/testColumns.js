@@ -12,6 +12,14 @@ export const testColumns = [
         width: 300,
     },
     {
+        field: "subject",
+        headerName: "Subject",
+        width: 150,
+        renderCell: (params) => {
+            return params.row.subject ? params.row.subject.subjectCode : '';
+        }
+    },
+    {
         field: "duration",
         headerName: "Duration",
         width: 100

@@ -22,6 +22,26 @@ const ClassSchema = new mongoose.Schema({
           message: 'Class number must be a valid number'
           }
     },
+    minAge: {
+      type: Number,
+      required: [true, 'Minimum age is required'],
+        validate: {
+          validator: function (v) {
+            return v > 0;
+          },
+        message: 'Minimum age must be a valid number'
+      }
+    },
+    maxAge: {
+      type: Number,
+      required: [true, 'Maximum age is required'],
+        validate: {
+          validator: function (v) {
+            return v > 0;
+          },
+        message: 'Maximum age must be a valid number'
+      }
+    },
     students: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Student'

@@ -126,6 +126,7 @@ const MarkAttendance = () => {
                             style={{ marginRight: "10px" }}
                             selected={sdate}
                             onChange={(sdate) => setSdate(sdate)}
+                            maxDate={new Date()}
                           />
                       </div>
                     </div>

@@ -42,7 +42,6 @@ import { materialInputs } from '../formsource/materialInputs';
 
 // Datatable Columns
 import { taskColumns } from '../datatablesource/taskColumns';
-import { queryColumns } from '../datatablesource/queryColumns';
 import { testColumns } from '../datatablesource/testColumns';
 import { attendanceColumns } from "../datatablesource/attendanceColumns"
 import { updateColumns } from '../datatablesource/updateColumns';
@@ -180,12 +179,6 @@ const FacultyRoutes = () => {
           <Route
             path="class/students"
             element={<ViewStudents />}
-            />
-
-          {/* query page faculty side*/}
-          <Route
-            path="queries"
-            element={<List column={queryColumns} name="Query" />}
             />
 
           {/* mark attendance page */}

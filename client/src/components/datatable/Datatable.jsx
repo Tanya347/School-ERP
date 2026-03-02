@@ -16,6 +16,7 @@ import { bulkDelete } from "../../utils/endpoints/post.js";
 import { testAction } from "../../utils/endpoints/put.js";
 import { facultiesConst, materialsConst, studentsConst, testsConst } from "../../utils/shared/constants.js";
 import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../utils/shared/commons.js";
+import { exportColumnMap } from "../../utils/datatablesource/exportButtonColumns.js";
 
 import AddClass from "../addCourse/AddCourse.jsx";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
@@ -23,6 +24,40 @@ import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
 import Loader from "../shared/loader/Loader.jsx";
 import Popup from "../shared/popup/Popup.jsx";
 import Modal from "../shared/modal/Modal.jsx";
+
+const getExportData = (data, tableType) => {
+  const columnsToExport = exportColumnMap[tableType] || Object.keys(data[0] || {});
+  
+  return data.map((item) => {
+    const filteredItem = {};
+    
+    columnsToExport.forEach((col) => {
+      // Handle nested field access (e.g., "classID.name", "teacher.teachername")
+      const fieldParts = col.split('.');
+      let value = item;
+      
+      for (let part of fieldParts) {
+        if (value && typeof value === 'object') {
+          value = value[part];
+        } else {
+          value = undefined;
+          break;
+        }
+      }
+      
+      if (value !== undefined) {
+        // Format date fields
+        if ((col === "createdAt" || col === "updatedAt" || col === "dueDate" || col === "date" || col === "testDate") && value) {
+          filteredItem[col] = new Date(value).toLocaleString();
+        } else {
+          filteredItem[col] = value;
+        }
+      }
+    });
+    
+    return filteredItem;
+  });
+};
 
 const Datatable = ({ column, name }) => {
   
@@ -191,11 +226,7 @@ const Datatable = ({ column, name }) => {
             <Tooltip title={"Export to Excel"} arrow>
               <ExportButton
                 data={list}
-                formatted={list.map((item) => ({
-                  ...item,
-                  createdAt: new Date(item.createdAt).toLocaleString(),
-                  updatedAt: new Date(item.updatedAt).toLocaleString(),
-                }))}
+                formatted={getExportData(list, path)}
                 filename={`${name}_data`}
                 sheetName={name}
               />
@@ -228,6 +259,7 @@ const Datatable = ({ column, name }) => {
             pageSize={10}
             rowsPerPageOptions={[10]}
             getRowId={(row) => row._id}
+            disableSelectionOnClick
           />
 
           {popupData && popupData.type === facultiesConst && (

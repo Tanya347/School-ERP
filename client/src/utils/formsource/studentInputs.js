@@ -28,13 +28,6 @@ export const studentInputs = [
         editAccess: "both"
     },
     {
-        id: "enroll",
-        label: "Enrollment Number",
-        type: "text",
-        placeholder: "Enter enrollment number",
-        editAccess: "admin"
-    },
-    {
         id: "studentPhone",
         label: "Phone Number",
         type: "text",

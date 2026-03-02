@@ -58,20 +58,8 @@ const EventModal = ({ setOpen, event, type }) => {
                         <div className="m-desc">{event.desc}</div>
 
                         {/* Event details */}
-                        {start.getDate() === end.getDate() ? 
-                            (
-                                <p><span>Date</span> : {formatDate(start)}</p>
-                            )
-                            :
-                            (
-                                <>
-                                    <p><span>From</span> : {formatDate(start)}</p>
-                                    <p><span>To</span> : {formatDate(end)}</p>
-                                </>
-                            )
-                        }
-                        
-                        <p><span>Time</span> : {formatTime(start)} - {formatTime(end)}</p>
+                        <p><span>Start Date</span>: {formatDate(start)} {formatTime(start)}</p>
+                        <p><span>End Date</span>: {formatDate(end)} {formatTime(end)}</p>
                         <p><span>Venue</span> : {event.venue}</p>
                         
 

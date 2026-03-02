@@ -7,8 +7,12 @@ import { logoutEndpoint, validateEndpoint } from "../../endpoints/post";
 
 export const verifyUser = createAsyncThunk(
   "auth/verify",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
+      const state = getState();
+      if (!state.auth.user) {
+        return rejectWithValue(null);
+      }
       const res = await axios.post(
         validateEndpoint(),
         {},

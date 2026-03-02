@@ -18,12 +18,13 @@ const AddMarks = () => {
   const [course, setCourse] = useState("");
   const [sclass, setSclass] = useState("");
   const [courseName, setCourseName] = useState("");
-  const [stuData, setStuData] = useState({});
+  const [stuData, setStuData] = useState([]);
   const [marksData, setMarksData] = useState({});
 
   const navigate = useNavigate();
 
   const courses = useSelector(state => state.faculty.courses);
+  const currentCourse = courses?.find(c => c._id === course);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -74,9 +75,9 @@ const AddMarks = () => {
   }, [course]);
 
   const handleClick = (cl) => {
-    setCourse(cl._id);
-    setCourseName(cl.subjectCode);
-    setSclass(cl.sclass);
+    setCourse(cl?._id);
+    setCourseName(cl?.subjectCode);
+    setSclass(cl?.classID?._id);
   };
 
   const handleMarksChange = (studentId, marks) => {
@@ -114,6 +115,76 @@ const AddMarks = () => {
     }
   };
 
+  const renderContent = () => {
+    // Case 1: No course selected
+    if (!course) {
+      return <h1>Please select a course</h1>;
+    }
+
+    // console.log(course)
+    console.log(currentCourse)
+
+    // Case 2: Exam not completed
+    if (currentCourse?.examStatus?.status !== "completed") {
+      return (
+        <div className="no-students">
+          <InforBanner
+            type="info"
+            header={`Marks cannot be added for ${currentCourse?.subjectCode}`}
+            description="This exam is not completed yet. Marks can only be added once the exam status is marked as completed."
+          />
+        </div>
+      );
+    }
+
+    // Case 3: No students in class
+    if (!stuData || stuData.length === 0) {
+      return (
+        <div className="no-students">
+          <InforBanner
+            type="error"
+            header="Empty List"
+            description="No students present for this class"
+          />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <h1>Course: {courseName}</h1>
+        <div className="marks-adding-table">
+          <div className="marks-row" id="title-row">
+            <div className="marks-col">Enrollment Number</div>
+            <div className="marks-col">Student</div>
+            <div className="marks-col">Marks</div>
+          </div>
+          {stuData?.map((st) => (
+            <div className="marks-row" key={st._id}>
+              <div className="marks-col">{st.enroll}</div>
+              <div className="marks-col">{st.name}</div>
+              <div className="marks-col">
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={marksData[st._id] || ""}
+                  onChange={(e) =>
+                    handleMarksChange(st._id, e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          ))}
+          <div className="add-marks-button">
+            {sending && <Loader text="adding marks.." />}
+            <button onClick={handleSubmit}>Add Marks</button>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="add-marks">
       <h1>Add Marks</h1>
@@ -132,52 +203,7 @@ const AddMarks = () => {
           ))}
         </div>
 
-        {course ? (
-          <>
-            <h1>Course: {courseName}</h1>
-
-            {stuData?.students?.length > 0 ? (<div className="marks-adding-table">
-              <div className="marks-row" id="title-row">
-                <div className="marks-col">Enrollment Number</div>
-                <div className="marks-col">Student</div>
-                <div className="marks-col">Marks</div>
-              </div>
-                {stuData?.students?.map((st) => (
-                  <div className="marks-row" key={st._id}>
-                    <div className="marks-col">{st.enroll}</div>
-                    <div className="marks-col">{st.name}</div>
-                    <div className="marks-col">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={marksData[st._id] || ""}
-                        onChange={(e) =>
-                          handleMarksChange(st._id, e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                ))}
-            <div className="add-marks-button">
-              {sending && <Loader text="adding marks.."/>}
-              <button onClick={handleSubmit}>Add Marks</button>
-            </div>
-            </div>
-            ) : (
-              <div className="no-students">
-                <InforBanner
-                  type="error"
-                  header="Empty List"
-                  description="No students present for this class"
-                ></InforBanner>
-              </div>
-            )}
-
-          </>
-        ) : (
-          <h1>Please select a course</h1>
-        )}
+        {renderContent()}
       </div>
     </div>
   );

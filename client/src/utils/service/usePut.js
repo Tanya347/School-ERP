@@ -2,17 +2,22 @@ import { toast } from "react-toastify"
 import axiosInterceptor from "../shared/axiosInterceptor";
 import { checkSuccess } from "../../utils/shared/commons"
 
-export const editElementWithPicture = async(file, info, element, url) => {
+export const editElementWithPicture = async(file, info, element, url, deleteImage = false) => {
     const formData = new FormData();
-    
+
     Object.keys(info).forEach((key) => {
         if (info[key] !== undefined && info[key] !== null) {
             formData.append(key, info[key]);
         }
     });
-    
+
     if(file) {
         formData.append("file", file);
+    }
+
+    // Add deleteImage flag to formData
+    if(deleteImage) {
+        formData.append("deleteImage", "true");
     }
 
     console.log(file)

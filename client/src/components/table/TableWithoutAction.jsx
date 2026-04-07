@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 import useFetch from "../../utils/service/useFetch.js"
 import { getClassCourses, getTableWithoutActionURL } from "../../utils/endpoints/get.js";
+import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 
 // column, name and type are props input at the place datatable is used
 const TableWithoutAction = ({ column, name }) => {
@@ -40,10 +41,18 @@ const TableWithoutAction = ({ column, name }) => {
       <div className="table-without-action-container">
 
         {/* Title will be shown based on which table is */}
-        <div className="datatable-header">
+        <div className="datatable-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className="datatable-title">
           {name}
           </div>
+          {list.length > 0 && (
+            <ExportButton
+              data={list}
+              columns={column(course).filter(col => col.field)}
+              filename={`${name.toLowerCase()}_${id || 'export'}`}
+              sheetName={name}
+            />
+          )}
         </div>
 
         {/* Datagrid element */}

@@ -1,6 +1,6 @@
 import "./addMarks.scss";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -21,10 +21,23 @@ const AddMarks = () => {
   const [stuData, setStuData] = useState([]);
   const [marksData, setMarksData] = useState({});
 
+  const { courseId } = useParams();
   const navigate = useNavigate();
 
   const courses = useSelector(state => state.faculty.courses);
   const currentCourse = courses?.find(c => c._id === course);
+
+  // Set course from URL param when courses load
+  useEffect(() => {
+    if (courseId && courses?.length > 0) {
+      const selectedCourse = courses.find(c => c._id === courseId);
+      if (selectedCourse) {
+        setCourse(selectedCourse._id);
+        setCourseName(selectedCourse.subjectCode);
+        setSclass(selectedCourse.classID?._id);
+      }
+    }
+  }, [courseId, courses]);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -75,9 +88,7 @@ const AddMarks = () => {
   }, [course]);
 
   const handleClick = (cl) => {
-    setCourse(cl?._id);
-    setCourseName(cl?.subjectCode);
-    setSclass(cl?.classID?._id);
+    navigate(`/faculty/marks/new/${cl._id}`);
   };
 
   const handleMarksChange = (studentId, marks) => {

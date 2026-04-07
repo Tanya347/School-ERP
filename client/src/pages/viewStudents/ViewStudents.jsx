@@ -2,6 +2,7 @@ import "./viewStudents.scss"
 
 import { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { getCourseStudents } from '../../utils/endpoints/get';
 import { studentColumns } from '../../utils/tableSource/studentsColumns';
@@ -16,7 +17,21 @@ const ViewStudents = () => {
   const [className, setClassName] = useState("");
   const [stuData, setStuData] = useState({});
 
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+
   const courses = useSelector(state => state.faculty.courses);
+
+  // Set course from URL param when courses load
+  useEffect(() => {
+    if (courseId && courses?.length > 0) {
+      const selectedCourse = courses.find(c => c._id === courseId);
+      if (selectedCourse) {
+        setCourse(selectedCourse._id);
+        setClassName(selectedCourse.name);
+      }
+    }
+  }, [courseId, courses]);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -39,8 +54,7 @@ const ViewStudents = () => {
   }, [course])
 
   const handleClick = (cl) => {
-    setCourse(cl._id);
-    setClassName(cl.name);
+    navigate(`/faculty/class/students/${cl._id}`);
   };
   
   return (

@@ -180,6 +180,10 @@ const FacultyRoutes = () => {
             path="class/students"
             element={<ViewStudents />}
             />
+          <Route
+            path="class/students/:courseId"
+            element={<ViewStudents />}
+            />
 
           {/* mark attendance page */}
           <Route 
@@ -206,16 +210,24 @@ const FacultyRoutes = () => {
             />
 
           {/* add marks page */}
-          <Route 
+          <Route
             path="marks/new"
             element={<AddMarks />}
-            />
+          />
+          <Route
+            path="marks/new/:courseId"
+            element={<AddMarks />}
+          />
 
           {/* view marks page */}
-          <Route 
+          <Route
             path="marks"
             element={<ViewMarks />}
-            />
+          />
+          <Route
+            path="marks/:courseId"
+            element={<ViewMarks />}
+          />
 
           {/* add test marks page */}
           <Route 

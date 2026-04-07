@@ -18,6 +18,9 @@ const EventModal = ({ setOpen, event, type }) => {
     const start = new Date(event.startDate)
     const end = new Date(event.endDate)
 
+    // Check if event has passed (expired)
+    const isEventPast = new Date() > end
+
     // deleting the event
     const handleDelete = async () => {
         try {
@@ -78,7 +81,8 @@ const EventModal = ({ setOpen, event, type }) => {
                         }
 
                         {
-                        event.registerLink && <button className="m-button">
+                        event.registerLink && !isEventPast && (
+                            <button className="m-button">
                                 <a
                                     href={normalizeUrl(event.registerLink)}
                                     style={{ textDecoration: "none", color: "white" }}
@@ -88,7 +92,8 @@ const EventModal = ({ setOpen, event, type }) => {
                                     Register for Event
                                 </a>
                             </button>
-                        }
+                        )}
+                        {isEventPast && <span className="event-expired-badge">Event Ended</span>}
 
                         {/* Other Details */}
                         <p><span>Contact Details</span> : {event.contact}</p>

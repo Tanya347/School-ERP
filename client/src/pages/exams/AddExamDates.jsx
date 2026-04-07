@@ -3,6 +3,7 @@ import './addExamDates.scss';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 
 import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useSelector } from "react-redux"
 
@@ -18,7 +19,7 @@ import Dropdown from '../../components/shared/dropdown/Dropdown';
 import Loader from "../../components/shared/loader/Loader"
 
 const AddExamDates = () => {
-  
+
   const [selectedClass, setSelectedClass] = useState('');
   const [courses, setCourses] = useState([]);
   const [examDates, setExamDates] = useState([]);
@@ -27,12 +28,30 @@ const AddExamDates = () => {
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
 
+  const { classId } = useParams();
+  const navigate = useNavigate();
+
   const classes = useSelector(state => state.admin.classes);
 
+  // Set class from URL param when classes load
+  useEffect(() => {
+    if (classId && classes?.length > 0) {
+      const selected = classes.find(c => c._id === classId);
+      if (selected) {
+        setSelectedClass(classId);
+      }
+    }
+  }, [classId, classes]);
+
   const handleClassSelection = (e) => {
-    setSelectedClass(e.target.value);
-    setExamDates({});
-    setCourses([]);
+    const classId = e.target.value;
+    if (classId) {
+      navigate(`/admin/exams/dates/${classId}`);
+    } else {
+      setSelectedClass('');
+      setExamDates({});
+      setCourses([]);
+    }
   };
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 import Popup from "../shared/popup/Popup";
 import GenericTable from "../shared/table/Table";
+import ExportButton from "../shared/excelButton/ExcelButton.jsx";
 
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import useFetch from "../../utils/service/useFetch";
@@ -52,14 +53,26 @@ const AttendanceTable = ({ classid, date, setOpen, id, refreshTrigger }) => {
       onClose={() => setOpen(false)}
       customClass="attendance-modal"
       content={
-        <GenericTable
-          columns={attendanceColumns}
-          rows={data}
-          rowKey="id"
-          customStyles={{
-            head: { backgroundColor: "#EEEEEE" },
-          }}
-        />
+        <>
+          {data.length > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+              <ExportButton
+                data={data}
+                columns={attendanceColumns}
+                filename={`attendance_${date}`}
+                sheetName="Attendance"
+              />
+            </div>
+          )}
+          <GenericTable
+            columns={attendanceColumns}
+            rows={data}
+            rowKey="id"
+            customStyles={{
+              head: { backgroundColor: "#EEEEEE" },
+            }}
+          />
+        </>
       }
       actions={[
         {

@@ -3,6 +3,60 @@
     height: fit-content;
 }
 
+// Custom event content styles
+.rbc-event-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+}
+
+.rbc-event-title {
+    font-weight: 500;
+    font-size: 0.85em;
+    line-height: 1.2;
+}
+
+.event-status-badge {
+    font-size: 0.65em;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+
+    &.status-completed {
+        background-color: #28a745;
+        color: white;
+    }
+
+    &.status-pending {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    &.status-overdue {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    &.status-canceled {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    &.status-past {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    &.status-upcoming {
+        background-color: #17a2b8;
+        color: white;
+    }
+}
+
 .app.dark .events {
     background-color: var(--black);
 

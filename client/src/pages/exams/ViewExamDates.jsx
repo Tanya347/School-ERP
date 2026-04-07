@@ -13,6 +13,7 @@ import DownloadableCard from '../../components/shared/downloadableCard/Downloada
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from "../../components/shared/infoBanner/InforBanner"
 import Loader from '../../components/shared/loader/Loader';
+import ExportButton from '../../components/shared/excelButton/ExcelButton.jsx';
 
 const ViewExamDates = () => {
 
@@ -53,7 +54,17 @@ const ViewExamDates = () => {
         <Loader text="Loading exam dates..." type="global"/>
       ) : (
         <>
-          <h1 className="list-title">Exam Dates</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h1 className="list-title" style={{ margin: 0 }}>Exam Dates</h1>
+            {data?.examDates?.length > 0 && (
+              <ExportButton
+                data={data?.examDates}
+                columns={examColumns}
+                filename={`exam_dates_${data?.className || 'class'}`}
+                sheetName="Exam Dates"
+              />
+            )}
+          </div>
           <div className="exams-date-containers">
             <GenericTable
               columns={examColumns}

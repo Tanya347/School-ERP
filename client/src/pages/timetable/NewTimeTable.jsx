@@ -3,6 +3,7 @@ import "./newTimeTable.scss";
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 
 import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import {toast} from "react-toastify"
 import { useSelector } from "react-redux"
 
@@ -30,7 +31,20 @@ const NewTimeTable = () => {
   const [clearloading, setClearloading] = useState(false);
   const [saveloading, setSaveloading] = useState(false);
 
+  const { classId } = useParams();
+  const navigate = useNavigate();
+
   const classes = useSelector(state => state.admin.classes);
+
+  // Set class from URL param when classes load
+  useEffect(() => {
+    if (classId && classes?.length > 0) {
+      const selected = classes.find(c => c._id === classId);
+      if (selected) {
+        setSelectedClass(classId);
+      }
+    }
+  }, [classId, classes]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,8 +87,13 @@ const NewTimeTable = () => {
   };
 
   const handleClassSelection = (e) => {
-    setSelectedClass(e.target.value)
-    setCourses([]);
+    const classId = e.target.value;
+    if (classId) {
+      navigate(`/admin/timetables/new/${classId}`);
+    } else {
+      setSelectedClass('');
+      setCourses([]);
+    }
   }
 
   const handleClearAllSlots = async () => {

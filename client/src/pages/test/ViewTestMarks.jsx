@@ -12,6 +12,7 @@ import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import { testsConst } from "../../utils/shared/constants";
 import { toast } from "react-toastify";
 import InforBanner from "../../components/shared/infoBanner/InforBanner";
+import ExportButton from '../../components/shared/excelButton/ExcelButton.jsx';
 
 const ViewTestMarks = () => {
   const [stuData, setStuData] = useState([]);
@@ -105,6 +106,19 @@ const ViewTestMarks = () => {
           {data?.state === "completed" ? (
             <div className="lower-container">
             {data?.marks && data?.marks?.length > 0 ? (
+              <>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                <ExportButton
+                  formatted={data?.marks?.map(mark => ({
+                    'Enrollment Number': mark.student_id.enroll,
+                    'Student Name': mark.student_id.name,
+                    'Present': mark.present ? "Yes" : "No",
+                    'Marks': mark.value
+                  }))}
+                  filename={`test_marks_${data?.name}`}
+                  sheetName="Test Marks"
+                />
+              </div>
               <div className="marks-adding-table">
                 <div className="marks-row" id='title-row'>
                   <div className="marks-col">Enrollment Number</div>
@@ -121,6 +135,7 @@ const ViewTestMarks = () => {
                   </div>
                 ))}
               </div>
+              </>
             ) : (
               <div className="marks-adding-table">
                 <div className="marks-row" id='title-row'>

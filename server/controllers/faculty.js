@@ -1,6 +1,11 @@
 import Faculty from "../models/Faculty.js";
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
+import Task from "../models/Task.js";
+import Test from "../models/Test.js";
+import Material from "../models/Material.js";
+import Attendance from "../models/Attendance.js";
+import TimetableSlot from "../models/Timetable.js";
 
 import fs from "fs";
 
@@ -71,7 +76,16 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
   if (!faculty) {
     return next(new AppError('Faculty not found', 404));
   }
-  if (req.file) {
+
+  // Check if image should be deleted
+  if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
+    // Delete from Cloudinary if exists
+    if (faculty.cloud_id) {
+      await cloudinary.uploader.destroy(faculty.cloud_id);
+    }
+    profilePicture = null;
+    cloud_id = null;
+  } else if (req.file) {
     if (faculty.cloud_id) {
       await cloudinary.uploader.destroy(faculty.cloud_id);
     }
@@ -121,7 +135,7 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
 });
 
 
-// Delete a faculty member
+// Delete a faculty member with cascade operations
 // -----------------------------------------------
 export const deleteFaculty = catchAsync(async (req, res, next) => {
 
@@ -132,30 +146,56 @@ export const deleteFaculty = catchAsync(async (req, res, next) => {
 
   if (!faculty) return next(new AppError("Faculty not found", 404));
 
+  const facultyId = faculty._id;
+
   await Course.updateMany(
-    { teacher: faculty._id },
+    { teacher: facultyId },
     { $set: { teacher: null } }
   );
 
   await Class.updateMany(
-    { teachers: faculty._id },
-    { $pull: { teachers: faculty._id } }
+    { teachers: facultyId },
+    { $pull: { teachers: facultyId } }
   );
 
+  // Cascade: Unset classTeacher if faculty is class teacher
+  if (faculty.classTeacherTo) {
+    await Class.findByIdAndUpdate(
+      faculty.classTeacherTo,
+      { $unset: { classTeacher: "" } }
+    );
+  }
+
+  // Cascade: Delete related tasks
+  await Task.deleteMany({ author: facultyId });
+
+  // Cascade: Delete related tests
+  await Test.deleteMany({ author: facultyId });
+
+  // Cascade: Delete related attendance records
+  await Attendance.deleteMany({ author: facultyId });
+
+  // Cascade: Delete related timetable slots
+  await TimetableSlot.deleteMany({ facultyID: facultyId });
+
+  // Cascade: Delete related materials (faculty authored)
+  await Material.deleteMany({ author: facultyId, authorModel: 'Faculty' });
+
+  // Delete cloudinary image
   if (faculty.cloud_id) {
     await cloudinary.uploader.destroy(faculty.cloud_id);
   }
 
-  await faculty.deleteOne();
+  await Faculty.findByIdAndDelete(facultyId);
 
   res.status(200).json({
     status: successMsg,
-    message: "The Faculty has been deleted"
+    message: "The Faculty and all related data have been deleted"
   });
 });
 
 
-// Bulk delete faculty members
+// Bulk delete faculty members with cascade operations
 // -----------------------------------------------
 export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
   const ids = req.body.ids;
@@ -167,18 +207,39 @@ export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
   });
 
   for (const faculty of faculties) {
+    const facultyId = faculty._id;
 
-    await Course.updateMany({ teacher: faculty._id }, { $set: { teacher: null } });
-    await Class.updateMany({ teachers: faculty._id }, { $pull: { teachers: faculty._id } });
+    // Cascade: Unset teacher from courses
+    await Course.updateMany({ teacher: facultyId }, { $set: { teacher: null } });
+
+    // Cascade: Remove faculty from class teachers array
+    await Class.updateMany({ teachers: facultyId }, { $pull: { teachers: facultyId } });
+
+    // Cascade: Unset classTeacher if faculty is class teacher
+    if (faculty.classTeacherTo) {
+      await Class.findByIdAndUpdate(
+        faculty.classTeacherTo,
+        { $unset: { classTeacher: "" } }
+      );
+    }
+
+    // Cascade: Delete related tasks, tests, attendance, timetable slots, materials
+    await Task.deleteMany({ author: facultyId });
+    await Test.deleteMany({ author: facultyId });
+    await Attendance.deleteMany({ author: facultyId });
+    await TimetableSlot.deleteMany({ facultyID: facultyId });
+    await Material.deleteMany({ author: facultyId, authorModel: 'Faculty' });
 
     if (faculty.cloud_id) {
       await cloudinary.uploader.destroy(faculty.cloud_id);
     }
-    await faculty.deleteOne();
+
+    await Faculty.findByIdAndDelete(facultyId);
   }
+
   res.status(200).json({
     status: successMsg,
-    message: "Faculty members deleted successfully"
+    message: "Faculty members and all related data deleted successfully"
   });
 });
 

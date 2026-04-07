@@ -126,13 +126,18 @@ const AddCourse = ({ setOpen, facId }) => {
                             }}
                             value={sclass}
                         />
-                        {sclass && <Dropdown
-                                title="Select Course"
-                                options={classes[classIndex]?.subjects}
-                                onChange={(e) => setCourse(e.target.value)}
-                                value={course}
-                            />
-                        }
+                        {sclass && (
+                            classes[classIndex]?.subjects?.filter(subject => !subject.teacher).length > 0 ? (
+                                <Dropdown
+                                    title="Select Course"
+                                    options={classes[classIndex]?.subjects?.filter(subject => !subject.teacher)}
+                                    onChange={(e) => setCourse(e.target.value)}
+                                    value={course}
+                                />
+                            ) : (
+                                <p className="empty">All courses in this class are already assigned</p>
+                            )
+                        )}
                     </form>
                 </div>
             }

@@ -8,22 +8,22 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify";
 
-import useFetch from "../../utils/service/useFetch.js";
-import { getDatatableURL } from "../../utils/endpoints/get.js";
-import axiosInterceptor from "../../utils/shared/axiosInterceptor.js";
-import { getDeleteURL } from "../../utils/endpoints/delete.js";
-import { bulkDelete } from "../../utils/endpoints/post.js";
-import { testAction } from "../../utils/endpoints/put.js";
-import { facultiesConst, materialsConst, studentsConst, testsConst } from "../../utils/shared/constants.js";
-import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../utils/shared/commons.js";
-import { exportColumnMap } from "../../utils/datatablesource/exportButtonColumns.js";
+import useFetch from "../../../utils/service/useFetch.js";
+import { getDatatableURL } from "../../../utils/endpoints/get.js";
+import axiosInterceptor from "../../../utils/shared/axiosInterceptor.js";
+import { getDeleteURL } from "../../../utils/endpoints/delete.js";
+import { bulkDelete } from "../../../utils/endpoints/post.js";
+import { testAction } from "../../../utils/endpoints/put.js";
+import { facultiesConst, materialsConst, studentsConst, testsConst } from "../../../utils/shared/constants.js";
+import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../../utils/shared/commons.js";
+import { exportColumnMap } from "../../../utils/datatablesource/exportButtonColumns.js";
 
-import AddClass from "../addCourse/AddCourse.jsx";
-import ExportButton from "../shared/excelButton/ExcelButton.jsx";
-import ConfirmPopup from "../shared/confirmationPopup/ConfirmatinPopup";
-import Loader from "../shared/loader/Loader.jsx";
-import Popup from "../shared/popup/Popup.jsx";
-import Modal from "../shared/modal/Modal.jsx";
+import AddClass from "../../addCourse/AddCourse.jsx";
+import ExportButton from "../excelButton/ExcelButton.jsx";
+import ConfirmPopup from "../confirmationPopup/ConfirmatinPopup.jsx";
+import Loader from "../loader/Loader.jsx";
+import Popup from "../popup/Popup.jsx";
+import Modal from "../modal/Modal.jsx";
 
 const getExportData = (data, tableType) => {
   const columnsToExport = exportColumnMap[tableType] || Object.keys(data[0] || {});

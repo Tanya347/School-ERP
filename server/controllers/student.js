@@ -1,5 +1,8 @@
 import Student from "../models/Student.js";
 import Class from "../models/Class.js";
+import Marks from "../models/Marks.js";
+import Attendance from "../models/Attendance.js";
+import Test from "../models/Test.js";
 
 import fs from "fs";
 
@@ -111,7 +114,15 @@ export const updateStudent = catchAsync(async (req, res, next) => {
   let profilePicture = student.profilePicture;
   let cloud_id = student.cloud_id;
 
-  if (req.file) {
+  // Check if image should be deleted
+  if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
+    // Delete from Cloudinary if exists
+    if (student.cloud_id) {
+      await cloudinary.uploader.destroy(student.cloud_id);
+    }
+    profilePicture = null;
+    cloud_id = null;
+  } else if (req.file) {
     if (student.cloud_id) {
       await cloudinary.uploader.destroy(student.cloud_id);
     }
@@ -188,7 +199,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 });
 
 
-// Delete a student
+// Delete a student with cascade operations
 // -----------------------------------------------
 export const deleteStudent = catchAsync(async (req, res, next) => {
   const activeSession = await getActiveSession(req.user);
@@ -199,22 +210,51 @@ export const deleteStudent = catchAsync(async (req, res, next) => {
   });
 
   if (!student) return next(new AppError('Student not found', 404));
+
+  const studentId = student._id;
+
+  // Cascade: Delete related marks
+  await Marks.deleteMany({ student: studentId });
+
+  // Cascade: Remove student from attendance records (present/absent arrays)
+  await Attendance.updateMany(
+    { present: studentId },
+    { $pull: { present: studentId } }
+  );
+  await Attendance.updateMany(
+    { absent: studentId },
+    { $pull: { absent: studentId } }
+  );
+
+  // Cascade: Remove student's marks entries from tests
+  await Test.updateMany(
+    { "marks.student_id": studentId },
+    { $pull: { marks: { student_id: studentId } } }
+  );
+
+  // Remove from class students array
+  if (student.classID) {
+    await Class.findByIdAndUpdate(student.classID, { $pull: { students: studentId } });
+  }
+
+  // Delete cloudinary image
   if (student.cloud_id) {
     await cloudinary.uploader.destroy(student.cloud_id);
   }
-  await Class.findByIdAndUpdate(student.classID, { $pull: { students: req.params.id } });
-  await student.remove();
+
+  await Student.findByIdAndDelete(studentId);
+
   res.status(200).json({
     status: successMsg,
-    message: "Student has been deleted successfully!"
+    message: "Student and all related data have been deleted successfully!"
   });
 });
 
 
-// Bulk delete students
+// Bulk delete students with cascade operations
 // -----------------------------------------------
 export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
-  const { ids } = req.body; // Expecting an array of student IDs in the request body
+  const { ids } = req.body;
   const activeSession = await getActiveSession(req.user);
   const students = await Student.find({
     _id: { $in: ids },
@@ -223,16 +263,42 @@ export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
   });
 
   for (const student of students) {
+    const studentId = student._id;
+
+    // Cascade: Delete related marks
+    await Marks.deleteMany({ student: studentId });
+
+    // Cascade: Remove student from attendance records
+    await Attendance.updateMany(
+      { present: studentId },
+      { $pull: { present: studentId } }
+    );
+    await Attendance.updateMany(
+      { absent: studentId },
+      { $pull: { absent: studentId } }
+    );
+
+    // Cascade: Remove student's marks entries from tests
+    await Test.updateMany(
+      { "marks.student_id": studentId },
+      { $pull: { marks: { student_id: studentId } } }
+    );
+
+    // Remove from class students array
+    if (student.classID) {
+      await Class.findByIdAndUpdate(student.classID, { $pull: { students: studentId } });
+    }
+
     if (student.cloud_id) {
       await cloudinary.uploader.destroy(student.cloud_id);
     }
-    await Class.findByIdAndUpdate(student.classID, { $pull: { students: student._id } });
-    await student.remove();
+
+    await Student.findByIdAndDelete(studentId);
   }
 
   res.status(200).json({
     status: successMsg,
-    message: "Selected students have been deleted successfully!"
+    message: "Selected students and all related data have been deleted successfully!"
   });
 });
 

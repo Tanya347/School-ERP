@@ -1,6 +1,6 @@
 import "./list.scss"
 
-import Datatable from "../../datatable/Datatable"
+import Datatable from "../../shared/datatable/Datatable"
 
 const List = ({ column, name }) => {
   return (

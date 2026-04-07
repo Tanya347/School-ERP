@@ -10,6 +10,7 @@ import DownloadableCard from '../../components/shared/downloadableCard/Downloada
 import GenericTable from '../../components/shared/table/Table';
 import InforBanner from '../../components/shared/infoBanner/InforBanner';
 import Loader from '../../components/shared/loader/Loader';
+import ExportButton from '../../components/shared/excelButton/ExcelButton.jsx';
 
 const Marksheet = () => {
 
@@ -42,7 +43,17 @@ const Marksheet = () => {
         <Loader text="Loading data..." type="global"/>
       ) : (
         <>
-          <h1 className="list-title">Marks Obtained</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h1 className="list-title" style={{ margin: 0 }}>Marks Obtained</h1>
+            {rows.length > 0 && (
+              <ExportButton
+                data={rows}
+                columns={marksColumns}
+                filename={`marks_${user.name}`}
+                sheetName="Marks"
+              />
+            )}
+          </div>
           <div className="marks-table-container">
             <GenericTable columns={marksColumns} rows={rows} rowKey="_id" />
           </div>

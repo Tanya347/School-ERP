@@ -25,6 +25,7 @@ const EditMaterial = ({title}) => {
   const [loading, setLoading] = useState(false);
   const [classId, setClassId] = useState("");
   const [errors, setErrors] = useState({});
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,6 +51,10 @@ const EditMaterial = ({title}) => {
     commonHandleChange(e, setInfo, setErrors, validateMaterial);
   }
 
+  const handleDeleteImage = () => {
+    setIsImageDeleted(!isImageDeleted);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -59,7 +64,8 @@ const EditMaterial = ({title}) => {
       const newInfo = {
         classID: classId || info.classID?._id,
         name: info.name,
-        description: info.description
+        description: info.description,
+        isImageDeleted
       }
 
       const res = await editElementWithPicture(file, newInfo, "material", putURLs("materials", id));
@@ -95,6 +101,8 @@ const EditMaterial = ({title}) => {
                   showPreview={false}
                   showFileName
                   showViewLink
+                  onDeleteImage={handleDeleteImage}
+                  isImageDeleted={isImageDeleted}
                 />
 
 

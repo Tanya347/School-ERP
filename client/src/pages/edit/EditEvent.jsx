@@ -25,6 +25,7 @@ const EditEvent = ({ inputs, title }) => {
     const [end, setEnd] = useState(null)
     const [sending, setSending] = useState(false);
     const [errors, setErrors] = useState({});
+    const [isImageDeleted, setIsImageDeleted] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -44,6 +45,10 @@ const EditEvent = ({ inputs, title }) => {
         commonHandleChange(e, setInfo, setErrors, validateEvent);
     }
 
+    const handleDeleteImage = () => {
+        setIsImageDeleted(!isImageDeleted);
+    }
+
     const handleClick = async (e) => {
         e.preventDefault();
         setSending(true);
@@ -56,7 +61,8 @@ const EditEvent = ({ inputs, title }) => {
                 contact: info.contact,
                 registerLink: info.registerLink,
                 startDate: start,
-                endDate: end
+                endDate: end,
+                isImageDeleted
             }
             const res = await editElementWithPicture(file, newInfo, "event", putURLs("events", id));
             if(checkSuccess(res.data.status)) {
@@ -87,6 +93,8 @@ const EditEvent = ({ inputs, title }) => {
                             existingUrl={info.poster}
                             label="Image"
                             iconType="outlined"
+                            onDeleteImage={handleDeleteImage}
+                            isImageDeleted={isImageDeleted}
                         />
                             <form>
 

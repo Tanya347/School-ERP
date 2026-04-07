@@ -24,6 +24,7 @@ const EditFaculty = ({ title }) => {
   const [file, setFile] = useState("");
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,6 +48,10 @@ const EditFaculty = ({ title }) => {
     commonHandleChange(e, setInfo, setErrors, validateFaculty);
   }
 
+  const handleDeleteImage = () => {
+    setIsImageDeleted(!isImageDeleted);
+  }
+
   const handleClick = async (e) => {
     e.preventDefault();
     setSending(true)
@@ -60,7 +65,8 @@ const EditFaculty = ({ title }) => {
         facultyPhone: info.facultyPhone,
         facultyAddress: info.facultyAddress,
         dob: info.dob,
-        joiningYear: info.joiningYear
+        joiningYear: info.joiningYear,
+        isImageDeleted
       }
       const res = await editElementWithPicture(file, newInfo, "faculty", putURLs(facultiesConst, id));
       if(checkSuccess(res.data.status)) {
@@ -91,6 +97,8 @@ const EditFaculty = ({ title }) => {
                 setFile={setFile}
                 existingUrl={info?.profilePicture}
                 label="Profile Picture"
+                onDeleteImage={handleDeleteImage}
+                isImageDeleted={isImageDeleted}
               />
 
 

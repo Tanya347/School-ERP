@@ -63,7 +63,15 @@ export const updateEvent = catchAsync(async (req, res, next) => {
     return next(new AppError('Event not found', 404));
   }
 
-  if (req.file) {
+  // Check if image should be deleted
+  if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
+    // Delete from Cloudinary if exists
+    if (event.cloud_id) {
+      await cloudinary.uploader.destroy(event.cloud_id);
+    }
+    poster = null;
+    cloud_id = null;
+  } else if (req.file) {
     if (event.cloud_id) {
       await cloudinary.uploader.destroy(event.cloud_id);
     }

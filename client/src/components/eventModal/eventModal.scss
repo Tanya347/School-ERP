@@ -129,6 +129,15 @@
     }
   }
 
+  .event-expired-badge {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
   @media screen and (max-width: 600px) {
     .m-container {
       width: 80%;

@@ -2,6 +2,11 @@ import Class from "../models/Class.js";
 import Student from "../models/Student.js";
 import Faculty from "../models/Faculty.js";
 import Course from "../models/Course.js";
+import Material from "../models/Material.js";
+import Attendance from "../models/Attendance.js";
+import Test from "../models/Test.js";
+import Update from "../models/Update.js";
+import TimetableSlot from "../models/Timetable.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
@@ -37,23 +42,52 @@ export const updateClass = catchAsync(async (req, res, next) => {
   });
 });
 
-// Delete a class and unset class reference from students
+// Delete a class with cascade operations
 export const deleteClass = catchAsync(async (req, res, next) => {
   const deletedClass = await Class.findById(req.params.id);
   if (!deletedClass) {
     return next(new AppError('Class not found', 404));
   }
 
-  // Remove class reference from associated students
+  const classId = deletedClass._id;
+
+  // Cascade: Remove class reference from associated students
   await Student.updateMany(
-    { classID: deletedClass._id },
+    { classID: classId },
     { $unset: { classID: "" } }
   );
 
+  // Cascade: Unset classTeacher from Faculty if assigned
+  if (deletedClass.classTeacher) {
+    await Faculty.findByIdAndUpdate(
+      deletedClass.classTeacher,
+      { $unset: { classTeacherTo: "" } }
+    );
+  }
+
+  // Cascade: Delete related courses
+  await Course.deleteMany({ classID: classId });
+
+  // Cascade: Delete related materials
+  await Material.deleteMany({ classID: classId });
+
+  // Cascade: Delete related attendance records
+  await Attendance.deleteMany({ classID: classId });
+
+  // Cascade: Delete related tests
+  await Test.deleteMany({ classID: classId });
+
+  // Cascade: Delete related updates
+  await Update.deleteMany({ classID: classId });
+
+  // Cascade: Delete related timetable slots
+  await TimetableSlot.deleteMany({ classID: classId });
+
   // Delete the class
-  await deletedClass.remove();
+  await Class.findByIdAndDelete(classId);
+
   res.status(200).json({
-    message: "The class has been deleted",
+    message: "The class and all related data have been deleted",
     status: successMsg
   });
 });

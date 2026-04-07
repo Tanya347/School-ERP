@@ -17,11 +17,12 @@ import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload"
 
 const EditCourse = ({ title }) => {
-  
+
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
   const [errors, setErrors] = useState({});
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,6 +41,10 @@ const EditCourse = ({ title }) => {
     commonHandleChange(e, setInfo, setErrors, validateCourse);
   }
 
+  const handleDeleteImage = () => {
+    setIsImageDeleted(!isImageDeleted);
+  }
+
   // update the data in the data base using put method
   const handleClick = async (e) => {
     e.preventDefault();
@@ -47,7 +52,8 @@ const EditCourse = ({ title }) => {
 
     const editInfo = {
       name: info.name,
-      subjectCode: info.subjectCode
+      subjectCode: info.subjectCode,
+      isImageDeleted
     }
 
     try {
@@ -85,6 +91,8 @@ const EditCourse = ({ title }) => {
                 setFile={setFile}
                 existingUrl={info?.syllabusPicture}
                 label="Syllabus"
+                onDeleteImage={handleDeleteImage}
+                isImageDeleted={isImageDeleted}
               />
 
               <form>

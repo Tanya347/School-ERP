@@ -2,12 +2,14 @@ import "./addMarks.scss"
 
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { getMarksOfSubject } from '../../utils/endpoints/get'
 import { getClearMarksSubject } from '../../utils/endpoints/delete'
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import { toast } from "react-toastify";
 import { checkSuccess } from "../../utils/shared/commons";
+import ExportButton from '../../components/shared/excelButton/ExcelButton.jsx';
 
 const ViewMarks = () => {
 
@@ -15,7 +17,21 @@ const ViewMarks = () => {
   const [courseName, setCourseName] = useState("");
   const [stuData, setStuData] = useState({});
 
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+
   const courses = useSelector(state => state.faculty.courses);
+
+  // Set course from URL param when courses load
+  useEffect(() => {
+    if (courseId && courses?.length > 0) {
+      const selectedCourse = courses.find(c => c._id === courseId);
+      if (selectedCourse) {
+        setCourse(selectedCourse._id);
+        setCourseName(selectedCourse.subjectCode);
+      }
+    }
+  }, [courseId, courses]);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -38,8 +54,7 @@ const ViewMarks = () => {
   }, [course])
 
   const handleClick = (cl) => {
-    setCourse(cl._id);
-    setCourseName(cl.subjectCode);
+    navigate(`/faculty/marks/${cl._id}`);
   };
 
   const handleClear = async() => {
@@ -77,10 +92,19 @@ const ViewMarks = () => {
         </div>
         {course ? (
           <>
-            <h1>Course: {courseName}</h1>
+            <div className="view-marks-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h1>Course: {courseName}</h1>
+              {Object.keys(stuData).length > 0 && (
+                <ExportButton
+                  data={stuData}
+                  filename={`marks_${courseName}`}
+                  sheetName="Marks"
+                />
+              )}
+            </div>
 
-          
-              {Object.keys(stuData).length ? 
+
+              {Object.keys(stuData).length ?
                 (
                   <>
                   <div className="marks-adding-table">

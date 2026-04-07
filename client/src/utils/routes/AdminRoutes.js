@@ -257,7 +257,11 @@ const AdminRoutes = () => {
           <Route
             path="timetables/new"
             element={ <NewTimeTable />}
-            />
+          />
+          <Route
+            path="timetables/new/:classId"
+            element={ <NewTimeTable />}
+          />
 
           {/* view timetables */}
           <Route
@@ -268,6 +272,10 @@ const AdminRoutes = () => {
         {/* Add exam dates */}
         <Route
           path="exams/dates"
+          element={<AddExamDates />}
+        />
+        <Route
+          path="exams/dates/:classId"
           element={<AddExamDates />}
         />
 

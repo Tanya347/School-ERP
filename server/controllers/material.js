@@ -107,7 +107,15 @@ export const editMaterial = catchAsync(async (req, res, next) => {
     return next(new AppError('Not authorized to edit this material', 403));
   }
 
-  if (req.file) {
+  // Check if file should be deleted
+  if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
+    // Delete from Cloudinary if exists
+    if (material.cloud_id) {
+      await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
+    }
+    fileUrl = null;
+    cloud_id = null;
+  } else if (req.file) {
     if (material.cloud_id) {
       await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
     }

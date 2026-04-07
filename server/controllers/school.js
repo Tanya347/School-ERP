@@ -174,7 +174,18 @@ export const editSchoolInfo = catchAsync(async (req, res, next) => {
     let logo = null;
     let cloud_id = null;
 
-    if(req.file) {
+    // Check if image should be deleted
+    if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
+        // Delete from Cloudinary if exists
+        if (school.cloud_id) {
+            await cloudinary.uploader.destroy(school.cloud_id);
+        }
+        logo = null;
+        cloud_id = null;
+    } else if (req.file) {
+        if (school.cloud_id) {
+            await cloudinary.uploader.destroy(school.cloud_id);
+        }
         const result = await cloudinary.uploader.upload(req.file.path, {
             folder: folderName
         });

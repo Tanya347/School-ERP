@@ -22,19 +22,64 @@
     background-color: var(--light-pink);
 }
 
-.event-dot {
+.calendar-dots {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.item-dot {
   width: 6px;
   height: 6px;
-  background: var(--blue);
   border-radius: 50%;
-  margin: auto;
-  margin-top: 2px;
+}
+
+.event-dot {
+  background: var(--blue);
+}
+
+.task-dot {
+  background: #28a745;
+}
+
+.task-overdue-dot {
+  background: #dc3545;
+}
+
+.test-pending-dot {
+  background: #ffc107;
+}
+
+.test-completed-dot {
+  background: #6c757d;
+}
+
+.test-cancelled-dot {
+  background: #dc3545;
 }
 
 .selected-event {
   background-color: var(--blue);
   color: var(--white);
   border-radius: 50%;
+}
+
+// Status-based tile styles
+.tile-cancelled {
+  background-color: #ffcccc !important;
+  color: #721c24 !important;
+}
+
+.tile-overdue {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+}
+
+.tile-completed {
+  background-color: #d4edda !important;
+  color: #155724 !important;
 }
 
 .event-popup {
@@ -46,6 +91,47 @@
   padding: 10px;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+
+  .popup-item {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--light-gray);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    p {
+      margin: 4px 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 8px;
+
+    &.past, &.overdue, &.cancelled {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    &.completed {
+      background-color: #28a745;
+      color: white;
+    }
+
+    &.pending {
+      background-color: #ffc107;
+      color: #212529;
+    }
+  }
 }
 
 .app.dark .calendar-container {
@@ -94,5 +180,21 @@
     background: #1E201E;
     color: var(--white);
     border: 1px solid var(--gray);
+  }
+
+  // Status tile styles for dark mode
+  .tile-cancelled {
+    background-color: #5c1a1a !important;
+    color: #ffcccc !important;
+  }
+
+  .tile-overdue {
+    background-color: #4d4000 !important;
+    color: #fff3cd !important;
+  }
+
+  .tile-completed {
+    background-color: #1a472a !important;
+    color: #d4edda !important;
   }
 }

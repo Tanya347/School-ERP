@@ -19,6 +19,7 @@ const EditSchool = ({title}) => {
   const [schoolInfo, setSchoolInfo] = useState({});
   const [infoloading, setInfoloading] = useState(false);
   const [file, setFile] = useState("");
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,11 +36,19 @@ const EditSchool = ({title}) => {
     setSchoolInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   }
 
+  const handleDeleteImage = () => {
+    setIsImageDeleted(!isImageDeleted);
+  }
+
   const handleClick = async (e) => {
     e.preventDefault();
     setInfoloading(true)
     try {
-      const res = await editElementWithPicture(file, schoolInfo, "school", putURLs(schoolsConst, id));
+      const editInfo = {
+        ...schoolInfo,
+        isImageDeleted
+      }
+      const res = await editElementWithPicture(file, editInfo, "school", putURLs(schoolsConst, id));
       if(checkSuccess(res.data.status)) {
         navigate('/admin');
         window.location.reload();
@@ -64,6 +73,8 @@ const EditSchool = ({title}) => {
               setFile={setFile}
               existingUrl={schoolInfo?.logo}
               label="Logo"
+              onDeleteImage={handleDeleteImage}
+              isImageDeleted={isImageDeleted}
             />
 
             <form>

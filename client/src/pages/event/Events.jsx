@@ -38,22 +38,57 @@ const Events = () => {
     const tests = useFetch(getTestCalenderURL(user)).data
     const eventsData = useFetch(getDatatableURL(eventsConst)).data
 
+    // Helper to get status for an item
+    const getStatus = (item, type) => {
+        const now = new Date();
+        if (type === tasksConst) {
+            const deadline = new Date(item.deadline);
+            return now > deadline ? 'Overdue' : 'Pending';
+        }
+        if (type === testsConst) {
+            return item.state || 'Pending';
+        }
+        if (type === eventsConst) {
+            const endDate = new Date(item.endDate);
+            return now > endDate ? 'Past' : 'Upcoming';
+        }
+        return 'Pending';
+    };
+
     useEffect(() => {
 
         const e1 = tasks?.map((t) => {
             const deadline = new Date(t.deadline)
-            return {title: t.title, start:deadline, end: deadline, type: tasksConst}
+            return {
+                title: t.title,
+                start: deadline,
+                end: deadline,
+                type: tasksConst,
+                status: getStatus(t, tasksConst)
+            }
         })
 
         const e2 = tests?.map((t) => {
             const date = new Date(t.date)
-            return {title: t.name, start: date, end: date, type: testsConst}
+            return {
+                title: t.name,
+                start: date,
+                end: date,
+                type: testsConst,
+                status: getStatus(t, testsConst)
+            }
         })
 
         const e3 = eventsData?.map((t) => {
             const s = new Date(t.startDate)
             const e = new Date(t.endDate)
-            return {title: t.name, start: s, end: e, type: eventsConst}
+            return {
+                title: t.name,
+                start: s,
+                end: e,
+                type: eventsConst,
+                status: getStatus(t, eventsConst)
+            }
         })
         setEvents([...e1, ...e2, ...e3]);
     }, [tasks, tests, eventsData])
@@ -78,26 +113,61 @@ const Events = () => {
 
     const eventPropGetter = (event) => {
         let backgroundColor
+        let opacity = 1;
+
+        // Base color by type
         if(event.type === tasksConst)
             backgroundColor = 'var(--tree-green)'
         else if(event.type === testsConst)
             backgroundColor = 'var(--green)'
         else
             backgroundColor = 'var(--mild-turquoise)'
-        return { style: { backgroundColor, textAlign: 'center' } };
+
+        // Status-based visual modifications
+        if (event.status === 'Overdue' || event.status === 'Past' || event.status === 'cancelled') {
+            opacity = 0.6;
+        } else if (event.status === 'completed') {
+            opacity = 0.8;
+        }
+
+        return {
+            style: {
+                backgroundColor,
+                textAlign: 'center',
+                opacity,
+                borderLeft: event.status === 'cancelled' ? '4px solid #dc3545' : 'none',
+            }
+        };
+    };
+
+    // Custom event component to show status badge
+    const EventComponent = ({ event }) => {
+        return (
+            <div className="rbc-event-content-wrapper">
+                <div className="rbc-event-title">{event.title}</div>
+                {event.status && (
+                    <span className={`event-status-badge status-${event.status.toLowerCase()}`}>
+                        {event.status}
+                    </span>
+                )}
+            </div>
+        );
     };
 
     return (
         <div className='events'>
             <div>
-                <Calendar 
-                    localizer={localizer} 
-                    events={events} 
-                    startAccessor="start" 
-                    endAccessor="end" 
-                    style={{ height: 500, margin: "50px" }} 
+                <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 500, margin: "50px" }}
                     onSelectEvent={handleEventPopup}
                     eventPropGetter={eventPropGetter}
+                    components={{
+                        event: EventComponent
+                    }}
                 />
                     
             </div>

@@ -1,5 +1,9 @@
 import Course from "../models/Course.js";
 import Class from "../models/Class.js";
+import Task from "../models/Task.js";
+import Test from "../models/Test.js";
+import Marks from "../models/Marks.js";
+import TimetableSlot from "../models/Timetable.js";
 
 import fs from "fs";
 
@@ -52,14 +56,26 @@ export const createCourse = catchAsync(async (req, res, next) => {
 // Update a course
 // -----------------------------------------------
 export const updateCourse = catchAsync(async (req, res, next) => {
-  
+
 
   const course = await Course.findById(req.params.id);
 
   let syllabusPicture = null;
   let cloud_id = null;
 
-  if (req.file) {
+  // Check if image should be deleted
+  if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
+    // Delete from Cloudinary if exists
+    if (course.cloud_id) {
+      await cloudinary.uploader.destroy(course.cloud_id);
+    }
+    syllabusPicture = null;
+    cloud_id = null;
+  } else if (req.file) {
+    // Delete old image from Cloudinary if exists
+    if (course.cloud_id) {
+      await cloudinary.uploader.destroy(course.cloud_id);
+    }
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: folderName,
     });
@@ -87,7 +103,7 @@ export const updateCourse = catchAsync(async (req, res, next) => {
 });
 
 
-// Delete a course and remove it from the class
+// Delete a course with cascade operations
 // -----------------------------------------------
 export const deleteCourse = catchAsync(async (req, res, next) => {
 
@@ -97,22 +113,32 @@ export const deleteCourse = catchAsync(async (req, res, next) => {
     return next(new AppError('Course not found', 404));
   }
 
+  const courseId = course._id;
+  
   if (course.classID) {
     await Class.findByIdAndUpdate(course.classID, {
-      $pull: { subjects: course._id }
+      $pull: { subjects: courseId }
     });
   }
+
+  await Task.deleteMany({ courseID: courseId });
+
+  await Test.deleteMany({ subject: courseId });
+
+  await Marks.deleteMany({ course: courseId });
+
+  await TimetableSlot.deleteMany({ courseID: courseId });
 
   // Delete syllabus image from Cloudinary if it exists
   if (course.cloud_id) {
     await cloudinary.uploader.destroy(course.cloud_id);
   }
 
-  await Course.findByIdAndDelete(course._id);
+  await Course.findByIdAndDelete(courseId);
 
   res.status(200).json({
     status: successMsg,
-    message: "The course has been deleted"
+    message: "The course and all related data have been deleted"
   });
 });
 
@@ -278,12 +304,19 @@ export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4️⃣ Delete courses
+  await Task.deleteMany({ courseID: { $in: ids } });
+
+  await Test.deleteMany({ subject: { $in: ids } });
+
+  await Marks.deleteMany({ course: { $in: ids } });
+
+  await TimetableSlot.deleteMany({ courseID: { $in: ids } });
+
   await Course.deleteMany({ _id: { $in: ids } });
 
   res.status(200).json({
     status: successMsg,
-    message: "Courses deleted successfully"
+    message: "Courses and all related data deleted successfully"
   });
 });
 

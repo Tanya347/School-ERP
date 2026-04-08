@@ -5,6 +5,10 @@ import { checkSuccess } from "../../shared/commons";
 
 import { logoutEndpoint, validateEndpoint } from "../../endpoints/post";
 
+const clearAllToasts = () => {
+  toast.dismiss();
+};
+
 export const verifyUser = createAsyncThunk(
   "auth/verify",
   async (_, { rejectWithValue, getState }) => {
@@ -20,6 +24,8 @@ export const verifyUser = createAsyncThunk(
       );
       return res.data.user;
     } catch (err) {
+      // Clear toasts on auth failure to prevent stale messages
+      clearAllToasts();
       return rejectWithValue(null);
     }
   }
@@ -28,6 +34,8 @@ export const verifyUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
+    // Clear any existing toasts before logging out
+    clearAllToasts();
     try {
       const res = await axios.post(
         logoutEndpoint(),

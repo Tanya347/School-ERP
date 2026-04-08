@@ -1,0 +1,23 @@
+.delete-image-btn, .restore-image-btn, .view-file-container {
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.view-file-container {
+    background-color: var(--light-gray);
+}
+
+.delete-image-btn {
+    background-color: var(--crimson);
+}
+
+.restore {
+    background-color: var(--turquoise);
+}

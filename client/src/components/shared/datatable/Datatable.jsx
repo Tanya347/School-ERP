@@ -14,11 +14,12 @@ import axiosInterceptor from "../../../utils/shared/axiosInterceptor.js";
 import { getDeleteURL } from "../../../utils/endpoints/delete.js";
 import { bulkDelete } from "../../../utils/endpoints/post.js";
 import { testAction } from "../../../utils/endpoints/put.js";
-import { facultiesConst, materialsConst, studentsConst, testsConst } from "../../../utils/shared/constants.js";
+import { facultiesConst, materialsConst, studentsConst, testsConst, coursesConst } from "../../../utils/shared/constants.js";
 import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../../utils/shared/commons.js";
 import { exportColumnMap } from "../../../utils/datatablesource/exportButtonColumns.js";
 
 import AddClass from "../../addCourse/AddCourse.jsx";
+import AddFaculty from "../../addFaculty/AddFaculty.jsx";
 import ExportButton from "../excelButton/ExcelButton.jsx";
 import ConfirmPopup from "../confirmationPopup/ConfirmatinPopup.jsx";
 import Loader from "../loader/Loader.jsx";
@@ -199,6 +200,17 @@ const Datatable = ({ column, name }) => {
             </div>
           )}
 
+          {checkAdmin(user.role) && path === coursesConst && (
+            <div
+              className={params.row.teacher ? "edit-button" : "view-button"}
+              onClick={() =>
+                setPopupData({ id: params.row._id, type: coursesConst })
+              }
+            >
+              {params.row.teacher ? "Change Faculty" : "Add Faculty"}
+            </div>
+          )}
+
 
           {checkFaculty(user.role) && path === testsConst && (
             <>
@@ -266,7 +278,11 @@ const Datatable = ({ column, name }) => {
             <AddClass setOpen={() => setPopupData(null)} facId={popupData.id} type={path} />
           )}
 
-          {popupData && popupData.type !== facultiesConst && (
+          {popupData && popupData.type === coursesConst && (
+            <AddFaculty setOpen={() => setPopupData(null)} courseId={popupData.id} />
+          )}
+
+          {popupData && popupData.type !== facultiesConst && popupData.type !== coursesConst && (
             <Popup
               title={`View ${name}`}
               onClose={() => setPopupData(null)}

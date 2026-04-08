@@ -79,7 +79,7 @@ function App() {
 
   return (
     <>
-      <ToastContainer theme={darkMode ? "dark" : "light"} />
+      <ToastContainer theme={darkMode ? "dark" : "light"} limit={3} />
       {user && <NotificationsListener />}
 
       <div className={darkMode ? "app dark" : "app"}>

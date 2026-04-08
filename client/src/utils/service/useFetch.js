@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import axiosInterceptor from "../shared/axiosInterceptor"
 
 const useFetch = (url, options = {}) => {
-    const {enabled = true} = options;
+    const {enabled = true, showErrors = false} = options;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -13,18 +12,12 @@ const useFetch = (url, options = {}) => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Add a 5 minute (300000 ms) delay for debugging
-                // await new Promise(resolve => setTimeout(resolve, 300000));
                 const res = await axiosInterceptor.get(url);
                 setData(res.data.data);
             } catch (err) {
                 setError(err);
-                toast.error(
-                    <div>
-                        <strong>Fetch Failed</strong>
-                        <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
-                    </div>
-                );
+                // Only log to console, let components handle their own error UI
+                console.error('Fetch error:', err);
             }
             setLoading(false);
         };
@@ -38,12 +31,7 @@ const useFetch = (url, options = {}) => {
             setData(res.data);
         } catch (err) {
             setError(err);
-            toast.error(
-                <div>
-                    <strong>Fetch Failed</strong>
-                    <div>{err.response?.data?.message || err.message || 'Unknown error'}</div>
-                </div>
-            );
+            console.error('Fetch error:', err);
         }
         setLoading(false);
     };

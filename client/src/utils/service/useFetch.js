@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInterceptor from "../shared/axiosInterceptor"
 
 const useFetch = (url, options = {}) => {
-    const {enabled = true, showErrors = false} = options;
+    const {enabled = true} = options;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);

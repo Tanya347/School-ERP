@@ -14,7 +14,7 @@ import axiosInterceptor from "../../../utils/shared/axiosInterceptor.js";
 import { getDeleteURL } from "../../../utils/endpoints/delete.js";
 import { bulkDelete } from "../../../utils/endpoints/post.js";
 import { testAction } from "../../../utils/endpoints/put.js";
-import { facultiesConst, materialsConst, studentsConst, testsConst, coursesConst } from "../../../utils/shared/constants.js";
+import { facultiesConst, materialsConst, studentsConst, testsConst, coursesConst, updatesConst } from "../../../utils/shared/constants.js";
 import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../../utils/shared/commons.js";
 import { exportColumnMap } from "../../../utils/datatablesource/exportButtonColumns.js";
 
@@ -61,7 +61,7 @@ const getExportData = (data, tableType) => {
 };
 
 const Datatable = ({ column, name }) => {
-  
+
   const [list, setList] = useState([]);
   const [popupData, setPopupData] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -70,9 +70,27 @@ const Datatable = ({ column, name }) => {
   const [confirmAction, setConfirmAction] = useState(null);
 
   const location = useLocation();
-
   const path = location.pathname.split("/")[2];
   const { user } = useSelector(state => state.auth);
+
+  // Check if user is the author of the item
+  const isAuthor = (row) => {
+    if (!row.author) return false;
+    return row.author._id?.toString() === user._id?.toString() ||
+           row.author.toString() === user._id?.toString();
+  };
+
+  // Check if user can edit/delete this specific row
+  const canModify = (row) => {
+    // Admin can modify anything within their school
+    if (checkAdmin(user.role)) return true;
+    // Faculty can only modify their own items for updates and materials
+    if ((path === updatesConst || path === materialsConst) && checkFaculty(user.role)) {
+      return isAuthor(row);
+    }
+    // Default: editor can modify
+    return checkEditor(user.role);
+  };
   const { data, loading } = useFetch(getDatatableURL(path, user));
 
   useEffect(() => {
@@ -177,13 +195,13 @@ const Datatable = ({ column, name }) => {
             </div>
           )}
 
-          {(checkEditor(user.role)) && (
+          {(canModify(params.row)) && (
             <Link to={`edit/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="edit-button">Edit</div>
             </Link>
           )}
 
-          {(checkEditor(user.role)) && (
+          {(canModify(params.row)) && (
             <div className="delete-button" onClick={() => handleDelete(params.row._id)}>
               Delete
             </div>
@@ -249,7 +267,9 @@ const Datatable = ({ column, name }) => {
                   <div className="link">Create</div>
                 </Link>
 
-                {selectedRows?.length > 0 && (
+                {/* Bulk delete: only for admins, or for faculty if all selected items are authored by them */}
+                {selectedRows?.length > 0 && (checkAdmin(user.role) ||
+                  (path !== updatesConst && path !== materialsConst)) && (
                   <div
                     className="link delete"
                     onClick={() => handleBulkDelete()}

@@ -6,7 +6,6 @@ import Calendar from 'react-calendar';
 import { useSelector } from 'react-redux';
 
 import { getTaskCalenderURL, getTestCalenderURL } from '../../utils/endpoints/get';
-import { isEventDate } from "../../utils/shared/commons";
 import axiosInterceptor from '../../utils/shared/axiosInterceptor';
 
 const EventCalender = () => {

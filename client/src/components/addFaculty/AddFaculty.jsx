@@ -27,7 +27,7 @@ const AddFaculty = ({ setOpen, courseId }) => {
     const { data: faculties, loading: loadingFaculties } = useFetch('/faculties');
 
     // Fetch current course data
-    const { data: courseData, loading: loadingCourse } = useFetch(getSingleData(courseId, coursesConst));
+    const { data: courseData } = useFetch(getSingleData(courseId, coursesConst));
 
     const handleClick = async (e) => {
         e.preventDefault();

@@ -11,12 +11,9 @@ const clearAllToasts = () => {
 
 export const verifyUser = createAsyncThunk(
   "auth/verify",
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const state = getState();
-      if (!state.auth.user) {
-        return rejectWithValue(null);
-      }
+      // validateEndpoint already returns full URL with base
       const res = await axios.post(
         validateEndpoint(),
         {},
@@ -37,6 +34,7 @@ export const logoutUser = createAsyncThunk(
     // Clear any existing toasts before logging out
     clearAllToasts();
     try {
+      // logoutEndpoint already returns full URL with base
       const res = await axios.post(
         logoutEndpoint(),
         {},

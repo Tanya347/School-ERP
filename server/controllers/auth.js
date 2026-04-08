@@ -30,12 +30,12 @@ const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN*60*60*1000),
-    httpOnly: true
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true
   }
-  if(process.env.NODE_ENV === 'production') {
-    cookieOptions.sameSite = 'None';
-    cookieOptions.secure = true;
-  }
+  if(process.env.NODE_ENV === 'production')
+  cookieOptions.secure = true
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
   res.status(statusCode).json({
@@ -116,15 +116,12 @@ export const restrictTo = (...roles) => {
 // logout
 // -----------------------------------------------
 export const logout = catchAsync(async (req, res, next) => {
-  const cookieOptions = {
+  res.cookie('jwt', '', {
     expires: new Date(0),
-    httpOnly: true
-  }
-  if(process.env.NODE_ENV === 'production') {
-    cookieOptions.sameSite = 'None';
-    cookieOptions.secure = true;
-  }
-  res.cookie('jwt', '', cookieOptions);
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true
+  });
 
   res.status(200).json({
     status: successMsg,

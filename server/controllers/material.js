@@ -2,7 +2,6 @@ import Material from "../models/Material.js";
 
 import fs from "fs";
 
-import { getActiveSession } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import cloudinary from "../utils/cloudinary.js";
 import { AppError } from "../utils/customError.js";
@@ -14,7 +13,7 @@ import { successMsg, folderName } from "../utils/constants.js";
 // -----------------------------------------------
 export const createMaterial = catchAsync(async (req, res, next) => {
 
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   let fileUrl = null;
   let cloud_id = null;
 
@@ -63,7 +62,7 @@ export const createMaterial = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const getMaterials = catchAsync(async (req, res, next) => {
 
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   let filter = { 
     schoolID: req.user.schoolID,

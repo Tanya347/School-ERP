@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useSelector } from "react-redux";
 
@@ -17,29 +17,28 @@ import { tasksConst } from "../../utils/shared/constants";
 import Loader from "../../components/shared/loader/Loader"
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import Dropdown from "../../components/shared/dropdown/Dropdown";
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EditTask = ({ title }) => {
-  
+
   const [info, setInfo] = useState({});
   const [deadline, setDeadline] = useState(null);
   const [sclass, setSclass] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const id = location.pathname.split("/")[4];
-
   const classes = useSelector(state => state.faculty.classes);
-  const { data } = useFetch(getSingleData(id, tasksConst));
+  const { data, loading: fetchLoading, error, reFetch } = useFetch(getSingleData(id, tasksConst));
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
     setInfo(data)
-    if(data.deadline)
+    if(data?.deadline)
       setDeadline(new Date(data.deadline))
-  }, [data, data.deadline])
+  }, [data])
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateTask)
@@ -65,66 +64,65 @@ const EditTask = ({ title }) => {
     } finally {
       setLoading(false);
     }
-  } 
-
+  }
 
   return (
     <div className="new">
+      {fetchLoading ? (
+        <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading task data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
+      ) : (
+        <div className="new-container">
+          <div className="top">
+            <h1>{title}</h1>
+          </div>
 
-      <div className="new-container">
+          <div className="bottom">
+            <div className="form-container">
+              <form>
+                <FormInputs
+                  inputs={taskInputs}
+                  values={info}
+                  errors={errors}
+                  onChange={handleChange}
+                  type="edit"
+                />
 
-        {/* Title of form */}
-        <div className="top">
-          <h1>{title}</h1>
-        </div>
+                <Dropdown
+                  title="Choose a Class"
+                  options={classes}
+                  value={sclass || info?.classID?._id || ""}
+                  onChange={(e) => setSclass(e.target.value)}
+                />
 
-        {/* Form */}
-        <div className="bottom">
-          <div className="form-container">
-            
-            <form>
-              <FormInputs
-                inputs={taskInputs}
-                values={info}
-                errors={errors}
-                onChange={handleChange}
-                type="edit"
-            />
-              
-            <Dropdown
-              title="Choose a Class"
-              options={classes}
-              value={sclass || info?.classID?._id || ""}
-              onChange={(e) => setSclass(e.target.value)}
-            />
-
-
-              <div className="form-input">
-
-                <label>Set Deadline</label>
-                <DatePicker
-                  class="date-picker"
-                  placeholderText="Choose Date and Time"
-                  style={{ marginRight: "10px" }}
-                  selected={deadline}
-                  className="form-input"
-                  onChange={(selectedDate) => {
-                    // Set only the date part to the state
-                    const dateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
-                    setDeadline(dateWithoutTime);
-                  }}
+                <div className="form-input">
+                  <label>Set Deadline</label>
+                  <DatePicker
+                    className="date-picker form-input"
+                    placeholderText="Choose Date and Time"
+                    style={{ marginRight: "10px" }}
+                    selected={deadline}
+                    onChange={(selectedDate) => {
+                      const dateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
+                      setDeadline(dateWithoutTime);
+                    }}
                   />
-              </div>
-                  </form>
+                </div>
+              </form>
 
-            {/* Submit Button */}
-            <div className="submit-button">
-            {loading && <Loader text="editing task..." />}
-              <button onClick={handleClick} id="submit" className="form-btn">Edit Task</button>
+              <div className="submit-button">
+                {loading && <Loader text="editing task..." />}
+                <button onClick={handleClick} id="submit" className="form-btn">Edit Task</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

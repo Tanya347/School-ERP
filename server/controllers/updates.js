@@ -2,7 +2,6 @@ import Update from "../models/Update.js";
 import Faculty from "../models/Faculty.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
 
@@ -11,7 +10,7 @@ import { AppError } from "../utils/customError.js";
 // -----------------------------------------------
 export const createUpdate = catchAsync(async (req, res, next) => {
     req.body.schoolID = req.user.schoolID;
-    const activeSession = await getActiveSession(req.user);
+    const activeSession = req.activeSession;
     req.body.sessionID = activeSession._id;
 
     // Set author based on user role

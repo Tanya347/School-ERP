@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../utils/service/useFetch";
@@ -17,6 +17,7 @@ import { noticeTypes, updatesConst } from "../../utils/shared/constants";
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import Dropdown from "../../components/shared/dropdown/Dropdown";
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EditUpdate = ({ title }) => {
 
@@ -26,13 +27,12 @@ const EditUpdate = ({ title }) => {
   const [info, setInfo] = useState({});
   const [selectedClass, setSelectedClass] = useState("");
   
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const id = location.pathname.split("/")[4];
 
   const { user } = useSelector(state => state.auth);
-  const { data } = useFetch(getSingleData(id, updatesConst))
+  const { data, loading: fetchLoading, error, reFetch } = useFetch(getSingleData(id, updatesConst))
   const classes = useSelector(selectAvailableClasses);
 
   useEffect(() => {
@@ -78,8 +78,14 @@ const EditUpdate = ({ title }) => {
 
   return (
     <div className="new">
-      {loading ? (
+      {fetchLoading ? (
         <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading update data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <>
           <div className="new-container">

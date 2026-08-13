@@ -1,13 +1,13 @@
 import "./tableWithoutAction.scss";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 
 import useFetch from "../../utils/service/useFetch.js"
 import { getClassCourses, getTableWithoutActionURL } from "../../utils/endpoints/get.js";
 import ExportButton from "../shared/excelButton/ExcelButton.jsx";
+import InlineError from "../shared/inlineError/InlineError";
 
 // column, name and type are props input at the place datatable is used
 const TableWithoutAction = ({ column, name }) => {
@@ -16,14 +16,14 @@ const TableWithoutAction = ({ column, name }) => {
   const [list, setList] = useState([]);
   const [course, setCourses] = useState([]);
 
-  // we use location url to extract the path 
-  const location = useLocation();
+  // we use params to extract the path and id
+  const { classId } = useParams();
 
-  let path = location.pathname.split("/")[3];
-  let id = location.pathname.split("/")[4];
+  let path = name === "Attendance" ? "attendance" : "marks";
+  let id = classId;
 
   // fetching data using the path
-  const { data } = useFetch(getTableWithoutActionURL(path, id))
+  const { data, loading, error, reFetch } = useFetch(getTableWithoutActionURL(path, id))
   const courses = useFetch(getClassCourses(id)).data;
 
   // feeding the data when page rerenders or data changes
@@ -37,8 +37,18 @@ const TableWithoutAction = ({ column, name }) => {
 
   return (
     <div className="table-without-action">
-
-      <div className="table-without-action-container">
+      {loading ? (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      ) : error ? (
+        <InlineError
+          title={`Error loading ${name}`}
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
+      ) : (
+        <div className="table-without-action-container">
 
         {/* Title will be shown based on which table is */}
         <div className="datatable-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -65,7 +75,7 @@ const TableWithoutAction = ({ column, name }) => {
           getRowId={row => row._id}
         />}
       </div>
-      
+      )}
     </div>
   );
 };

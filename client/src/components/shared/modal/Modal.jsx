@@ -5,13 +5,32 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import useFetch from "../../../utils/service/useFetch"
 import { getModalURL } from "../../../utils/endpoints/get";
 import { formatDate } from "../../../utils/shared/commons";
+import Loader from "../loader/Loader";
+import InlineError from "../inlineError/InlineError";
 
 // setOpen prop, id is the id of the data we need to display and type will tell whether it's task or update
 
 const Modal = ({ setOpen, id, type }) => {
 
-    const { data } = useFetch(getModalURL(type, id));
-    
+    const { data, loading, error, reFetch } = useFetch(getModalURL(type, id));
+
+    if (loading) return <Loader text="Loading details..." />;
+    if (error) return (
+        <div className="modal">
+            <div className="m-container">
+                <CancelIcon
+                    className="m-close"
+                    onClick={() => setOpen(false)}
+                />
+                <InlineError
+                    title="Error loading details"
+                    message={error.response?.data?.message || error.message}
+                    onRetry={reFetch}
+                />
+            </div>
+        </div>
+    );
+
     return (
         <div className="modal">
             <div className="m-container">

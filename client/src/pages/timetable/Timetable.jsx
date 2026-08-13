@@ -1,7 +1,7 @@
 import "./timetable.scss"
 
 import { useState, useEffect, useMemo } from 'react'
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { periodTimes, days, periods, checkAdmin } from '../../utils/shared/commons';
 import { getTimeTableURL } from '../../utils/endpoints/get';
@@ -9,14 +9,16 @@ import { useSelector } from "react-redux";
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 
 import Loader from "../../components/shared/loader/Loader"
+import InlineError from "../../components/shared/inlineError/InlineError"
 
 const Timetable = ({type}) => {
   
   const [existingSlots, setExistingSlots] = useState({});
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const location = useLocation();
+  const { classId } = useParams();
 
   const { user } = useSelector(state => state.auth);
 
@@ -24,59 +26,65 @@ const Timetable = ({type}) => {
     if (type !== "class") return null;
 
     return checkAdmin(user.role)
-      ? location.pathname.split("/").pop()
+      ? classId
       : user.classID;
-  }, [type, user.role, user.classID, location.pathname]);
+  }, [type, user.role, user.classID, classId]);
 
 
-  useEffect(() => {
-
+  const fetchTimetable = async () => {
     if (!id && type !== "faculty") return;
 
-    let isMounted = true;
     setLoading(true);
+    setError(null);
 
     const timetableURL =
       type === "faculty"
         ? getTimeTableURL(user._id, "faculty")
         : getTimeTableURL(id, "class");
 
-    axiosInterceptor
-      .get(timetableURL)
-      .then((res) => {
-        if (!isMounted) return;
-        const slots = res.data.data;
-        const mapped = {};
+    try {
+      const res = await axiosInterceptor.get(timetableURL);
+      const slots = res.data.data;
+      const mapped = {};
 
-        slots.forEach((slot) => {
-          const key = `${slot.day}_${slot.period}`;
-          mapped[key] = {
-            courseName: slot.courseID?.name || "—",
-            facultyName: slot.facultyID?.teachername || "Not Assigned",
-            className: slot.classID?.name || "",
-          };
-        });
+      slots.forEach((slot) => {
+        const key = `${slot.day}_${slot.period}`;
+        mapped[key] = {
+          courseName: slot.courseID?.name || "—",
+          facultyName: slot.facultyID?.teachername || "Not Assigned",
+          className: slot.classID?.name || "",
+        };
+      });
 
-        if (type === "class") {
-          setTitle(slots[0]?.classID?.name + " Standard");
-        } else {
-          setTitle("My Timetable");
-        }
+      if (type === "class") {
+        setTitle(slots[0]?.classID?.name + " Standard");
+      } else {
+        setTitle("My Timetable");
+      }
 
-        setExistingSlots(mapped);
-      })
-      .catch(console.error)
-      .finally(() =>isMounted && setLoading(false));
+      setExistingSlots(mapped);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return () => {
-      isMounted = false;
-    };
+
+  useEffect(() => {
+    fetchTimetable();
   }, [id, type, user._id])
 
   return (
     <div className='timetable-container'>
       {loading ? (
         <Loader text="Loading data..." type="global"/>
+      ) : error ? (
+        <InlineError
+          title="Error loading timetable"
+          message={error.response?.data?.message || error.message}
+          onRetry={fetchTimetable}
+        />
       ) : (
         <>
           <h1>{title}</h1>

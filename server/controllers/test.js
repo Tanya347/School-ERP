@@ -4,7 +4,6 @@ import Course from "../models/Course.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
-import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
 
 
@@ -14,7 +13,7 @@ export const createTest = catchAsync(async (req, res, next) => {
 
   req.body.schoolID = req.user.schoolID;
 
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   req.body.sessionID = activeSession._id;
 
   const course = await Course.findById(req.body.subject);

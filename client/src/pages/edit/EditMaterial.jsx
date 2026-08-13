@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from "react-redux"
 
 import { getSingleData } from "../../utils/endpoints/get";
@@ -18,6 +18,7 @@ import Loader from '../../components/shared/loader/Loader';
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EditMaterial = ({title}) => {
   const [file, setFile] = useState(null);
@@ -28,12 +29,11 @@ const EditMaterial = ({title}) => {
   const [isImageDeleted, setIsImageDeleted] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const { id } = useParams();
 
-  const id = location.pathname.split("/")[4];
 
   const { user } = useSelector(state => state.auth);
-  const { data, dataloading } = useFetch(getSingleData(id, materialsConst));
+  const { data, dataloading, error, reFetch } = useFetch(getSingleData(id, materialsConst));
   const classes = useSelector(selectAvailableClasses);
 
 
@@ -84,6 +84,12 @@ const EditMaterial = ({title}) => {
     <div className='new'>
       {dataloading ? (
         <Loader text="Loading data.." type="global"/>
+      ) : error ? (
+        <InlineError
+          title="Error loading material data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <>
           <div className="new-container">

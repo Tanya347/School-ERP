@@ -1,6 +1,6 @@
 import "./profile.scss";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import useFetch from "../../utils/service/useFetch";
 import { getSingleData } from "../../utils/endpoints/get";
@@ -9,28 +9,33 @@ import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
 import { facultiesConst } from "../../utils/shared/constants";
 import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
+import InlineError from "../../components/shared/inlineError/InlineError";
+
 import { facultyProfileFields } from "../../utils/shared/profileFieldConfigs";
 
 const FacultyProfile = ({ type }) => {
 
-  const location = useLocation();
+  const { id: mainId, facultyId } = useParams();
   const navigate = useNavigate();
-  
-  let id
-  if (type === "Main")
-    id = location.pathname.split("/")[3];
-  else
-    id = location.pathname.split("/")[4];
-  const { data, loading } = useFetch(getSingleData(id, facultiesConst))
+
+  const id = mainId || facultyId;
+  const { data, loading, error, reFetch } = useFetch(getSingleData(id, facultiesConst))
 
   return (
     <div className="single-profile-container faculty-profile">
       {loading ? (
         <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading profile"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
+
       ) : (
         <>
           <div className="profile-top">
-            
+
             <ProfileHeader
               image={data?.faculty?.profilePicture}
               title={data?.faculty?.teachername}
@@ -55,7 +60,7 @@ const FacultyProfile = ({ type }) => {
                         No courses assigned yet.
                       </span>
                     ) : (
-                      data?.courses?.map((item, index) => (
+                      data?.courses?.map((item) => (
                         <Course
                           key={item._id}
                           name={item.name}

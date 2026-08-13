@@ -11,13 +11,14 @@ import {
 
 import { protect } from '../controllers/auth.js';
 import upload from '../utils/multer.js';
+import { sessionMiddleware } from '../utils/sessionMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', protect(), upload.single('file'), createMaterial);
+router.post('/', protect(), sessionMiddleware, upload.single('file'), createMaterial);
 router.put('/:id', protect(), upload.single('file'), editMaterial);
-router.get('/', protect(), getMaterials);
-router.delete('/:id', protect(), deleteMaterial);
+router.get('/', protect(), sessionMiddleware, getMaterials);
+router.delete('/:id', protect(), sessionMiddleware, deleteMaterial);
 router.get('/:id', protect(), getMaterial);
-router.post('/bulk/delete', protect(), bulkDeleteMaterial);
+router.post('/bulk/delete', protect(), sessionMiddleware, bulkDeleteMaterial);
 export default router;

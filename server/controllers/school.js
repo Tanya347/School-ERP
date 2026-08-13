@@ -4,7 +4,6 @@ import Session from "../models/Session.js";
 
 import fs from "fs";
 
-import { getActiveSession, getSessionMeta } from "./session.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { AppError } from "../utils/customError.js";
 import cloudinary from "../utils/cloudinary.js";
@@ -141,7 +140,7 @@ export const getSchoolInfo = catchAsync(async (req, res, next) => {
         return next(new AppError('School not found', 404));
     }
 
-    const activeSession = await getActiveSession(req.user);
+    const activeSession = req.activeSession;
     const admin = await Admin.findOne({ schoolID: schoolId }).select("username");
 
     res.status(200).json({

@@ -1,7 +1,6 @@
 import Timetable from "../models/Timetable.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
 
@@ -21,7 +20,7 @@ export const createSlot = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const bulkCreateSlots = catchAsync(async (req, res, next) => {
   const { slots } = req.body;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   const enrichedSlots = slots.map(slot => ({
     ...slot,

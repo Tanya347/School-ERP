@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 
 import useFetch from "../../utils/service/useFetch";
@@ -16,6 +16,7 @@ import { eventsConst } from "../../utils/shared/constants";
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload";
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EditEvent = ({ inputs, title }) => {
 
@@ -27,11 +28,10 @@ const EditEvent = ({ inputs, title }) => {
     const [errors, setErrors] = useState({});
     const [isImageDeleted, setIsImageDeleted] = useState(false);
 
-    const location = useLocation();
+    const { id } = useParams();
     const navigate = useNavigate();
 
-    const id = location.pathname.split("/")[4];
-    const { data, loading } = useFetch(getSingleData(id, eventsConst))
+    const { data, loading, error, reFetch } = useFetch(getSingleData(id, eventsConst))
 
     useEffect(() => {
         if (data) {
@@ -79,6 +79,12 @@ const EditEvent = ({ inputs, title }) => {
         <div className="new">
            {loading ? (
                 <Loader text="Loading data..." type="global" />
+           ) : error ? (
+                <InlineError
+                  title="Error loading event data"
+                  message={error.response?.data?.message || error.message}
+                  onRetry={reFetch}
+                />
            ) : (
             <>
                  <div className="new-container">

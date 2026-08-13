@@ -7,7 +7,6 @@ import Test from "../models/Test.js";
 import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import { getActiveSession } from "./session.js";
 import cloudinary from "../utils/cloudinary.js";
 import { folderName, successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
@@ -17,7 +16,7 @@ import { sendRegistrationEmail } from "../utils/email.js";
 // -----------------------------------------------
 export const registerStudent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   req.body.sessionID = activeSession._id;
 
   const classDoc = await Class.findById(req.body.classID);
@@ -202,7 +201,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 // Delete a student with cascade operations
 // -----------------------------------------------
 export const deleteStudent = catchAsync(async (req, res, next) => {
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   const student = await Student.findOne({
     _id: req.params.id,
     schoolID: req.user.schoolID,
@@ -255,7 +254,7 @@ export const deleteStudent = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
   const { ids } = req.body;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   const students = await Student.find({
     _id: { $in: ids },
     schoolID: req.user.schoolID,
@@ -306,7 +305,7 @@ export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
 // Get student details
 // -----------------------------------------------
 export const getStudent = catchAsync(async (req, res, next) => {
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   const student = await Student.findOne({
       _id: req.params.id,
       schoolID: req.user.schoolID,
@@ -346,7 +345,7 @@ export const getSingleStudent = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const getStudents = catchAsync(async (req, res, next) => {
   const schoolId = req.user.schoolID;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   let filter = {
       schoolID: schoolId,
       sessionID: activeSession._id
@@ -363,7 +362,7 @@ export const getStudents = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const getGenderCount = catchAsync(async (req, res, next) => {
   const schoolId = req.user.schoolID;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   const students = await Student.find({ schoolID: schoolId, sessionID: activeSession._id }).select('gender');
   let boys = 0, girls = 0;

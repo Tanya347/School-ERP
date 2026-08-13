@@ -14,11 +14,12 @@ import Lecture from '../../components/lecture/Lecture';
 import Course from '../../components/course/Course';
 import ProfileHeader from '../../components/shared/profileHeader/ProfileHeader';
 import Loader from '../../components/shared/loader/Loader';
+import InlineError from '../../components/shared/inlineError/InlineError';
 
 const FacultyHome = () => {
   
   const { user } = useSelector(state => state.auth);
-  const { data, loading } = useFetch(getSingleData(user._id, facultiesConst))
+  const { data, loading, error, reFetch } = useFetch(getSingleData(user._id, facultiesConst))
 
   const navigate = useNavigate();
 
@@ -35,24 +36,36 @@ const FacultyHome = () => {
           <div className="bottom-container">
             <EventCalender />
             <div className="faculty-courses-container">
-             {loading ? (<Loader text="Loading courses information..." type="global"/>) : (<>{classTeacherClass && <h3>Class Teacher To: <span>{data?.faculty?.classTeacherTo?.name} Standard</span></h3>}
-              <h2 className="c-title">Courses</h2>
-              <div className="courses-container">
-                {data?.courses?.length > 0 ? (
-                  data?.courses?.map((item, index) => (
-                    <Course
-                      name={item.name}
-                      index={index}
-                      subjectCode={item.subjectCode}
-                      syllabusPicture={item.syllabusPicture} 
-                      examStatus={item?.examStatus?.status}
-                      className={item?.classID?.name}
-                    />
-                  ))
-                ) : (
-                  <p>No courses available</p>
-                )}
-              </div></>)}
+             {loading ? (
+               <Loader text="Loading courses information..." type="global"/>
+             ) : error ? (
+               <InlineError
+                title="Error loading courses"
+                message={error.response?.data?.message || error.message}
+                onRetry={reFetch}
+               />
+             ) : (
+               <>
+                 {classTeacherClass && <h3>Class Teacher To: <span>{data?.faculty?.classTeacherTo?.name} Standard</span></h3>}
+                 <h2 className="c-title">Courses</h2>
+                 <div className="courses-container">
+                   {data?.courses?.length > 0 ? (
+                     data?.courses?.map((item, index) => (
+                       <Course
+                         name={item.name}
+                         index={index}
+                         subjectCode={item.subjectCode}
+                         syllabusPicture={item.syllabusPicture}
+                         examStatus={item?.examStatus?.status}
+                         className={item?.classID?.name}
+                       />
+                     ))
+                   ) : (
+                     <p>No courses available</p>
+                   )}
+                 </div>
+               </>
+             )}
             </div>
 
           </div>

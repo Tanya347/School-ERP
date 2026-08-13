@@ -1,6 +1,6 @@
 import "../../utils/style/form.scss";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -21,10 +21,9 @@ const EditSchool = ({title}) => {
   const [file, setFile] = useState("");
   const [isImageDeleted, setIsImageDeleted] = useState(false);
 
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const id = location.pathname.split("/")[4];
 
   const { info } = useSelector(state => state.school);
 

@@ -2,6 +2,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 let storeRef;
+let lastErrorMessage = null;
+let lastErrorTime = 0;
+
+const deduplicatedToast = (message) => {
+  const now = Date.now();
+  if (lastErrorMessage === message && (now - lastErrorTime < 2000)) {
+    return;
+  }
+  lastErrorMessage = message;
+  lastErrorTime = now;
+  toast.error(message);
+};
 
 export const injectStore = (store) => {
   storeRef = store;
@@ -18,7 +30,7 @@ axiosInterceptor.interceptors.response.use(
     if (err.response?.status === 401 && storeRef) {
       const state = storeRef.getState();
       if (state.auth?.user) {
-        toast.error("Session expired. Please login again.");
+        deduplicatedToast("Session expired. Please login again.");
         storeRef.dispatch({ type: "auth/logout/fulfilled" });
       }
     }
@@ -26,4 +38,5 @@ axiosInterceptor.interceptors.response.use(
   }
 );
 
+export { deduplicatedToast };
 export default axiosInterceptor;

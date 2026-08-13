@@ -3,7 +3,7 @@ import './viewClass.scss'
 import EditIcon from '@mui/icons-material/Edit';
 
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import useFetch from '../../utils/service/useFetch'
 import { getClassDetails } from '../../utils/endpoints/get'
@@ -13,20 +13,27 @@ import GenericTable from '../../components/shared/table/Table'
 import Course from '../../components/course/Course'
 import AddClassTeacher from '../../components/addClassTeacher/AddClassTeacher'
 import Loader from '../../components/shared/loader/Loader'
+import InlineError from '../../components/shared/inlineError/InlineError'
 
 const ViewClass = () => {
   
     const [openModal, setOpenModal] = useState(false);
-    const location = useLocation();
+    const { classId } = useParams();
 
-    const id = location.pathname.split("/")[3]
+    const id = classId
 
-    const {data, loading} = useFetch(getClassDetails(id))
+    const {data, loading, error, reFetch} = useFetch(getClassDetails(id))
 
   return (
     <div className='view-class'>
         {loading ? (
           <Loader text="Loading class data..." />
+        ) : error ? (
+          <InlineError
+            title="Error loading class data"
+            message={error.response?.data?.message || error.message}
+            onRetry={reFetch}
+          />
         ) : (<div className="view-class-container">
                 <h2>{data?.name} Standard</h2>
                 {

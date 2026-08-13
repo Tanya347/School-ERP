@@ -1,7 +1,7 @@
 import "./viewTestMarks.scss"
 
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import useFetch from '../../utils/service/useFetch';
 import { getSingleData, getStudentsOfClass } from '../../utils/endpoints/get';
@@ -18,10 +18,8 @@ const ViewTestMarks = () => {
   const [stuData, setStuData] = useState([]);
   const [marksData, setMarksData] = useState({});
 
-  const location = useLocation();
-  
-  const id = location.pathname.split("/")[4];
-  const { data } = useFetch(getSingleData(id, testsConst))
+  const { id } = useParams();
+  const { data, reFetch } = useFetch(getSingleData(id, testsConst))
   
   useEffect(() => {
     if (!data?.classID?._id) return;
@@ -57,7 +55,7 @@ const ViewTestMarks = () => {
       console.log(marksArray)
       await axiosInterceptor.put(addTestMarks(id), { marksData: marksArray });
       toast.success("Test marks added successfully");
-      window.location.reload();
+      reFetch();
     } catch (error) {
       const errorMessage =
           error.response?.data?.message ||
@@ -71,7 +69,7 @@ const ViewTestMarks = () => {
     try {
       await axiosInterceptor.delete(clearTestMarks(id));
       setMarksData({})
-      window.location.reload();
+      reFetch();
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||

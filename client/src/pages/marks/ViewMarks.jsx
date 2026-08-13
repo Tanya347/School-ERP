@@ -1,6 +1,6 @@
 import "./addMarks.scss"
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -9,18 +9,25 @@ import { getClearMarksSubject } from '../../utils/endpoints/delete'
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import { toast } from "react-toastify";
 import { checkSuccess } from "../../utils/shared/commons";
+import useFetch from "../../utils/service/useFetch";
 import ExportButton from '../../components/shared/excelButton/ExcelButton.jsx';
+import InlineError from "../../components/shared/inlineError/InlineError.jsx";
 
 const ViewMarks = () => {
 
   const [course, setCourse ]= useState("");
   const [courseName, setCourseName] = useState("");
-  const [stuData, setStuData] = useState({});
 
   const { courseId } = useParams();
   const navigate = useNavigate();
 
   const courses = useSelector(state => state.faculty.courses);
+
+  // Use the improved useFetch hook
+  const { data: stuData, loading, error, reFetch } = useFetch(
+    course ? getMarksOfSubject(course) : null,
+    { enabled: !!course }
+  );
 
   // Set course from URL param when courses load
   useEffect(() => {
@@ -32,26 +39,6 @@ const ViewMarks = () => {
       }
     }
   }, [courseId, courses]);
-
-  useEffect(() => {
-    const fetchStudents = async () => {
-      if (course) {
-        try {
-          const response = await axiosInterceptor.get(getMarksOfSubject(course));
-          setStuData(response.data.data);
-        } catch (error) {
-          toast.error(
-            <div>
-              <strong>Error fetching student data</strong>
-              <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
-            </div>
-          );
-          console.error("Error fetching student data:", error);
-        }
-      }
-    };
-    fetchStudents();
-  }, [course])
 
   const handleClick = (cl) => {
     navigate(`/faculty/marks/${cl._id}`);
@@ -65,7 +52,7 @@ const ViewMarks = () => {
 
         if (checkSuccess(res.data.status)) {
           toast.success("Marks cleared successfully!");
-          setStuData({});
+          reFetch();
         }
       } catch (err) {
         const errorMessage =
@@ -94,7 +81,7 @@ const ViewMarks = () => {
           <>
             <div className="view-marks-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h1>Course: {courseName}</h1>
-              {Object.keys(stuData).length > 0 && (
+              {stuData && stuData.length > 0 && (
                 <ExportButton
                   data={stuData}
                   filename={`marks_${courseName}`}
@@ -104,7 +91,15 @@ const ViewMarks = () => {
             </div>
 
 
-              {Object.keys(stuData).length ?
+              {loading ? (
+                <div className="inline-loader">Loading marks...</div>
+              ) : error ? (
+                <InlineError
+                  title="Error fetching marks data"
+                  message={error.response?.data?.message || error.message || 'An unknown error occurred'}
+                  onRetry={reFetch}
+                />
+              ) : stuData && stuData.length ?
                 (
                   <>
                   <div className="marks-adding-table">
@@ -129,7 +124,7 @@ const ViewMarks = () => {
                 )
               }
 
-            {Object.keys(stuData).length !== 0 && <div className="clear-marks-button">
+            {stuData && stuData.length !== 0 && <div className="clear-marks-button">
               <button onClick={handleClear}>Clear Marks</button>
             </div>}
           </>

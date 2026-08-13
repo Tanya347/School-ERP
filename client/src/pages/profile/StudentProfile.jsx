@@ -1,7 +1,7 @@
 import "./profile.scss";
 import 'react-circular-progressbar/dist/styles.css';
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import useFetch from "../../utils/service/useFetch";
 import { getSingleData } from "../../utils/endpoints/get";
@@ -11,26 +11,29 @@ import { studentProfileFields } from "../../utils/shared/profileFieldConfigs";
 
 import Course from "../../components/course/Course";
 import Loader from "../../components/shared/loader/Loader";
+import InlineError from "../../components/shared/inlineError/InlineError";
 import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
 import StudentMarksHistory from "../../components/studentMarksHistory/StudentMarksHistory";
 
 const StudentProfile = ({ type }) => {
-  
-  const location = useLocation();
+
+  const { id: mainId, studentId } = useParams();
   const navigate = useNavigate();
 
-  let id;
-  if (type === "Main")
-    id = location.pathname.split("/")[3];
-  else
-    id = location.pathname.split("/")[4];
+  const id = mainId || studentId;
 
-  const { data, loading } = useFetch(getSingleData(id, studentsConst));
+  const { data, loading, error, reFetch } = useFetch(getSingleData(id, studentsConst));
 
   return (
     <div className="single-profile-container student-profile">
       {loading ? (
         <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading profile"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <>
           <div className="profile-top">

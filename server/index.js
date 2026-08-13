@@ -32,6 +32,10 @@ import sessionRoute from "./routes/session.js";
 import materialRoute from "./routes/material.js";
 import marksRoute from "./routes/marks.js"
 
+// Import cron jobs to initialize them
+import './jobs/testCompleted.js';
+import './jobs/examCompleted.js';
+
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
   console.log('UNCAUGHT EXCEPTION! Shutting down...');

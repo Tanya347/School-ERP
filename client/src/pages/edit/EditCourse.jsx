@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import useFetch from "../../utils/service/useFetch";
 import { getSingleData } from "../../utils/endpoints/get";
@@ -15,6 +15,7 @@ import { coursesConst } from "../../utils/shared/constants";
 import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload"
+import InlineError from "../../components/shared/inlineError/InlineError"
 
 const EditCourse = ({ title }) => {
 
@@ -24,13 +25,13 @@ const EditCourse = ({ title }) => {
   const [errors, setErrors] = useState({});
   const [isImageDeleted, setIsImageDeleted] = useState(false);
 
-  const location = useLocation();
+  const { courseId } = useParams();
   const navigate = useNavigate();
 
-  const id = location.pathname.split("/")[4];
+  const id = courseId;
 
   // fetch data using id
-  const { data, courseloading } = useFetch(getSingleData(id, coursesConst))
+  const { data, courseloading, error, reFetch } = useFetch(getSingleData(id, coursesConst))
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
@@ -74,6 +75,12 @@ const EditCourse = ({ title }) => {
 
       {courseloading ? (
         <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading course data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <>
           <div className="new-container">

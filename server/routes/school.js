@@ -9,11 +9,12 @@ import {
 import upload from "../utils/multer.js";
 import { protect, restrictTo } from "../controllers/auth.js";
 import { roles } from "../utils/constants.js";
+import { sessionMiddleware } from "../utils/sessionMiddleware.js";
 
 const router = express.Router();
 
 router.post("/", upload.single('file'), createSchool);
 router.get("/", protect(), getSchoolInfo);
-router.put("/:id", protect(), restrictTo(roles.admin), upload.single('file'), editSchoolInfo);
+router.put("/:id", protect(), sessionMiddleware, restrictTo(roles.admin), upload.single('file'), editSchoolInfo);
 
 export default router;

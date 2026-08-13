@@ -1,7 +1,6 @@
 import Task from "../models/Task.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import { getActiveSession } from "./session.js";
 import { successMsg } from "../utils/constants.js";
 
 
@@ -9,7 +8,7 @@ import { successMsg } from "../utils/constants.js";
 // -----------------------------------------------
 export const createTask = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   req.body.sessionID = activeSession._id;
   const newTask = new Task(req.body);
   const savedTask = await newTask.save();

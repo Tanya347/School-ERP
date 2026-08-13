@@ -10,11 +10,12 @@ import {
 } from "../controllers/tasks.js";
 
 import { protect } from "../controllers/auth.js";
+import { sessionMiddleware } from "../utils/sessionMiddleware.js";
 
 
 const router = express.Router();
 
-router.post("/", protect(), createTask);
+router.post("/", protect(), sessionMiddleware, createTask);
 router.put("/:id", protect(), updateTask);
 router.delete("/:id", protect(), deleteTask);
 router.get("/:id", protect(), getTask);

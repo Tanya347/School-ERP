@@ -8,6 +8,7 @@ import useFetch from "../../utils/service/useFetch";
 import Loader from "../../components/shared/loader/Loader";
 import EventModal from "../../components/eventModal/EventModal";
 import { eventPicture } from '../../utils/shared/constants';
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EventsList = ({type}) => {
   
@@ -15,7 +16,7 @@ const EventsList = ({type}) => {
     const [openModal, setOpenModal] = useState(false);
     const [clickedEvent, setClickedEvent] = useState({});
 
-    const { data, loading } = useFetch(getDatatableURL("events"));
+    const { data, loading, error, reFetch } = useFetch(getDatatableURL("events"));
 
     useEffect(() => {
         setList(data)
@@ -44,6 +45,12 @@ const EventsList = ({type}) => {
       <div className="events-title">Events List</div>
       <div className="event-container">{loading ? (
         <Loader text="Loading events..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading events"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : list.length === 0 ? (
         <div>No events available.</div>
       ) : (

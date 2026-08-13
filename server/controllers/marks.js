@@ -5,7 +5,6 @@ import Course from "../models/Course.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
-import { getActiveSession } from "./session.js";
 
 
 // Enter or update marks for a subject
@@ -15,7 +14,7 @@ export const enterMarksForSubject = catchAsync(async (req, res) => {
   const { marksData } = req.body;
   const { schoolID  } = req.user;
 
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   const sessionID = activeSession._id;
 
   const course = await Course.findOne({
@@ -120,7 +119,7 @@ export const getMarksOfStudent = catchAsync(async (req, res) => {
 // -----------------------------------------------
 export const getMarksOfSubject = catchAsync(async (req, res) => {
   const { subjectId } = req.params;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   const marks = await Marks.find({
     course: subjectId,
@@ -147,7 +146,7 @@ export const getMarksOfSubject = catchAsync(async (req, res) => {
 // -----------------------------------------------
 export const getMarksOfClass = catchAsync(async (req, res) => {
   const { classId } = req.params;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   const students = await Student.find({ 
     classID: classId,

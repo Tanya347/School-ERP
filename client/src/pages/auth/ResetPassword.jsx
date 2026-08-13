@@ -4,7 +4,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
 import { somethingWentWrongMsg } from "../../utils/shared/constants"
@@ -24,12 +24,11 @@ const ResetPassword = ({type}) => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const location = useLocation();
+    const { token } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
 
-    const token = location.pathname.split("/")[3];
 
     const handleChange = (e) => {
         setPasswordCreds((prev) => ({ ...prev, [e.target.id]: e.target.value }))

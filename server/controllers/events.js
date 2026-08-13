@@ -3,7 +3,6 @@ import Event from "../models/Event.js";
 import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import { getActiveSession } from "./session.js";
 import cloudinary from "../utils/cloudinary.js";
 
 import { successMsg, folderName } from "../utils/constants.js";
@@ -13,7 +12,7 @@ import { successMsg, folderName } from "../utils/constants.js";
 // -----------------------------------------------
 export const createEvent = catchAsync(async (req, res, next) => {
   req.body.schoolID = req.user.schoolID;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   req.body.sessionID = activeSession._id;
   let poster = null;
   let cloud_id = null;

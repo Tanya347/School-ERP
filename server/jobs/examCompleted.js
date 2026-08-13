@@ -1,7 +1,8 @@
 import cron from 'node-cron';
 import Course from '../models/Course.js';
 
-cron.schedule('0 0 * * 0', async () => {
+// Run every day at midnight
+cron.schedule('0 0 * * *', async () => {
   const now = new Date();
 
   await Course.updateMany(

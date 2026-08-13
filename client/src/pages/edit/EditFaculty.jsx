@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../utils/service/useFetch";
@@ -17,6 +17,7 @@ import Loader from "../../components/shared/loader/Loader";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EditFaculty = ({ title }) => {
 
@@ -27,17 +28,12 @@ const EditFaculty = ({ title }) => {
   const [isImageDeleted, setIsImageDeleted] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const { id } = useParams();
 
-  let id;
   const { user } = useSelector(state => state.auth);
   
-  if (checkAdmin(user.role))
-    id = location.pathname.split("/")[4];
-  else
-    id = location.pathname.split("/")[3];
 
-  const { data, loading } = useFetch(getSingleData(id, facultiesConst))
+  const { data, loading, error, reFetch } = useFetch(getSingleData(id, facultiesConst))
 
   useEffect(() => {
     setInfo(data.faculty)
@@ -83,6 +79,12 @@ const EditFaculty = ({ title }) => {
     <div className="new">
       {loading ? (
         <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading faculty data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <>
           <div className="new-container">

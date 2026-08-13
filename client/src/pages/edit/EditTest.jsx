@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useSelector } from "react-redux";
 
@@ -17,9 +17,10 @@ import { testsConst } from "../../utils/shared/constants";
 import Loader from "../../components/shared/loader/Loader"
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import Dropdown from "../../components/shared/dropdown/Dropdown";
+import InlineError from "../../components/shared/inlineError/InlineError";
 
 const EditTest = ({ title }) => {
-  
+
   const [date, setDate] = useState(null);
   const [sclass, setSclass] = useState("");
   const [course, setCourse] = useState("");
@@ -27,23 +28,19 @@ const EditTest = ({ title }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // get location and extract id out of it
-  const id = location.pathname.split("/")[4];
-  
   const classes = useSelector(state => state.faculty.classes);
   const courses = useSelector(state => state.faculty.courses);
-  const { data } = useFetch(getSingleData(id, testsConst))
+  const { data, loading: fetchLoading, error, reFetch } = useFetch(getSingleData(id, testsConst))
 
   // data needs to be present in forms for it to change hence feed data into the array
   useEffect(() => {
-  
     setInfo(data)
-    if(data.date)
-      setDate(new Date(data?.date)); 
-  }, [data, data.date])
+    if(data?.date)
+      setDate(new Date(data?.date));
+  }, [data])
 
   const handleChange = (e) => {
     commonHandleChange(e, setInfo, setErrors, validateTest);
@@ -70,74 +67,76 @@ const EditTest = ({ title }) => {
     } finally {
       setLoading(false);
     }
-  } 
+  }
 
   return (
     <div className="new">
+      {fetchLoading ? (
+        <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading test data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
+      ) : (
+        <div className="new-container">
+          {/* Title of form */}
+          <div className="top">
+            <h1>{title}</h1>
+          </div>
 
-      <div className="new-container">
+          {/* Form */}
+          <div className="bottom">
+            <div className="form-container">
+              <form>
+                <FormInputs
+                  inputs={testInputs}
+                  values={info}
+                  errors={errors}
+                  onChange={handleChange}
+                  type="edit"
+                />
 
-        {/* Title of form */}
-        <div className="top">
-          <h1>{title}</h1>
-        </div>
+                <Dropdown
+                  title="Choose a Class"
+                  options={classes}
+                  value={sclass || info?.classID?._id || ""}
+                  onChange={(e) => setSclass(e.target.value)}
+                />
 
-        {/* Form */}
-        <div className="bottom">
-          <div className="form-container">
-            
-            <form>
-            
-            <FormInputs
-              inputs={testInputs}
-              values={info}
-              errors={errors}
-              onChange={handleChange}
-              type="edit"
-            />
+                <Dropdown
+                  title="Choose a Course"
+                  options={courses}
+                  value={course || info?.subject?._id || ""}
+                  onChange={(e) => setCourse(e.target.value)}
+                />
 
-              <Dropdown
-                title="Choose a Class"
-                options={classes}
-                value={sclass || info?.classID?._id || ""}
-                onChange={(e) => setSclass(e.target.value)}
-              />
-
-
-              <Dropdown
-                title="Choose a Course"
-                options={courses}
-                value={course || info?.subject?._id || ""}
-                onChange={(e) => setCourse(e.target.value)}
-              />
-
-
-              <div className="form-input">
-
-                <label>Set Test Date</label>
-                <DatePicker
-                  class="date-picker"
-                  placeholderText="Choose Date and Time"
-                  style={{ marginRight: "10px" }}
-                  selected={date}
-                  className="form-input"
-                  onChange={(selectedDate) => {
-                    // Set only the date part to the state
-                    const dateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
-                    setDate(dateWithoutTime);
-                  }}
+                <div className="form-input">
+                  <label>Set Test Date</label>
+                  <DatePicker
+                    className="date-picker"
+                    placeholderText="Choose Date and Time"
+                    style={{ marginRight: "10px" }}
+                    selected={date}
+                    className="form-input"
+                    onChange={(selectedDate) => {
+                      const dateWithoutTime = new Date(selectedDate.setHours(0, 0, 0, 0));
+                      setDate(dateWithoutTime);
+                    }}
                   />
-              </div>
-                  </form>
+                </div>
+              </form>
 
-            {/* Submit Button */}
-            <div className="submit-button">
-            {loading && <Loader text="editing test..."/>}
-              <button onClick={handleClick} id="submit" className="form-btn">Edit Test</button>
+              {/* Submit Button */}
+              <div className="submit-button">
+                {loading && <Loader text="editing test..."/>}
+                <button onClick={handleClick} id="submit" className="form-btn">Edit Test</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

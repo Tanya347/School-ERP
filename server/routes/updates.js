@@ -10,12 +10,13 @@ import {
 } from "../controllers/updates.js";
 
 import { protect } from "../controllers/auth.js";
+import { sessionMiddleware } from "../utils/sessionMiddleware.js";
 
 // router variable
 const router = express.Router();
 
 
-router.post("/", protect(), createUpdate);
+router.post("/", protect(), sessionMiddleware, createUpdate);
 router.put("/:id", protect(), updateUpdate);
 router.delete("/:id", protect(), deleteUpdate);
 router.get("/:id", protect(), getUpdate);

@@ -3,7 +3,7 @@ import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { Tooltip } from "@mui/material";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ import axiosInterceptor from "../../../utils/shared/axiosInterceptor.js";
 import { getDeleteURL } from "../../../utils/endpoints/delete.js";
 import { bulkDelete } from "../../../utils/endpoints/post.js";
 import { testAction } from "../../../utils/endpoints/put.js";
-import { facultiesConst, materialsConst, studentsConst, testsConst, coursesConst, updatesConst } from "../../../utils/shared/constants.js";
+import { facultiesConst, materialsConst, studentsConst, testsConst, coursesConst, updatesConst, tasksConst } from "../../../utils/shared/constants.js";
 import { checkAdmin, checkEditor, checkFaculty, checkSuccess } from "../../../utils/shared/commons.js";
 import { exportColumnMap } from "../../../utils/datatablesource/exportButtonColumns.js";
 
@@ -25,6 +25,7 @@ import ConfirmPopup from "../confirmationPopup/ConfirmatinPopup.jsx";
 import Loader from "../loader/Loader.jsx";
 import Popup from "../popup/Popup.jsx";
 import Modal from "../modal/Modal.jsx";
+import InlineError from "../inlineError/InlineError.jsx";
 
 const getExportData = (data, tableType) => {
   const columnsToExport = exportColumnMap[tableType] || Object.keys(data[0] || {});
@@ -69,9 +70,18 @@ const Datatable = ({ column, name }) => {
   const [confirmMessage, setConfirmMessage] = useState("");
   const [confirmAction, setConfirmAction] = useState(null);
 
-  const location = useLocation();
-  const path = location.pathname.split("/")[2];
   const { user } = useSelector(state => state.auth);
+
+  const nameToPathMap = {
+    "Student": studentsConst,
+    "Faculty": facultiesConst,
+    "Update": updatesConst,
+    "Course": coursesConst,
+    "Material": materialsConst,
+    "Test": testsConst,
+    "Task": tasksConst,
+  };
+  const path = nameToPathMap[name];
 
   // Check if user is the author of the item
   const isAuthor = (row) => {
@@ -91,7 +101,7 @@ const Datatable = ({ column, name }) => {
     // Default: editor can modify
     return checkEditor(user.role);
   };
-  const { data, loading } = useFetch(getDatatableURL(path, user));
+  const { data, loading, error, reFetch } = useFetch(getDatatableURL(path, user));
 
   useEffect(() => {
       setList(data || []);
@@ -249,6 +259,12 @@ const Datatable = ({ column, name }) => {
     <div className="datatable-container">
       {loading ? (
        <Loader text="Loading data..." type="global"/>
+      ) : error ? (
+        <InlineError
+          title={`Error loading ${name}`}
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <div className="datatable">
           <div className="datatable-header">

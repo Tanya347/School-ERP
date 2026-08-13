@@ -1,7 +1,7 @@
 import "../../utils/style/form.scss";
 
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import useFetch from "../../utils/service/useFetch";
@@ -14,6 +14,7 @@ import { checkAdmin, checkSuccess, handleChange as commonHandleChange } from "..
 import { genderTypes } from "../../utils/shared/constants";
 
 import Loader from "../../components/shared/loader/Loader";
+import InlineError from "../../components/shared/inlineError/InlineError";
 import FormInputs from "../../components/shared/formInputs/FormInputs"
 import FileUpload from "../../components/shared/fileUpload/FileUpload";
 import Dropdown from "../../components/shared/dropdown/Dropdown";
@@ -26,21 +27,15 @@ const EditUser = ({ title }) => {
   const [errors, setErrors] = useState({});
   const [sclass, setSclass] = useState("");
   const [isImageDeleted, setIsImageDeleted] = useState(false);
-  
-  const location = useLocation();
+
+  const { id } = useParams();
   const navigate = useNavigate();
-  
-  let id;
- 
+
   const classes = useSelector(state => state.admin.classes);
   const { user } = useSelector(state => state.auth);
   
-  if(checkAdmin(user.role)) 
-    id = location.pathname.split("/")[4];
-  else
-    id = location.pathname.split("/")[3];
 
-  const { data, loading } = useFetch(getSingleData(id, "single-student"))
+  const { data, loading, error, reFetch } = useFetch(getSingleData(id, "single-student"))
 
   useEffect(() => {
     setInfo(data)
@@ -73,7 +68,6 @@ const EditUser = ({ title }) => {
       const res = await editElementWithPicture(file, newInfo, "student", putURLs("students", id));
       if(checkSuccess(res.data.status)) {
         navigate(`/admin/students/single/${id}`);
-        window.location.reload();
       }
     } catch(err) {
       console.error(err);
@@ -86,6 +80,12 @@ const EditUser = ({ title }) => {
     <div className="new">
       {loading ? (
         <Loader text="Loading data..." type="global" />
+      ) : error ? (
+        <InlineError
+          title="Error loading student data"
+          message={error.response?.data?.message || error.message}
+          onRetry={reFetch}
+        />
       ) : (
         <>
           <div className="new-container">

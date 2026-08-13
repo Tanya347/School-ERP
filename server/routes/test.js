@@ -15,11 +15,11 @@ import {
 } from "../controllers/test.js";
 
 import { protect } from "../controllers/auth.js";
-
+import { sessionMiddleware } from "../utils/sessionMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", protect(), createTest);
+router.post("/", protect(), sessionMiddleware, createTest);
 router.delete("/:id", protect(), deleteTest);
 router.get("/", protect(), getTests);
 router.get("/:id", protect(), getTest);

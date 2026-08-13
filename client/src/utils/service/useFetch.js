@@ -5,7 +5,7 @@ const useFetch = (url, options = {}) => {
     const {enabled = true} = options;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     useEffect(() => {
         if (!enabled || !url) return;
 
@@ -26,9 +26,10 @@ const useFetch = (url, options = {}) => {
 
     const reFetch = async () => {
         setLoading(true);
+        setError(null);
         try {
             const res = await axiosInterceptor.get(url);
-            setData(res.data);
+            setData(res.data.data);
         } catch (err) {
             setError(err);
             console.error('Fetch error:', err);

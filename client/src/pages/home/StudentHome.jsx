@@ -14,6 +14,7 @@ import EventCalender from "../../components/calender/Calender"
 import Lecture from "../../components/lecture/Lecture"
 import Course from "../../components/course/Course"
 import Loader from "../../components/shared/loader/Loader"
+import InlineError from "../../components/shared/inlineError/InlineError"
 import ProfileHeader from "../../components/shared/profileHeader/ProfileHeader";
 import { studentProfileFields } from "../../utils/shared/profileFieldConfigs";
 
@@ -22,7 +23,7 @@ const StudentHome = () => {
   const [attendance, setAttendance] = useState({})
   
   const { user } = useSelector(state => state.auth);
-  const { data, loading } = useFetch(getSingleData(user._id, "students"))
+  const { data, loading, error, reFetch } = useFetch(getSingleData(user._id, "students"))
  
   const navigate = useNavigate();
 
@@ -64,6 +65,12 @@ const StudentHome = () => {
               {
                 loading ? (
                   <Loader text="fetching courses..."/>
+                ) : error ? (
+                  <InlineError
+                    title="Error fetching courses"
+                    message={error.response?.data?.message || error.message}
+                    onRetry={reFetch}
+                  />
                 ) : (
                   <div className="courses-container">
                     {data?.classInfo?.subjects?.map((item, index) => (

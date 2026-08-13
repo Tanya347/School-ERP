@@ -6,21 +6,25 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { getCourseStudents } from '../../utils/endpoints/get';
 import { studentColumns } from '../../utils/tableSource/studentsColumns';
-import axiosInterceptor from "../../utils/shared/axiosInterceptor";
+import useFetch from "../../utils/service/useFetch";
 
 import GenericTable from '../../components/shared/table/Table';
-import { toast } from "react-toastify";
-
+import InlineError from '../../components/shared/inlineError/InlineError';
 
 const ViewStudents = () => {
   const [course, setCourse] = useState("");
   const [className, setClassName] = useState("");
-  const [stuData, setStuData] = useState({});
 
   const { courseId } = useParams();
   const navigate = useNavigate();
 
   const courses = useSelector(state => state.faculty.courses);
+
+  // Fetch students using the improved useFetch hook
+  const { data: stuData, loading, error, reFetch } = useFetch(
+    course ? getCourseStudents(course) : null,
+    { enabled: !!course }
+  );
 
   // Set course from URL param when courses load
   useEffect(() => {
@@ -33,30 +37,10 @@ const ViewStudents = () => {
     }
   }, [courseId, courses]);
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      if (course) {
-        try {
-          const response = await axiosInterceptor.get(getCourseStudents(course));
-          setStuData(response.data.data);
-        } catch (error) {
-          toast.error(
-            <div>
-              <strong>Error fetching students data</strong>
-              <div>{error.response?.data?.message || error.message || 'Unknown error'}</div>
-            </div>
-          );
-          console.error("Error fetching student data:", error);
-        }
-      }
-    };
-    fetchStudents();
-  }, [course])
-
   const handleClick = (cl) => {
     navigate(`/faculty/class/students/${cl._id}`);
   };
-  
+
   return (
     <div className='view-students'>
       <h1 className='student-title'>Students</h1>
@@ -74,7 +58,7 @@ const ViewStudents = () => {
                 </button>
               ))}
             </div>
-            {course ? 
+            {course ?
               (
                 <>
                   <h1>Course: {className}</h1>
@@ -86,7 +70,17 @@ const ViewStudents = () => {
               )
             }
             <div className="studentlist-container">
-              {course && stuData && <GenericTable columns={studentColumns} rows={stuData} rowKey='id' />}
+              {loading ? (
+                <div className="inline-loader">Loading students...</div>
+              ) : error ? (
+                <InlineError
+                  title="Error fetching students data"
+                  message={error.response?.data?.message || error.message || 'An unknown error occurred'}
+                  onRetry={reFetch}
+                />
+              ) : (
+                course && stuData && <GenericTable columns={studentColumns} rows={stuData} rowKey='id' />
+              )}
             </div>
           </>
         ) : (

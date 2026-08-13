@@ -4,7 +4,6 @@ import Class from "../models/Class.js";
 import moment from 'moment';
 
 import { catchAsync } from '../utils/catchAsync.js';
-import { getActiveSession } from "./session.js";
 import { AppError } from '../utils/customError.js';
 import { dateFormat, successMsg } from '../utils/constants.js';
 
@@ -14,7 +13,7 @@ import { dateFormat, successMsg } from '../utils/constants.js';
 export const createAttendance = catchAsync(async (req, res, next) => {
   const { date, present, classID, author } = req.body;
   const schoolID = req.user.schoolID;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   // Get all students in the class
   const classInfo = await Class.findById(classID);
@@ -102,7 +101,7 @@ export const getAttendanceDates = catchAsync(async(req, res, next) => {
 // -----------------------------------------------
 export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
   const { classId, date } = req.params;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
 
   const start = moment(date).startOf("day").toDate();
   const end = moment(date).endOf("day").toDate();
@@ -153,7 +152,7 @@ export const getAttendanceStatusByDate = catchAsync(async (req, res, next) => {
 // -----------------------------------------------
 export const clearAttendanceByClass = catchAsync(async (req, res, next) => {
   const { classId } = req.params;
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   
   await Attendance.deleteMany({
     classID: classId,
@@ -293,7 +292,7 @@ export const getStudentAbsenceDates = catchAsync(async (req, res, next) => {
 // clear all attendance records
 // -----------------------------------------------
 export const clearAllAttendanceRecords = catchAsync(async (req, res, next) => {
-  const activeSession = await getActiveSession(req.user);
+  const activeSession = req.activeSession;
   await Attendance.deleteMany({
     schoolID: req.user.schoolID,
     sessionID: activeSession._id

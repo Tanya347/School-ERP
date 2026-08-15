@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import EditStudent from '../../pages/edit/EditStudent';
+import StudentForm from '../../pages/shared/StudentForm';
+import { studentInputs } from '../formsource/studentInputs';
 import StudentProfile from '../../pages/profile/StudentProfile';
 import List from '../../components/shared/list/List';
 import Events from '../../pages/event/Events';
@@ -37,7 +38,7 @@ const StudentRoutes = () => {
         <Routes>
             <Route index element={<StudentHome />} />
             <Route path="single/:id" element={<StudentProfile type="Main" />} />
-            <Route path="edit/:id" element={<EditStudent title="Edit Profile" />} />
+            <Route path="edit/:id" element={<StudentForm mode="edit" inputs={studentInputs} title="Edit Profile" />} />
             <Route path="tasks" element={<List column={taskColumns} name="Task" />} />
             <Route path="tests" element={<List column={testColumns} name="Test" />} />
             <Route path="calender" element={<Events />} />
@@ -46,7 +47,7 @@ const StudentRoutes = () => {
             <Route path="exams" element={<ViewExamDates />} />
             <Route path="marks" element={<Marksheet />}/>
             <Route path="updates" element={<List column={updateColumns} name="Update" />}/>
-            <Route path="updatePassword/:studentId" element={<ResetPassword type="change"/>} />
+            <Route path="updatePassword/:token" element={<ResetPassword type="change"/>} />
             <Route path="timetable" element={<Timetable type="class"/>} />
         </Routes>
        </Layout>

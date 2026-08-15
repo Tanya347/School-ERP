@@ -66,17 +66,6 @@ const limiter = rateLimit({
   message: "Too many requests, please try again in an hour!",
 })
 
-app.use((err, req, res, next) => {
-  const errorStatus = err.status || 500;
-  const errorMessage = err.message || somethingWentWrongMsg;
-  res.status(errorStatus).json({
-    success: false,
-    status: errorStatus,
-    message: errorMessage,
-    stack: err.stack,
-  });
-});
-
 const connect = async () => {
   try {
     mongoose.connect(process.env.MONGO);
@@ -121,7 +110,7 @@ app.all('*', (req, res, next) => {
 // error handling middleware
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);
   connect();
 });

@@ -2,24 +2,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
-// New forms
-import NewStudent from "../../pages/new/NewStudent";
-import NewFaculty from "../../pages/new/NewFaculty";
-import NewCourse from "../../pages/new/NewCourse";
-import NewEvent from "../../pages/new/NewEvent"
-import NewClass from "../../pages/new/CreateClass";
-import NewUpdate from "../../pages/new/NewUpdate";
+import StudentForm from "../../pages/shared/StudentForm";
+import FacultyForm from "../../pages/shared/FacultyForm";
+import CourseForm from "../../pages/shared/CourseForm";
+import UpdateForm from "../../pages/shared/UpdateForm";
+import EventForm from "../../pages/shared/EventForm";
+import MaterialForm from "../../pages/shared/MaterialForm";
+import NewClass from "../../pages/class/CreateClass";
 import NewTimeTable from '../../pages/timetable/NewTimeTable';
-import UploadMaterial from '../../pages/new/UploadMaterial';
-
-// Edit Forms
-import EditEvent from "../../pages/edit/EditEvent"
-import EditUpdate from "../../pages/edit/EditUpdate";
-import EditCourse from "../../pages/edit/EditCourse";
-import EditStudent from "../../pages/edit/EditStudent";
-import EditFaculty from "../../pages/edit/EditFaculty";
-import EditMaterial from '../../pages/edit/EditMaterial';
-import EditSchool from '../../pages/edit/EditSchool';
+import EditSchool from '../../pages/school/EditSchool';
 
 // Components
 import Layout from '../../components/sidebar/Layout';
@@ -88,20 +79,20 @@ const AdminRoutes = () => {
           
           {/* single page for student */}
           <Route 
-            path="students/single/:studentId" 
+            path="students/single/:id" 
             element={<StudentProfile type="Admin" />} 
           />
           
           {/* edit page for student */}
           <Route 
-            path="students/edit/:studentId" 
-            element={<EditStudent title="Update Student" />} 
+            path="students/edit/:id" 
+            element={<StudentForm mode="edit" inputs={studentInputs} title="Update Student" />} 
             />
 
           {/* create user student */ }
           <Route 
             path="students/new" 
-            element={<NewStudent inputs={studentInputs} title="Add New Student" />} 
+            element={<StudentForm mode="create" inputs={studentInputs} title="Add New Student" />} 
             />
 
 
@@ -115,20 +106,20 @@ const AdminRoutes = () => {
 
           {/* single page for faculty */}
           <Route 
-            path="faculties/single/:facultyId" 
+            path="faculties/single/:id" 
             element={<FacultyProfile type="Admin" />} 
             />
 
           {/* edit page for faculty */}
           <Route 
-            path="faculties/edit/:facultyId/" 
-            element={<EditFaculty title="Update Faculty" /> }
+            path="faculties/edit/:id/" 
+            element={<FacultyForm mode="edit" inputs={facultyInputs} title="Update Faculty" />}
             />
 
           {/* create faculty */}
           <Route 
             path="faculties/new" 
-            element={<NewFaculty inputs={facultyInputs} title="Add New Faculty" />} 
+            element={<FacultyForm mode="create" inputs={facultyInputs} title="Add New Faculty" />} 
             />
 
 
@@ -141,15 +132,15 @@ const AdminRoutes = () => {
             />
 
           {/* edit update */}
-          <Route 
-            path="updates/edit/:updateId" 
-            element={ <EditUpdate title="Edit Updates" />} 
+          <Route
+            path="updates/edit/:id"
+            element={ <UpdateForm mode="edit" inputs={updateInputs} title="Edit Updates" />}
             />
 
           {/* create update page */}
-          <Route 
-            path="updates/new" 
-            element={<NewUpdate inputs={updateInputs} title="Add New Update"  /> }
+          <Route
+            path="updates/new"
+            element={<UpdateForm mode="create" inputs={updateInputs} title="Add New Update"  /> }
             />
         
         {/* ROUTES FOR COURSES */}
@@ -163,16 +154,16 @@ const AdminRoutes = () => {
 
           {/*  create new courses */}
 
-          <Route
-            path="courses/new"
-            element={ <NewCourse inputs={courseInputs} title="Add New Course" />}
-          />
+            <Route
+              path="courses/new"
+              element={ <CourseForm mode="create" inputs={courseInputs} title="Add New Course" />}
+            />
 
           {/* edit courses */}
 
           <Route
-            path="courses/edit/:courseId/"
-            element={ <EditCourse title="Edit Courses" />}
+            path="courses/edit/:id/"
+            element={ <CourseForm mode="edit" inputs={courseInputs} title="Edit Courses" />}
             />
 
         {/* ROUTES FOR MATERIALS */}
@@ -180,7 +171,7 @@ const AdminRoutes = () => {
           {/* create material */}
           <Route
             path="materials/new"
-            element={ <UploadMaterial title="Create Material" inputs={materialInputs}/>}
+            element={ <MaterialForm mode="create" inputs={materialInputs} title="Upload Material"/>}
           />
 
           {/* list of materials */}
@@ -191,8 +182,8 @@ const AdminRoutes = () => {
 
           {/* edit materials */}
           <Route
-            path="materials/edit/:materialId"
-            element={ <EditMaterial title="Edit Material"/>}
+            path="materials/edit/:id"
+            element={ <MaterialForm mode="edit" inputs={materialInputs} title="Edit Material"/>}
           />
 
         {/* ROUTES FOR CLASSES */}
@@ -235,14 +226,14 @@ const AdminRoutes = () => {
 
           {/* edit events */}
           <Route
-            path="events/edit/:eventId"
-            element={ <EditEvent inputs={eventInputs} title="Edit Event" />}
+            path="events/edit/:id"
+            element={ <EventForm mode="edit" inputs={eventInputs} title="Edit Event" />}
             />
 
           {/* create events */}
           <Route
             path="events/new"
-            element={ <NewEvent inputs={eventInputs}  title="Add New Event" />}
+            element={ <EventForm mode="create" inputs={eventInputs}  title="Add New Event" />}
           />
 
           {/* list of events */}
@@ -282,13 +273,13 @@ const AdminRoutes = () => {
         {/* ROUTES FOR SCHOOLS & SESSIONS */}
           {/* create new timetables */}
           <Route
-            path='school/edit/:schoolId'
+            path='school/edit/:id'
             element={<EditSchool title="Edit School Info" />}
           />
 
           {/* edit password */}
           <Route
-            path="updatePassword/:adminId"
+            path="updatePassword/:token"
             element={<ResetPassword type="change"/>}
           />
 

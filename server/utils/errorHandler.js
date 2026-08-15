@@ -12,9 +12,14 @@ const handleDuplicateFieldsDB = err => {
 }
 
 const handleValidationErrorDB = err => {
-    const errors = Object.values(err.errors).map(el => el.message);
-    const message = `Invalid input data. ${errors.join('. ')}`;
-    return new AppError(message, 400);
+    const errors = {};
+    Object.keys(err.errors).forEach(key => {
+        errors[key] = err.errors[key].message;
+    });
+
+    const error = new AppError('Invalid input data.', 400);
+    error.errors = errors;
+    return error;
 }
 
 const handleJWTError = () => new AppError('Invalid token. Please log in again!', 401);
@@ -26,6 +31,7 @@ const sendErrorDev = (err, res) => {
         status: err.status,
         error: err,
         message: err.message,
+        errors: err.errors,
         stack: err.stack
     })
 }
@@ -34,7 +40,8 @@ const sendErrorProd = (err, res) => {
     if(err.operational) {
         res.status(err.statusCode).json({
             status: err.status,
-            message: err.message
+            message: err.message,
+            errors: err.errors
         })
     }
     else {

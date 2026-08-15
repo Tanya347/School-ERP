@@ -3,23 +3,17 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // New forms
-import NewTask from '../../pages/new/NewTask';
-import NewTest from '../../pages/new/NewTest';
-import NewUpdate from '../../pages/new/NewUpdate';
-import UploadMaterial from '../../pages/new/UploadMaterial';
+import TaskForm from '../../pages/shared/TaskForm';
+import TestForm from '../../pages/shared/TestForm';
+import UpdateForm from '../../pages/shared/UpdateForm';
+import MaterialForm from '../../pages/shared/MaterialForm';
+import FacultyForm from '../../pages/shared/FacultyForm';
 
 // Components
 import List from '../../components/shared/list/List';
 import TableWithoutAction from "../../components/table/TableWithoutAction"
 import Layout from '../../components/sidebar/Layout';
 import AddMarks from '../../pages/marks/AddMarks';
-
-// Edit forms
-import EditFaculty from '../../pages/edit/EditFaculty';
-import EditTask from '../../pages/edit/EditTask';
-import EditTest from '../../pages/edit/EditTest';
-import EditUpdate from '../../pages/edit/EditUpdate';
-import EditMaterial from '../../pages/edit/EditMaterial';
 
 // Pages
 import FacultyProfile from "../../pages/profile/FacultyProfile";
@@ -39,6 +33,7 @@ import { taskInputs } from '../formsource/taskInputs';
 import { testInputs } from '../formsource/testInputs';
 import { updateInputs } from '../formsource/updateInputs';
 import { materialInputs } from '../formsource/materialInputs';
+import { facultyInputs } from '../formsource/facultyInputs';
 
 // Datatable Columns
 import { taskColumns } from '../datatablesource/taskColumns';
@@ -82,7 +77,7 @@ const FacultyRoutes = () => {
           {/* edit profile page for faculty */}
           <Route
             path="edit/:id"
-            element={<EditFaculty title="Edit Profile" />}
+            element={<FacultyForm mode="edit" inputs={facultyInputs} title="Edit Profile" />}
           />
           
 
@@ -98,14 +93,13 @@ const FacultyRoutes = () => {
 
           <Route
             path="tasks/new"
-            element={<NewTask title="Add New Task" inputs={taskInputs} />}
-            >
-          </Route>
+            element={<TaskForm mode="create" inputs={taskInputs} title="Add New Task" />}
+            />
 
           {/* edit page for tasks */}
           <Route
-            path="tasks/edit/:taskId"
-            element={<EditTask title="Update Task" />}
+            path="tasks/edit/:id"
+            element={<TaskForm mode="edit" inputs={taskInputs} title="Update Task" />}
           />
 
           {/* ROUTES FOR UPDATES */}
@@ -114,9 +108,8 @@ const FacultyRoutes = () => {
 
           <Route
             path="updates/new"
-            element={<NewUpdate title="Add New Update" inputs={updateInputs} />}
-            >
-          </Route>
+            element={<UpdateForm mode="create" inputs={updateInputs} title="Add New Update" />}
+            />
 
           <Route
             path="updates"
@@ -125,8 +118,8 @@ const FacultyRoutes = () => {
 
           {/* edit page for tasks */}
           <Route
-            path="updates/edit/:taskId"
-            element={<EditUpdate title="Edit Update" />}
+            path="updates/edit/:id"
+            element={<UpdateForm mode="edit" inputs={updateInputs} title="Edit Updates" />}
           />
 
           {/* ROUTES FOR MATERIALS */}
@@ -134,7 +127,7 @@ const FacultyRoutes = () => {
           {/* create materials */}
           <Route
             path="materials/new"
-            element={ <UploadMaterial title="Create Material" inputs={materialInputs}/>}
+            element={ <MaterialForm mode="create" inputs={materialInputs} title="Upload Material"/>}
           />
 
           {/* list of materials */}
@@ -145,8 +138,8 @@ const FacultyRoutes = () => {
 
           {/* edit materials */}
           <Route
-            path="materials/edit/:materialId"
-            element={ <EditMaterial title="Edit Material"/>}
+            path="materials/edit/:id"
+            element={ <MaterialForm mode="edit" inputs={materialInputs} title="Edit Material"/>}
           />
 
           {/* ROUTES FOR TESTS */}
@@ -159,14 +152,14 @@ const FacultyRoutes = () => {
 
           {/* edit page for tests */}
           <Route
-            path="tests/edit/:testId"
-            element={<EditTest title="Update Test" />}
+            path="tests/edit/:id"
+            element={<TestForm mode="edit" inputs={testInputs} title="Update Test" />}
             />
 
           {/* create test page */}
           <Route
             path="tests/new"
-            element={<NewTest title="Add New Test" inputs={testInputs} />}
+            element={<TestForm mode="create" inputs={testInputs} title="Add New Test" />}
             />
 
           {/* events */}
@@ -231,7 +224,7 @@ const FacultyRoutes = () => {
 
           {/* add test marks page */}
           <Route 
-            path="tests/marks/:testId"
+            path="tests/marks/:id"
             element={<ViewTestMarks />}
             />
 
@@ -249,7 +242,7 @@ const FacultyRoutes = () => {
 
           {/* edit password */}
           <Route
-            path="updatePassword/:facultyId"
+            path="updatePassword/:token"
             element={<ResetPassword type="change"/>}
           />
         </Routes>

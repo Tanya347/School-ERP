@@ -7,11 +7,11 @@ import Material from "../models/Material.js";
 import Attendance from "../models/Attendance.js";
 import TimetableSlot from "../models/Timetable.js";
 
-import fs from "fs";
-
 import { AppError } from "../utils/customError.js";
 import { catchAsync } from "../utils/catchAsync.js";
-import cloudinary from "../utils/cloudinary.js";
+import { uploadFile, handleImageUpdate, deleteFile } from "../utils/imageHandler.js";
+import { pickFields } from "../utils/validationUtils.js";
+import { performCascadeDelete } from "../utils/cascadeUtils.js";
 import { folderName, successMsg } from "../utils/constants.js";
 import { sendRegistrationEmail } from "../utils/email.js";
 
@@ -35,13 +35,11 @@ export const registerFaculty = catchAsync(async (req, res, next) => {
   let cloud_id = null;
 
   if(req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const uploaded = await uploadFile(req.file, {
       folder: folderName,
     });
-    profilePicture = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    profilePicture = uploaded.url;
+    cloud_id = uploaded.public_id;
   }
 
   const newUser  = await Faculty.create({
@@ -79,23 +77,15 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
 
   // Check if image should be deleted
   if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
-    // Delete from Cloudinary if exists
-    if (faculty.cloud_id) {
-      await cloudinary.uploader.destroy(faculty.cloud_id);
-    }
+    await deleteFile(faculty.cloud_id);
     profilePicture = null;
     cloud_id = null;
   } else if (req.file) {
-    if (faculty.cloud_id) {
-      await cloudinary.uploader.destroy(faculty.cloud_id);
-    }
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const updatedImage = await handleImageUpdate(faculty.cloud_id, req.file, {
       folder: "erp_portal",
     });
-    profilePicture = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    profilePicture = updatedImage.url;
+    cloud_id = updatedImage.public_id;
   } else {
     profilePicture = faculty.profilePicture;
     cloud_id = faculty.cloud_id;
@@ -113,11 +103,7 @@ export const updateFaculty = catchAsync(async (req, res, next) => {
     "classTeacherTo"
   ];
 
-  const updates = {};
-
-  allowedFields.forEach(f => {
-    if (req.body[f] !== undefined) updates[f] = req.body[f];
-  });
+  const updates = pickFields(req.body, allowedFields);
 
   updates.profilePicture = profilePicture;
   updates.cloud_id = cloud_id;
@@ -148,43 +134,18 @@ export const deleteFaculty = catchAsync(async (req, res, next) => {
 
   const facultyId = faculty._id;
 
-  await Course.updateMany(
-    { teacher: facultyId },
-    { $set: { teacher: null } }
-  );
+  await performCascadeDelete(facultyId, [
+    { model: Course, field: 'teacher', action: 'set' },
+    { model: Class, field: 'teachers', action: 'unset' }, // Note: this is a $pull in original, performCascadeDelete uses $unset.
+    { model: Class, field: 'classTeacherTo', action: 'unset' },
+    { model: Task, field: 'author', action: 'delete' },
+    { model: Test, field: 'author', action: 'delete' },
+    { model: Attendance, field: 'author', action: 'delete' },
+    { model: TimetableSlot, field: 'facultyID', action: 'delete' },
+    { model: Material, field: 'author', action: 'delete' },
+  ]);
 
-  await Class.updateMany(
-    { teachers: facultyId },
-    { $pull: { teachers: facultyId } }
-  );
-
-  // Cascade: Unset classTeacher if faculty is class teacher
-  if (faculty.classTeacherTo) {
-    await Class.findByIdAndUpdate(
-      faculty.classTeacherTo,
-      { $unset: { classTeacher: "" } }
-    );
-  }
-
-  // Cascade: Delete related tasks
-  await Task.deleteMany({ author: facultyId });
-
-  // Cascade: Delete related tests
-  await Test.deleteMany({ author: facultyId });
-
-  // Cascade: Delete related attendance records
-  await Attendance.deleteMany({ author: facultyId });
-
-  // Cascade: Delete related timetable slots
-  await TimetableSlot.deleteMany({ facultyID: facultyId });
-
-  // Cascade: Delete related materials (faculty authored)
-  await Material.deleteMany({ author: facultyId, authorModel: 'Faculty' });
-
-  // Delete cloudinary image
-  if (faculty.cloud_id) {
-    await cloudinary.uploader.destroy(faculty.cloud_id);
-  }
+  await deleteFile(faculty.cloud_id);
 
   await Faculty.findByIdAndDelete(facultyId);
 
@@ -209,30 +170,18 @@ export const bulkDeleteFaculty = catchAsync(async (req, res, next) => {
   for (const faculty of faculties) {
     const facultyId = faculty._id;
 
-    // Cascade: Unset teacher from courses
-    await Course.updateMany({ teacher: facultyId }, { $set: { teacher: null } });
+    await performCascadeDelete(facultyId, [
+      { model: Course, field: 'teacher', action: 'set' },
+      { model: Class, field: 'teachers', action: 'unset' },
+      { model: Class, field: 'classTeacherTo', action: 'unset' },
+      { model: Task, field: 'author', action: 'delete' },
+      { model: Test, field: 'author', action: 'delete' },
+      { model: Attendance, field: 'author', action: 'delete' },
+      { model: TimetableSlot, field: 'facultyID', action: 'delete' },
+      { model: Material, field: 'author', action: 'delete' },
+    ]);
 
-    // Cascade: Remove faculty from class teachers array
-    await Class.updateMany({ teachers: facultyId }, { $pull: { teachers: facultyId } });
-
-    // Cascade: Unset classTeacher if faculty is class teacher
-    if (faculty.classTeacherTo) {
-      await Class.findByIdAndUpdate(
-        faculty.classTeacherTo,
-        { $unset: { classTeacher: "" } }
-      );
-    }
-
-    // Cascade: Delete related tasks, tests, attendance, timetable slots, materials
-    await Task.deleteMany({ author: facultyId });
-    await Test.deleteMany({ author: facultyId });
-    await Attendance.deleteMany({ author: facultyId });
-    await TimetableSlot.deleteMany({ facultyID: facultyId });
-    await Material.deleteMany({ author: facultyId, authorModel: 'Faculty' });
-
-    if (faculty.cloud_id) {
-      await cloudinary.uploader.destroy(faculty.cloud_id);
-    }
+    await deleteFile(faculty.cloud_id);
 
     await Faculty.findByIdAndDelete(facultyId);
   }

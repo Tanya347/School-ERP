@@ -138,8 +138,15 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
 
   const studentsInClass = await Student.find({ classID: test.classID }).select('_id');
 
-  // Create a map of student IDs from marksData for quick lookup
-  const marksDataMap = new Map(marksData.map(({ student_id, value }) => [student_id, value]));
+  // Create a map of existing marks for quick lookup
+  const existingMarksMap = new Map(
+    test.marks.map(mark => [mark.student_id.toString(), mark])
+  );
+
+  // Create a map of new marks data from the request body
+  const marksDataMap = new Map(
+    marksData.map(({ student_id, value }) => [student_id, value])
+  );
 
   // Process each student in the class
   studentsInClass.forEach(student => {
@@ -147,7 +154,7 @@ export const addEditMarks = catchAsync(async (req, res, next) => {
     const value = marksDataMap.has(student_id) ? marksDataMap.get(student_id) : 0;
     const present = marksDataMap.has(student_id);
 
-    const studentMarks = test.marks.find(mark => mark.student_id.toString() === student_id);
+    const studentMarks = existingMarksMap.get(student_id);
 
     if (studentMarks) {
       // Update existing marks

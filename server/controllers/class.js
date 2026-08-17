@@ -11,6 +11,7 @@ import TimetableSlot from "../models/Timetable.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
+import { performCascadeDelete } from "../utils/cascadeUtils.js";
 
 
 // Create a new class
@@ -51,37 +52,16 @@ export const deleteClass = catchAsync(async (req, res, next) => {
 
   const classId = deletedClass._id;
 
-  // Cascade: Remove class reference from associated students
-  await Student.updateMany(
-    { classID: classId },
-    { $unset: { classID: "" } }
-  );
-
-  // Cascade: Unset classTeacher from Faculty if assigned
-  if (deletedClass.classTeacher) {
-    await Faculty.findByIdAndUpdate(
-      deletedClass.classTeacher,
-      { $unset: { classTeacherTo: "" } }
-    );
-  }
-
-  // Cascade: Delete related courses
-  await Course.deleteMany({ classID: classId });
-
-  // Cascade: Delete related materials
-  await Material.deleteMany({ classID: classId });
-
-  // Cascade: Delete related attendance records
-  await Attendance.deleteMany({ classID: classId });
-
-  // Cascade: Delete related tests
-  await Test.deleteMany({ classID: classId });
-
-  // Cascade: Delete related updates
-  await Update.deleteMany({ classID: classId });
-
-  // Cascade: Delete related timetable slots
-  await TimetableSlot.deleteMany({ classID: classId });
+  await performCascadeDelete(classId, [
+    { model: Student, field: 'classID', action: 'unset' },
+    { model: Faculty, field: 'classTeacherTo', action: 'unset' },
+    { model: Course, field: 'classID', action: 'delete' },
+    { model: Material, field: 'classID', action: 'delete' },
+    { model: Attendance, field: 'classID', action: 'delete' },
+    { model: Test, field: 'classID', action: 'delete' },
+    { model: Update, field: 'classID', action: 'delete' },
+    { model: TimetableSlot, field: 'classID', action: 'delete' },
+  ]);
 
   // Delete the class
   await Class.findByIdAndDelete(classId);

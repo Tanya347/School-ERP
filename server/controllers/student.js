@@ -4,10 +4,10 @@ import Marks from "../models/Marks.js";
 import Attendance from "../models/Attendance.js";
 import Test from "../models/Test.js";
 
-import fs from "fs";
-
 import { catchAsync } from "../utils/catchAsync.js";
-import cloudinary from "../utils/cloudinary.js";
+import { uploadFile, handleImageUpdate, deleteFile } from "../utils/imageHandler.js";
+import { calculateAge, validateAgeRange, pickFields } from "../utils/validationUtils.js";
+import { performCascadeDelete } from "../utils/cascadeUtils.js";
 import { folderName, successMsg } from "../utils/constants.js";
 import { AppError } from "../utils/customError.js";
 import { sendRegistrationEmail } from "../utils/email.js";
@@ -26,11 +26,9 @@ export const registerStudent = catchAsync(async (req, res, next) => {
   }
 
   const dob = new Date(req.body.dob);
-  const today = new Date();
+  const age = calculateAge(dob);
 
-  const age = today.getFullYear() - dob.getFullYear();
-
-  if (age < classDoc.minAge || age > classDoc.maxAge) {
+  if (!validateAgeRange(age, classDoc.minAge, classDoc.maxAge)) {
     return next(
       new AppError(
         `Student age must be between ${classDoc.minAge} and ${classDoc.maxAge} for this class`,
@@ -44,15 +42,11 @@ export const registerStudent = catchAsync(async (req, res, next) => {
   let cloud_id = null;
 
   if(req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const uploaded = await uploadFile(req.file, {
       folder: folderName,
     });
-
-    profilePicture = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
-
+    profilePicture = uploaded.url;
+    cloud_id = uploaded.public_id;
   }
   const newUser  = await Student.create({
     ...req.body,
@@ -97,11 +91,9 @@ export const updateStudent = catchAsync(async (req, res, next) => {
   }
 
   const dob = new Date(req.body.dob);
-  const today = new Date();
+  const age = calculateAge(dob);
 
-  const age = today.getFullYear() - dob.getFullYear();
-
-  if (age < classDoc.minAge || age > classDoc.maxAge) {
+  if (!validateAgeRange(age, classDoc.minAge, classDoc.maxAge)) {
     return next(
       new AppError(
         `Student age must be between ${classDoc.minAge} and ${classDoc.maxAge} for this class`,
@@ -115,25 +107,15 @@ export const updateStudent = catchAsync(async (req, res, next) => {
 
   // Check if image should be deleted
   if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
-    // Delete from Cloudinary if exists
-    if (student.cloud_id) {
-      await cloudinary.uploader.destroy(student.cloud_id);
-    }
+    await deleteFile(student.cloud_id);
     profilePicture = null;
     cloud_id = null;
   } else if (req.file) {
-    if (student.cloud_id) {
-      await cloudinary.uploader.destroy(student.cloud_id);
-    }
-
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const updatedImage = await handleImageUpdate(student.cloud_id, req.file, {
       folder: folderName,
     });
-
-    profilePicture = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    profilePicture = updatedImage.url;
+    cloud_id = updatedImage.public_id;
   }
 
   const allowedFields = [
@@ -148,13 +130,7 @@ export const updateStudent = catchAsync(async (req, res, next) => {
     "classID"
   ];
 
-  const updates = {};
-
-  allowedFields.forEach((field) => {
-    if (req.body[field] !== undefined && req.body[field] !== null) {
-      updates[field] = req.body[field];
-    }
-  });
+  const updates = pickFields(req.body, allowedFields);
 
   
   if (updates.classID && typeof updates.classID === "object") {
@@ -212,34 +188,15 @@ export const deleteStudent = catchAsync(async (req, res, next) => {
 
   const studentId = student._id;
 
-  // Cascade: Delete related marks
-  await Marks.deleteMany({ student: studentId });
+  await performCascadeDelete(studentId, [
+    { model: Marks, field: 'student', action: 'delete' },
+    { model: Attendance, field: 'present', action: 'unset' },
+    { model: Attendance, field: 'absent', action: 'unset' },
+    { model: Test, field: 'marks.student_id', action: 'unset' },
+    { model: Class, field: 'students', action: 'unset' },
+  ]);
 
-  // Cascade: Remove student from attendance records (present/absent arrays)
-  await Attendance.updateMany(
-    { present: studentId },
-    { $pull: { present: studentId } }
-  );
-  await Attendance.updateMany(
-    { absent: studentId },
-    { $pull: { absent: studentId } }
-  );
-
-  // Cascade: Remove student's marks entries from tests
-  await Test.updateMany(
-    { "marks.student_id": studentId },
-    { $pull: { marks: { student_id: studentId } } }
-  );
-
-  // Remove from class students array
-  if (student.classID) {
-    await Class.findByIdAndUpdate(student.classID, { $pull: { students: studentId } });
-  }
-
-  // Delete cloudinary image
-  if (student.cloud_id) {
-    await cloudinary.uploader.destroy(student.cloud_id);
-  }
+  await deleteFile(student.cloud_id);
 
   await Student.findByIdAndDelete(studentId);
 
@@ -264,33 +221,15 @@ export const bulkDeleteStudent = catchAsync(async (req, res, next) => {
   for (const student of students) {
     const studentId = student._id;
 
-    // Cascade: Delete related marks
-    await Marks.deleteMany({ student: studentId });
+    await performCascadeDelete(studentId, [
+      { model: Marks, field: 'student', action: 'delete' },
+      { model: Attendance, field: 'present', action: 'unset' },
+      { model: Attendance, field: 'absent', action: 'unset' },
+      { model: Test, field: 'marks.student_id', action: 'unset' },
+      { model: Class, field: 'students', action: 'unset' },
+    ]);
 
-    // Cascade: Remove student from attendance records
-    await Attendance.updateMany(
-      { present: studentId },
-      { $pull: { present: studentId } }
-    );
-    await Attendance.updateMany(
-      { absent: studentId },
-      { $pull: { absent: studentId } }
-    );
-
-    // Cascade: Remove student's marks entries from tests
-    await Test.updateMany(
-      { "marks.student_id": studentId },
-      { $pull: { marks: { student_id: studentId } } }
-    );
-
-    // Remove from class students array
-    if (student.classID) {
-      await Class.findByIdAndUpdate(student.classID, { $pull: { students: studentId } });
-    }
-
-    if (student.cloud_id) {
-      await cloudinary.uploader.destroy(student.cloud_id);
-    }
+    await deleteFile(student.cloud_id);
 
     await Student.findByIdAndDelete(studentId);
   }

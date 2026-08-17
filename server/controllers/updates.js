@@ -3,7 +3,7 @@ import Faculty from "../models/Faculty.js";
 
 import { catchAsync } from "../utils/catchAsync.js";
 import { successMsg } from "../utils/constants.js";
-import { AppError } from "../utils/customError.js";
+import { ensureOwnership } from '../utils/authUtils.js';
 
 
 // Create an update
@@ -44,8 +44,14 @@ export const updateUpdate = catchAsync(async (req, res, next) => {
         return next(new AppError('Not authorized to edit this update', 403));
     }
 
-    if (update.author.toString() !== req.user._id.toString()) {
+    if (update.schoolID.toString() !== req.user.schoolID.toString()) {
         return next(new AppError('Not authorized to edit this update', 403));
+    }
+
+    try {
+      ensureOwnership(update, req.user);
+    } catch (error) {
+      return next(error);
     }
 
     const updatedUpdate = await Update.findByIdAndUpdate(
@@ -72,8 +78,14 @@ export const deleteUpdate = catchAsync(async (req, res, next) => {
     if (update.schoolID.toString() !== req.user.schoolID.toString()) {
         return next(new AppError('Not authorized to delete this update', 403));
     }
-    if (update.author.toString() !== req.user._id.toString()) {
+    if (update.schoolID.toString() !== req.user.schoolID.toString()) {
         return next(new AppError('Not authorized to delete this update', 403));
+    }
+
+    try {
+      ensureOwnership(update, req.user);
+    } catch (error) {
+      return next(error);
     }
     await Update.findByIdAndDelete(req.params.id);
     res.status(200).json({

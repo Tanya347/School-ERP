@@ -5,10 +5,9 @@ import Test from "../models/Test.js";
 import Marks from "../models/Marks.js";
 import TimetableSlot from "../models/Timetable.js";
 
-import fs from "fs";
-
 import { catchAsync } from "../utils/catchAsync.js";
-import cloudinary from "../utils/cloudinary.js";
+import { uploadFile, handleImageUpdate, deleteFile } from "../utils/imageHandler.js";
+import { performCascadeDelete } from "../utils/cascadeUtils.js";
 import { AppError } from "../utils/customError.js";
 
 import { successMsg, folderName } from "../utils/constants.js";
@@ -24,14 +23,11 @@ export const createCourse = catchAsync(async (req, res, next) => {
   let cloud_id = null;
 
   if (req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const uploaded = await uploadFile(req.file, {
       folder: folderName,
     });
-
-    syllabusPicture = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    syllabusPicture = uploaded.url;
+    cloud_id = uploaded.public_id;
   }
 
   const course = await Course.create({
@@ -65,25 +61,15 @@ export const updateCourse = catchAsync(async (req, res, next) => {
 
   // Check if image should be deleted
   if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
-    // Delete from Cloudinary if exists
-    if (course.cloud_id) {
-      await cloudinary.uploader.destroy(course.cloud_id);
-    }
+    await deleteFile(course.cloud_id);
     syllabusPicture = null;
     cloud_id = null;
   } else if (req.file) {
-    // Delete old image from Cloudinary if exists
-    if (course.cloud_id) {
-      await cloudinary.uploader.destroy(course.cloud_id);
-    }
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const updatedImage = await handleImageUpdate(course.cloud_id, req.file, {
       folder: folderName,
     });
-
-    syllabusPicture = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    syllabusPicture = updatedImage.url;
+    cloud_id = updatedImage.public_id;
   } else {
     syllabusPicture = course.syllabusPicture;
     cloud_id = course.cloud_id;
@@ -114,25 +100,21 @@ export const deleteCourse = catchAsync(async (req, res, next) => {
   }
 
   const courseId = course._id;
-  
+
   if (course.classID) {
     await Class.findByIdAndUpdate(course.classID, {
       $pull: { subjects: courseId }
     });
   }
 
-  await Task.deleteMany({ courseID: courseId });
+  await performCascadeDelete(courseId, [
+    { model: Task, field: 'courseID', action: 'delete' },
+    { model: Test, field: 'subject', action: 'delete' },
+    { model: Marks, field: 'course', action: 'delete' },
+    { model: TimetableSlot, field: 'courseID', action: 'delete' },
+  ]);
 
-  await Test.deleteMany({ subject: courseId });
-
-  await Marks.deleteMany({ course: courseId });
-
-  await TimetableSlot.deleteMany({ courseID: courseId });
-
-  // Delete syllabus image from Cloudinary if it exists
-  if (course.cloud_id) {
-    await cloudinary.uploader.destroy(course.cloud_id);
-  }
+  await deleteFile(course.cloud_id);
 
   await Course.findByIdAndDelete(courseId);
 
@@ -287,9 +269,7 @@ export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
 
   // 1️⃣ Remove syllabus images
   for (const course of courses) {
-    if (course.cloud_id) {
-      await cloudinary.uploader.destroy(course.cloud_id);
-    }
+    await deleteFile(course.cloud_id);
   }
 
   // 2️⃣ Remove courses from Class.subjects
@@ -304,13 +284,15 @@ export const bulkDeleteCourse = catchAsync(async (req, res, next) => {
     );
   }
 
-  await Task.deleteMany({ courseID: { $in: ids } });
-
-  await Test.deleteMany({ subject: { $in: ids } });
-
-  await Marks.deleteMany({ course: { $in: ids } });
-
-  await TimetableSlot.deleteMany({ courseID: { $in: ids } });
+  // 3️⃣ Cascade delete related data for each course
+  for (const course of courses) {
+    await performCascadeDelete(course._id, [
+      { model: Task, field: 'courseID', action: 'delete' },
+      { model: Test, field: 'subject', action: 'delete' },
+      { model: Marks, field: 'course', action: 'delete' },
+      { model: TimetableSlot, field: 'courseID', action: 'delete' },
+    ]);
+  }
 
   await Course.deleteMany({ _id: { $in: ids } });
 

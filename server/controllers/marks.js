@@ -35,36 +35,34 @@ export const enterMarksForSubject = catchAsync(async (req, res) => {
     );
   }
   
-  for (const data of marksData) {
+  // Validate students and prepare bulk operations
+  const students = await Student.find({
+    classID: course.classID,
+    schoolID
+  }).select('_id');
 
+  const studentIds = students.map(s => s._id.toString());
+
+  const ops = marksData.map(data => {
     const { studentId, marks } = data;
-  
-    const student = await Student.findOne({
-      _id: studentId,
-      classID: course.classID,
-      schoolID
-    });
-  
-    if (!student) throw new AppError("Invalid student for this subject", 400);
 
-    await Marks.findOneAndUpdate(
-      {
-        student: studentId,
-        course: subjectId,
-        sessionID,
-        schoolID,
-      },
-      {
-        student: studentId,
-        course: subjectId,
-        sessionID,
-        schoolID,
-        marksObtained: marks,
-        status: "evaluated",
-      },
-      { upsert: true, new: true }
-    );
-  }
+    if (!studentIds.includes(studentId)) {
+      throw new AppError(`Invalid student ${studentId} for this subject`, 400);
+    }
+
+    return {
+      updateOne: {
+        filter: { student: studentId, course: subjectId, sessionID, schoolID },
+        update: {
+          $set: { marksObtained: marks, status: "evaluated" },
+          $setOnInsert: { student: studentId, course: subjectId, sessionID, schoolID }
+        },
+        upsert: true
+      }
+    };
+  });
+
+  await Marks.bulkWrite(ops);
 
   res.status(200).json({
     status: successMsg,

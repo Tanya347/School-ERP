@@ -3,9 +3,9 @@ import Material from "../models/Material.js";
 import fs from "fs";
 
 import { catchAsync } from "../utils/catchAsync.js";
-import cloudinary from "../utils/cloudinary.js";
 import { AppError } from "../utils/customError.js";
-
+import { uploadFile, deleteFile, handleImageUpdate } from "../utils/imageHandler.js";
+import { ensureOwnership } from "../utils/authUtils.js";
 import { successMsg, folderName } from "../utils/constants.js";
 
 
@@ -18,15 +18,12 @@ export const createMaterial = catchAsync(async (req, res, next) => {
   let cloud_id = null;
 
   if (req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-    resource_type: 'raw',
-    folder: folderName
+    const uploaded = await uploadFile(req.file, {
+      resourceType: 'raw',
+      folder: folderName
     });
-
-    fileUrl = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    fileUrl = uploaded.url;
+    cloud_id = uploaded.public_id;
   }
 
   // Determine authorModel based on user role
@@ -102,32 +99,24 @@ export const editMaterial = catchAsync(async (req, res, next) => {
     return next(new AppError('Not authorized to edit this material', 403));
   }
 
-  if (material.author.toString() !== req.user._id.toString()) {
-    return next(new AppError('Not authorized to edit this material', 403));
+  try {
+    ensureOwnership(material, req.user);
+  } catch (error) {
+    return next(error);
   }
 
   // Check if file should be deleted
   if (req.body.isImageDeleted === 'true' || req.body.isImageDeleted === true) {
-    // Delete from Cloudinary if exists
-    if (material.cloud_id) {
-      await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
-    }
+    await deleteFile(material.cloud_id, { resourceType: 'raw' });
     fileUrl = null;
     cloud_id = null;
   } else if (req.file) {
-    if (material.cloud_id) {
-      await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
-    }
-
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'raw',
+    const updatedImage = await handleImageUpdate(material.cloud_id, req.file, {
+      resourceType: 'raw',
       folder: 'erp_portal'
     });
-
-    fileUrl = result.secure_url;
-    cloud_id = result.public_id;
-
-    fs.unlinkSync(req.file.path);
+    fileUrl = updatedImage.url;
+    cloud_id = updatedImage.public_id;
   } else {
     fileUrl = material.fileUrl;
     cloud_id = material.cloud_id;
@@ -164,13 +153,13 @@ export const deleteMaterial = catchAsync(async (req, res, next) => {
         return next(new AppError('Not authorized to delete this material', 403));
     }
 
-    if (material.author.toString() !== req.user._id.toString()) {
-        return next(new AppError('Not authorized to delete this material', 403));
+    try {
+      ensureOwnership(material, req.user);
+    } catch (error) {
+      return next(error);
     }
 
-    if (material.cloud_id) {
-        await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
-    }
+    await deleteFile(material.cloud_id, { resourceType: 'raw' });
 
     await Material.findByIdAndDelete(req.params.id);
 
@@ -194,9 +183,7 @@ export const bulkDeleteMaterial = catchAsync(async (req, res, next) => {
         author: req.user._id
     });
     for (const material of materials) {
-        if (material.cloud_id) {
-            await cloudinary.uploader.destroy(material.cloud_id, { resource_type: 'raw' });
-        }
+        await deleteFile(material.cloud_id, { resourceType: 'raw' });
         await Material.findByIdAndDelete(material._id);
     }
     res.status(200).json({

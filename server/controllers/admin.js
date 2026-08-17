@@ -2,18 +2,9 @@ import Admin from "../models/Admin.js";
 
 import { catchAsync } from '../utils/catchAsync.js';
 import { successMsg } from "../utils/constants.js";
-import { AppError } from "../utils/customError.js";
+import { pickFields } from '../utils/validationUtils.js';
 
 
-// filter object to allow only specified fields
-// -----------------------------------------------
-const filterObj = (obj, ...allowedFields) => {
-    const newObj = {};
-    Object.keys(obj).forEach((el) => {
-      if(allowedFields.includes(el)) newObj[el] = obj[el];
-    })
-    return newObj;
-  }
 
 
 // update admin data
@@ -25,7 +16,7 @@ export const updateAdmin = catchAsync(async (req, res, next) => {
       return next(new AppError('This route is not for password updates. Please use /updatePassword.', 400));
     }
   
-    const filteredBody = filterObj(req.body, 'username');
+    const filteredBody = pickFields(req.body, ['username']);
   
     const updatedUser = await Admin.findByIdAndUpdate(
       { _id: req.user.id, schoolID: req.user.schoolID },

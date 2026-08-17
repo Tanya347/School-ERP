@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from 'react'
 
 import { postURLs } from "../../utils/endpoints/post";
-import { createElement } from "../../utils/service/usePost";
+import { createElement } from "../../utils/service/postHelper";
 import { validateClass } from "../../utils/validators/class";
 import { checkSuccess, handleChange as commonHandleChange } from "../../utils/shared/commons";
 import { classesConst } from "../../utils/shared/constants";

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { schoolInputs } from "../../utils/formsource/schoolInputs"
-import { editElementWithPicture } from "../../utils/service/usePut";
+import { editElementWithPicture } from "../../utils/service/putHelper";
 import { putURLs } from "../../utils/endpoints/put";
 import { schoolsConst } from "../../utils/shared/constants";
 

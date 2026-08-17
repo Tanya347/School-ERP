@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 import { getAttendanceStatusByDate, getStudentsOfClass } from '../../utils/endpoints/get'
 import { postURLs } from '../../utils/endpoints/post'
-import { createElement } from '../../utils/service/usePost'
+import { createElement } from '../../utils/service/postHelper'
 import axiosInterceptor from "../../utils/shared/axiosInterceptor";
 import { dateTimeFormat } from "../../utils/shared/constants";
 

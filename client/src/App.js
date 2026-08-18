@@ -18,6 +18,7 @@ import { fetchFacultyClasses } from "./utils/store/slices/facultySlice";
 
 // UI
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./components/shared/ProtectedRoute";
 import NotificationsListener from "./components/navbar/notifications/NotificationsListener";
 import { fetchSchoolInfo } from "./utils/store/slices/schoolSlice";
 import { roles } from "./utils/shared/constants";
@@ -96,9 +97,9 @@ function App() {
             <Route path="/resetPassword/faculty/:token" element={<ResetPassword type="faculty" />} />
 
             {/* Protected Routes */}
-            <Route path="/admin/*" element={<AdminRoutes />} />
-            <Route path="/faculty/*" element={<FacultyRoutes />} />
-            <Route path="/student/*" element={<StudentRoutes />} />
+            <Route path="/admin/*" element={<ProtectedRoute allowedRoles={[roles.admin]}><AdminRoutes /></ProtectedRoute>} />
+            <Route path="/faculty/*" element={<ProtectedRoute allowedRoles={[roles.faculty]}><FacultyRoutes /></ProtectedRoute>} />
+            <Route path="/student/*" element={<ProtectedRoute allowedRoles={[roles.student]}><StudentRoutes /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </div>

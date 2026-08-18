@@ -45,90 +45,80 @@ import EventsList from '../../pages/event/EventsList';
 import ResetPassword from '../../pages/auth/ResetPassword';
 import AdminHome from '../../pages/home/AdminHome';
 import AddExamDates from '../../pages/exams/AddExamDates';
-import { checkAdmin } from '../shared/commons';
 
 const AdminRoutes = () => {
 
   const { user } = useSelector(state => state.auth);
-  
-  const RequireAdmin = ({ children }) => {
-    if (user && checkAdmin(user.role)) {
-      return children;
-    } else {
-      return <Navigate to="/" />;
-    }
-};
 
   return (
-      <RequireAdmin>
-        <Layout>
+      <Layout>
 
         <Routes>
-          <Route 
+          <Route
             index
-            element={<RequireAdmin><AdminHome/></RequireAdmin>} 
+            element={<AdminHome/>}
             />
-          
+
         {/* ROUTES FOR STUDENTS */}
-          
+
           {/* list of students */}
-          <Route 
-            path="students" 
-            element={<List column={studentColumns} name="Student" />} 
+          <Route
+            path="students"
+            element={<List column={studentColumns} name="Student" />}
             />
-          
+
           {/* single page for student */}
-          <Route 
-            path="students/single/:id" 
-            element={<StudentProfile type="Admin" />} 
+          <Route
+            path="students/single/:id"
+            element={<StudentProfile type="Admin" />}
           />
-          
+
           {/* edit page for student */}
-          <Route 
-            path="students/edit/:id" 
-            element={<StudentForm mode="edit" inputs={studentInputs} title="Update Student" />} 
+          <Route
+            path="students/edit/:id"
+            element={<StudentForm mode="edit" inputs={studentInputs} title="Update Student" />}
             />
 
           {/* create user student */ }
-          <Route 
-            path="students/new" 
-            element={<StudentForm mode="create" inputs={studentInputs} title="Add New Student" />} 
+          <Route
+            path="students/new"
+            element={<StudentForm mode="create" inputs={studentInputs} title="Add New Student" />}
             />
 
 
         {/* ROUTES FOR FACULTIES */}
 
           {/* list of faculties */}
-          <Route 
-            path="faculties" 
+          <Route
+            path="faculties"
             element={<List column={facultyColumns} name="Faculty" />}
             />
 
           {/* single page for faculty */}
-          <Route 
-            path="faculties/single/:id" 
-            element={<FacultyProfile type="Admin" />} 
+          <Route
+            path="faculties/single/:id"
+            element={<FacultyProfile type="Admin" />}
             />
 
           {/* edit page for faculty */}
-          <Route 
-            path="faculties/edit/:id/" 
+          <Route
+            path="faculties/edit/:id/"
             element={<FacultyForm mode="edit" inputs={facultyInputs} title="Update Faculty" />}
             />
 
           {/* create faculty */}
-          <Route 
-            path="faculties/new" 
-            element={<FacultyForm mode="create" inputs={facultyInputs} title="Add New Faculty" />} 
+          <Route
+            path="faculties/new"
+            element={<FacultyForm mode="create" inputs={facultyInputs} title="Add New Faculty" />}
             />
 
 
         {/* ROUTES FOR UPDATES */}
 
           {/* list of updates */}
-          <Route 
-            path="updates" 
-            element={<List column={updateColumns} name="Update" />} 
+          <Route
+            path="updates"
+            element={<List column={updateColumns} name="Update" />}
             />
 
           {/* edit update */}
@@ -142,7 +132,7 @@ const AdminRoutes = () => {
             path="updates/new"
             element={<UpdateForm mode="create" inputs={updateInputs} title="Add New Update"  /> }
             />
-        
+
         {/* ROUTES FOR COURSES */}
 
           {/* list of courses */}
@@ -234,13 +224,13 @@ const AdminRoutes = () => {
           <Route
             path="events/new"
             element={ <EventForm mode="create" inputs={eventInputs}  title="Add New Event" />}
-          />
+            />
 
           {/* list of events */}
           <Route
             path="events"
             element={ <EventsList type="Admin"/>}
-          />
+            />
 
         {/* ROUTES FOR TIMETABLES */}
 
@@ -248,11 +238,11 @@ const AdminRoutes = () => {
           <Route
             path="timetables/new"
             element={ <NewTimeTable />}
-          />
+            />
           <Route
             path="timetables/new/:classId"
             element={ <NewTimeTable />}
-          />
+            />
 
           {/* view timetables */}
           <Route
@@ -289,7 +279,6 @@ const AdminRoutes = () => {
 
         </Routes>
         </Layout>
-      </RequireAdmin>
   );
 };
 

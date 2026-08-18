@@ -1,6 +1,5 @@
 // src/routes/facultyRoutes.js
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Routes, Route } from 'react-router-dom';
 
 // New forms
 import TaskForm from '../../pages/shared/TaskForm';
@@ -42,23 +41,10 @@ import { attendanceColumns } from "../datatablesource/attendanceColumns"
 import { updateColumns } from '../datatablesource/updateColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
 
-import { checkFaculty } from '../shared/commons';
-
 const FacultyRoutes = () => {
 
-  const { user } = useSelector(state => state.auth);
-
-  const RequireFaculty = ({ children }) => {
-    if (user && checkFaculty(user.role)) {
-      return children;
-    } else {
-      return <Navigate to="/" />;
-    }
-};
-
   return (
-      <RequireFaculty>
-        <Layout>
+      <Layout>
 
         <Routes>
 
@@ -78,8 +64,7 @@ const FacultyRoutes = () => {
           <Route
             path="edit/:id"
             element={<FacultyForm mode="edit" inputs={facultyInputs} title="Edit Profile" />}
-          />
-          
+            />
 
           {/* ROUTES FOR TASKS */}
 
@@ -100,7 +85,7 @@ const FacultyRoutes = () => {
           <Route
             path="tasks/edit/:id"
             element={<TaskForm mode="edit" inputs={taskInputs} title="Update Task" />}
-          />
+            />
 
           {/* ROUTES FOR UPDATES */}
 
@@ -114,13 +99,13 @@ const FacultyRoutes = () => {
           <Route
             path="updates"
             element={<List column={updateColumns} name="Update" />}
-          />
+            />
 
           {/* edit page for tasks */}
           <Route
             path="updates/edit/:id"
             element={<UpdateForm mode="edit" inputs={updateInputs} title="Edit Updates" />}
-          />
+            />
 
           {/* ROUTES FOR MATERIALS */}
 
@@ -128,26 +113,26 @@ const FacultyRoutes = () => {
           <Route
             path="materials/new"
             element={ <MaterialForm mode="create" inputs={materialInputs} title="Upload Material"/>}
-          />
+            />
 
           {/* list of materials */}
           <Route
             path="materials"
             element={ <List column={materialColumns} name="Material"/>}
-          />
+            />
 
           {/* edit materials */}
           <Route
             path="materials/edit/:id"
             element={ <MaterialForm mode="edit" inputs={materialInputs} title="Edit Material"/>}
-          />
+            />
 
           {/* ROUTES FOR TESTS */}
 
           {/* list of tests */}
-          <Route 
-            path="tests" 
-            element={ <List column={testColumns} name="Test" />} 
+          <Route
+            path="tests"
+            element={ <List column={testColumns} name="Test" />}
             />
 
           {/* edit page for tests */}
@@ -179,7 +164,7 @@ const FacultyRoutes = () => {
             />
 
           {/* mark attendance page */}
-          <Route 
+          <Route
             path="attendance/new"
             element={<MarkAttendance />}
             />
@@ -188,13 +173,7 @@ const FacultyRoutes = () => {
           <Route
             path="attendance"
             element={<AttendanceInfo />}
-          />
-
-          {/* view and edit attendance on faculty side */}
-          {/* <Route
-            path="attendance/:classId"
-            element={<AttendanceInfo />}
-          /> */}
+            />
 
           {/* student attendance percentage */}
           <Route
@@ -206,30 +185,30 @@ const FacultyRoutes = () => {
           <Route
             path="marks/new"
             element={<AddMarks />}
-          />
+            />
           <Route
             path="marks/new/:courseId"
             element={<AddMarks />}
-          />
+            />
 
           {/* view marks page */}
           <Route
             path="marks"
             element={<ViewMarks />}
-          />
+            />
           <Route
             path="marks/:courseId"
             element={<ViewMarks />}
-          />
+            />
 
           {/* add test marks page */}
-          <Route 
+          <Route
             path="tests/marks/:id"
             element={<ViewTestMarks />}
             />
 
           {/* view events page */}
-          <Route 
+          <Route
             path="events"
             element={<EventsList type="Faculty"/>}
             />
@@ -238,16 +217,15 @@ const FacultyRoutes = () => {
           <Route
             path='timetable'
             element={<Timetable type="faculty"/>}
-          />
+            />
 
           {/* edit password */}
           <Route
             path="updatePassword/:token"
             element={<ResetPassword type="change"/>}
-          />
+            />
         </Routes>
         </Layout>
-      </RequireFaculty>
   );
 };
 

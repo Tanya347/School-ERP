@@ -1,5 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Routes, Route } from 'react-router-dom';
 
 import StudentForm from '../../pages/shared/StudentForm';
 import { studentInputs } from '../formsource/studentInputs';
@@ -19,22 +18,10 @@ import { testColumns } from '../datatablesource/testColumns';
 import { materialColumns } from '../datatablesource/materialColumns';
 import { updateColumns } from '../datatablesource/updateColumns';
 
-import { checkStudent } from '../shared/commons';
-
 const StudentRoutes = () => {
-    const { user } = useSelector(state => state.auth);
-  
-    const RequireStudent = ({ children }) => {
-        if(user && checkStudent(user.role)) {
-          return children;
-        } else
-          return <Navigate to="/" />;
-    };
 
   return (
-
-    <RequireStudent>
-       <Layout>
+    <Layout>
         <Routes>
             <Route index element={<StudentHome />} />
             <Route path="single/:id" element={<StudentProfile type="Main" />} />
@@ -50,8 +37,7 @@ const StudentRoutes = () => {
             <Route path="updatePassword/:token" element={<ResetPassword type="change"/>} />
             <Route path="timetable" element={<Timetable type="class"/>} />
         </Routes>
-       </Layout>
-    </RequireStudent>
+    </Layout>
   );
 };
 
